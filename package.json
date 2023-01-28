@@ -1,0 +1,35 @@
+{
+  "name": "nestjs-nextjs",
+  "version": "0.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "db:generate": "turbo run db:generate --filter database",
+    "dev": "turbo run dev --parallel",
+    "dev:frontend": "turbo run dev --filter frontend --filter config",
+    "dev:backend": "turbo run dev --filter backend --filter config --filter database",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "eslint-config-custom": "workspace:*",
+    "husky": "^8.0.0",
+    "lint-staged": "^13.1.0",
+    "prettier": "latest",
+    "turbo": "latest"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "packageManager": "pnpm@7.25.1",
+  "lint-staged": {
+    "*.{js,json,ts,tsx,md}": [
+      "prettier --write"
+    ]
+  }
+}

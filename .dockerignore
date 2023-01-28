@@ -1,0 +1,13 @@
+.git
+.github
+postgres
+
+**/node_modules
+**/.env
+**/dist
+**/.next
+**/.gitignore
+**/.turbor
+
+Dockerfile.frontend
+Dockerfile.backend

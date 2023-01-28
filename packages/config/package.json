@@ -1,0 +1,14 @@
+{
+  "name": "config",
+  "main": "dist/index.js",
+  "types": "src/index.ts",
+  "type": "commonjs",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc -w"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "typescript": "^4.9.4"
+  }
+}

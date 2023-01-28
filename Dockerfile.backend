@@ -1,0 +1,49 @@
+FROM node:alpine AS base
+RUN apk add --no-cache libc6-compat
+RUN apk update
+
+RUN npm i -g pnpm
+
+WORKDIR /app
+
+FROM base AS pruner
+RUN pnpm i turbo
+COPY . .
+RUN pnpm turbo prune --scope=backend --docker --out-dir prune/backend
+
+FROM base AS builder
+COPY --from=pruner /app/prune/backend/json/ .
+COPY --from=pruner /app/prune/backend/pnpm-lock.yaml ./pnpm-lock.yaml
+RUN pnpm install --frozen-lockfile
+
+COPY --from=pruner /app/prune/backend/full/ .
+RUN pnpm install --frozen-lockfile
+RUN pnpm run build
+RUN pnpm pkg set scripts.prepare="echo no-prepare"
+RUN pnpm prune --prod
+
+FROM base AS deploy
+
+ENV NODE_ENV production
+
+RUN addgroup --system --gid 1001 container
+RUN adduser --system --uid 1001 user
+USER user
+
+COPY --from=builder --chown=user:container /app/package.json /app/package.json
+COPY --from=builder --chown=user:container /app/node_modules /app/node_modules
+COPY --from=builder --chown=user:container /app/pnpm-workspace.yaml /app/pnpm-workspace.yaml
+
+COPY --from=builder --chown=user:container /app/apps/backend/package.json /app/apps/backend/package.json
+COPY --from=builder --chown=user:container /app/apps/backend/node_modules /app/apps/backend/node_modules
+COPY --from=builder --chown=user:container /app/apps/backend/dist /app/apps/backend/dist
+
+COPY --from=builder --chown=user:container /app/packages/config/package.json /app/packages/config/package.json
+COPY --from=builder --chown=user:container /app/packages/config/node_modules /app/packages/config/node_modules
+COPY --from=builder --chown=user:container /app/packages/config/dist /app/packages/config/dist
+
+COPY --from=builder --chown=user:container /app/packages/database/package.json /app/packages/database/package.json
+COPY --from=builder --chown=user:container /app/packages/database/node_modules /app/packages/database/node_modules
+COPY --from=builder --chown=user:container /app/packages/database/dist /app/packages/database/dist
+
+CMD pnpm --filter backend start:prod

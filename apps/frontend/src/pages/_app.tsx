@@ -1,3 +1,4 @@
+import React from "react";
 import "@/styles/globals.css";
 import Head from "next/head";
 import { ThemeProvider } from "@mui/material/styles";

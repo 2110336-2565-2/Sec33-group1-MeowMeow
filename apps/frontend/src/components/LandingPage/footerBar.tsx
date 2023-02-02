@@ -21,7 +21,7 @@ export default function FooterBar() {
         elevation={0}
         component="footer"
         color="default"
-        style={{ marginTop: "20px" }}
+        style={{ marginTop: "20px", background: "#FFFF" }}
       >
         <Grid container spacing={2}>
           <Grid item xs={8}>
@@ -36,7 +36,11 @@ export default function FooterBar() {
                 edge="start"
                 color="inherit"
                 aria-label="menu"
-                sx={{ mr: 2, color: theme.palette.primary["main"] }}
+                sx={{
+                  mr: 2,
+                  color: theme.palette.primary["main"],
+                  paddingLeft: 10,
+                }}
               >
                 <CatchingPokemonIcon />
               </IconButton>
@@ -61,16 +65,20 @@ export default function FooterBar() {
                 edge="start"
                 color="default"
                 aria-label="menu"
-                sx={{ mr: 2, color: theme.palette.primary["main"] }}
+                sx={{
+                  mr: 2,
+                  color: theme.palette.primary["main"],
+                  paddingRight: 10,
+                }}
               >
-                <FacebookIcon />
-                <GitHubIcon />
-                <InstagramIcon />
+                <FacebookIcon style={{ marginRight: "10", color: "#000000" }} />
+                <GitHubIcon style={{ marginRight: "10", color: "#000000" }} />
+                <InstagramIcon style={{ color: "#000000" }} />
               </IconButton>
             </Grid>
           </Grid>
         </Grid>
-        <Divider />
+        <Divider variant="middle" />
         <Toolbar style={{ justifyContent: "center" }}>
           <Typography variant="caption">Copyright © 2022 GuideKai</Typography>
         </Toolbar>

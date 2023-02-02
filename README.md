@@ -1,6 +1,6 @@
 # Starter Pack
 
-## Project initalization with
+## Project initialization with
 
 - NestJS
 - NextJS

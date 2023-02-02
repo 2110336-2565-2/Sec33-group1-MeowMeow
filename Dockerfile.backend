@@ -7,7 +7,7 @@ RUN npm i -g pnpm
 WORKDIR /app
 
 FROM base AS pruner
-RUN pnpm i turbo
+RUN pnpm i turbo@1.7.0
 COPY . .
 RUN pnpm turbo prune --scope=backend --docker --out-dir prune/backend
 

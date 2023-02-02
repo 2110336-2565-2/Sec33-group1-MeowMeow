@@ -40,8 +40,8 @@ export default function Promotion() {
             Members
           </Grid>
           <Grid container style={{ paddingBottom: "35px" }}>
-            More than 2 billion we people over countries use socibooks we to
-            stay in touch with friends.
+            More than 2 billion people in thailand using Guidekai to find the
+            matched guide
           </Grid>
           <Grid container style={{ color: theme.palette.primary.main }}>
             <Button variant="text">
@@ -68,8 +68,8 @@ export default function Promotion() {
             2021 on Github
           </Grid>
           <Grid container style={{ paddingBottom: "35px" }}>
-            More than 2 billion we people over countries use socibooks we to
-            stay in touch with friends.
+            Guidekai is voted as the popular project on Github in 2021 and won
+            the best new project 2021 award
           </Grid>
           <Grid container style={{}}>
             <Button variant="text">
@@ -96,8 +96,8 @@ export default function Promotion() {
           We connect You to The Adventure Life
         </Grid>
         <Grid container style={{ paddingBottom: "35px" }}>
-          Lorem ipsum dolor sit amet consectetur. Egestas enim nisl vitae nunc
-          sollicitudin. Ultricies netus egestas facilisi faucibus lobortis.
+          Guidekai aims to be the friend of your trip. We take care of your
+          journey at every step to ensure you feel comfortable.
         </Grid>
         <Grid container style={{}}>
           <Button variant="contained"> Discover more </Button>

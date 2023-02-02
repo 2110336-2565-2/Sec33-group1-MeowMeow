@@ -23,8 +23,9 @@ export default function Feature() {
       sx={{
         width: "100%",
         paddingTop: "30px",
-        paddingBottom: "30px",
-        backgroundColor: "#ffe9d6",
+        paddingBottom: "150px",
+        background:
+          "linear-gradient(0deg, rgba(241, 246, 253, 0) 1.63%, #FDF8F1 20.5%, #FFF2E6 58.57%, #FFFFFF 100%)",
       }}
     >
       <Grid container rowSpacing={5} columnSpacing={5}>
@@ -37,14 +38,14 @@ export default function Feature() {
             alignItems="center"
           >
             <Grid item xs={6} style={{ color: theme.palette.primary.main }}>
-              Our Community
+              Our Website
             </Grid>
             <Grid item xs={6} style={{ fontSize: "36px", fontWeight: "700" }}>
-              Community Main Features
+              Website Main Features
             </Grid>
             <Grid item xs={6} style={{ width: "500px", textAlign: "center" }}>
-              The wise man therefore always holds in these matters to this
-              principle of selection.
+              This website has four main features which were developed by our
+              experienced IT team to make you feel satisfied.
             </Grid>
           </Grid>
         </Grid>
@@ -52,7 +53,7 @@ export default function Feature() {
           <FeatureBox
             id={1}
             title="Matchmaking"
-            description="Members, Friends Connection ( like followers ), Private Message"
+            description="This application allow you to find your guide by using our matchmaking algorithm"
             icon={
               <GroupIcon
                 style={{ width: "50px", height: "50px", color: "white" }}
@@ -64,7 +65,7 @@ export default function Feature() {
           <FeatureBox
             id={2}
             title="Searching"
-            description="Your users can create groups to let other users to join and talk"
+            description="You can search your guide by using our search engine."
             icon={
               <SearchIcon
                 style={{ width: "50px", height: "50px", color: "white" }}
@@ -76,7 +77,7 @@ export default function Feature() {
           <FeatureBox
             id={3}
             title="Chatting"
-            description="Forum is ready by BBPress. Your users can make topics and talk."
+            description="You can chat with your guide or traveller by using our chatting system."
             icon={
               <QuestionAnswerIcon
                 style={{ width: "50px", height: "50px", color: "white" }}
@@ -88,7 +89,7 @@ export default function Feature() {
           <FeatureBox
             id={4}
             title="Payment"
-            description="Lorem ipsum dolor sit amet consectetur. Id lorem augue ornare sit. Fusce eleifend."
+            description="Payment system is available for you to pay your guide."
             icon={
               <PaymentIcon
                 style={{ width: "50px", height: "50px", color: "white" }}

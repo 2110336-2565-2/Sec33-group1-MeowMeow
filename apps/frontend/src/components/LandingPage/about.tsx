@@ -21,8 +21,9 @@ export default function About() {
       <Box
         sx={{
           flexGrow: 1,
-          background: theme.palette.grey[100],
+          background: "#ffff",
           width: "window.innerWidth",
+          paddingBottom: "50px",
         }}
       >
         <Container maxWidth={false} disableGutters>
@@ -88,10 +89,10 @@ export default function About() {
                   height={45}
                 ></Box>
                 <Image
-                  src={"/traveller_about.png"}
+                  src={"/landing/traveller_about.png"}
                   alt="user"
-                  height={450}
-                  width={530}
+                  height={465}
+                  width={540}
                   priority
                 />
               </Grid>

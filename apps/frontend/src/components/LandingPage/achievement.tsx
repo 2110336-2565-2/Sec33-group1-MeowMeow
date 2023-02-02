@@ -18,7 +18,7 @@ import QuiltedImageList from "./imageWindow";
 
 export default function Achievement() {
   return (
-    <Box sx={{ width: "100%", background: "#ffe9d6", height: "580px" }}>
+    <Box sx={{ width: "100%", height: "580px" }}>
       <Grid container spacing={2}>
         <Grid item xs={6}>
           <Grid
@@ -57,9 +57,9 @@ export default function Achievement() {
               Why Join GuideKai?
             </Grid>
             <Grid item xs={3}>
-              Lorem ipsum dolor sit amet consectetur. Nibh imperdiet est amet
-              nisl eu scelerisque volutpat at. Phasellus euismod at senectus at
-              aliquet ultricies in.
+              GuideKai provides convenient functions to use in finding your
+              dream guide. No matter where you go, GuideKai has many guides for
+              you, and many travelers look for capable guides like you!
             </Grid>
             <Grid item xs={3}>
               <Grid item xs={12} style={{ padding: "5px" }}>

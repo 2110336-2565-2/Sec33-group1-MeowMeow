@@ -1,7 +1,9 @@
 import Category from "@/components/review/category";
+import Detail from "@/components/review/detail";
 import Star from "@/components/review/star";
+import DisplayUsername from "@/components/review/displayUsername";
 import theme from "@/config/theme";
-import { Box, Grid, Paper, styled } from "@mui/material";
+import { Box, Button, Grid, Paper, styled } from "@mui/material";
 import React from "react";
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -42,13 +44,18 @@ export default function Review() {
           <Category />
         </Grid>
         <Grid item xs={12}>
-          <Item> 5 </Item>
+          <Detail />
         </Grid>
         <Grid item xs={12}>
-          <Item> 6 </Item>
+          <DisplayUsername />
         </Grid>
-        <Grid item xs={12}>
-          <Item> 7 </Item>
+        <Grid container xs={12} justifyContent="flex-end" sx={{ marginTop: 5 }}>
+          <Grid item xs={10}></Grid>
+          <Grid item xs={2}>
+            <Button variant="contained" sx={{ color: theme.palette.grey[100] }}>
+              Submit
+            </Button>
+          </Grid>
         </Grid>
       </Grid>
     </Box>

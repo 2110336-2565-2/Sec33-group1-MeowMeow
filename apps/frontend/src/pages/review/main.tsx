@@ -1,3 +1,4 @@
+import Category from "@/components/review/category";
 import Star from "@/components/review/star";
 import theme from "@/config/theme";
 import { Box, Grid, Paper, styled } from "@mui/material";
@@ -24,7 +25,6 @@ export default function Review() {
       <Grid container spacing={2}>
         <Grid
           container
-          xs={12}
           justifyContent="center"
           alignItems="center"
           fontWeight={600}
@@ -35,11 +35,11 @@ export default function Review() {
         <Grid item xs={12}>
           Natee Niparnan
         </Grid>
-        <Grid container xs={12} justifyContent="center" alignItems="center">
+        <Grid container justifyContent="center" alignItems="center">
           <Star />
         </Grid>
         <Grid item xs={12}>
-          <Item> 4 </Item>
+          <Category />
         </Grid>
         <Grid item xs={12}>
           <Item> 5 </Item>

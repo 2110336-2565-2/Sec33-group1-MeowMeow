@@ -1,7 +1,16 @@
-import { createTheme } from "@mui/material/styles";
+import { createTheme, responsiveFontSizes } from "@mui/material/styles";
 import { red } from "@mui/material/colors";
 // Create a theme instance.
-const theme = createTheme({
+let theme = createTheme({
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 600,
+      md: 900,
+      lg: 1200,
+      xl: 1536,
+    },
+  },
   palette: {
     primary: {
       main: "#F46D21",
@@ -19,12 +28,14 @@ const theme = createTheme({
     },
     text: {
       primary: "#000000",
-      secondary: "#475569",
     },
   },
   typography: {
-    fontFamily: ["Roboto"].join(","),
+    fontFamily: ["Inter", "sans-serif"].join(","),
     fontSize: 16,
   },
 });
+
+theme = responsiveFontSizes(theme);
+
 export default theme;

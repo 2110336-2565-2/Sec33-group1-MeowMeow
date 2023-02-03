@@ -21,6 +21,9 @@ RUN pnpm install --frozen-lockfile
 RUN pnpm run build
 RUN pnpm pkg set scripts.prepare="echo no-prepare"
 RUN pnpm prune --prod
+RUN cd apps/backend && pnpm prune --prod && cd ../..
+RUN cd packages/config && pnpm prune --prod && cd ../..
+RUN cd packages/database && pnpm prune --prod && cd ../..
 
 FROM base AS deploy
 

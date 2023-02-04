@@ -3,11 +3,11 @@ import Detail from "@/components/review/detail";
 import Star from "@/components/review/star";
 import DisplayUsername from "@/components/review/displayUsername";
 import theme from "@/config/theme";
-import { Button, Grid } from "@mui/material";
+import { Alert, Button, DialogActions, Grid } from "@mui/material";
 import React from "react";
 
 export default function Review() {
-  const [star, setStar] = React.useState<number | null>(0);
+  const [star, setStar] = React.useState<number | null>(null);
   const [category, setCategory] = React.useState<(string | null)[]>([
     null,
     null,
@@ -16,6 +16,7 @@ export default function Review() {
   ]);
   const [detail, setDetail] = React.useState<string>("");
   const [isShowUsername, setIsShowUsername] = React.useState<boolean>(false);
+  const [isAlert, setIsAlert] = React.useState<boolean>(false);
 
   const handleStar = (starValue: number | null) => {
     setStar(starValue);
@@ -31,6 +32,11 @@ export default function Review() {
     setIsShowUsername(isShowUsernameValue);
   };
   const handleSubmit = () => {
+    if (star === null || star === 0) {
+      setIsAlert(true);
+      return;
+    }
+    setIsAlert(false);
     console.log(
       "star: ",
       star,
@@ -47,9 +53,9 @@ export default function Review() {
     <Grid
       container
       sx={{
-        backgroundColor: theme.palette.grey["100"],
-        margin: 5,
+        backgroundColor: "#ffffff",
         padding: 5,
+        paddingTop: 2,
         borderRadius: 5,
       }}
       width={583}
@@ -57,6 +63,11 @@ export default function Review() {
       justifyContent="center"
       alignItems="center"
     >
+      {isAlert && (
+        <Alert severity="error">
+          Error! Please Provide star rating before submit
+        </Alert>
+      )}
       <Grid item xs={12}>
         <Grid
           container
@@ -89,13 +100,15 @@ export default function Review() {
           </Grid>
           <Grid container justifyContent="flex-end" sx={{ marginTop: 2 }}>
             <Grid item>
-              <Button
-                variant="contained"
-                sx={{ color: theme.palette.grey[100] }}
-                onClick={handleSubmit}
-              >
-                Submit
-              </Button>
+              <DialogActions>
+                <Button
+                  variant="contained"
+                  sx={{ color: theme.palette.grey[100] }}
+                  onClick={handleSubmit}
+                >
+                  Submit
+                </Button>
+              </DialogActions>
             </Grid>
           </Grid>
         </Grid>

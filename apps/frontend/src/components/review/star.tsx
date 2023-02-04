@@ -1,7 +1,6 @@
 import * as React from "react";
 import Rating from "@mui/material/Rating";
 import Box from "@mui/material/Box";
-import StarIcon from "@mui/icons-material/Star";
 import { Grid, Stack } from "@mui/material";
 
 const labels: { [index: string]: string } = {
@@ -28,7 +27,6 @@ interface starProps {
 }
 
 export default function Star(starProps: starProps) {
-  // const [value, setValue] = React.useState<number | null>(2);
   const [hover, setHover] = React.useState(-1);
 
   return (

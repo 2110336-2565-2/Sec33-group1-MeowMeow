@@ -1,6 +1,7 @@
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import { ReactNode } from "react";
+
 const ResponsiveBox = styled(Box)(({ theme }) => {
   return {
     backgroundColor: "#FFFFFF",
@@ -14,7 +15,6 @@ const ResponsiveBox = styled(Box)(({ theme }) => {
       margin: "12px",
       borderRadius: "12px",
     },
-
     [theme.breakpoints.up("sm")]: {
       width: "500px",
       padding: "32px",

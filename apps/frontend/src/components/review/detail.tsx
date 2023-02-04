@@ -1,17 +1,15 @@
 import theme from "@/config/theme";
 import { Box, Grid, TextField } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 export default function Detail() {
   const [comment, setComment] = React.useState("");
   const [count, setCount] = React.useState(0);
-  const [IsExceed, setIsExceed] = React.useState(false);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (count >= 200) {
-      setIsExceed(true);
+    if (event.target.value.length > 200) {
     } else {
       setComment(event.target.value);
-      setCount(count + 1);
+      setCount(event.target.value.length);
     }
   };
 
@@ -26,8 +24,8 @@ export default function Detail() {
       <Grid
         container
         direction={"column"}
-        justifyContent="center"
-        alignItems="center"
+        justifyContent="flex-start"
+        alignItems="flex-start"
         sx={{ marginTop: 1 }}
       >
         <TextField
@@ -35,16 +33,14 @@ export default function Detail() {
           label="Tell us how you feel. Good Services?"
           placeholder="Tell us how you feel. Good Services?"
           multiline
-          InputProps={{
-            readOnly: IsExceed,
-          }}
           onChange={handleChange}
-          sx={{ width: 600 }}
+          sx={{ width: "inherit" }}
+          value={comment}
         />
       </Grid>
       <Grid
         container
-        sx={{ marginTop: 2, marginLeft: 12, color: theme.palette.grey[700] }}
+        sx={{ marginTop: 2, color: theme.palette.grey[700] }}
         justifyContent="flex-start"
         alignItems="flex-start"
       >

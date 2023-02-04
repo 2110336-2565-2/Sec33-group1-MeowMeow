@@ -20,7 +20,7 @@ export default function CategoryBox(props: CategoryBoxProps) {
       container
       justifyContent="center"
       alignItems="center"
-      sx={{ marginTop: 5 }}
+      sx={{ marginTop: 2 }}
     >
       <ToggleButtonGroup
         color="primary"

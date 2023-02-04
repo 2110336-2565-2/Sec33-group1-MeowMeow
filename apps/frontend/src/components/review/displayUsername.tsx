@@ -11,11 +11,11 @@ export default function DisplayUsername() {
 
   return (
     <Grid container spacing={1}>
-      <Grid item xs={6} sx={{ marginLeft: 12 }}>
+      <Grid item xs={9} sx={{}}>
         Displaying username in this review
       </Grid>
-      <Grid item xs={1} sx={{ marginLeft: 19 }}>
-        <Grid container justifyContent={"flex-end"}>
+      <Grid item xs={3} sx={{}}>
+        <Grid container justifyContent="flex-end" alignItems="flex-end">
           <Switch
             checked={checked}
             onChange={handleChange}

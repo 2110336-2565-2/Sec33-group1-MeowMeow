@@ -16,15 +16,20 @@ const Item = styled(Paper)(({ theme }) => ({
 
 export default function Review() {
   return (
-    <Box
+    <Grid
+      container
       sx={{
         backgroundColor: theme.palette.grey["100"],
         margin: 5,
         padding: 5,
         borderRadius: 5,
       }}
+      width={583}
+      height={"auto"}
+      justifyContent="center"
+      alignItems="center"
     >
-      <Grid container spacing={2}>
+      <Grid item xs={12}>
         <Grid
           container
           justifyContent="center"
@@ -34,30 +39,34 @@ export default function Review() {
         >
           Review
         </Grid>
-        <Grid item xs={12}>
-          Natee Niparnan
-        </Grid>
-        <Grid container justifyContent="center" alignItems="center">
-          <Star />
-        </Grid>
-        <Grid item xs={12}>
-          <Category />
-        </Grid>
-        <Grid item xs={12}>
-          <Detail />
-        </Grid>
-        <Grid item xs={12}>
-          <DisplayUsername />
-        </Grid>
-        <Grid container xs={12} justifyContent="flex-end" sx={{ marginTop: 5 }}>
-          <Grid item xs={10}></Grid>
-          <Grid item xs={2}>
-            <Button variant="contained" sx={{ color: theme.palette.grey[100] }}>
-              Submit
-            </Button>
+        <Grid container>
+          <Grid item xs={12}>
+            Natee Niparnan
+          </Grid>
+          <Grid container justifyContent="center" alignItems="center">
+            <Star />
+          </Grid>
+          <Grid item xs={12}>
+            <Category />
+          </Grid>
+          <Grid item xs={12}>
+            <Detail />
+          </Grid>
+          <Grid item xs={12}>
+            <DisplayUsername />
+          </Grid>
+          <Grid container justifyContent="flex-end" sx={{ marginTop: 2 }}>
+            <Grid item>
+              <Button
+                variant="contained"
+                sx={{ color: theme.palette.grey[100] }}
+              >
+                Submit
+              </Button>
+            </Grid>
           </Grid>
         </Grid>
       </Grid>
-    </Box>
+    </Grid>
   );
 }

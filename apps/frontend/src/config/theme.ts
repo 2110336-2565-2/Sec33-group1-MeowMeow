@@ -1,6 +1,8 @@
 import { createTheme, responsiveFontSizes } from "@mui/material/styles";
 import { red } from "@mui/material/colors";
-// Create a theme instance.
+
+const defaultTheme = createTheme();
+
 let theme = createTheme({
   breakpoints: {
     values: {
@@ -33,6 +35,15 @@ let theme = createTheme({
   typography: {
     fontFamily: ["Inter", "sans-serif"].join(","),
     fontSize: 16,
+    body2: {
+      lineHeight: 1.5,
+      [defaultTheme.breakpoints.up("sm")]: {
+        fontSize: 16,
+      },
+      [defaultTheme.breakpoints.down("sm")]: {
+        fontSize: 14,
+      },
+    },
   },
 });
 

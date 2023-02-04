@@ -3,18 +3,46 @@ import Detail from "@/components/review/detail";
 import Star from "@/components/review/star";
 import DisplayUsername from "@/components/review/displayUsername";
 import theme from "@/config/theme";
-import { Box, Button, Grid, Paper, styled } from "@mui/material";
+import { Button, Grid } from "@mui/material";
 import React from "react";
 
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: "center",
-  color: theme.palette.text.secondary,
-}));
-
 export default function Review() {
+  const [star, setStar] = React.useState<number | null>(0);
+  const [category, setCategory] = React.useState<(string | null)[]>([
+    null,
+    null,
+    null,
+    null,
+  ]);
+  const [detail, setDetail] = React.useState<string>("");
+  const [isShowUsername, setIsShowUsername] = React.useState<boolean>(false);
+
+  const handleStar = (starValue: number | null) => {
+    setStar(starValue);
+  };
+  const handleCategory = (categoryValue: string | null, index: number) => {
+    category[index] = categoryValue;
+    setCategory(category);
+  };
+  const handleDetail = (detailValue: string) => {
+    setDetail(detailValue);
+  };
+  const handleIsShowUsername = (isShowUsernameValue: boolean) => {
+    setIsShowUsername(isShowUsernameValue);
+  };
+  const handleSubmit = () => {
+    console.log(
+      "star: ",
+      star,
+      "\ncategory: ",
+      category,
+      "\ndetail: ",
+      detail,
+      "\nisShowUsername: ",
+      isShowUsername
+    );
+  };
+
   return (
     <Grid
       container
@@ -36,6 +64,7 @@ export default function Review() {
           alignItems="center"
           fontWeight={600}
           fontSize={30}
+          sx={{ marginBottom: 2 }}
         >
           Review
         </Grid>
@@ -44,22 +73,26 @@ export default function Review() {
             Natee Niparnan
           </Grid>
           <Grid container justifyContent="center" alignItems="center">
-            <Star />
+            <Star handleStar={handleStar} star={star} />
           </Grid>
           <Grid item xs={12}>
-            <Category />
+            <Category point={star} handleCategory={handleCategory} />
           </Grid>
           <Grid item xs={12}>
-            <Detail />
+            <Detail detail={detail} handleDetail={handleDetail} />
           </Grid>
           <Grid item xs={12}>
-            <DisplayUsername />
+            <DisplayUsername
+              isShowUsername={isShowUsername}
+              handleIsShowUsername={handleIsShowUsername}
+            />
           </Grid>
           <Grid container justifyContent="flex-end" sx={{ marginTop: 2 }}>
             <Grid item>
               <Button
                 variant="contained"
                 sx={{ color: theme.palette.grey[100] }}
+                onClick={handleSubmit}
               >
                 Submit
               </Button>

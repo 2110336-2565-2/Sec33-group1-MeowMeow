@@ -22,8 +22,13 @@ function getLabelText(value: number) {
   return `${value} Star${value !== 1 ? "s" : ""}, ${labels[value]}`;
 }
 
-export default function Star() {
-  const [value, setValue] = React.useState<number | null>(2);
+interface starProps {
+  star: number | null;
+  handleStar: (num: number | null) => void;
+}
+
+export default function Star(starProps: starProps) {
+  // const [value, setValue] = React.useState<number | null>(2);
   const [hover, setHover] = React.useState(-1);
 
   return (
@@ -42,11 +47,11 @@ export default function Star() {
       <Grid item>
         <Rating
           name="hover-feedback"
-          value={value}
+          value={starProps.star}
           precision={0.5}
           getLabelText={getLabelText}
           onChange={(event, newValue) => {
-            setValue(newValue);
+            starProps.handleStar(newValue);
           }}
           onChangeActive={(event, newHover) => {
             setHover(newHover);
@@ -54,9 +59,9 @@ export default function Star() {
         />
       </Grid>
       <Grid item>
-        {value !== null && (
+        {starProps.star !== null && (
           <Box sx={{ marginTop: 2 }}>
-            {labels[hover !== -1 ? hover : value]}
+            {labels[hover !== -1 ? hover : starProps.star]}
           </Box>
         )}
       </Grid>

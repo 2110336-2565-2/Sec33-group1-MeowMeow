@@ -1,20 +1,28 @@
 import { Grid, ToggleButton, ToggleButtonGroup } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 
-interface CategoryBoxProps {
+interface categoryBoxProps {
+  id: number;
   text: string;
   value: string;
+  reset: boolean;
+  handleCategory: (categoryValue: string | null, index: number) => void;
 }
 
-export default function CategoryBox(props: CategoryBoxProps) {
-  const [alignment, setAlignment] = React.useState("");
-
+export default function CategoryBox(boxProps: categoryBoxProps) {
+  const [value, setValue] = React.useState("");
   const handleChange = (
     event: React.MouseEvent<HTMLElement>,
     newAlignment: string
   ) => {
-    setAlignment(newAlignment);
+    boxProps.handleCategory(newAlignment, boxProps.id);
+    setValue(newAlignment);
   };
+
+  useEffect(() => {
+    setValue("");
+  }, [boxProps.reset]);
+
   return (
     <Grid
       container
@@ -24,14 +32,13 @@ export default function CategoryBox(props: CategoryBoxProps) {
     >
       <ToggleButtonGroup
         color="primary"
-        value={alignment}
+        value={value}
         exclusive
         onChange={handleChange}
         aria-label="Platform"
       >
-        <ToggleButton sx={{ width: 200 }} value={props.value}>
-          {" "}
-          {props.text}{" "}
+        <ToggleButton sx={{ width: 200 }} value={boxProps.value}>
+          {boxProps.text}
         </ToggleButton>
       </ToggleButtonGroup>
     </Grid>

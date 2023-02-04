@@ -1,5 +1,5 @@
 import { ToggleButtonGroup, ToggleButton, Grid } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import CategoryBox from "./categoryBox";
 
 var categoryName: string[][] = new Array(2);
@@ -11,15 +11,27 @@ categoryName[1] = [
   "Not On Time",
 ]; // Bad
 
-export default function Category() {
-  const [alignment, setAlignment] = React.useState("web");
+interface categoryProps {
+  point: number | null;
+  handleCategory: (categoryValue: string | null, index: number) => void;
+}
 
-  const handleChange = (
-    event: React.MouseEvent<HTMLElement>,
-    newAlignment: string
-  ) => {
-    setAlignment(newAlignment);
-  };
+var indicator = 0;
+export default function Category(categoryProps: categoryProps) {
+  const [reset, setReset] = React.useState(false);
+  if (categoryProps.point == null || categoryProps.point < 2.5) {
+    indicator = 1;
+  } else {
+    indicator = 0;
+  }
+
+  useEffect(() => {
+    for (var i = 0; i < 4; i++) {
+      categoryProps.handleCategory(null, i);
+    }
+    setReset(!reset);
+  }, [indicator]);
+
   return (
     <Grid
       container
@@ -37,10 +49,22 @@ export default function Category() {
         spacing={1}
       >
         <Grid item xs={5}>
-          <CategoryBox text="Polite" value="Polite" />
+          <CategoryBox
+            id={0}
+            text={categoryName[indicator][0]}
+            value={categoryName[indicator][0]}
+            handleCategory={categoryProps.handleCategory}
+            reset={reset}
+          />
         </Grid>
         <Grid item xs={5}>
-          <CategoryBox text="Guidance" value="Guidance" />
+          <CategoryBox
+            id={1}
+            text={categoryName[indicator][1]}
+            value={categoryName[indicator][1]}
+            handleCategory={categoryProps.handleCategory}
+            reset={reset}
+          />
         </Grid>
       </Grid>
 
@@ -52,10 +76,22 @@ export default function Category() {
         spacing={1}
       >
         <Grid item xs={5}>
-          <CategoryBox text="Funny" value="Funny" />
+          <CategoryBox
+            id={2}
+            text={categoryName[indicator][2]}
+            value={categoryName[indicator][2]}
+            handleCategory={categoryProps.handleCategory}
+            reset={reset}
+          />
         </Grid>
         <Grid item xs={5}>
-          <CategoryBox text="Knowledgeful" value="Knowledgeful" />
+          <CategoryBox
+            id={3}
+            text={categoryName[indicator][3]}
+            value={categoryName[indicator][3]}
+            handleCategory={categoryProps.handleCategory}
+            reset={reset}
+          />
         </Grid>
       </Grid>
     </Grid>

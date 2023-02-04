@@ -2,11 +2,16 @@ import React from "react";
 import Switch from "@mui/material/Switch";
 import { Grid } from "@mui/material";
 
-export default function DisplayUsername() {
-  const [checked, setChecked] = React.useState(true);
+interface displayUsernamePropsInterface {
+  isShowUsername: boolean;
+  handleIsShowUsername: (isShowUsernameValue: boolean) => void;
+}
 
+export default function DisplayUsername(
+  isShowProps: displayUsernamePropsInterface
+) {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked(event.target.checked);
+    isShowProps.handleIsShowUsername(event.target.checked);
   };
 
   return (
@@ -17,7 +22,7 @@ export default function DisplayUsername() {
       <Grid item xs={3} sx={{}}>
         <Grid container justifyContent="flex-end" alignItems="flex-end">
           <Switch
-            checked={checked}
+            checked={isShowProps.isShowUsername}
             onChange={handleChange}
             inputProps={{ "aria-label": "controlled" }}
           />

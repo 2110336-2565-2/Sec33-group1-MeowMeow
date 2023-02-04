@@ -2,13 +2,17 @@ import theme from "@/config/theme";
 import { Box, Grid, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
 
-export default function Detail() {
-  const [comment, setComment] = React.useState("");
+interface detailPropsInterface {
+  detail: string;
+  handleDetail: (detailValue: string) => void;
+}
+
+export default function Detail(detailProps: detailPropsInterface) {
   const [count, setCount] = React.useState(0);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value.length > 200) {
     } else {
-      setComment(event.target.value);
+      detailProps.handleDetail(event.target.value);
       setCount(event.target.value.length);
     }
   };
@@ -35,7 +39,7 @@ export default function Detail() {
           multiline
           onChange={handleChange}
           sx={{ width: "inherit" }}
-          value={comment}
+          value={detailProps.detail}
         />
       </Grid>
       <Grid

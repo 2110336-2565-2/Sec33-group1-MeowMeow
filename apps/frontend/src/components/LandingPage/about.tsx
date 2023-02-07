@@ -7,6 +7,7 @@ import { Container, Button } from "@mui/material";
 import Navbar from "./navbar";
 import Image from "next/image";
 import theme from "@/config/theme";
+import traveller_about from "../../../public/landing/traveller_about.png";
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -29,7 +30,7 @@ export default function About() {
         <Container maxWidth={false} disableGutters>
           <Box
             sx={{
-              height: "600px",
+              height: "550px",
               width: "auto",
               background: "linear-gradient(to right bottom, #FFFFFF, #fff3e0)",
               padding: "0px",
@@ -61,9 +62,9 @@ export default function About() {
                   <Grid
                     item
                     xs={3}
-                    style={{
+                    sx={{
                       height: "auto",
-                      fontSize: "50px",
+                      fontSize: { xs: "25px", sm: "50px" },
                       fontWeight: "bold",
                     }}
                   >
@@ -81,20 +82,27 @@ export default function About() {
                   </Grid>
                 </Grid>
               </Grid>
-              <Grid item xs={6}>
-                <Box
-                  display="flex"
+              <Grid item xs={6} style={{ minHeight: "600px" }}>
+                <Grid
+                  container
+                  direction="row"
                   justifyContent="flex-end"
                   alignItems="flex-end"
-                  height={45}
-                ></Box>
-                <Image
-                  src={"/landing/traveller_about.png"}
-                  alt="user"
-                  height={465}
-                  width={540}
-                  priority
-                />
+                >
+                  <Box
+                    display="flex"
+                    justifyContent="flex-end"
+                    alignItems="flex-end"
+                    height={45}
+                  ></Box>
+                  <Image
+                    src={traveller_about}
+                    alt="user"
+                    height={465}
+                    width={540}
+                    priority
+                  />
+                </Grid>
               </Grid>
             </Grid>
           </Box>

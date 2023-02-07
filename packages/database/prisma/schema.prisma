@@ -55,7 +55,6 @@ model Review {
   publishDate         DateTime
   score               Decimal  @db.Decimal(2, 1)
   text                String?
-  isUsernameDisplayed Boolean
   reviewer            User     @relation(fields: [reviewerId], references: [id])
   reviewerId          Int
   guide               Guide    @relation(fields: [guideId], references: [id])

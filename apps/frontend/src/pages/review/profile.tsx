@@ -39,13 +39,16 @@ export default function ScrollDialog() {
         aria-labelledby="scroll-dialog-title"
         aria-describedby="scroll-dialog-description"
         fullWidth
+        sx={{
+          padding: { sm: 5, xs: 2 },
+        }}
       >
         <Grid container justifyContent="flex-end" alignItems="flex-end">
           <IconButton onClick={handleClose}>
             <CancelIcon style={{ color: theme.palette.primary.main }} />
           </IconButton>
         </Grid>
-        <Review />
+        <Review handleDialog={handleClose} />
       </Dialog>
     </>
   );

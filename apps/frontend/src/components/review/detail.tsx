@@ -23,7 +23,7 @@ export default function Detail(detailProps: detailPropsInterface) {
       direction={"column"}
       justifyContent="flex-start"
       alignItems="flex-start"
-      sx={{ marginTop: 5, marginBottom: 5 }}
+      sx={{ marginTop: 3, marginBottom: 5 }}
     >
       <Grid
         container

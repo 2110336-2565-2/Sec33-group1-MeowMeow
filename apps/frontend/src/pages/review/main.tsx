@@ -3,10 +3,23 @@ import Detail from "@/components/review/detail";
 import Star from "@/components/review/star";
 import DisplayUsername from "@/components/review/displayUsername";
 import theme from "@/config/theme";
-import { Alert, Button, DialogActions, Grid } from "@mui/material";
+import {
+  Alert,
+  Button,
+  DialogActions,
+  Grid,
+  useMediaQuery,
+} from "@mui/material";
 import React from "react";
+import reviewHandler from "../api/review";
+import { Router, useRouter } from "next/router";
 
-export default function Review() {
+interface reviewProps {
+  handleDialog: () => void;
+}
+
+export default function Review(props: reviewProps) {
+  const router = useRouter();
   const [star, setStar] = React.useState<number | null>(null);
   const [category, setCategory] = React.useState<(string | null)[]>([
     null,
@@ -32,21 +45,14 @@ export default function Review() {
     setIsShowUsername(isShowUsernameValue);
   };
   const handleSubmit = () => {
-    if (star === null || star === 0) {
+    if (star === null || star === 0 || detail === "") {
       setIsAlert(true);
       return;
     }
     setIsAlert(false);
-    console.log(
-      "star: ",
-      star,
-      "\ncategory: ",
-      category,
-      "\ndetail: ",
-      detail,
-      "\nisShowUsername: ",
-      isShowUsername
-    );
+    console.log("star: ", star, "\ndetail: ", detail);
+
+    router.push("pages/api/review");
   };
 
   return (
@@ -54,21 +60,21 @@ export default function Review() {
       container
       sx={{
         backgroundColor: "#ffffff",
-        padding: 5,
+        padding: { sm: 5, xs: 5 },
         paddingTop: 2,
         borderRadius: 5,
       }}
-      width={583}
+      width={"auto"}
       height={"auto"}
       justifyContent="center"
       alignItems="center"
     >
       {isAlert && (
         <Alert severity="error">
-          Error! Please Provide star rating before submit
+          Error! Please Provide star rating and comment before submit
         </Alert>
       )}
-      <Grid item xs={12}>
+      <Grid item xs={8} sm={12}>
         <Grid
           container
           justifyContent="center"
@@ -79,25 +85,25 @@ export default function Review() {
         >
           Review
         </Grid>
-        <Grid container>
+        <Grid container justifyContent="flex-start" alignItems="center">
           <Grid item xs={12}>
             Natee Niparnan
           </Grid>
           <Grid container justifyContent="center" alignItems="center">
             <Star handleStar={handleStar} star={star} />
           </Grid>
-          <Grid item xs={12}>
+          {/* <Grid item xs={12}>
             <Category point={star} handleCategory={handleCategory} />
-          </Grid>
+          </Grid> */}
           <Grid item xs={12}>
             <Detail detail={detail} handleDetail={handleDetail} />
           </Grid>
-          <Grid item xs={12}>
+          {/* <Grid item xs={12}>
             <DisplayUsername
               isShowUsername={isShowUsername}
               handleIsShowUsername={handleIsShowUsername}
             />
-          </Grid>
+          </Grid> */}
           <Grid container justifyContent="flex-end" sx={{ marginTop: 2 }}>
             <Grid item>
               <DialogActions>

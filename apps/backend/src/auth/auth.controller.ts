@@ -6,11 +6,11 @@ import {
   InvalidRequestError,
 } from './auth.commons';
 
-@Controller()
+@Controller({ path: 'auth', version: '1' })
 export class AppController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('/sign-in')
+  @Post('sign-in')
   signIn(@Body() req: LoginRequest, @Res({ passthrough: true }) res) {
     let resBody: LoginResponse;
     let statusCode = HttpStatus.CREATED;
@@ -31,6 +31,6 @@ export class AppController {
     return res.status(statusCode).send(resBody);
   }
 
-  @Post('/sign-out')
+  @Post('sign-out')
   signOut() {}
 }

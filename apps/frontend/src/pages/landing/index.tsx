@@ -10,12 +10,12 @@ export default function Landing() {
   return (
     <Grid container direction="row" justifyContent="center" alignItems="center">
       <About />
-      <Container maxWidth="lg">
-        {/* <Achievement /> */}
-        <Promotion />
-        <Feature />
-        <FooterBar />
-      </Container>
+      {/* <Container maxWidth="xl"> */}
+      <Achievement />
+      <Promotion />
+      <Feature />
+      <FooterBar />
+      {/* </Container> */}
     </Grid>
   );
 }

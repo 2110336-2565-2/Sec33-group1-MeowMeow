@@ -1,4 +1,4 @@
-import { Box, Grid } from "@mui/material";
+import { Box, Container, Grid } from "@mui/material";
 import React from "react";
 import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
@@ -28,76 +28,94 @@ export default function Feature() {
           "linear-gradient(0deg, rgba(241, 246, 253, 0) 1.63%, #FDF8F1 20.5%, #FFF2E6 58.57%, #FFFFFF 100%)",
       }}
     >
-      <Grid container rowSpacing={5} columnSpacing={5}>
-        <Grid item xs={12}>
-          <Grid
-            container
-            rowSpacing={1}
-            direction="column"
-            justifyContent="center"
-            alignItems="center"
-          >
-            <Grid item xs={6} style={{ color: theme.palette.primary.main }}>
-              Our Website
-            </Grid>
-            <Grid item xs={6} style={{ fontSize: "36px", fontWeight: "700" }}>
-              Website Main Features
-            </Grid>
-            <Grid item xs={6} style={{ width: "500px", textAlign: "center" }}>
-              This website has four main features which were developed by our
-              experienced IT team to make you feel satisfied.
+      <Container maxWidth="xl">
+        <Grid container rowSpacing={5} columnSpacing={5} maxWidth="xl">
+          <Grid item xs={12}>
+            <Grid
+              container
+              rowSpacing={1}
+              direction="column"
+              justifyContent="center"
+              alignItems="center"
+            >
+              <Grid item xs={6} style={{ color: theme.palette.primary.main }}>
+                Our Website
+              </Grid>
+              <Grid
+                item
+                xs={6}
+                style={{
+                  fontSize: "36px",
+                  fontWeight: "700",
+                  textAlign: "center",
+                }}
+              >
+                Website Main Features
+              </Grid>
+              <Grid
+                item
+                xs={6}
+                style={{
+                  width: "auto",
+                  maxWidth: "500px",
+                  textAlign: "center",
+                }}
+              >
+                This website has four main features which were developed by our
+                experienced IT team to make you feel satisfied.
+              </Grid>
             </Grid>
           </Grid>
+          <Grid item sm={6}>
+            <FeatureBox
+              id={1}
+              title="Matchmaking"
+              description="This application allow you to find your guide by using our matchmaking algorithm"
+              icon={
+                <GroupIcon
+                  style={{ width: "50px", height: "50px", color: "white" }}
+                />
+              }
+            />
+          </Grid>
+          <Grid item sm={6}>
+            <FeatureBox
+              id={2}
+              title="Searching"
+              description="You can search your guide by using our powerful search engine."
+              icon={
+                <SearchIcon
+                  style={{ width: "50px", height: "50px", color: "white" }}
+                />
+              }
+            />
+          </Grid>
+          <Grid item sm={6}>
+            <FeatureBox
+              id={3}
+              title="Chatting"
+              description="You can chat with your guide or traveller by using our chatting system."
+              icon={
+                <QuestionAnswerIcon
+                  style={{ width: "50px", height: "50px", color: "white" }}
+                />
+              }
+            />
+          </Grid>
+          <Grid item sm={6}>
+            <FeatureBox
+              id={4}
+              title="Payment"
+              description="Payment system is available for you to pay your guide."
+              icon={
+                <PaymentIcon
+                  style={{ width: "50px", height: "50px", color: "white" }}
+                />
+              }
+            />
+          </Grid>
         </Grid>
-        <Grid item xs={6}>
-          <FeatureBox
-            id={1}
-            title="Matchmaking"
-            description="This application allow you to find your guide by using our matchmaking algorithm"
-            icon={
-              <GroupIcon
-                style={{ width: "50px", height: "50px", color: "white" }}
-              />
-            }
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <FeatureBox
-            id={2}
-            title="Searching"
-            description="You can search your guide by using our search engine."
-            icon={
-              <SearchIcon
-                style={{ width: "50px", height: "50px", color: "white" }}
-              />
-            }
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <FeatureBox
-            id={3}
-            title="Chatting"
-            description="You can chat with your guide or traveller by using our chatting system."
-            icon={
-              <QuestionAnswerIcon
-                style={{ width: "50px", height: "50px", color: "white" }}
-              />
-            }
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <FeatureBox
-            id={4}
-            title="Payment"
-            description="Payment system is available for you to pay your guide."
-            icon={
-              <PaymentIcon
-                style={{ width: "50px", height: "50px", color: "white" }}
-              />
-            }
-          />
-        </Grid>
-      </Grid>
+      </Container>
     </Box>
   );
 }

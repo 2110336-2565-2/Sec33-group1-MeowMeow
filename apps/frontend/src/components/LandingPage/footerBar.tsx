@@ -17,13 +17,20 @@ export default function FooterBar() {
   return (
     <>
       <AppBar
-        position="static"
+        position="relative"
         elevation={0}
         component="footer"
         color="default"
         style={{ marginTop: "20px", background: "#FFFF" }}
       >
-        <Grid container spacing={2}>
+        <Grid
+          container
+          direction="row"
+          justifyContent="center"
+          alignItems="center"
+          spacing={2}
+          sx={{ flexDirection: { xs: "column", sm: "row" } }}
+        >
           <Grid item xs={8}>
             <Grid
               container
@@ -37,9 +44,8 @@ export default function FooterBar() {
                 color="inherit"
                 aria-label="menu"
                 sx={{
-                  mr: 2,
                   color: theme.palette.primary["main"],
-                  paddingLeft: 10,
+                  paddingLeft: { sm: 10, xs: 0 },
                 }}
               >
                 <CatchingPokemonIcon />
@@ -66,9 +72,8 @@ export default function FooterBar() {
                 color="default"
                 aria-label="menu"
                 sx={{
-                  mr: 2,
                   color: theme.palette.primary["main"],
-                  paddingRight: 10,
+                  paddingRight: { sm: 10, xs: 0 },
                 }}
               >
                 <FacebookIcon style={{ marginRight: "10", color: "#000000" }} />

@@ -4,7 +4,7 @@ import Paper from "@mui/material/Paper";
 import { Grid, Typography } from "@mui/material";
 
 const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
+  backgroundColor: "#fff",
   ...theme.typography.body2,
   padding: theme.spacing(1),
   textAlign: "left",
@@ -42,11 +42,16 @@ interface featureBoxProps {
 export default function FeatureBox(props: featureBoxProps) {
   return (
     <Item>
-      <Grid container spacing={2} direction="row">
-        <Grid item xs={4}>
+      <Grid
+        container
+        direction="row"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <Grid item xs={4} sx={{ marginRight: "0px" }}>
           <Grid
             container
-            sx={{ width: 128, height: 128 }}
+            sx={{ width: "auto", height: 128, margin: "0px" }}
             alignItems="center"
             justifyContent="center"
           >
@@ -67,18 +72,16 @@ export default function FeatureBox(props: featureBoxProps) {
           </Grid>
         </Grid>
         <Grid item xs={8} container>
-          <Grid item xs container direction="column" spacing={2}>
-            <Grid item xs>
+          <Grid item container direction="column" spacing={2}>
+            <Grid item>
               <Typography
-                gutterBottom
                 variant="subtitle1"
-                component="div"
                 style={{ fontSize: "24px", fontWeight: "600" }}
               >
                 {props.title}
               </Typography>
             </Grid>
-            <Grid item xs>
+            <Grid item>
               <Typography variant="body1" gutterBottom>
                 {props.description}
               </Typography>

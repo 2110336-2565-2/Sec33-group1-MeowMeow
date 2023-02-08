@@ -5,3 +5,11 @@ export class InvalidRequestError extends Error {
     Object.setPrototypeOf(this, InvalidRequestError.prototype);
   }
 }
+
+export class InvalidAuthenticationError extends Error {
+  constructor(msg: string) {
+    super(msg);
+
+    Object.setPrototypeOf(this, InvalidRequestError.prototype);
+  }
+}

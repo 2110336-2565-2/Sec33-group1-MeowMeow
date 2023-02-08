@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Container,
   Grid,
   List,
   ListItem,
@@ -18,7 +19,7 @@ import QuiltedImageList from "./imageWindow";
 
 export default function Achievement() {
   return (
-    <Box sx={{ width: "100%", height: "auto" }}>
+    <Box maxWidth="xl" sx={{ width: "100%", height: "580px" }}>
       <Grid container spacing={2}>
         <Grid item xs={6}>
           <Grid

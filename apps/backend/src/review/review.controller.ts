@@ -28,7 +28,7 @@ export class ReviewController {
         HttpStatus.BAD_REQUEST,
       );
     }
-    console.log(reviewData);
+    this.reviewService.createReview(reviewData);
     return {};
   }
 }

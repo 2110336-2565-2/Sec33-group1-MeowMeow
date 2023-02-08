@@ -1,6 +1,11 @@
 import { Controller, HttpStatus, Post, Body, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LoginRequest, LoginResponse } from './auth.dto';
+import {
+  LoginRequest,
+  LoginResponse,
+  LogoutRequest,
+  LogoutResponse,
+} from './auth.dto';
 import {
   InvalidAuthenticationError,
   InvalidRequestError,
@@ -16,6 +21,7 @@ export class AppController {
     let statusCode = HttpStatus.CREATED;
     try {
       resBody = this.authService.login(req);
+      // TODO set session (access token and refresh token) to cookie
     } catch (e) {
       if (e instanceof InvalidRequestError) {
         statusCode = HttpStatus.BAD_REQUEST;
@@ -32,5 +38,23 @@ export class AppController {
   }
 
   @Post('sign-out')
-  signOut() {}
+  signOut(@Body() req: LogoutRequest, @Res({ passthrough: true }) res) {
+    let resBody: LogoutResponse;
+    let statusCode = HttpStatus.CREATED;
+    try {
+      // TODO remove session from cookie
+    } catch (e) {
+      if (e instanceof InvalidRequestError) {
+        statusCode = HttpStatus.BAD_REQUEST;
+        resBody = { message: e.message };
+      } else if (e instanceof InvalidAuthenticationError) {
+        statusCode = HttpStatus.UNAUTHORIZED;
+        resBody = { message: e.message };
+      } else {
+        statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
+        resBody = { message: 'internal server error' };
+      }
+    }
+    return res.status(statusCode).send(resBody);
+  }
 }

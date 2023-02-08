@@ -1,4 +1,4 @@
-import { Button, Grid } from "@mui/material";
+import { Button, Grid, Container } from "@mui/material";
 import React from "react";
 import theme from "@/config/theme";
 import PromotionBox from "./promotionBox";
@@ -11,6 +11,7 @@ import GitHubIcon from "@mui/icons-material/GitHub";
 export default function Promotion() {
   return (
     <Grid
+      maxWidth="xl"
       container
       direction="row"
       justifyContent="center"

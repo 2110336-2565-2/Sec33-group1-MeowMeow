@@ -18,7 +18,7 @@ export default function Promotion() {
       columnGap={5}
       style={{ padding: "10px" }}
     >
-      <Grid item xs={3}>
+      <Grid item sm={3} xs={12}>
         <PromotionBox>
           <Grid
             container
@@ -50,7 +50,7 @@ export default function Promotion() {
           </Grid>
         </PromotionBox>
       </Grid>
-      <Grid item xs={3}>
+      <Grid item sm={3} xs={12}>
         <PromotionBox>
           <Grid
             container
@@ -78,7 +78,7 @@ export default function Promotion() {
           </Grid>
         </PromotionBox>
       </Grid>
-      <Grid item xs={4}>
+      <Grid item sm={4} xs={12}>
         <Grid
           container
           style={{ paddingBottom: "5px", color: theme.palette.primary.main }}

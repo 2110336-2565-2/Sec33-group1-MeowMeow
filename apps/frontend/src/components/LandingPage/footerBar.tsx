@@ -6,6 +6,7 @@ import {
   Toolbar,
   Divider,
   IconButton,
+  Container,
 } from "@mui/material";
 import React from "react";
 import CatchingPokemonIcon from "@mui/icons-material/CatchingPokemon";
@@ -23,65 +24,74 @@ export default function FooterBar() {
         color="default"
         style={{ marginTop: "20px", background: "#FFFF" }}
       >
-        <Grid container spacing={2}>
-          <Grid item xs={8}>
-            <Grid
-              container
-              direction="row"
-              justifyContent="flex-end"
-              alignItems="center"
-            >
-              <IconButton
-                size="large"
-                edge="start"
-                color="inherit"
-                aria-label="menu"
-                sx={{
-                  mr: 2,
-                  color: theme.palette.primary["main"],
-                  paddingLeft: 10,
-                }}
+        <Container maxWidth="xl">
+          <Grid
+            container
+            direction="row"
+            justifyContent="center"
+            alignItems="center"
+            spacing={2}
+            sx={{ flexDirection: { xs: "column", sm: "row" } }}
+          >
+            <Grid item xs={8}>
+              <Grid
+                container
+                direction="row"
+                justifyContent="flex-end"
+                alignItems="center"
               >
-                <CatchingPokemonIcon />
-              </IconButton>
-              <Typography
-                variant="h6"
-                component="div"
-                sx={{ flexGrow: 1, fontWeight: "bold" }}
+                <IconButton
+                  size="large"
+                  edge="start"
+                  color="inherit"
+                  aria-label="menu"
+                  sx={{
+                    color: theme.palette.primary["main"],
+                    paddingLeft: { sm: 10, xs: 0 },
+                  }}
+                >
+                  <CatchingPokemonIcon />
+                </IconButton>
+                <Typography
+                  variant="h6"
+                  component="div"
+                  sx={{ flexGrow: 1, fontWeight: "bold" }}
+                >
+                  GuideKai
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid item xs={4}>
+              <Grid
+                container
+                direction="row"
+                justifyContent="flex-end"
+                alignItems="center"
               >
-                GuideKai
-              </Typography>
+                <IconButton
+                  size="large"
+                  edge="start"
+                  color="default"
+                  aria-label="menu"
+                  sx={{
+                    color: theme.palette.primary["main"],
+                    paddingRight: { sm: 10, xs: 0 },
+                  }}
+                >
+                  <FacebookIcon
+                    style={{ marginRight: "10", color: "#000000" }}
+                  />
+                  <GitHubIcon style={{ marginRight: "10", color: "#000000" }} />
+                  <InstagramIcon style={{ color: "#000000" }} />
+                </IconButton>
+              </Grid>
             </Grid>
           </Grid>
-          <Grid item xs={4}>
-            <Grid
-              container
-              direction="row"
-              justifyContent="flex-end"
-              alignItems="center"
-            >
-              <IconButton
-                size="large"
-                edge="start"
-                color="default"
-                aria-label="menu"
-                sx={{
-                  mr: 2,
-                  color: theme.palette.primary["main"],
-                  paddingRight: 10,
-                }}
-              >
-                <FacebookIcon style={{ marginRight: "10", color: "#000000" }} />
-                <GitHubIcon style={{ marginRight: "10", color: "#000000" }} />
-                <InstagramIcon style={{ color: "#000000" }} />
-              </IconButton>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Divider variant="middle" />
-        <Toolbar style={{ justifyContent: "center" }}>
-          <Typography variant="caption">Copyright © 2022 GuideKai</Typography>
-        </Toolbar>
+          <Divider variant="middle" />
+          <Toolbar style={{ justifyContent: "center" }}>
+            <Typography variant="caption">Copyright © 2022 GuideKai</Typography>
+          </Toolbar>
+        </Container>
       </AppBar>
     </>
   );

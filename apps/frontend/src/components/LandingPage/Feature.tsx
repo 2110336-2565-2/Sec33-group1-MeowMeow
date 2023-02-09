@@ -41,19 +41,23 @@ export default function Feature() {
               justifyContent="center"
               alignItems="center"
             >
-              <Grid item xs={6} style={{ color: theme.palette.primary.main }}>
+              <Grid item xs={12} style={{ color: theme.palette.primary.main }}>
                 Our Website
               </Grid>
-              <Grid item xs={6} style={{ fontSize: "36px", fontWeight: "700" }}>
+              <Grid
+                item
+                xs={12}
+                style={{ fontSize: "36px", fontWeight: "700" }}
+              >
                 Website Main Features
               </Grid>
-              <Grid item xs={6} style={{ width: "500px", textAlign: "center" }}>
+              <Grid item xs={12} style={{ textAlign: "center" }}>
                 This website has four main features which were developed by our
                 experienced IT team to make you feel satisfied.
               </Grid>
             </Grid>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12} md={6}>
             <FeatureBox
               id={1}
               title="Matchmaking"
@@ -65,7 +69,7 @@ export default function Feature() {
               }
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12} md={6}>
             <FeatureBox
               id={2}
               title="Searching"
@@ -77,7 +81,7 @@ export default function Feature() {
               }
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12} md={6}>
             <FeatureBox
               id={3}
               title="Chatting"
@@ -89,7 +93,7 @@ export default function Feature() {
               }
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12} md={6}>
             <FeatureBox
               id={4}
               title="Payment"

@@ -1,113 +1,78 @@
-import * as React from "react";
-import { styled } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import Paper from "@mui/material/Paper";
-import Grid from "@mui/material/Grid";
-import { Container, Button } from "@mui/material";
-import Navbar from "./navbar";
-import Image from "next/image";
+import {
+  Box,
+  Button,
+  Container,
+  Grid,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Typography,
+} from "@mui/material";
+import React from "react";
 import theme from "@/config/theme";
-import traveller_about from "../../../public/landing/traveller_about.png";
-
-const Item = styled(Paper)(({ theme }) => ({
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: "center",
-  color: theme.palette.primary["main"],
-}));
+import ListComponent from "./ListComponent";
+import ImageWindow from "./ImageWindow";
 
 export default function About() {
   return (
-    <>
-      <Box
-        sx={{
-          flexGrow: 1,
-          background: "#ffff",
-          width: "window.innerWidth",
-          paddingBottom: "50px",
-        }}
-      >
-        <Container maxWidth={false} disableGutters>
-          <Box
-            sx={{
-              height: "550px",
-              width: "auto",
-              background: "linear-gradient(to right bottom, #FFFFFF, #fff3e0)",
-              padding: "0px",
-            }}
-            justifyContent="flex-end"
-            alignItems="flex-end"
+    <Box maxWidth="xl" sx={{ width: "100%", height: "auto" }}>
+      <Grid container spacing={2}>
+        <Grid item xs={6}>
+          <Grid
+            container
+            direction="column"
+            justifyContent="center"
+            alignItems="flex-start"
+            spacing={4}
+            paddingLeft={10}
           >
-            <Navbar />
-            <Grid container spacing={2}>
-              <Grid item xs={6} style={{ minHeight: "600px" }}>
-                <Grid
-                  container
-                  direction="column"
-                  justifyContent="center"
-                  alignItems="flex-start"
-                  spacing={4}
-                  columnSpacing={0}
-                  paddingLeft={10}
-                >
-                  <Box
-                    display="flex"
-                    justifyContent="flex-end"
-                    alignItems="flex-end"
-                    height={50}
-                  ></Box>
-                  <Grid item xs={3} style={{ minHeight: "40" }}>
-                    <Item> Designed For Both Tourist and Guide </Item>
-                  </Grid>
-                  <Grid
-                    item
-                    xs={3}
-                    sx={{
-                      height: "auto",
-                      fontSize: { xs: "25px", sm: "50px" },
-                      fontWeight: "bold",
-                    }}
-                  >
-                    Your Custom Trip!
-                  </Grid>
-                  <Grid item xs={3}>
-                    More than 2 billion people over the countries use GuideKai
-                    and enjoy with their trip
-                  </Grid>
-                  <Grid item xs={3}>
-                    <Button variant="contained" style={{ margin: "10px" }}>
-                      GET STARTED
-                    </Button>
-                    <Button variant="outlined">ABOUT</Button>
-                  </Grid>
-                </Grid>
-              </Grid>
-              <Grid item xs={6} style={{ minHeight: "600px" }}>
-                <Grid
-                  container
-                  direction="row"
-                  justifyContent="flex-end"
-                  alignItems="flex-end"
-                >
-                  <Box
-                    display="flex"
-                    justifyContent="flex-end"
-                    alignItems="flex-end"
-                    height={45}
-                  ></Box>
-                  <Image
-                    src={traveller_about}
-                    alt="user"
-                    height={465}
-                    width={540}
-                    priority
-                  />
-                </Grid>
+            <Box
+              display="flex"
+              justifyContent="flex-end"
+              alignItems="flex-end"
+              height={90}
+            ></Box>
+            <Grid
+              item
+              style={{
+                height: "40",
+                fontSize: "28px",
+                color: theme.palette.primary["main"],
+              }}
+            >
+              What’s GuideKai?
+            </Grid>
+            <Grid
+              item
+              xs={3}
+              style={{
+                height: "auto",
+                fontSize: "35px",
+                fontWeight: "bold",
+              }}
+            >
+              Why Join GuideKai?
+            </Grid>
+            <Grid item xs={3}>
+              GuideKai provides convenient functions to use in finding your
+              dream guide. No matter where you go, GuideKai has many guides for
+              you, and many travelers look for capable guides like you!
+            </Grid>
+            <Grid item xs={3}>
+              <Grid item xs={12} style={{ padding: "5px" }}>
+                <ListComponent text={"Guide"} />
+                <ListComponent text={"Tourist"} />
+                <ListComponent text={"All In One Service"} />
               </Grid>
             </Grid>
-          </Box>
-        </Container>
-      </Box>
-    </>
+          </Grid>
+        </Grid>
+
+        <Grid item xs={6}>
+          <ImageWindow />
+        </Grid>
+      </Grid>
+    </Box>
   );
 }

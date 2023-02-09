@@ -1,9 +1,7 @@
-import theme from "@/config/theme";
-import { Padding } from "@mui/icons-material";
 import { Box, Grid } from "@mui/material";
 import React from "react";
 
-export default function PromotionBox({ children }: any) {
+export default function AcheivementBox({ children }: any) {
   return (
     <Grid
       container

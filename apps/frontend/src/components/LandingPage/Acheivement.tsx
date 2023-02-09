@@ -1,7 +1,7 @@
 import { Button, Grid, Container, Paper, styled } from "@mui/material";
 import React from "react";
 import theme from "@/config/theme";
-import PromotionBox from "./promotionBox";
+import AcheivementBox from "./AcheivementBox";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import GroupsIcon from "@mui/icons-material/Groups";
@@ -16,7 +16,7 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-export default function Promotion() {
+export default function Acheivement() {
   return (
     <Grid
       maxWidth="xl"
@@ -29,7 +29,7 @@ export default function Promotion() {
     >
       <Grid item sm={3} xs={12} sx={{ height: "auto" }}>
         <Grid container justifyContent="center" alignItems="center">
-          <PromotionBox>
+          <AcheivementBox>
             <Grid
               container
               style={{
@@ -59,12 +59,12 @@ export default function Promotion() {
                 Join Our Community <ArrowForwardIcon />{" "}
               </Button>
             </Grid>
-          </PromotionBox>
+          </AcheivementBox>
         </Grid>
       </Grid>
       <Grid item sm={3} xs={12} sx={{ height: "auto" }}>
         <Grid container justifyContent="center" alignItems="center">
-          <PromotionBox>
+          <AcheivementBox>
             <Grid
               container
               style={{
@@ -89,7 +89,7 @@ export default function Promotion() {
                 Go To Awards <ArrowForwardIcon />{" "}
               </Button>
             </Grid>
-          </PromotionBox>
+          </AcheivementBox>
         </Grid>
       </Grid>
       <Grid item sm={4} xs={12}>

@@ -1,11 +1,10 @@
 import React from "react";
 import Hero from "@/components/LandingPage/Hero";
-import About from "@/components/LandingPage/About";
 import Acheivement from "@/components/LandingPage/Acheivement";
-import Feature from "@/components/LandingPage/Feature";
-import FooterBar from "@/components/LandingPage/FooterBar";
 import { Grid } from "@mui/material";
-import Navbar from "@/components/LandingPage/Navbar";
+import About from "@/components/LandingPage/about";
+import Feature from "@/components/LandingPage/feature";
+import FooterBar from "@/components/LandingPage/footerBar";
 
 export default function Landing() {
   return (

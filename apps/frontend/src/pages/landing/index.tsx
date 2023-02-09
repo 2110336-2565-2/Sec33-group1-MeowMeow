@@ -1,21 +1,19 @@
 import React from "react";
-import About from "@/components/LandingPage/about";
-import Achievement from "@/components/LandingPage/achievement";
-import Promotion from "@/components/LandingPage/promotion";
-import Feature from "@/components/LandingPage/feature";
-import FooterBar from "@/components/LandingPage/footerBar";
+import Hero from "@/components/LandingPage/Hero";
+import About from "@/components/LandingPage/About";
+import Acheivement from "@/components/LandingPage/Acheivement";
+import Feature from "@/components/LandingPage/Feature";
+import FooterBar from "@/components/LandingPage/FooterBar";
 import { Container, Grid } from "@mui/material";
 
 export default function Landing() {
   return (
     <Grid container direction="row" justifyContent="center" alignItems="center">
+      <Hero />
       <About />
-      {/* <Container maxWidth="xl"> */}
-      <Achievement />
-      <Promotion />
+      <Acheivement />
       <Feature />
       <FooterBar />
-      {/* </Container> */}
     </Grid>
   );
 }

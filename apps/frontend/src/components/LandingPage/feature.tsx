@@ -7,7 +7,7 @@ import GroupIcon from "@mui/icons-material/Group";
 import SearchIcon from "@mui/icons-material/Search";
 import QuestionAnswerIcon from "@mui/icons-material/QuestionAnswer";
 import PaymentIcon from "@mui/icons-material/Payment";
-import FeatureBox from "./featureBox";
+import FeatureBox from "./FeatureBox";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",

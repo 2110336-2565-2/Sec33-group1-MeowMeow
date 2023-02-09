@@ -10,9 +10,57 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Add dummy models to make the schema valid
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+  id           Int       @id @default(autoincrement())
+  createdAt    DateTime
+  email        String    @unique
+  username     String    @unique
+  hashPassword String
+  firstName    String
+  lastName     String
+  role         Role      @default(USER)
+  Guide        Guide?
+  Review       Review[]
+}
+
+model Guide {
+  id          Int         @id @default(autoincrement())
+  user        User        @relation(fields: [userId], references: [id])
+  userId      Int         @unique
+  certificate String
+  fee         Decimal     @db.Decimal(10, 2)
+  location    Location[]
+  tourStyle   TourStyle[]
+  review      Review[]
+}
+
+model Location {
+  id           Int    @id @default(autoincrement())
+  locationName String
+  guide        Guide  @relation(fields: [guideId], references: [id])
+  guideId      Int
+}
+
+model TourStyle {
+  id            Int    @id @default(autoincrement())
+  tourStyleName String
+  guide         Guide  @relation(fields: [guideId], references: [id])
+  guideId       Int
+}
+
+model Review {
+  id                  Int      @id @default(autoincrement())
+  publishDate         DateTime
+  score               Decimal  @db.Decimal(2, 1)
+  text                String?
+  reviewer            User     @relation(fields: [reviewerId], references: [id])
+  reviewerId          Int
+  guide               Guide    @relation(fields: [guideId], references: [id])
+  guideId             Int
+}
+
+enum Role {
+  USER
+  GUIDE
+  ADMIN
 }

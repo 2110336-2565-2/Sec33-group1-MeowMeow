@@ -119,7 +119,6 @@ export default function Acheivement() {
         <Grid
           container
           style={{ paddingBottom: "5px", color: theme.palette.primary.main }}
-          sx={{}}
         >
           Our Achievement
         </Grid>

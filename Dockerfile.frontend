@@ -7,7 +7,7 @@ RUN npm i -g pnpm
 WORKDIR /app
 
 FROM base AS pruner
-RUN pnpm i turbo
+RUN pnpm i turbo@1.7.0
 COPY . .
 RUN pnpm turbo prune --scope=frontend --docker --out-dir prune/frontend
 
@@ -21,6 +21,7 @@ RUN pnpm install --frozen-lockfile
 RUN pnpm run build
 RUN pnpm pkg set scripts.prepare="echo no-prepare"
 RUN pnpm prune --prod
+RUN cd apps/frontend && pnpm prune --prod && cd ../..
 
 FROM base AS deploy
 

@@ -6,7 +6,6 @@ import Grid from "@mui/material/Grid";
 import { Container, Button } from "@mui/material";
 import Navbar from "./Navbar";
 import Image from "next/image";
-import traveller_about from "../../../public/landing/traveller_about.png";
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -93,7 +92,7 @@ export default function Hero() {
                   height={45}
                 ></Box>
                 <Image
-                  src={traveller_about}
+                  src={"/landing/traveller.png"}
                   alt="user"
                   height={465}
                   width={540}

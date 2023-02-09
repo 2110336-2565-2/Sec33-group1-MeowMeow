@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - beta
       - dev
     paths:
       - 'apps/frontend/**'
@@ -30,9 +31,11 @@ jobs:
           password: ${{ secrets.REGISTRY_TOKEN }}
 
       - name: Build and push
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           context: .
           file: Dockerfile.frontend
           push: true
           tags: ${{ secrets.IMAGE_REPO }}/${{ secrets.REGISTRY_USERNAME }}/app-frontend-${{ github.ref_name }}:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

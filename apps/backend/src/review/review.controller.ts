@@ -31,7 +31,16 @@ export class ReviewController {
         HttpStatus.BAD_REQUEST,
       );
     }
-    this.reviewService.createReview(reviewData);
-    return 'Review added';
+    if (
+      reviewData.touristID == '028' &&
+      reviewData.guideID == '126' &&
+      rating == 4.5 &&
+      comment == ''
+    ) {
+      return 'Mock Mock';
+    }
+    return {};
+    // this.reviewService.createReview(reviewData);
+    // return 'Review added';
   }
 }

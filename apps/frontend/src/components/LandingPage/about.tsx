@@ -17,24 +17,21 @@ import ImageWindow from "./ImageWindow";
 export default function About() {
   return (
     <Box maxWidth="xl" sx={{ width: "100%", height: "auto" }}>
-      <Grid container spacing={2}>
-        <Grid item xs={6}>
+      <Grid container spacing={12}>
+        <Grid item sm={12} md={6}>
           <Grid
             container
             direction="column"
             justifyContent="center"
             alignItems="flex-start"
             spacing={4}
-            paddingLeft={10}
+            sx={{
+              padding: "32px",
+            }}
           >
-            <Box
-              display="flex"
-              justifyContent="flex-end"
-              alignItems="flex-end"
-              height={90}
-            ></Box>
             <Grid
               item
+              xs={3}
               style={{
                 height: "40",
                 fontSize: "28px",
@@ -68,8 +65,14 @@ export default function About() {
             </Grid>
           </Grid>
         </Grid>
-
-        <Grid item xs={6}>
+        <Grid
+          item
+          xs={12}
+          md={6}
+          sx={{
+            display: { xs: "none", md: "block" },
+          }}
+        >
           <ImageWindow />
         </Grid>
       </Grid>

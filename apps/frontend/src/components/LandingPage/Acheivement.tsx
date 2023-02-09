@@ -33,6 +33,9 @@ export default function Acheivement() {
     <Grid
       maxWidth="xl"
       container
+      justifyContent="center"
+      alignItems="center"
+      columnGap={5}
       sx={{
         flexDirection: {
           xs: "column-reverse",

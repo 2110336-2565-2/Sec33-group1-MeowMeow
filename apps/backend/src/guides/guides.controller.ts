@@ -14,19 +14,28 @@ export class GuidesController {
   findGuides(@Body() searchDetails: GuideSearch) {
     if (
       searchDetails.reviewScore == 10 &&
-      searchDetails.fee.gte == 500 &&
-      searchDetails.fee.lte == 2000
+      searchDetails.fee == 2000 &&
+      searchDetails.datetime === new Date('2023-03-14') &&
+      searchDetails.location == 'Berlint, Ostania'
     ) {
-      return {
-        first_name: 'Nattee',
-        last_name: 'Niparnan',
-        phone_number: '0819696969',
-        picture: 'pfp/divideandconquer.png',
-        gender: 'M',
-        age: 420,
-      };
+      return [
+        {
+          first_name: 'Nattee',
+          last_name: 'Niparnan',
+          phone_number: '0819696969',
+          picture: 'pfp/divideandconquer.png',
+          gender: 'M',
+          age: 420,
+        },
+        {
+          first_name: 'Jolyne',
+          last_name: 'Kujo',
+          phone_number: '0420420420',
+          picture: 'pfp/stoneocean.png',
+          gender: 'F',
+          age: 1,
+        },
+      ];
     }
-    // searchDetails.fee = Math.round(searchDetails.fee*100)/100
-    // searchDetails.reviewScore = Math.round(searchDetails.reviewScore*100)/100
   }
 }

@@ -22,8 +22,11 @@ export default function Feature() {
     <Box
       sx={{
         width: "100%",
-        paddingTop: "30px",
-        paddingBottom: "150px",
+        py: {
+          // for spanning gradient background
+          xs: 0,
+          sm: 16,
+        },
         background:
           "linear-gradient(0deg, rgba(241, 246, 253, 0) 1.63%, #FDF8F1 20.5%, #FFF2E6 58.57%, #FFFFFF 100%)",
       }}

@@ -1,9 +1,5 @@
-import * as React from "react";
-import ImageList from "@mui/material/ImageList";
-import ImageListItem from "@mui/material/ImageListItem";
 import { Grid, Paper, styled } from "@mui/material";
 import Image from "next/image";
-import theme from "@/config/theme";
 
 function srcset(image: string, size: number, rows = 1, cols = 1) {
   return {

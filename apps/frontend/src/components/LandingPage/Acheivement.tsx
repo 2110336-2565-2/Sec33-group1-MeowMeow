@@ -21,13 +21,23 @@ export default function Acheivement() {
     <Grid
       maxWidth="xl"
       container
-      justifyContent="center"
-      alignItems="center"
-      columnGap={5}
-      style={{ padding: "10px" }}
-      sx={{ flexDirection: { xs: "column", sm: "row" } }}
+      sx={{
+        flexDirection: {
+          xs: "column-reverse",
+          sm: "row",
+        },
+        padding: "10px",
+      }}
     >
-      <Grid item sm={3} xs={12} sx={{ height: "auto" }}>
+      <Grid
+        item
+        xs={12}
+        sm={3}
+        sx={{
+          height: "auto",
+          padding: { xs: "10px", sm: "0px" },
+        }}
+      >
         <Grid container justifyContent="center" alignItems="center">
           <AcheivementBox>
             <Grid
@@ -62,7 +72,7 @@ export default function Acheivement() {
           </AcheivementBox>
         </Grid>
       </Grid>
-      <Grid item sm={3} xs={12} sx={{ height: "auto" }}>
+      <Grid item xs={12} sm={3} sx={{ height: "auto" }}>
         <Grid container justifyContent="center" alignItems="center">
           <AcheivementBox>
             <Grid
@@ -92,10 +102,21 @@ export default function Acheivement() {
           </AcheivementBox>
         </Grid>
       </Grid>
-      <Grid item sm={4} xs={12}>
+      <Grid
+        item
+        xs={12}
+        sm={4}
+        sx={{
+          padding: {
+            xs: "32px",
+            sm: "0",
+          },
+        }}
+      >
         <Grid
           container
           style={{ paddingBottom: "5px", color: theme.palette.primary.main }}
+          sx={{}}
         >
           Our Achievement
         </Grid>

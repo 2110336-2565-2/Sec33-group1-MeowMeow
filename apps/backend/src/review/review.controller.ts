@@ -4,6 +4,8 @@ import {
   HttpException,
   HttpStatus,
   Post,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { CreateReviewDto } from './dtos/CreateReview.dto';
 import { ReviewService } from './service/review/review.service';
@@ -13,6 +15,7 @@ export class ReviewController {
   constructor(private reviewService: ReviewService) {}
 
   @Post('')
+  @UsePipes(new ValidationPipe())
   addReview(@Body() reviewData: CreateReviewDto) {
     const rating: number = reviewData.rating;
     if (rating > 0 || rating < 5 || rating % 0.5 != 0) {
@@ -29,6 +32,6 @@ export class ReviewController {
       );
     }
     this.reviewService.createReview(reviewData);
-    return {};
+    return 'Review added';
   }
 }

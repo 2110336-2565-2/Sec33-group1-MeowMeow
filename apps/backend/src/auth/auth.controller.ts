@@ -30,7 +30,6 @@ export class AuthController {
     let statusCode = HttpStatus.CREATED;
     try {
       let accessToken: string, refreshToken: string;
-      console.log(this.authService.login);
       [resBody, accessToken, refreshToken] = this.authService.login(req);
       res.cookie('access_token', accessToken);
       res.cookie('refresh_token', refreshToken);

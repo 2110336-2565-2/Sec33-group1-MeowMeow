@@ -10,6 +10,6 @@ export class InvalidAuthenticationError extends Error {
   constructor(msg: string) {
     super(msg);
 
-    Object.setPrototypeOf(this, InvalidRequestError.prototype);
+    Object.setPrototypeOf(this, InvalidAuthenticationError.prototype);
   }
 }

@@ -8,17 +8,13 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class AuthServiceMock {
-  login(req: LoginRequest): LoginResponse {
-    if (req.email != 'test@gmail.com' || req.password != '123456') {
+  login(req: LoginRequest): [LoginResponse, string, string] {
+    if (req.email !== 'test@gmail.com' || req.password !== '123456') {
       throw new InvalidAuthenticationError(
-        'Hey dude. An email is test@gmail.com and password is 123456!',
+        'Hey dude. An email is test@gmail.com and password is 123456',
       );
     }
 
-    return {
-      message: 'success',
-      accessToken: 'xxx',
-      refreshToken: 'yyy',
-    };
+    return [{ message: 'success' }, 'xxxx', 'rrrr'];
   }
 }

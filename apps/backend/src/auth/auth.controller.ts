@@ -29,9 +29,13 @@ export class AuthController {
     let resBody: LoginResponse;
     let statusCode = HttpStatus.CREATED;
     try {
-      resBody = this.authService.login(req);
-      // TODO set session (access token and refresh token) to cookie
+      let accessToken: string, refreshToken: string;
+      console.log(this.authService.login);
+      [resBody, accessToken, refreshToken] = this.authService.login(req);
+      res.cookie('access_token', accessToken);
+      res.cookie('refresh_token', refreshToken);
     } catch (e) {
+      console.log(e);
       if (e instanceof InvalidRequestError) {
         statusCode = HttpStatus.BAD_REQUEST;
         resBody = { message: e.message };
@@ -43,7 +47,7 @@ export class AuthController {
         resBody = { message: 'internal server error' };
       }
     }
-    return res.status(statusCode).send(resBody);
+    res.status(statusCode).send(resBody);
   }
 
   @Post('sign-out')
@@ -51,7 +55,9 @@ export class AuthController {
     let resBody: LogoutResponse;
     let statusCode = HttpStatus.CREATED;
     try {
-      // TODO remove session from cookie
+      resBody = { message: 'success' };
+      res.clearCookie('access_token');
+      res.clearCookie('refresh_token');
     } catch (e) {
       if (e instanceof InvalidRequestError) {
         statusCode = HttpStatus.BAD_REQUEST;

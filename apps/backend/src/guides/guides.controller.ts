@@ -5,13 +5,13 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { GuideSearch } from './dtos/guideSearch.dto';
+import { GuideSearchDto } from './dtos/guideSearch.dto';
 
 @Controller('guides')
 export class GuidesController {
   @Get('')
   @UsePipes(new ValidationPipe())
-  findGuides(@Body() searchDetails: GuideSearch) {
+  findGuides(@Body() searchDetails: GuideSearchDto) {
     if (
       searchDetails.reviewScore == 10 &&
       searchDetails.fee == 2000 &&

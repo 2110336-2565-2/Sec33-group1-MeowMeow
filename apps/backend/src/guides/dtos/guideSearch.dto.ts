@@ -1,6 +1,6 @@
 import { IsDate, IsNumber, IsOptional } from 'class-validator';
 
-export class GuideSearch {
+export class GuideSearchDto {
   @IsOptional()
   location: string;
   @IsOptional()

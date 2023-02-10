@@ -18,7 +18,7 @@ export class ReviewController {
   @UsePipes(new ValidationPipe())
   addReview(@Body() reviewData: CreateReviewDto) {
     const rating: number = reviewData.rating;
-    if (rating > 0 || rating < 5 || rating % 0.5 != 0) {
+    if (rating < 0 || rating > 5 || rating % 0.5 != 0) {
       throw new HttpException(
         'Invalid rating, it should be between 0 and 5 and multiple of 0.5',
         HttpStatus.BAD_REQUEST,
@@ -39,7 +39,7 @@ export class ReviewController {
     ) {
       return 'Mock Mock';
     }
-    return {};
+    return 'Request OK';
     // this.reviewService.createReview(reviewData);
     // return 'Review added';
   }

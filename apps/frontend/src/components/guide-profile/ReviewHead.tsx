@@ -13,6 +13,7 @@ export default function ReviewHead({ reviewCount }: IReviewHeadProps) {
       fontFamily="Inter"
       fontStyle="normal"
       paddingTop={{ xs: "1vh", sm: "4vh" }}
+      paddingX={{ xs: 0, sm: "3vw", md: 0 }}
     >
       <Grid
         container

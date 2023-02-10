@@ -48,7 +48,7 @@ export default function Content({
         direction={{ xs: "column", md: "row" }}
         rowSpacing={{ xs: 2, md: 1 }}
         justifyContent="space-between"
-        paddingX={{ xs: 0, md: "5vw" }}
+        paddingX={{ xs: 0, sm: "3vw", md: "5vw" }}
         paddingY={{ xs: "2vh", md: "3.5vh" }}
       >
         <Grid item md={5}>
@@ -58,7 +58,11 @@ export default function Content({
           <Tags title={"Location"} tags={tagsLocation} />
         </Grid>
       </Grid>
-      <Grid item justifyContent="center" paddingX={{ xs: 0, md: "5vw" }}>
+      <Grid
+        item
+        justifyContent="center"
+        paddingX={{ xs: 0, sm: "3vw", md: "5vw" }}
+      >
         <Statistics accept={accept} total={total} />
       </Grid>
       <Grid
@@ -69,13 +73,18 @@ export default function Content({
       >
         <ReviewHead reviewCount={reviewCount}></ReviewHead>
       </Grid>
-      <Grid item justifyContent="center" paddingX={{ xs: 0, md: "5vw" }}>
+      <Grid
+        item
+        justifyContent="center"
+        paddingX={{ xs: 0, sm: "3vw", md: "5vw" }}
+      >
         {reviews.map((review) => (
           <Review
             rating={review.rating}
             timestamp={review.timestamp}
             reviewer={review.reviewer}
             detail={review.detail}
+            key={review.reviewer}
           />
         ))}
       </Grid>

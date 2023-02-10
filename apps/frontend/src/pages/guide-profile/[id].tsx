@@ -22,19 +22,19 @@ export default function Guide_profile() {
     "Playful",
     "Knowledge",
     "Luxury",
-    "Luxury",
-    "Luxury",
-    "Luxury",
-    "Luxury",
+    "Luxury1",
+    "Luxury2",
+    "Luxury3",
+    "Luxury4",
   ];
   const tagsLocation = [
     "Bangkok",
     "Ayutthaya",
     "Ohio",
     "London",
-    "London",
-    "London",
-    "London",
+    "London1",
+    "London2",
+    "London3",
   ];
   const accept = 60;
   const total = 100;
@@ -71,7 +71,6 @@ export default function Guide_profile() {
           reviews={reviews}
         ></Content>
       </Box>
-      <p>Post: {id}</p>
     </>
   );
 }

@@ -16,7 +16,7 @@ export default function Tags({ title, tags }: ITagsProps) {
       <Grid item>
         <Grid container direction="row" spacing={1} wrap="wrap">
           {tags.map((tag) => (
-            <Grid item xs="auto">
+            <Grid item xs="auto" key={tag}>
               <Chip label={tag} size="small" />
             </Grid>
           ))}

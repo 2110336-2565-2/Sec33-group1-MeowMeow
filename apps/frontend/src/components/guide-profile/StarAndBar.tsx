@@ -19,6 +19,9 @@ export default function StarAndBar({ star, count, total }: IStarAndBarProps) {
       width: "55vw",
     },
     [theme.breakpoints.up("sm")]: {
+      width: "30vw",
+    },
+    [theme.breakpoints.up("md")]: {
       width: "40vw",
     },
     [`&.${linearProgressClasses.colorPrimary}`]: {
@@ -42,7 +45,7 @@ export default function StarAndBar({ star, count, total }: IStarAndBarProps) {
         <StarIcon
           sx={{
             visibility: 4 - i >= star ? "hidden" : "visible",
-            fontSize: { xs: 12, md: 16 },
+            fontSize: { xs: 12, sm: 16 },
             opacity: 0.35,
           }}
         />

@@ -46,7 +46,6 @@ export default function Statistics({ accept, total }: IStatisticsProps) {
           fontWeight={400}
         >
           <Grid item xs="auto">
-            {" "}
             {accept} Tour Accepted
           </Grid>
           {accept < total && (

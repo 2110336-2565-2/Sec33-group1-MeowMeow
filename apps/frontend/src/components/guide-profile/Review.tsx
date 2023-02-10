@@ -27,10 +27,10 @@ export default function Review({
       color="#475569"
       fontFamily="Inter"
       fontWeight={400}
-      fontSize={{ xs: 12, sm: 16 }}
-      lineHeight={2}
-      padding="2vw"
-      marginBottom="2vw"
+      fontSize={{ xs: 12, sm: 14, md: 16 }}
+      lineHeight={{ xs: 1.5, md: 2 }}
+      padding={{ xs: "6vw", sm: "4vw", md: "3vw" }}
+      marginBottom="3vh"
     >
       <Grid container direction="row">
         <Grid item marginRight="auto">

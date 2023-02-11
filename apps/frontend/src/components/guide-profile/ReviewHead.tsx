@@ -2,6 +2,7 @@ import { Button, Grid } from "@mui/material";
 import CreateIcon from "@mui/icons-material/Create";
 import React from "react";
 import StarAndBar from "./StarAndBar";
+import ReviewDialog from "../review/dialog";
 interface IReviewHeadProps {
   reviewCount: number[];
 }
@@ -28,15 +29,7 @@ export default function ReviewHead({ reviewCount }: IReviewHeadProps) {
         </Grid>
         <Grid item>
           {" "}
-          <Button
-            variant="outlined"
-            size="small"
-            startIcon={<CreateIcon fontSize="inherit" />}
-            sx={{ fontSize: { xs: 10, sm: 12, md: 16 } }}
-          >
-            {" "}
-            WRITE REVIEW
-          </Button>
+          <ReviewDialog />
         </Grid>
       </Grid>
       <Grid

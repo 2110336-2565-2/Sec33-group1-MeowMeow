@@ -1,12 +1,11 @@
-import * as React from "react";
-import Button from "@mui/material/Button";
-import Dialog, { DialogProps } from "@mui/material/Dialog";
-import Review from "./main";
-import { Alert, Grid, IconButton } from "@mui/material";
-import CancelIcon from "@mui/icons-material/Cancel";
 import theme from "@/config/theme";
+import { Button, Dialog, DialogProps, Grid, IconButton } from "@mui/material";
+import React from "react";
+import CancelIcon from "@mui/icons-material/Cancel";
+import Review from "../../pages/review";
+import CreateIcon from "@mui/icons-material/Create";
 
-export default function ScrollDialog() {
+export default function ReviewDialog() {
   const [open, setOpen] = React.useState(false);
   const [scroll, setScroll] = React.useState<DialogProps["scroll"]>("paper");
 
@@ -28,10 +27,18 @@ export default function ScrollDialog() {
       }
     }
   }, [open]);
-
   return (
     <>
-      <Button onClick={handleClickOpen("paper")}>Click me to review</Button>
+      <Button
+        variant="outlined"
+        size="small"
+        startIcon={<CreateIcon fontSize="inherit" />}
+        sx={{ fontSize: { xs: 10, sm: 12, md: 16 } }}
+        onClick={handleClickOpen("paper")}
+      >
+        {" "}
+        WRITE REVIEW
+      </Button>
       <Dialog
         open={open}
         onClose={handleClose}

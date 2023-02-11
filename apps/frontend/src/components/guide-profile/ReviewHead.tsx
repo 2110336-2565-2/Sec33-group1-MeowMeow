@@ -60,10 +60,17 @@ export default function ReviewHead({ reviewCount }: IReviewHeadProps) {
             Out of 5
           </Grid>
         </Grid>
-        <Grid item direction="column">
-          {Array.from({ length: 5 }, (_, i) => (
-            <StarAndBar star={5 - i} count={reviewCount[i]} total={total} />
-          ))}
+        <Grid item>
+          <Grid container direction="column">
+            {Array.from({ length: 5 }, (_, i) => (
+              <StarAndBar
+                key={5 - i}
+                star={5 - i}
+                count={reviewCount[i]}
+                total={total}
+              />
+            ))}
+          </Grid>
         </Grid>
       </Grid>
     </Grid>

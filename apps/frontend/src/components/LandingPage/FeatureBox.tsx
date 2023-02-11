@@ -15,29 +15,13 @@ const Item = styled(Paper)(({ theme }) => ({
   borderRadius: "16px",
 }));
 
-let styleMapping = new Map<number, string[]>();
-styleMapping.set(1, [
-  "linear-gradient(154.49deg, #5CA1FE 6.61%, #217BF4 89.72%)",
-  "0px 10px 22px -2px #6DABFF5C",
-]);
-styleMapping.set(2, [
-  "linear-gradient(154.49deg, #FF858A 6.61%, #F04148 89.72%)",
-  "0px 8px 22px -2px #F8575E4D",
-]);
-styleMapping.set(3, [
-  "linear-gradient(154.49deg, #FFD085 6.61%, #FFAF2E 89.72%)",
-  "0px 10px 22px -2px #FABA544D",
-]);
-styleMapping.set(4, [
-  "linear-gradient(154.49deg, #5CA1FE 6.61%, #217BF4 89.72%)",
-  "0px 10px 22px -2px #6DABFF5C",
-]);
-
 interface IFeatureBoxProps {
   id: number;
   title: string;
   description: string;
   icon: ReactElement<OverridableComponent<SvgIconTypeMap<{}, "svg">>>;
+  background: string;
+  boxShadow: string;
 }
 
 export default function FeatureBox(props: IFeatureBoxProps) {
@@ -60,8 +44,8 @@ export default function FeatureBox(props: IFeatureBoxProps) {
             <Grid
               container
               sx={{
-                background: styleMapping.get(props.id)![0],
-                boxShadow: styleMapping.get(props.id)![1],
+                background: props.background,
+                boxShadow: props.boxShadow,
                 borderRadius: "16px",
                 width: { xs: "66px", sm: "66px" },
                 height: "66px",

@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 
 export default function Navbar() {
   const router = useRouter();
+
   return (
     <AppBar
       position="static"
@@ -32,10 +33,16 @@ export default function Navbar() {
           >
             GuideKai
           </Typography>
-          <Button variant="outlined" style={{ margin: "10px" }}>
+          <Button
+            variant="outlined"
+            style={{ margin: "10px" }}
+            onClick={() => router.push("/login")}
+          >
             LOGIN
           </Button>
-          <Button variant="contained">SIGN UP</Button>
+          <Button variant="contained" onClick={() => router.push("/register")}>
+            SIGN UP
+          </Button>
         </Toolbar>
       </Container>
     </AppBar>

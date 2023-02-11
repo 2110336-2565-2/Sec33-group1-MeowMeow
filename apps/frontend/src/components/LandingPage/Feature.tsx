@@ -68,6 +68,10 @@ export default function Feature() {
                   style={{ width: "50px", height: "50px", color: "white" }}
                 />
               }
+              background={
+                "linear-gradient(154.49deg, #5CA1FE 6.61%, #217BF4 89.72%)"
+              }
+              boxShadow={"0px 10px 22px -2px #6DABFF5C"}
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -80,6 +84,10 @@ export default function Feature() {
                   style={{ width: "50px", height: "50px", color: "white" }}
                 />
               }
+              background={
+                "linear-gradient(154.49deg, #FF858A 6.61%, #F04148 89.72%)"
+              }
+              boxShadow={"0px 8px 22px -2px #F8575E4D"}
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -92,6 +100,10 @@ export default function Feature() {
                   style={{ width: "50px", height: "50px", color: "white" }}
                 />
               }
+              background={
+                "linear-gradient(154.49deg, #FFD085 6.61%, #FFAF2E 89.72%)"
+              }
+              boxShadow={"0px 10px 22px -2px #FABA544D"}
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -104,6 +116,10 @@ export default function Feature() {
                   style={{ width: "50px", height: "50px", color: "white" }}
                 />
               }
+              background={
+                "linear-gradient(154.49deg, #5CA1FE 6.61%, #217BF4 89.72%)"
+              }
+              boxShadow={"0px 10px 22px -2px #6DABFF5C"}
             />
           </Grid>
         </Grid>

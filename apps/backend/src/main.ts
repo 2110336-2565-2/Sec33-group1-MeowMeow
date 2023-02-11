@@ -4,12 +4,13 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { PrismaService } from './prisma/prisma.service';
 import { backendConfig as config } from 'config';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const prismaService = app.get(PrismaService);
   const port = config.port;
-
+  app.useGlobalPipes(new ValidationPipe());
   if (config.swagger.enable) {
     const swaggerConfig = new DocumentBuilder()
       .setTitle('API Document')

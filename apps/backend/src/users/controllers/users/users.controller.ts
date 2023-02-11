@@ -2,7 +2,7 @@ import { Body, Controller, Get, Post, Put } from '@nestjs/common';
 import { CreateUserDto } from 'src/users/dto/createUser.dto';
 import { UsersService } from 'src/users/users.service';
 
-@Controller()
+@Controller('users')
 export class UsersController {
   constructor(private usersService: UsersService) {}
   @Post('register')
@@ -28,11 +28,5 @@ export class UsersController {
   @Put('user')
   editUserProfile() {
     return { msg: 'edit profile successfully' };
-  }
-
-  @Get('test')
-  test() {
-    console.log('test');
-    return { msg: 'get test successfully' };
   }
 }

@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AuthController } from './auth.controller';
 import { PrismaService } from '../prisma/prisma.service';
+import { AuthService, AuthServiceImpl } from './auth.service';
 import { AuthServiceMock } from './auth.service.mock';
 
 @Module({
@@ -9,7 +10,7 @@ import { AuthServiceMock } from './auth.service.mock';
   providers: [
     {
       provide: 'AuthService',
-      useClass: AuthServiceMock,
+      useValue: AuthServiceMock,
     },
     PrismaService,
   ],

@@ -1,6 +1,6 @@
-import { IsDate, IsNumber, IsOptional } from 'class-validator';
+import { IsDate, IsDateString, IsNumber, IsOptional } from 'class-validator';
 
-export class GuideSearch {
+export class GuideSearchDto {
   @IsOptional()
   location: string;
   @IsOptional()
@@ -10,6 +10,6 @@ export class GuideSearch {
   @IsNumber()
   reviewScore: number; //decimal(10,2)
   @IsOptional()
-  @IsDate()
-  datetime: Date;
+  @IsDateString()
+  datetime: string;
 }

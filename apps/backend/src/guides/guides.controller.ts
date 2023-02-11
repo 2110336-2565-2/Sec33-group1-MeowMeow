@@ -11,10 +11,10 @@ import { GuidesService } from './service/guides/guides.service';
 @Controller('guides')
 export class GuidesController {
   constructor(private guidesService: GuidesService) {}
-  @Get('')
+  @Get()
   @UsePipes(new ValidationPipe())
   findGuides(@Body() searchDetails: GuideSearchDto) {
-    console.log(searchDetails);
+    // console.log(searchDetails);
     return this.guidesService.getGuides(searchDetails);
   }
 }

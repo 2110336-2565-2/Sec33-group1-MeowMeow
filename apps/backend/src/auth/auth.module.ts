@@ -1,7 +1,8 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { AuthController } from './auth.controller';
 import { PrismaService } from '../prisma/prisma.service';
 import { AuthServiceMock } from './auth.service.mock';
+import { AuthMiddleware } from 'src/common/middleware/auth.middleware';
 
 @Module({
   imports: [],
@@ -14,4 +15,11 @@ import { AuthServiceMock } from './auth.service.mock';
     PrismaService,
   ],
 })
-export class AuthModule {}
+export class AuthModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(AuthMiddleware)
+      .exclude({ path: 'auth/sign-in', method: RequestMethod.POST })
+      .forRoutes({ path: '/**', method: RequestMethod.ALL });
+  }
+}

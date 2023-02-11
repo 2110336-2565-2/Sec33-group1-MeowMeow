@@ -1,0 +1,22 @@
+name: Unit Tests
+
+on: [pull_request]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: User Node.js ${{matrix.node-version}}
+        uses: actions/setup-node@v1
+        with:
+          node_version: ${{matrix.node-version}}
+      - name: pnpm install
+        run: pnpm install
+      - name: tests
+        run: pnpm run test

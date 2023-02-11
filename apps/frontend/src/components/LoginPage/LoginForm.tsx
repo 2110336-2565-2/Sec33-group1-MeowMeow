@@ -2,21 +2,28 @@ import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import LoginUtils from "./LoginUtils";
 import StyleTextField from "./StyledTextField";
-import { useForm, SubmitHandler } from "react-hook-form";
+import apiClient from "@/utils/apiClient";
+import { FormEventHandler, useCallback } from "react";
 import { ILoginForm } from "./types/loginForm";
-import { useCallback } from "react";
 
 const LoginForm = () => {
-  const { register, handleSubmit } = useForm<ILoginForm>({
-    defaultValues: {
-      email: "",
-      password: "",
+  const onSubmit: FormEventHandler<HTMLFormElement> = useCallback(
+    async (event) => {
+      event.preventDefault();
+      const email = event.currentTarget.email.value;
+      const password = event.currentTarget.password.value;
+      try {
+        await apiClient.post<ILoginForm>("/auth/sign-in", {
+          email,
+          password,
+        });
+      } catch (err) {
+        console.log(err);
+      }
     },
-  });
-  const onSubmit: SubmitHandler<ILoginForm> = useCallback((data, event) => {
-    event?.preventDefault();
-    console.log(data);
-  }, []);
+    []
+  );
+
   return (
     <Stack
       component="form"
@@ -24,14 +31,14 @@ const LoginForm = () => {
       direction="column"
       spacing="20px"
       alignItems="start"
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={onSubmit}
     >
-      <StyleTextField placeholder="Email" {...register("email")} />
+      <StyleTextField placeholder="Email" id="email" />
       <StyleTextField
         autoComplete=""
         type="password"
+        id="password"
         placeholder="Password"
-        {...register("password")}
       />
       <LoginUtils />
       <Button variant="contained" color="secondary" fullWidth type="submit">

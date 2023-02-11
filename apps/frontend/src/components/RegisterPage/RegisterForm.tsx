@@ -1,24 +1,16 @@
+import { FormEventHandler, useCallback } from "react";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import StyleTextField from "../LoginPage/StyledTextField";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { IRegisterForm } from "./types/registerForm";
-import { useCallback } from "react";
+import { REGISTER_INPUT_IDs } from "@/constants/RegisterPage";
 
 const RegisterForm = () => {
-  const { register, handleSubmit } = useForm<IRegisterForm>({
-    defaultValues: {
-      firstName: "",
-      lastName: "",
-      userName: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-    },
-  });
-  const onSubmit: SubmitHandler<IRegisterForm> = useCallback((data, event) => {
-    event?.preventDefault();
-    console.log(data);
+  const onSubmit: FormEventHandler<HTMLFormElement> = useCallback((event) => {
+    event.preventDefault();
+    const formBody = REGISTER_INPUT_IDs.reduce((prev, formId) => {
+      prev[formId] = event.currentTarget[formId].value;
+      return prev;
+    }, {} as { [key: string]: string });
   }, []);
 
   return (
@@ -27,22 +19,19 @@ const RegisterForm = () => {
       direction="column"
       spacing="16px"
       width="100%"
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={onSubmit}
     >
       <Stack direction="row" spacing="20px">
-        <StyleTextField placeholder="First name" {...register("firstName")} />
-        <StyleTextField placeholder="Last name" {...register("lastName")} />
+        <StyleTextField placeholder="First name" id="firstName" />
+        <StyleTextField placeholder="Last name" id="lastName" />
       </Stack>
-      <StyleTextField placeholder="Username" {...register("userName")} />
-      <StyleTextField placeholder="Email" {...register("email")} />
-      <StyleTextField
-        type="password"
-        placeholder="Password"
-        {...register("password")}
-      />
+      <StyleTextField placeholder="Username" id="userName" />
+      <StyleTextField placeholder="Email" id="email" />
+      <StyleTextField type="password" placeholder="Password" id="password" />
       <StyleTextField
         type="password"
         placeholder="Confirm Password"
+        id="confirmPassword"
         helperText="Minimum length is 8 characters."
         FormHelperTextProps={{
           style: {
@@ -51,7 +40,6 @@ const RegisterForm = () => {
             color: "#475569",
           },
         }}
-        {...register("confirmPassword")}
       />
       <Button
         type="submit"

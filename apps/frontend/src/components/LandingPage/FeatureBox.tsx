@@ -1,7 +1,8 @@
-import React from "react";
+import React, { ReactElement } from "react";
 import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
-import { Grid, Typography } from "@mui/material";
+import { Grid, SvgIconTypeMap, Typography } from "@mui/material";
+import { OverridableComponent } from "@mui/material/OverridableComponent";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -32,23 +33,29 @@ styleMapping.set(4, [
   "0px 10px 22px -2px #6DABFF5C",
 ]);
 
-interface featureBoxProps {
+interface IFeatureBoxProps {
   id: number;
   title: string;
   description: string;
-  icon: any;
+  icon: ReactElement<OverridableComponent<SvgIconTypeMap<{}, "svg">>>;
 }
 
-export default function FeatureBox(props: featureBoxProps) {
+export default function FeatureBox(props: IFeatureBoxProps) {
   return (
     <Item>
-      <Grid container spacing={2} direction="row">
+      <Grid
+        container
+        direction="row"
+        alignItems="center"
+        justifyContent="center"
+      >
         <Grid item xs={4}>
           <Grid
             container
-            sx={{ width: 128, height: 128 }}
+            sx={{ width: { sm: 128, xs: 100 }, height: 128 }}
             alignItems="center"
             justifyContent="center"
+            margin={0}
           >
             <Grid
               container
@@ -56,7 +63,7 @@ export default function FeatureBox(props: featureBoxProps) {
                 background: styleMapping.get(props.id)![0],
                 boxShadow: styleMapping.get(props.id)![1],
                 borderRadius: "16px",
-                width: "66px",
+                width: { xs: "66px", sm: "66px" },
                 height: "66px",
               }}
               alignItems="center"

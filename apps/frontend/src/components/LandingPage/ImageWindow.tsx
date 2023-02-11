@@ -1,23 +1,6 @@
 import { Grid, Paper, styled } from "@mui/material";
 import Image from "next/image";
 
-function srcset(image: string, size: number, rows = 1, cols = 1) {
-  return {
-    src: `${image}?w=${size * cols}&h=${size * rows}&fit=crop&auto=format`,
-    srcSet: `${image}?w=${size * cols}&h=${
-      size * rows
-    }&fit=crop&auto=format&dpr=2 2x`,
-  };
-}
-
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: "center",
-  color: theme.palette.text.secondary,
-}));
-
 export default function ImageWindow() {
   return (
     <Grid
@@ -65,23 +48,6 @@ export default function ImageWindow() {
         </Grid>
       </Grid>
     </Grid>
-
-    // <ImageList
-    //   sx={{ width: 500, height: 450 }}
-    //   variant="quilted"
-    //   cols={4}
-    //   rowHeight={121}
-    // >
-    //   {itemData.map((item) => (
-    //     <ImageListItem key={item.img} cols={item.cols || 1} rows={item.rows || 1}>
-    //       <img
-    //         {...srcset(item.img, 121, item.rows, item.cols)}
-    //         alt={item.title}
-    //         loading="lazy"
-    //       />
-    //     </ImageListItem>
-    //   ))}
-    // </ImageList>
   );
 }
 

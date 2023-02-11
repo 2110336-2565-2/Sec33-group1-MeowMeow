@@ -9,7 +9,7 @@ import {
   Container,
 } from "@mui/material";
 import React from "react";
-import CatchingPokemonIcon from "@mui/icons-material/CatchingPokemon";
+import Image from "next/image";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import InstagramIcon from "@mui/icons-material/Instagram";
@@ -33,25 +33,20 @@ export default function FooterBar() {
             spacing={2}
             sx={{ flexDirection: { xs: "column", sm: "row" } }}
           >
-            <Grid item xs={8}>
+            <Grid item xs={7}>
               <Grid
                 container
                 direction="row"
                 justifyContent="flex-end"
                 alignItems="center"
               >
-                <IconButton
-                  size="large"
-                  edge="start"
-                  color="inherit"
-                  aria-label="menu"
-                  sx={{
-                    color: theme.palette.primary["main"],
-                    paddingLeft: { sm: 10, xs: 0 },
-                  }}
-                >
-                  <CatchingPokemonIcon />
-                </IconButton>
+                <Image
+                  src="/images/loginPage/guideKai-logo.svg"
+                  alt="guideKai logo"
+                  width={45}
+                  height={45}
+                  style={{ marginRight: "10px" }}
+                />
                 <Typography
                   variant="h6"
                   component="div"
@@ -75,7 +70,7 @@ export default function FooterBar() {
                   aria-label="menu"
                   sx={{
                     color: theme.palette.primary["main"],
-                    paddingRight: { sm: 10, xs: 0 },
+                    paddingRight: { sm: 5, xs: 0 },
                   }}
                 >
                   <FacebookIcon

@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import { Container, Button } from "@mui/material";
-import Navbar from "./Navbar";
+import Navbar from "@/components/common/Navbar";
 import Image from "next/image";
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -17,7 +17,8 @@ const Item = styled(Paper)(({ theme }) => ({
 export default function Hero() {
   return (
     <>
-      <Box
+      <Grid
+        container
         sx={{
           flexGrow: 1,
           background: "linear-gradient(to right bottom, #FFFFFF, #fff3e0)",
@@ -102,7 +103,7 @@ export default function Hero() {
             </Grid>
           </Grid>
         </Container>
-      </Box>
+      </Grid>
     </>
   );
 }

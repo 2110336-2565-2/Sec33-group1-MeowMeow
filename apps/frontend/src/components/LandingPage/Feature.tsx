@@ -48,6 +48,7 @@ export default function Feature() {
                 item
                 xs={12}
                 style={{ fontSize: "36px", fontWeight: "700" }}
+                textAlign="center"
               >
                 Website Main Features
               </Grid>

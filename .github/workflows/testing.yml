@@ -12,10 +12,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: User Node.js ${{matrix.node-version}}
-        uses: actions/setup-node@v1
+      - uses: pnpm/action-setup@v2
         with:
-          node_version: ${{matrix.node-version}}
+          version: 6.0.2
       - name: pnpm install
         run: pnpm install
       - name: tests

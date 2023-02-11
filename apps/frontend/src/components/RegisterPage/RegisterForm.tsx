@@ -3,15 +3,26 @@ import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import StyleTextField from "../LoginPage/StyledTextField";
 import { REGISTER_INPUT_IDs } from "@/constants/RegisterPage";
+import apiClient from "@/utils/apiClient";
 
 const RegisterForm = () => {
-  const onSubmit: FormEventHandler<HTMLFormElement> = useCallback((event) => {
-    event.preventDefault();
-    const formBody = REGISTER_INPUT_IDs.reduce((prev, formId) => {
-      prev[formId] = event.currentTarget[formId].value;
-      return prev;
-    }, {} as { [key: string]: string });
-  }, []);
+  const onSubmit: FormEventHandler<HTMLFormElement> = useCallback(
+    async (event) => {
+      event.preventDefault();
+      const formBody = REGISTER_INPUT_IDs.reduce((prev, formId) => {
+        prev[formId] = event.currentTarget[formId].value;
+        return prev;
+      }, {} as { [key: string]: string });
+      formBody["hashPassword"] = formBody["password"];
+      try {
+        const response = await apiClient.post("/users/register", formBody);
+        console.log(response.data);
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    []
+  );
 
   return (
     <Stack

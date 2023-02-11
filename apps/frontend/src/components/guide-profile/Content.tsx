@@ -5,7 +5,7 @@ import Review from "./Review";
 import ReviewHead from "./ReviewHead";
 import Statistics from "./Statistics";
 import Tags from "./Tags";
-interface Ireview {
+interface IReview {
   rating: number;
   timestamp: string;
   reviewer: string;
@@ -20,7 +20,7 @@ interface IContentProps {
   accept: number;
   total: number;
   reviewCount: number[];
-  reviews: Ireview[];
+  reviews: IReview[];
 }
 export default function Content({
   name,

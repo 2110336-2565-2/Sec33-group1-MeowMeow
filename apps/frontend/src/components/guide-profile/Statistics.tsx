@@ -10,19 +10,19 @@ interface IStatisticsProps {
   accept: number;
   total: number;
 }
+const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
+  height: "2vh",
+  width: "100%",
+  borderRadius: "1vh",
+  [`&.${linearProgressClasses.colorPrimary}`]: {
+    backgroundColor: "#F46D21",
+  },
+  [`& .${linearProgressClasses.bar}`]: {
+    borderRadius: 5,
+    backgroundColor: "#1976D2",
+  },
+}));
 export default function Statistics({ accept, total }: IStatisticsProps) {
-  const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
-    height: "2vh",
-    width: "100%",
-    borderRadius: "1vh",
-    [`&.${linearProgressClasses.colorPrimary}`]: {
-      backgroundColor: "#F46D21",
-    },
-    [`& .${linearProgressClasses.bar}`]: {
-      borderRadius: 5,
-      backgroundColor: "#1976D2",
-    },
-  }));
   return (
     <Grid container direction="column" rowSpacing={1}>
       <Grid item>

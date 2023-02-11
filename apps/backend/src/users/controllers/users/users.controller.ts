@@ -9,9 +9,11 @@ export class UsersController {
   async createUser(@Body() data: CreateUserDto) {
     try {
       const user = await this.usersService.create(data);
-      if (!user) return { msg: 'create user successfully' };
-      return { msg: 'unable to create user' };
+      if (!user) return { msg: 'unable to create user' };
+      console.log(user);
+      return { msg: 'Create user successfully!!!' };
     } catch (err) {
+      console.log(err);
       return { msg: 'error has occurred' };
     }
   }

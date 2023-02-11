@@ -6,10 +6,6 @@ jobs:
   tests:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [16.x]
-
     steps:
       - uses: actions/checkout@v2
       - uses: pnpm/action-setup@v2
@@ -18,4 +14,5 @@ jobs:
       - name: pnpm install
         run: pnpm install
       - name: tests
+        working-directory: ./apps/backend
         run: pnpm run test

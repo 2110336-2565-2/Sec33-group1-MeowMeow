@@ -13,7 +13,7 @@ export default function Guide_profile() {
   const router = useRouter();
   const { id } = router.query;
 
-  const name = "John Cena";
+  const name = "John Smith";
   const desc =
     "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione magni ipsa deleniti delectus nobis provident asperiores neque amet rerum modi adipisci possimus repellendus distinctio doloremque quasi sit, quis reiciendis iste?";
   const imageurl =

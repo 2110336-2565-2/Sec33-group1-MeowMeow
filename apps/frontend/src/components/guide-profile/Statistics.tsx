@@ -26,7 +26,7 @@ export default function Statistics({ accept, total }: IStatisticsProps) {
   return (
     <Grid container direction="column" rowSpacing={1}>
       <Grid item>
-        <Box fontFamily="Inter" fontWeight={600} fontSize={{ xs: 20, sm: 24 }}>
+        <Box fontFamily="Inter" fontWeight={600} fontSize={{ xs: 18, sm: 20 }}>
           {"Statistics"}
         </Box>
       </Grid>

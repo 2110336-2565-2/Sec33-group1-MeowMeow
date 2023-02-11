@@ -28,7 +28,12 @@ export default function Profile({ name, imageurl, desc }: IProfileProps) {
         ></Avatar>
       </Grid>
       <Grid item xs>
-        <Grid direction="column" fontFamily="Inter" fontStyle="normal">
+        <Grid
+          direction="column"
+          fontFamily="Inter"
+          fontStyle="normal"
+          paddingX={{ xs: 0, sm: "3vw", md: 0 }}
+        >
           <Grid container direction="row" alignItems="center">
             <Grid item>
               <Box fontWeight={600} fontSize={{ xs: 24, sm: 32 }}>
@@ -36,7 +41,11 @@ export default function Profile({ name, imageurl, desc }: IProfileProps) {
               </Box>
             </Grid>
             <Grid item paddingLeft={"1vw"}>
-              <Chip label="Guide" size="small" />
+              <Chip
+                label="Guide"
+                size="small"
+                sx={{ fontFamily: "Inter", fontSize: { xs: 12, sm: 14 } }}
+              />
             </Grid>
           </Grid>
           <Box

@@ -16,8 +16,6 @@ export class AppController {
     } catch (e) {
       if (e instanceof InvalidRequestError) {
         statusCode = HttpStatus.BAD_REQUEST;
-      } else {
-        statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
       }
     }
     return res.status(statusCode).send(resBody);

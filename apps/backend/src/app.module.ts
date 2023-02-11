@@ -10,4 +10,4 @@ import { UsersModule } from './users/users.module';
   controllers: [AppController],
   providers: [AppService, PrismaService],
 })
-export class AppModule { }
+export class AppModule {}

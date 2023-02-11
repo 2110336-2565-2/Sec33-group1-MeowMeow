@@ -11,12 +11,12 @@ export interface UserRepository {
 }
 
 export interface AuthService {
-  login(req: LoginRequest): [LoginResponse, string, string];
+  login(req: LoginRequest): LoginResponse;
 }
 
 @Injectable()
 export class AuthServiceImpl {
-  login(req: LoginRequest): [LoginResponse, string, string] {
-    return [{ message: 'not implemented' }, null, null];
+  login(req: LoginRequest): LoginResponse {
+    return null;
   }
 }

@@ -27,7 +27,7 @@ const ModalContainer = styled(Box)(({ theme }) => ({
     padding: "32px 32px 12px 12px",
   },
 
-  [theme.breakpoints.up("md")]: {
+  [theme.breakpoints.up("sm")]: {
     width: "500px",
     padding: "32px",
   },

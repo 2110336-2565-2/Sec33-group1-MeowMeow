@@ -6,17 +6,19 @@ import { LoginRequest, LoginResponse } from './auth.dto';
 
 import { Injectable } from '@nestjs/common';
 
-export interface UserRepository {
-  getUserByEmail(email: string);
-}
-
-export interface AuthService {
-  login(req: LoginRequest): LoginResponse;
-}
-
 @Injectable()
-export class AuthServiceImpl {
+export class AuthService {
   login(req: LoginRequest): LoginResponse {
-    return null;
+    if (req.email != 'test@gmail.com' || req.password != '123456') {
+      throw new InvalidAuthenticationError(
+        'Hey dude. An email is test@gmail.com and password is 123456!',
+      );
+    }
+
+    return {
+      message: 'success',
+      accessToken: 'xxx',
+      refreshToken: 'yyy',
+    };
   }
 }

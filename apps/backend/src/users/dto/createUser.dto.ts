@@ -1,20 +1,34 @@
-import { IsNotEmpty } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Role, Guide, Review } from 'database';
 
 export class CreateUserDto {
-  @IsNotEmpty()
+  // @ApiProperty({ type: Number })
+  // id: number
+
+  // @ApiProperty({ type: Date })
+  // createdAt: Date
+
+  @ApiProperty({ type: String })
   email: string;
-  @IsNotEmpty()
-  password: string;
-  @IsNotEmpty()
-  name: string;
-  surname: string;
-  @IsNotEmpty()
-  ssn: string;
-  phone: string;
-  profile_picture: File;
-  gender: string;
-  age: number;
-  birth_date: Date;
-  region: string;
-  disorder: string[];
+
+  @ApiProperty({ type: String })
+  username: string;
+
+  @ApiProperty({ type: String })
+  hashPassword: string;
+
+  @ApiProperty({ type: String })
+  firstName: string;
+
+  @ApiProperty({ type: String })
+  lastName: string;
+
+  // @ApiProperty({ enum: Role, enumName: 'Role' })
+  // role: Role = Role.USER
+
+  // @ApiPropertyOptional()
+  // Guide?: Guide
+
+  @ApiProperty({ isArray: true })
+  Review: Review[];
 }

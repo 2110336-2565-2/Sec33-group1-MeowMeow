@@ -31,8 +31,14 @@ export class AuthController {
     try {
       let accessToken: string, refreshToken: string;
       [resBody, accessToken, refreshToken] = this.authService.login(req);
-      res.cookie('access_token', accessToken);
-      res.cookie('refresh_token', refreshToken);
+      res.cookie('access_token', accessToken, {
+        sameSite: 'strict',
+        httpOnly: true,
+      });
+      res.cookie('refresh_token', refreshToken, {
+        sameSite: 'strict',
+        httpOnly: true,
+      });
     } catch (e) {
       console.log(e);
       if (e instanceof InvalidRequestError) {

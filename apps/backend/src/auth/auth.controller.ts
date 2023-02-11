@@ -1,12 +1,5 @@
-import {
-  Controller,
-  HttpStatus,
-  Post,
-  Body,
-  Res,
-  Inject,
-} from '@nestjs/common';
-import { AuthService, AuthServiceImpl } from './auth.service';
+import { Controller, HttpStatus, Post, Body, Res } from '@nestjs/common';
+import { AuthService } from './auth.service';
 import {
   LoginRequest,
   LoginResponse,
@@ -19,10 +12,8 @@ import {
 } from './auth.commons';
 
 @Controller({ path: 'auth', version: '1' })
-export class AuthController {
-  constructor(
-    @Inject('AuthService') private readonly authService: AuthService,
-  ) {}
+export class AppController {
+  constructor(private readonly authService: AuthService) {}
 
   @Post('sign-in')
   signIn(@Body() req: LoginRequest, @Res({ passthrough: true }) res) {

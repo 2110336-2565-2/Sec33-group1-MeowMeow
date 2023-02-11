@@ -19,10 +19,10 @@ export class AppController {
     } catch (e) {
       if (e instanceof InvalidRequestError) {
         statusCode = HttpStatus.BAD_REQUEST;
-        resBody = { message: e.message };
+        resBody = { message: 'invalid request' };
       } else if (e instanceof InvalidAuthenticationError) {
         statusCode = HttpStatus.UNAUTHORIZED;
-        resBody = { message: e.message };
+        resBody = { message: 'incorrect email or password' };
       } else {
         statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
         resBody = { message: 'internal server error' };

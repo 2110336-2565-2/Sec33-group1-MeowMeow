@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Post, Put } from '@nestjs/common';
 import { CreateUserDto } from 'src/users/dto/createUser.dto';
 import { UsersService } from 'src/users/users.service';
 
@@ -7,7 +7,13 @@ export class UsersController {
   constructor(private usersService: UsersService) {}
   @Post('register')
   async createUser(@Body() data: CreateUserDto) {
-    return this.usersService.create(data);
+    try {
+      const user = await this.usersService.create(data);
+      if (!user) return { msg: 'create user successfully' };
+      return { msg: 'unable to create user' };
+    } catch (err) {
+      return { msg: 'error has occurred' };
+    }
   }
 
   // Auth Required : true
@@ -20,5 +26,11 @@ export class UsersController {
   @Put('user')
   editUserProfile() {
     return { msg: 'edit profile successfully' };
+  }
+
+  @Get('test')
+  test() {
+    console.log('test');
+    return { msg: 'get test successfully' };
   }
 }

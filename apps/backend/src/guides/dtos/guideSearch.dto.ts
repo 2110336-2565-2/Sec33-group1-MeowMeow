@@ -1,4 +1,4 @@
-import { IsDate, IsDateString, IsNumber, IsOptional } from 'class-validator';
+import { IsDateString, IsNumber, IsOptional } from 'class-validator';
 
 export class GuideSearchDto {
   @IsOptional()

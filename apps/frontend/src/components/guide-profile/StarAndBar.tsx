@@ -42,6 +42,7 @@ export default function StarAndBar({ star, count, total }: IStarAndBarProps) {
     >
       {Array.from({ length: 5 }, (_, i) => (
         <StarIcon
+          key={i}
           sx={{
             visibility: 4 - i >= star ? "hidden" : "visible",
             fontSize: { xs: 12, sm: 16 },

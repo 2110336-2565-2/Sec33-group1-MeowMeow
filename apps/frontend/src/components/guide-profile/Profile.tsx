@@ -29,6 +29,7 @@ export default function Profile({ name, imageurl, desc }: IProfileProps) {
       </Grid>
       <Grid item xs>
         <Grid
+          container
           direction="column"
           fontFamily="Inter"
           fontStyle="normal"
@@ -50,7 +51,7 @@ export default function Profile({ name, imageurl, desc }: IProfileProps) {
           </Grid>
           <Box
             fontWeight={400}
-            fontSize={{ xs: 16, lg: 18 }}
+            fontSize={{ xs: 14, sm: 16, lg: 18 }}
             paddingTop={{ xs: "1vh", sm: "2vh" }}
           >
             {desc}

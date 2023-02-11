@@ -112,6 +112,7 @@ importers:
       '@types/node': 18.11.18
       '@types/react': 18.0.27
       '@types/react-dom': 18.0.10
+      dayjs: ^1.11.7
       eslint: 8.32.0
       eslint-config-next: 13.0.0
       eslint-plugin-react: 7.31.8
@@ -131,6 +132,7 @@ importers:
       '@types/node': 18.11.18
       '@types/react': 18.0.27
       '@types/react-dom': 18.0.10
+      dayjs: 1.11.7
       eslint: 8.32.0
       eslint-config-next: 13.0.0_7uibuqfxkfaozanbtbziikiqje
       eslint-plugin-react: 7.31.8_eslint@8.32.0
@@ -3207,6 +3209,10 @@ packages:
     resolution: {integrity: sha512-2iy1EkLdlBzQGvbweYRFxmFath8+K7+AKB0TlhHWkNuH+TmovaMH/Wp7V7R4u7f4SnX3OgLsU9t1NI9ioDnUpg==}
     engines: {node: '>=8'}
     dev: true
+
+  /dayjs/1.11.7:
+    resolution: {integrity: sha512-+Yw9U6YO5TQohxLcIkrXBeY73WP3ejHWVvx8XCk3gxvQDCTEmS48ZrSZCKciI7Bhl/uCMyxYtE9UqRILmFphkQ==}
+    dev: false
 
   /debug/2.6.9:
     resolution: {integrity: sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==}

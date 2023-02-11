@@ -12,7 +12,7 @@ jobs:
         with:
           version: 6.0.2
       - name: pnpm install
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
       - name: tests
         working-directory: ./apps/backend
         run: pnpm run test

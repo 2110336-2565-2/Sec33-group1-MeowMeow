@@ -17,6 +17,8 @@ export interface AuthService {
 
 @Injectable()
 export class AuthServiceImpl {
+  constructor(private readonly userRepo: UserRepository) {}
+
   login(req: LoginRequest): [LoginResponse, string, string] {
     return [{ message: 'not implemented' }, null, null];
   }

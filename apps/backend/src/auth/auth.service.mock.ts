@@ -8,7 +8,7 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class AuthServiceMock {
-  login(req: LoginRequest): [LoginResponse, string, string] {
+  async login(req: LoginRequest): Promise<[LoginResponse, string, string]> {
     if (req.email !== 'test@gmail.com' || req.password !== '123456') {
       throw new InvalidAuthenticationError(
         'Hey dude. An email is test@gmail.com and password is 123456',
@@ -18,17 +18,26 @@ export class AuthServiceMock {
     return [{ message: 'success' }, 'xxxx', 'rrrr'];
   }
 
-  validate(credential: string): AccountMetadata {
+  async validate(credential: string): Promise<AccountMetadata> {
     if (!credential) {
-      throw new InvalidRequestError('missing credential');
+      throw new InvalidAuthenticationError('missing credential');
     }
+
     if (credential !== 'xxxx') {
-      throw new InvalidAuthenticationError('');
+      throw new InvalidAuthenticationError('invalid credentials');
     }
 
     return {
       userId: 100,
       role: 'admin',
     };
+  }
+
+  async refresh(refreshToken: string): Promise<[string, string]> {
+    if (refreshToken !== 'rrrr') {
+      throw new InvalidAuthenticationError('invalid refresh token');
+    }
+
+    return ['xxxx', 'rrrr'];
   }
 }

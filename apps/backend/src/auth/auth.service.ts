@@ -1,3 +1,4 @@
+import { User } from 'database';
 import {
   InvalidAuthenticationError,
   InvalidRequestError,
@@ -7,21 +8,24 @@ import { LoginRequest, LoginResponse, AccountMetadata } from './auth.dto';
 import { Injectable } from '@nestjs/common';
 
 export interface UserRepository {
-  getUserByEmail(email: string);
+  getUserByEmail(email: string): Promise<User>;
 }
 
 export interface AuthService {
-  login(req: LoginRequest): [LoginResponse, string, string];
-  validate(credential: string): AccountMetadata;
+  login(req: LoginRequest): Promise<[LoginResponse, string, string]>;
+  validate(credential: string): Promise<AccountMetadata>;
+  refresh(refreshToken: string): Promise<[string, string]>;
 }
 
 @Injectable()
 export class AuthServiceImpl {
-  login(req: LoginRequest): [LoginResponse, string, string] {
+  constructor(private readonly userRepo: UserRepository) {}
+
+  async login(req: LoginRequest): Promise<[LoginResponse, string, string]> {
     return [{ message: 'not implemented' }, null, null];
   }
 
-  validate(credential: string): AccountMetadata {
+  async validate(credential: string): Promise<AccountMetadata> {
     return null;
   }
 }

@@ -1,3 +1,4 @@
+import { User } from 'database';
 import {
   InvalidAuthenticationError,
   InvalidRequestError,
@@ -7,11 +8,11 @@ import { LoginRequest, LoginResponse, AccountMetadata } from './auth.dto';
 import { Injectable } from '@nestjs/common';
 
 export interface UserRepository {
-  getUserByEmail(email: string);
+  getUserByEmail(email: string): Promise<User>;
 }
 
 export interface AuthService {
-  login(req: LoginRequest): [LoginResponse, string, string];
+  login(req: LoginRequest): Promise<[LoginResponse, string, string]>;
   validate(credential: string): AccountMetadata;
 }
 

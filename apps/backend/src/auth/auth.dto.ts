@@ -7,6 +7,11 @@ export interface LoginResponse {
   message: string;
 }
 
+export interface AccountMetadata {
+  userId: number;
+  role: string;
+}
+
 export interface LogoutRequest {}
 
 export interface LogoutResponse {

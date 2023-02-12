@@ -2,7 +2,7 @@ import {
   InvalidAuthenticationError,
   InvalidRequestError,
 } from './auth.commons';
-import { LoginRequest, LoginResponse } from './auth.dto';
+import { AccountMetadata, LoginRequest, LoginResponse } from './auth.dto';
 
 import { Injectable } from '@nestjs/common';
 
@@ -16,5 +16,19 @@ export class AuthServiceMock {
     }
 
     return [{ message: 'success' }, 'xxxx', 'rrrr'];
+  }
+
+  validate(credential: string): AccountMetadata {
+    if (!credential) {
+      throw new InvalidRequestError('missing credential');
+    }
+    if (credential !== 'xxxx') {
+      throw new InvalidAuthenticationError('');
+    }
+
+    return {
+      userId: 100,
+      role: 'admin',
+    };
   }
 }

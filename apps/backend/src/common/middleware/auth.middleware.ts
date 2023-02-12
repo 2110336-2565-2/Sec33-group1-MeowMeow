@@ -24,8 +24,9 @@ export class AuthMiddleware implements NestMiddleware {
   async use(@Req() req, @Res({ passthrough: true }) res, @Next() next) {
     const accessToken: string = req.cookies['access_token'];
     try {
-      const accountMetadata: AccountMetadata =
-        this.authService.validate(accessToken);
+      const accountMetadata: AccountMetadata = await this.authService.validate(
+        accessToken,
+      );
       req.account = accountMetadata;
       next();
     } catch (e) {

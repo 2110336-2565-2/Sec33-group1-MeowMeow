@@ -13,7 +13,8 @@ export interface UserRepository {
 
 export interface AuthService {
   login(req: LoginRequest): Promise<[LoginResponse, string, string]>;
-  validate(credential: string): AccountMetadata;
+  validate(credential: string): Promise<AccountMetadata>;
+  refresh(refreshToken: string): Promise<[string, string]>;
 }
 
 @Injectable()

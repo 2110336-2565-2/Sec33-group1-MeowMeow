@@ -20,10 +20,11 @@ export class AuthServiceMock {
 
   async validate(credential: string): Promise<AccountMetadata> {
     if (!credential) {
-      throw new InvalidRequestError('missing credential');
+      throw new InvalidAuthenticationError('missing credential');
     }
+
     if (credential !== 'xxxx') {
-      throw new InvalidAuthenticationError('');
+      throw new InvalidAuthenticationError('invalid credentials');
     }
 
     return {

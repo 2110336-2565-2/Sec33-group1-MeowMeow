@@ -32,4 +32,12 @@ export class AuthServiceMock {
       role: 'admin',
     };
   }
+
+  async refresh(refreshToken: string): Promise<[string, string]> {
+    if (refreshToken !== 'rrrr') {
+      throw new InvalidAuthenticationError('invalid refresh token');
+    }
+
+    return ['xxxx', 'rrrr'];
+  }
 }

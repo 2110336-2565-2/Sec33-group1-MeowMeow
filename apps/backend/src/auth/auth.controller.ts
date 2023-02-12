@@ -6,6 +6,7 @@ import {
   Res,
   Inject,
   HttpException,
+  Req,
 } from '@nestjs/common';
 import { AuthService, AuthServiceImpl } from './auth.service';
 import {
@@ -40,6 +41,38 @@ export class AuthController {
         httpOnly: true,
       });
       res.status(HttpStatus.CREATED).send(resBody);
+    } catch (e) {
+      if (e instanceof InvalidRequestError) {
+        throw new HttpException({ message: e.message }, HttpStatus.BAD_REQUEST);
+      }
+      if (e instanceof InvalidAuthenticationError) {
+        throw new HttpException(
+          { message: e.message },
+          HttpStatus.UNAUTHORIZED,
+        );
+      }
+      throw new HttpException(
+        { message: e.message },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  @Post('refresh')
+  async refresh(@Req() req, @Res({ passthrough: true }) res) {
+    try {
+      const refreshToken: string = req.cookies['refresh_token'];
+      const [newAccessToken, newRefreshToken] = await this.authService.refresh(
+        refreshToken,
+      );
+      res.cookie('access_token', newAccessToken, {
+        sameSite: 'strict',
+        httpOnly: true,
+      });
+      res.cookie('refresh_token', newRefreshToken, {
+        sameSite: 'strict',
+        httpOnly: true,
+      });
     } catch (e) {
       if (e instanceof InvalidRequestError) {
         throw new HttpException({ message: e.message }, HttpStatus.BAD_REQUEST);

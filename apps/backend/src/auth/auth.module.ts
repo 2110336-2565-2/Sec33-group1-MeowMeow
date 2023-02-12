@@ -19,7 +19,10 @@ export class AuthModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(AuthMiddleware)
-      .exclude({ path: 'auth/sign-in', method: RequestMethod.POST })
+      .exclude(
+        { path: 'auth/sign-in', method: RequestMethod.POST },
+        { path: 'auth/refresh', method: RequestMethod.POST },
+      )
       .forRoutes({ path: '/**', method: RequestMethod.ALL });
   }
 }

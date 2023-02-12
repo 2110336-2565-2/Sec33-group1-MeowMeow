@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpException,
+  HttpStatus,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/createUser.dto';
 
@@ -13,8 +21,7 @@ export class UsersController {
       console.log(user);
       return { msg: 'Create user successfully!!!' };
     } catch (err) {
-      console.log(err);
-      return { msg: 'error has occurred' };
+      throw new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 

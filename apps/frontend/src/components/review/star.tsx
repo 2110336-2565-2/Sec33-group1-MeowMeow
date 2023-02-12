@@ -26,7 +26,7 @@ interface starProps {
   handleStar: (num: number | null) => void;
 }
 
-export default function Star(starProps: starProps) {
+export default function Star({ star, handleStar }: starProps) {
   const [hover, setHover] = React.useState(-1);
 
   return (
@@ -45,11 +45,11 @@ export default function Star(starProps: starProps) {
       <Grid item>
         <Rating
           name="hover-feedback"
-          value={starProps.star}
+          value={star}
           precision={0.5}
           getLabelText={getLabelText}
           onChange={(event, newValue) => {
-            starProps.handleStar(newValue);
+            handleStar(newValue);
           }}
           onChangeActive={(event, newHover) => {
             setHover(newHover);
@@ -57,10 +57,8 @@ export default function Star(starProps: starProps) {
         />
       </Grid>
       <Grid item>
-        {starProps.star !== null && (
-          <Box sx={{ marginTop: 2 }}>
-            {labels[hover !== -1 ? hover : starProps.star]}
-          </Box>
+        {star !== null && (
+          <Box sx={{ marginTop: 2 }}>{labels[hover !== -1 ? hover : star]}</Box>
         )}
       </Grid>
     </Grid>

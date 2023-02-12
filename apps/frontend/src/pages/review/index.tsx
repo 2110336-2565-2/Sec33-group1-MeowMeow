@@ -1,23 +1,14 @@
 import Detail from "@/components/review/detail";
 import Star from "@/components/review/star";
 import theme from "@/config/theme";
-import {
-  Alert,
-  Button,
-  DialogActions,
-  Grid,
-  useMediaQuery,
-} from "@mui/material";
+import { Alert, Button, DialogActions, Grid } from "@mui/material";
 import React from "react";
-import reviewHandler from "../api/review";
-import { Router, useRouter } from "next/router";
 
 interface reviewProps {
   handleDialog: () => void;
 }
 
 export default function Review(props: reviewProps) {
-  const router = useRouter();
   const [star, setStar] = React.useState<number | null>(null);
   const [detail, setDetail] = React.useState<string>("");
   const [isAlert, setIsAlert] = React.useState<boolean>(false);
@@ -36,8 +27,6 @@ export default function Review(props: reviewProps) {
     }
     setIsAlert(false);
     console.log("star: ", star, "\ndetail: ", detail);
-
-    // router.push("pages/api/review");
   };
 
   return (
@@ -45,7 +34,7 @@ export default function Review(props: reviewProps) {
       container
       sx={{
         backgroundColor: "#ffffff",
-        padding: { sm: 5, xs: 5 },
+        padding: { sm: 5, xs: 2 },
         paddingTop: 2,
         borderRadius: 5,
       }}

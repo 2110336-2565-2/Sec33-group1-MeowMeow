@@ -28,8 +28,14 @@ export default function Navbar() {
           />
           <Typography
             variant="h6"
-            component="div"
-            sx={{ flexGrow: 1, fontWeight: "bold" }}
+            component="a"
+            sx={{
+              flexGrow: 1,
+              fontWeight: "bold",
+              textDecoration: "none",
+              color: "inherit",
+            }}
+            href="/landing"
           >
             GuideKai
           </Typography>

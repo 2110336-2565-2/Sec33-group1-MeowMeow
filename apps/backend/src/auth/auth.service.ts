@@ -21,11 +21,11 @@ export interface AuthService {
 export class AuthServiceImpl {
   constructor(private readonly userRepo: UserRepository) {}
 
-  login(req: LoginRequest): [LoginResponse, string, string] {
+  async login(req: LoginRequest): Promise<[LoginResponse, string, string]> {
     return [{ message: 'not implemented' }, null, null];
   }
 
-  validate(credential: string): AccountMetadata {
+  async validate(credential: string): Promise<AccountMetadata> {
     return null;
   }
 }

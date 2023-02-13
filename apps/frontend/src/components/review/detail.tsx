@@ -8,12 +8,10 @@ interface IDetailProps {
 }
 
 export default function Detail({ detail, handleDetail }: IDetailProps) {
-  const [count, setCount] = React.useState(0);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value.length > 200) {
     } else {
       handleDetail(event.target.value);
-      setCount(event.target.value.length);
     }
   };
 
@@ -48,7 +46,7 @@ export default function Detail({ detail, handleDetail }: IDetailProps) {
         justifyContent="flex-start"
         alignItems="flex-start"
       >
-        {count} / 200 Characters
+        {detail.length} / 200 Characters
       </Grid>
     </Grid>
   );

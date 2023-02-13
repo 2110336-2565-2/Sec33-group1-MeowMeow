@@ -3,15 +3,16 @@ import Star from "@/components/review/star";
 import theme from "@/config/theme";
 import { Alert, Button, DialogActions, Grid } from "@mui/material";
 import React from "react";
+import { useState } from "react";
 
 interface reviewProps {
   handleDialog: () => void;
 }
 
 export default function Review(props: reviewProps) {
-  const [star, setStar] = React.useState<number | null>(null);
-  const [detail, setDetail] = React.useState<string>("");
-  const [isAlert, setIsAlert] = React.useState<boolean>(false);
+  const [star, setStar] = useState<number | null>(null);
+  const [detail, setDetail] = useState<string>("");
+  const [isAlert, setIsAlert] = useState<boolean>(false);
 
   const handleStar = (starValue: number | null) => {
     setStar(starValue);

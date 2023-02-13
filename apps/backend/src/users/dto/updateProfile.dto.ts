@@ -1,27 +1,27 @@
 import { Optional } from '@nestjs/common';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsOptional } from 'class-validator';
 import { Role, Guide, Review } from 'database';
 
 export class UpdateProfileDto {
   @ApiProperty({ type: String })
+  @IsOptional()
   @IsEmail()
-  @Optional()
   email?: string;
 
   @ApiProperty({ type: String })
-  @Optional()
+  @IsOptional()
   username?: string;
 
   @ApiProperty({ type: String })
-  @Optional()
+  @IsOptional()
   hashPassword?: string;
 
   @ApiProperty({ type: String })
-  @Optional()
+  @IsOptional()
   firstName?: string;
 
   @ApiProperty({ type: String })
-  @Optional()
+  @IsOptional()
   lastName?: string;
 }

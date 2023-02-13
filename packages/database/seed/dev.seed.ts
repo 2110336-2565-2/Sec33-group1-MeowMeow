@@ -1,3 +1,3 @@
-import { ISeed } from "./types";
+import { SeedGenerator } from "./types";
 
-export const devSeed: ISeed = async (prisma) => {};
+export const devSeed: SeedGenerator = async (prisma) => {};

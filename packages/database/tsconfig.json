@@ -9,7 +9,8 @@
     "noEmit": false,
     "strict": true,
     "module": "commonjs",
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "lib": ["DOM", "ES2015"]
   },
   "include": ["."],
   "exclude": ["dist", "build", "node_modules"]

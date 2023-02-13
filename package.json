@@ -9,6 +9,10 @@
   "scripts": {
     "build": "turbo run build",
     "db:generate": "turbo run db:generate --filter database",
+    "db:migrate:dev": "pnpm --filter database db:migrate:dev",
+    "db:migrate:deploy": "pnpm --filter database db:migrate:deploy",
+    "db:seed": "pnpm --filter database db:seed",
+    "db:seed-dev": "pnpm --filter database db:seed-dev",
     "dev": "turbo run dev --parallel",
     "dev:frontend": "turbo run dev --filter frontend --filter config",
     "dev:backend": "turbo run dev --filter backend --filter config --filter database",

@@ -4,6 +4,7 @@
     "@prisma/client": "^4.9.0"
   },
   "devDependencies": {
+    "@types/node": "18.11.18",
     "prisma": "^4.9.0",
     "typescript": "^4.9.4"
   },
@@ -13,7 +14,12 @@
     "db:generate": "prisma generate",
     "db:push": "prisma db push --skip-generate",
     "db:migrate:dev": "prisma migrate dev",
-    "db:migrate:deploy": "prisma migrate deploy"
+    "db:migrate:deploy": "prisma migrate deploy",
+    "db:seed": "prisma db seed",
+    "db:seed-dev": "ts-node seed/index.ts dev"
+  },
+  "prisma": {
+    "seed": "ts-node seed/index.ts"
   },
   "main": "dist/index.js",
   "types": "src/index.ts",

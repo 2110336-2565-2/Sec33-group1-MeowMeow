@@ -1,21 +1,100 @@
 import { Injectable } from '@nestjs/common';
+import { Prisma } from 'database';
 import { PrismaService } from '../prisma/prisma.service';
-import { CreateUserDto } from './dto/createUser.dto';
+import { CreateUserRequest, CreateUserResponse } from './dto/createUser.dto';
+import { UpdateUserRequest, UpdateUserResponse } from './dto/updateProfile.dto';
+import {
+  InvalidRequestError,
+  PropertyAlreadyUsedError,
+  UserNotFoundError,
+} from './user.common';
+import { GetUserByIdRequest, GetUserByIdResponse } from './dto/getUserById.dto';
 
 @Injectable()
 export class UsersService {
   constructor(private prisma: PrismaService) {}
-  create(createUserDto: CreateUserDto) {
-    return this.prisma.user.create({
-      data: {
-        createdAt: new Date(),
-        email: createUserDto.email,
-        username: createUserDto.username,
-        firstName: createUserDto.firstName,
-        lastName: createUserDto.lastName,
-        hashPassword: createUserDto.hashPassword,
-        role: 'USER',
-      },
+
+  async getUserById(req: GetUserByIdRequest): Promise<GetUserByIdResponse> {
+    const user = await this.prisma.user.findUnique({
+      where: { id: Number(req.id) },
     });
+
+    if (!user) {
+      throw new UserNotFoundError('user with given id not found');
+    }
+
+    return {
+      message: 'success',
+      id: user.id,
+      email: user.email,
+      username: user.username,
+      firstName: user.firstName,
+      lastName: user.lastName,
+    };
+  }
+
+  async create(createUserDto: CreateUserRequest): Promise<CreateUserResponse> {
+    try {
+      const user = await this.prisma.user.create({
+        data: {
+          createdAt: new Date(),
+          email: createUserDto.email,
+          username: createUserDto.username,
+          firstName: createUserDto.firstName,
+          lastName: createUserDto.lastName,
+          hashPassword: createUserDto.password,
+          role: 'USER',
+        },
+      });
+
+      return {
+        message: 'success',
+        id: user.id,
+        username: user.username,
+        role: user.role,
+      };
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code === 'P2002') {
+          throw new PropertyAlreadyUsedError(
+            `There is a unique constraint violation, ${e.meta.target} have already been used`,
+          );
+        }
+      }
+      throw e;
+    }
+  }
+
+  async updateUser(
+    id: number,
+    updates: UpdateUserRequest,
+  ): Promise<UpdateUserResponse> {
+    try {
+      const user = await this.prisma.user.update({
+        where: { id: id },
+        data: updates,
+      });
+
+      if (!user) {
+        throw new UserNotFoundError('user with given id not found');
+      }
+
+      return {
+        message: 'success',
+        email: user.email,
+        username: user.username,
+        firstName: user.firstName,
+        lastName: user.lastName,
+      };
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code === 'P2002') {
+          throw new PropertyAlreadyUsedError(
+            `There is a unique constraint violation, ${e.meta.target} have already been used`,
+          );
+        }
+      }
+      throw e;
+    }
   }
 }

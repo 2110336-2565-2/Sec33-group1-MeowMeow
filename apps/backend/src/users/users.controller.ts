@@ -1,32 +1,87 @@
-import { Body, Controller, Get, Post, Put } from '@nestjs/common';
+import {
+  ParseIntPipe,
+  Body,
+  Controller,
+  Get,
+  HttpException,
+  HttpStatus,
+  Param,
+  Post,
+  Put,
+  Req,
+  Res,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/createUser.dto';
+import { CreateUserRequest } from './dto/createUser.dto';
+import { AccountMetadata } from 'src/auth/auth.dto';
+import { PropertyAlreadyUsedError, UserNotFoundError } from './user.common';
 
 @Controller('users')
 export class UsersController {
-  constructor(private usersService: UsersService) {}
-  @Post('register')
-  async createUser(@Body() data: CreateUserDto) {
+  constructor(private readonly usersService: UsersService) {}
+
+  @Get(':id')
+  async getUserById(
+    @Param('id', ParseIntPipe) userId: number,
+    @Res({ passthrough: true }) res,
+  ) {
     try {
-      const user = await this.usersService.create(data);
-      if (!user) return { msg: 'unable to create user' };
-      console.log(user);
-      return { msg: 'Create user successfully!!!' };
-    } catch (err) {
-      console.log(err);
-      return { msg: 'error has occurred' };
+      const resBody = await this.usersService.getUserById({ id: userId });
+      res.status(HttpStatus.OK).send(resBody);
+    } catch (e) {
+      console.log(e);
+      if (e instanceof UserNotFoundError) {
+        throw new HttpException(
+          'user with given id not found',
+          HttpStatus.NOT_FOUND,
+        );
+      }
+      throw new HttpException(
+        'internal server error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 
-  // Auth Required : true
-  @Post('guideVerify')
-  submitGuideVerification() {
-    return { msg: 'submission sent' };
+  @Post('register')
+  async createUser(
+    @Body() data: CreateUserRequest,
+    @Res({ passthrough: true }) res,
+  ) {
+    try {
+      const resBody = await this.usersService.create(data);
+      res.status(HttpStatus.CREATED).send(resBody);
+    } catch (e) {
+      console.log(e);
+      if (e instanceof PropertyAlreadyUsedError) {
+        throw new HttpException(e.message, HttpStatus.CONFLICT);
+      }
+      throw new HttpException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
-  // Auth Required : true, Access Control : owner
   @Put('user')
-  editUserProfile() {
-    return { msg: 'edit profile successfully' };
+  async editUserProfile(
+    @Req() req,
+    @Body() reqBody,
+    @Res({ passthrough: true }) res,
+  ) {
+    try {
+      const account: AccountMetadata = req.account;
+      const resBody = await this.usersService.updateUser(
+        account.userId,
+        reqBody,
+      );
+      res.status(HttpStatus.CREATED).send(resBody);
+    } catch (e) {
+      console.log(e);
+      if (e instanceof PropertyAlreadyUsedError) {
+        throw new HttpException(e.message, HttpStatus.CONFLICT);
+      }
+      throw new HttpException(
+        'internal server error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 }

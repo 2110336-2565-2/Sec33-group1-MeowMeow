@@ -1,4 +1,5 @@
 import { User } from 'database';
+import * as bcrypt from 'bcrypt';
 import {
   InvalidAuthenticationError,
   InvalidRequestError,
@@ -22,7 +23,22 @@ export class AuthServiceImpl {
   constructor(private readonly userRepo: UserRepository) {}
 
   async login(req: LoginRequest): Promise<[LoginResponse, string, string]> {
-    return [{ message: 'not implemented' }, null, null];
+    try {
+      const user = await this.userRepo.getUserByEmail(req.email);
+      const passwordMatch = await bcrypt.compare(
+        req.password,
+        user.hashPassword,
+      );
+      if (!passwordMatch) {
+        throw new InvalidAuthenticationError('invalid email or password');
+      }
+      return [{ message: 'success' }, null, null];
+    } catch (e) {
+      if (e instanceof UserNotFoundError) {
+        throw new InvalidRequestError('invalid email or password');
+      }
+      throw e;
+    }
   }
 
   async validate(credential: string): Promise<AccountMetadata> {

@@ -1,10 +1,11 @@
 import {
+  ParseIntPipe,
   Body,
   Controller,
   Get,
   HttpException,
   HttpStatus,
-  Patch,
+  Param,
   Post,
   Put,
   Req,
@@ -12,14 +13,35 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserRequest } from './dto/createUser.dto';
-import { Request } from 'express';
 import { AccountMetadata } from 'src/auth/auth.dto';
-import { UpdateUserRequest } from './dto/updateProfile.dto';
 import { PropertyAlreadyUsedError, UserNotFoundError } from './user.common';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
+
+  @Get(':id')
+  async getUserById(
+    @Param('id', ParseIntPipe) userId: number,
+    @Res({ passthrough: true }) res,
+  ) {
+    try {
+      const resBody = await this.usersService.getUserById({ id: userId });
+      res.status(HttpStatus.OK).send(resBody);
+    } catch (e) {
+      console.log(e);
+      if (e instanceof UserNotFoundError) {
+        throw new HttpException(
+          'user with given id not found',
+          HttpStatus.NOT_FOUND,
+        );
+      }
+      throw new HttpException(
+        'internal server error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
 
   @Post('register')
   async createUser(

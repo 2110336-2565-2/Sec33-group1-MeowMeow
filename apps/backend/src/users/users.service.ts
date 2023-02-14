@@ -3,11 +3,40 @@ import { Prisma } from 'database';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserRequest, CreateUserResponse } from './dto/createUser.dto';
 import { UpdateUserRequest, UpdateUserResponse } from './dto/updateProfile.dto';
-import { PropertyAlreadyUsedError, UserNotFoundError } from './user.common';
+import {
+  InvalidRequestError,
+  PropertyAlreadyUsedError,
+  UserNotFoundError,
+} from './user.common';
+import { GetUserByIdRequest, GetUserByIdResponse } from './dto/getUserById.dto';
 
 @Injectable()
 export class UsersService {
   constructor(private prisma: PrismaService) {}
+
+  async getUserById(req: GetUserByIdRequest): Promise<GetUserByIdResponse> {
+    try {
+      const user = await this.prisma.user.findUniqueOrThrow({
+        where: { id: Number(req.id) },
+      });
+
+      return {
+        message: 'success',
+        id: user.id,
+        email: user.email,
+        username: user.username,
+        firstName: user.firstName,
+        lastName: user.lastName,
+      };
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code === 'P2025') {
+          throw new UserNotFoundError('user with given id not found');
+        }
+      }
+      throw e;
+    }
+  }
   async create(createUserDto: CreateUserRequest): Promise<CreateUserResponse> {
     try {
       const user = await this.prisma.user.create({

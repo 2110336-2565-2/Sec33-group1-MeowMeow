@@ -58,7 +58,7 @@ export class UsersService {
       };
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        if (e.code === 'P2002') {
+        if (e.code === 'P2025') {
           throw new UserNotFoundError('user with given id not found');
         }
       }

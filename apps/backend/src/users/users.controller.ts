@@ -60,11 +60,6 @@ export class UsersController {
     }
   }
 
-  @Post('guideVerify')
-  submitGuideVerification() {
-    return { msg: 'submission sent' };
-  }
-
   @Put('user')
   async editUserProfile(
     @Req() req,

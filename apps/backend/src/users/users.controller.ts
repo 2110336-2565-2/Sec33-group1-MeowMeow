@@ -11,34 +11,38 @@ import {
   Res,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/createUser.dto';
+import { CreateUserRequest } from './dto/createUser.dto';
 import { Request } from 'express';
 import { AccountMetadata } from 'src/auth/auth.dto';
 import { UpdateUserRequest } from './dto/updateProfile.dto';
-import { UserNotFoundError } from './user.common';
+import { PropertyAlreadyUsedError, UserNotFoundError } from './user.common';
 
 @Controller('users')
 export class UsersController {
-  constructor(private usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) {}
+
   @Post('register')
-  async createUser(@Body() data: CreateUserDto) {
+  async createUser(
+    @Body() data: CreateUserRequest,
+    @Res({ passthrough: true }) res,
+  ) {
     try {
-      const user = await this.usersService.create(data);
-      if (!user) return { msg: 'unable to create user' };
-      console.log(user);
-      return { msg: 'Create user successfully!!!' };
+      const resBody = await this.usersService.create(data);
+      res.status(HttpStatus.CREATED).send(resBody);
     } catch (e) {
+      console.log(e);
+      if (e instanceof PropertyAlreadyUsedError) {
+        throw new HttpException(e.message, HttpStatus.CONFLICT);
+      }
       throw new HttpException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
-  // Auth Required : true
   @Post('guideVerify')
   submitGuideVerification() {
     return { msg: 'submission sent' };
   }
 
-  // Auth Required : true, Access Control : owner
   @Put('user')
   async editUserProfile(
     @Req() req,
@@ -54,6 +58,9 @@ export class UsersController {
       res.status(HttpStatus.CREATED).send(resBody);
     } catch (e) {
       console.log(e);
+      if (e instanceof PropertyAlreadyUsedError) {
+        throw new HttpException(e.message, HttpStatus.CONFLICT);
+      }
       throw new HttpException(
         'internal server error',
         HttpStatus.INTERNAL_SERVER_ERROR,

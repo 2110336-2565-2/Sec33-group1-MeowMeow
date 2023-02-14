@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from 'database';
 import { PrismaService } from '../prisma/prisma.service';
-import { CreateUserDto } from './dto/createUser.dto';
+import { CreateUserRequest, CreateUserResponse } from './dto/createUser.dto';
 import { UpdateUserRequest, UpdateUserResponse } from './dto/updateProfile.dto';
-import { UserNotFoundError } from './user.common';
+import { PropertyAlreadyUsedError, UserNotFoundError } from './user.common';
 
 @Injectable()
 export class UsersService {
   constructor(private prisma: PrismaService) {}
-  async create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserRequest): Promise<CreateUserResponse> {
     try {
       const user = await this.prisma.user.create({
         data: {
@@ -21,12 +21,18 @@ export class UsersService {
           role: 'USER',
         },
       });
-      return user;
+      return {
+        message: 'success',
+        id: user.id,
+        username: user.username,
+        role: user.role,
+      };
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
         if (e.code === 'P2002') {
-          e.message = `There is a unique constraint violation, ${e.meta.target} have already been used`;
-          console.log(e.message);
+          throw new PropertyAlreadyUsedError(
+            `There is a unique constraint violation, ${e.meta.target} have already been used`,
+          );
         }
       }
       throw e;
@@ -54,6 +60,13 @@ export class UsersService {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
         if (e.code === 'P2002') {
           throw new UserNotFoundError('user with given id not found');
+        }
+      }
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code === 'P2002') {
+          throw new PropertyAlreadyUsedError(
+            `There is a unique constraint violation, ${e.meta.target} have already been used`,
+          );
         }
       }
       throw e;

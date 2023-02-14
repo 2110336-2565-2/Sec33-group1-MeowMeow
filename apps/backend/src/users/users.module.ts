@@ -3,7 +3,8 @@ import { PrismaService } from '../prisma/prisma.service';
 import { AuthMiddleware } from '../common/middleware/auth.middleware';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
-import { AuthServiceMock } from 'src/auth/auth.service.mock';
+import { AuthServiceImpl } from 'src/auth/auth.service';
+import { UserRepository } from './user.repository';
 
 @Module({
   imports: [],
@@ -11,9 +12,10 @@ import { AuthServiceMock } from 'src/auth/auth.service.mock';
   providers: [
     {
       provide: 'AuthService',
-      useClass: AuthServiceMock,
+      useClass: AuthServiceImpl,
     },
     UsersService,
+    UserRepository,
     PrismaService,
   ],
 })

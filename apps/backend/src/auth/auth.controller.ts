@@ -42,6 +42,7 @@ export class AuthController {
       });
       res.status(HttpStatus.CREATED).send(resBody);
     } catch (e) {
+      console.log(e);
       if (e instanceof InvalidRequestError) {
         throw new HttpException({ message: e.message }, HttpStatus.BAD_REQUEST);
       }

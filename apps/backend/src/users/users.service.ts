@@ -15,28 +15,24 @@ export class UsersService {
   constructor(private prisma: PrismaService) {}
 
   async getUserById(req: GetUserByIdRequest): Promise<GetUserByIdResponse> {
-    try {
-      const user = await this.prisma.user.findUniqueOrThrow({
-        where: { id: Number(req.id) },
-      });
+    const user = await this.prisma.user.findUnique({
+      where: { id: Number(req.id) },
+    });
 
-      return {
-        message: 'success',
-        id: user.id,
-        email: user.email,
-        username: user.username,
-        firstName: user.firstName,
-        lastName: user.lastName,
-      };
-    } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        if (e.code === 'P2025') {
-          throw new UserNotFoundError('user with given id not found');
-        }
-      }
-      throw e;
+    if (!user) {
+      throw new UserNotFoundError('user with given id not found');
     }
+
+    return {
+      message: 'success',
+      id: user.id,
+      email: user.email,
+      username: user.username,
+      firstName: user.firstName,
+      lastName: user.lastName,
+    };
   }
+
   async create(createUserDto: CreateUserRequest): Promise<CreateUserResponse> {
     try {
       const user = await this.prisma.user.create({
@@ -50,6 +46,7 @@ export class UsersService {
           role: 'USER',
         },
       });
+
       return {
         message: 'success',
         id: user.id,
@@ -73,11 +70,15 @@ export class UsersService {
     updates: UpdateUserRequest,
   ): Promise<UpdateUserResponse> {
     try {
-      console.log(updates);
       const user = await this.prisma.user.update({
         where: { id: id },
         data: updates,
       });
+
+      if (!user) {
+        throw new UserNotFoundError('user with given id not found');
+      }
+
       return {
         message: 'success',
         email: user.email,
@@ -86,11 +87,6 @@ export class UsersService {
         lastName: user.lastName,
       };
     } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        if (e.code === 'P2025') {
-          throw new UserNotFoundError('user with given id not found');
-        }
-      }
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
         if (e.code === 'P2002') {
           throw new PropertyAlreadyUsedError(

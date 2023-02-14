@@ -35,28 +35,18 @@ export class AuthServiceImpl {
       throw new InvalidAuthenticationError('invalid email or password');
     }
 
-    const accessToken = jwt.sign(
-      {
-        id: user.id.toString(),
-        username: user.username,
-        role: user.role,
-      },
-      this.jwt_secret,
-      {
-        expiresIn: 600,
-      },
-    );
-    const refreshToken = jwt.sign(
-      {
-        id: user.id.toString(),
-        username: user.username,
-        role: user.role,
-      },
-      this.jwt_secret,
-      {
-        expiresIn: '10 days',
-      },
-    );
+    const account = {
+      id: user.id.toString(),
+      username: user.username,
+      role: user.role,
+    };
+
+    const accessToken = jwt.sign(account, this.jwt_secret, {
+      expiresIn: 600,
+    });
+    const refreshToken = jwt.sign(account, this.jwt_secret, {
+      expiresIn: '10 days',
+    });
 
     return [{ message: 'success' }, accessToken, refreshToken];
   }

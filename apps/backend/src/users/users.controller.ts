@@ -60,17 +60,4 @@ export class UsersController {
       );
     }
   }
-  @Patch('test')
-  async editUserProfileMock(@Req() req, @Body() data: UpdateUserRequest) {
-    try {
-      if (req.account.userId === 100) {
-        this.usersService.updateUser(req.account.userId, data);
-      }
-    } catch (e) {
-      throw new HttpException(
-        { message: e.message },
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
-  }
 }

@@ -1,8 +1,9 @@
 import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { AuthController } from './auth.controller';
 import { PrismaService } from '../prisma/prisma.service';
-import { AuthServiceMock } from './auth.service.mock';
 import { AuthMiddleware } from 'src/common/middleware/auth.middleware';
+import { AuthServiceImpl } from './auth.service';
+import { UserRepository } from 'src/users/user.repository';
 
 @Module({
   imports: [],
@@ -10,8 +11,9 @@ import { AuthMiddleware } from 'src/common/middleware/auth.middleware';
   providers: [
     {
       provide: 'AuthService',
-      useClass: AuthServiceMock,
+      useClass: AuthServiceImpl,
     },
+    UserRepository,
     PrismaService,
   ],
 })
@@ -23,6 +25,6 @@ export class AuthModule {
         { path: 'auth/sign-in', method: RequestMethod.POST },
         { path: 'auth/refresh', method: RequestMethod.POST },
       )
-      .forRoutes({ path: '/**', method: RequestMethod.ALL });
+      .forRoutes({ path: '/auth/**', method: RequestMethod.ALL });
   }
 }

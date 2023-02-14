@@ -1,18 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from 'database';
+import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserRequest, CreateUserResponse } from './dto/createUser.dto';
 import { UpdateUserRequest, UpdateUserResponse } from './dto/updateProfile.dto';
-import {
-  InvalidRequestError,
-  PropertyAlreadyUsedError,
-  UserNotFoundError,
-} from './user.common';
+import { PropertyAlreadyUsedError, UserNotFoundError } from './user.common';
 import { GetUserByIdRequest, GetUserByIdResponse } from './dto/getUserById.dto';
 
 @Injectable()
 export class UsersService {
-  constructor(private prisma: PrismaService) {}
+  private hashRound: number;
+  constructor(private prisma: PrismaService) {
+    this.hashRound = 10;
+  }
 
   async getUserById(req: GetUserByIdRequest): Promise<GetUserByIdResponse> {
     const user = await this.prisma.user.findUnique({
@@ -35,6 +35,10 @@ export class UsersService {
 
   async create(createUserDto: CreateUserRequest): Promise<CreateUserResponse> {
     try {
+      const hashPassword = await bcrypt.hash(
+        createUserDto.password,
+        this.hashRound,
+      );
       const user = await this.prisma.user.create({
         data: {
           createdAt: new Date(),
@@ -42,7 +46,7 @@ export class UsersService {
           username: createUserDto.username,
           firstName: createUserDto.firstName,
           lastName: createUserDto.lastName,
-          hashPassword: createUserDto.password,
+          hashPassword: hashPassword,
           role: 'USER',
         },
       });

@@ -6,12 +6,14 @@ import { CreateUserRequest, CreateUserResponse } from './dto/createUser.dto';
 import { UpdateUserRequest, UpdateUserResponse } from './dto/updateProfile.dto';
 import { PropertyAlreadyUsedError, UserNotFoundError } from './user.common';
 import { GetUserByIdRequest, GetUserByIdResponse } from './dto/getUserById.dto';
+import { backendConfig } from 'config';
 
 @Injectable()
 export class UsersService {
   private hashRound: number;
+
   constructor(private prisma: PrismaService) {
-    this.hashRound = 10;
+    this.hashRound = backendConfig.bcrypt.salt;
   }
 
   async getUserById(req: GetUserByIdRequest): Promise<GetUserByIdResponse> {

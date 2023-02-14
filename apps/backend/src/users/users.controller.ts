@@ -8,11 +8,14 @@ import {
   Post,
   Put,
   Req,
+  Res,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/createUser.dto';
-import { UpdateProfileDto } from './dto/updateProfile.dto';
 import { Request } from 'express';
+import { AccountMetadata } from 'src/auth/auth.dto';
+import { UpdateUserRequest } from './dto/updateProfile.dto';
+import { UserNotFoundError } from './user.common';
 
 @Controller('users')
 export class UsersController {
@@ -37,16 +40,31 @@ export class UsersController {
 
   // Auth Required : true, Access Control : owner
   @Put('user')
-  async editUserProfile(@Body() data: UpdateProfileDto) {
+  async editUserProfile(
+    @Req() req,
+    @Body() reqBody,
+    @Res({ passthrough: true }) res,
+  ) {
     try {
-    } catch (e) {}
-    return { msg: 'edit profile successfully' };
+      const account: AccountMetadata = req.account;
+      const resBody = await this.usersService.updateUser(
+        account.userId,
+        reqBody,
+      );
+      res.status(HttpStatus.CREATED).send(resBody);
+    } catch (e) {
+      console.log(e);
+      throw new HttpException(
+        'internal server error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
   @Patch('test')
-  async editUserProfileMock(@Req() req, @Body() data: UpdateProfileDto) {
+  async editUserProfileMock(@Req() req, @Body() data: UpdateUserRequest) {
     try {
       if (req.account.userId === 100) {
-        this.usersService.updateProfile(req.account.userId, data);
+        this.usersService.updateUser(req.account.userId, data);
       }
     } catch (e) {
       throw new HttpException(

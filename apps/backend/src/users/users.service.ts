@@ -2,7 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { Prisma } from 'database';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/createUser.dto';
-import { UpdateProfileDto } from './dto/updateProfile.dto';
+import { UpdateUserRequest, UpdateUserResponse } from './dto/updateProfile.dto';
+import { UserNotFoundError } from './user.common';
 
 @Injectable()
 export class UsersService {
@@ -16,7 +17,7 @@ export class UsersService {
           username: createUserDto.username,
           firstName: createUserDto.firstName,
           lastName: createUserDto.lastName,
-          hashPassword: createUserDto.hashPassword,
+          hashPassword: createUserDto.password,
           role: 'USER',
         },
       });
@@ -31,15 +32,31 @@ export class UsersService {
       throw e;
     }
   }
-  async updateProfile(updateId: number, updateProfileDto: UpdateProfileDto) {
+
+  async updateUser(
+    id: number,
+    updates: UpdateUserRequest,
+  ): Promise<UpdateUserResponse> {
     try {
-      console.log(updateProfileDto);
-      const updateUser = await this.prisma.user.update({
-        where: {
-          id: 20,
-        },
-        data: updateProfileDto,
+      console.log(updates);
+      const user = await this.prisma.user.update({
+        where: { id: id },
+        data: updates,
       });
-    } catch (e) {}
+      return {
+        message: 'success',
+        email: user.email,
+        username: user.username,
+        firstName: user.firstName,
+        lastName: user.lastName,
+      };
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code === 'P2002') {
+          throw new UserNotFoundError('user with given id not found');
+        }
+      }
+      throw e;
+    }
   }
 }

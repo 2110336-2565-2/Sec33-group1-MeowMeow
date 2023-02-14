@@ -13,7 +13,7 @@ export class CreateUserDto {
 
   @ApiProperty({ type: String })
   @IsNotEmpty()
-  hashPassword: string;
+  password: string;
 
   @ApiProperty({ type: String })
   @IsNotEmpty()

@@ -1,29 +1,18 @@
-import { FormEventHandler, useCallback } from "react";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import StyleTextField from "../LoginPage/StyledTextField";
-import { REGISTER_INPUT_IDs } from "@/constants/RegisterPage";
-import apiClient from "@/utils/apiClient";
+import useRegisterForm from "@/hooks/useRegisterForm";
+import useSnackbar from "@/hooks/useSnackbar";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
+import Typography from "@mui/material/Typography";
 
 const RegisterForm = () => {
-  const onSubmit: FormEventHandler<HTMLFormElement> = useCallback(
-    async (event) => {
-      event.preventDefault();
-      const formBody = REGISTER_INPUT_IDs.reduce((prev, formId) => {
-        prev[formId] = event.currentTarget[formId].value;
-        return prev;
-      }, {} as { [key: string]: string });
-      formBody["hashPassword"] = formBody["password"];
-      try {
-        const response = await apiClient.post("/users/register", formBody);
-        console.log(response.data);
-      } catch (err) {
-        console.log(err);
-      }
-    },
-    []
-  );
-
+  const { onAddSnackbar, onClose, onExit, isOpen, messageInfo } = useSnackbar();
+  const { onSubmit, isLoading } = useRegisterForm({ onError: onAddSnackbar });
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
   return (
     <Stack
       component="form"
@@ -60,6 +49,32 @@ const RegisterForm = () => {
       >
         REGISTER
       </Button>
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        key={messageInfo ? messageInfo.key : undefined}
+        open={isOpen}
+        autoHideDuration={3000}
+        onClose={onClose}
+        sx={{
+          width: "75%",
+        }}
+        TransitionProps={{ onExited: onExit }}
+        message={messageInfo ? messageInfo.message : undefined}
+      >
+        <Alert
+          severity="error"
+          variant="filled"
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Typography fontWeight="500" textTransform="capitalize">
+            {messageInfo?.message}
+          </Typography>
+        </Alert>
+      </Snackbar>
     </Stack>
   );
 };

@@ -1,29 +1,21 @@
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 import LoginUtils from "./LoginUtils";
 import StyleTextField from "./StyledTextField";
-import apiClient from "@/utils/apiClient";
-import { FormEventHandler, useCallback } from "react";
-import { ILoginForm } from "./types/loginForm";
+import useLoginForm from "@/hooks/useLoginForm";
+import useSnackbar from "@/hooks/useSnackbar";
+import Typography from "@mui/material/Typography";
 
 const LoginForm = () => {
-  const onSubmit: FormEventHandler<HTMLFormElement> = useCallback(
-    async (event) => {
-      event.preventDefault();
-      const email = event.currentTarget.email.value;
-      const password = event.currentTarget.password.value;
-      try {
-        await apiClient.post<ILoginForm>("/auth/sign-in", {
-          email,
-          password,
-        });
-      } catch (err) {
-        console.log(err);
-      }
-    },
-    []
-  );
-
+  const { onAddSnackbar, onClose, onExit, isOpen, messageInfo } = useSnackbar();
+  const { isLoading, onSubmit } = useLoginForm({
+    onError: onAddSnackbar,
+  });
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
   return (
     <Stack
       component="form"
@@ -44,6 +36,29 @@ const LoginForm = () => {
       <Button variant="contained" color="secondary" fullWidth type="submit">
         SIGN IN
       </Button>
+
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        key={messageInfo ? messageInfo.key : undefined}
+        open={isOpen}
+        autoHideDuration={3000}
+        onClose={onClose}
+        sx={{ width: "75%" }}
+        TransitionProps={{ onExited: onExit }}
+        message={messageInfo ? messageInfo.message : undefined}
+      >
+        <Alert
+          severity="error"
+          variant="filled"
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Typography fontWeight="500">{messageInfo?.message}</Typography>
+        </Alert>
+      </Snackbar>
     </Stack>
   );
 };

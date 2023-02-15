@@ -24,15 +24,6 @@ const LoginUtils = () => {
           Remember me
         </Typography>
       </Stack>
-
-      <Typography
-        variant="subtitle2"
-        color="secondary"
-        fontFamily="Inter"
-        fontWeight="500"
-      >
-        Forgot your password?
-      </Typography>
     </Stack>
   );
 };

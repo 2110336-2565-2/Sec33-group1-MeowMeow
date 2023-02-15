@@ -9,6 +9,7 @@ import { LoginRequest, LoginResponse, AccountMetadata } from './auth.dto';
 import { Injectable } from '@nestjs/common';
 import { UserNotFoundError } from 'src/users/user.common';
 import { UserRepository } from 'src/users/user.repository';
+import { backendConfig } from 'config';
 
 export interface AuthService {
   login(req: LoginRequest): Promise<[LoginResponse, string, string]>;
@@ -21,7 +22,7 @@ export class AuthServiceImpl {
   private jwt_secret: string;
 
   constructor(private readonly userRepo: UserRepository) {
-    this.jwt_secret = '1233';
+    this.jwt_secret = backendConfig.jwt.secret;
   }
 
   async login(req: LoginRequest): Promise<[LoginResponse, string, string]> {

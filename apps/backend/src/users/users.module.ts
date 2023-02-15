@@ -23,6 +23,7 @@ export class UsersModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(AuthMiddleware)
+      .exclude({ path: '/users/register', method: RequestMethod.POST })
       .forRoutes({ path: '/users/**', method: RequestMethod.ALL });
   }
 }

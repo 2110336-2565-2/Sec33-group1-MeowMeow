@@ -12,6 +12,7 @@ const LoginForm = () => {
   const { onAddSnackbar, onClose, onExit, isOpen, messageInfo } = useSnackbar();
   const { isLoading, onSubmit } = useLoginForm({
     onError: onAddSnackbar,
+    onSuccess: onAddSnackbar,
   });
   if (isLoading) {
     return <div>Loading...</div>;
@@ -43,12 +44,12 @@ const LoginForm = () => {
         open={isOpen}
         autoHideDuration={3000}
         onClose={onClose}
-        sx={{ width: "75%" }}
+        sx={{ width: "75%", minWidth: "300px" }}
         TransitionProps={{ onExited: onExit }}
         message={messageInfo ? messageInfo.message : undefined}
       >
         <Alert
-          severity="error"
+          severity={messageInfo?.severity ?? "error"}
           variant="filled"
           sx={{
             display: "flex",

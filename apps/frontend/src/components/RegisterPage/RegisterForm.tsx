@@ -9,7 +9,10 @@ import Typography from "@mui/material/Typography";
 
 const RegisterForm = () => {
   const { onAddSnackbar, onClose, onExit, isOpen, messageInfo } = useSnackbar();
-  const { onSubmit, isLoading } = useRegisterForm({ onError: onAddSnackbar });
+  const { onSubmit, isLoading } = useRegisterForm({
+    onError: onAddSnackbar,
+    onSuccess: onAddSnackbar,
+  });
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -25,7 +28,7 @@ const RegisterForm = () => {
         <StyleTextField placeholder="First name" id="firstName" />
         <StyleTextField placeholder="Last name" id="lastName" />
       </Stack>
-      <StyleTextField placeholder="Username" id="userName" />
+      <StyleTextField placeholder="Username" id="username" />
       <StyleTextField placeholder="Email" id="email" />
       <StyleTextField type="password" placeholder="Password" id="password" />
       <StyleTextField
@@ -57,12 +60,13 @@ const RegisterForm = () => {
         onClose={onClose}
         sx={{
           width: "75%",
+          minWidth: "300px",
         }}
         TransitionProps={{ onExited: onExit }}
         message={messageInfo ? messageInfo.message : undefined}
       >
         <Alert
-          severity="error"
+          severity={messageInfo?.severity ?? "error"}
           variant="filled"
           sx={{
             display: "flex",

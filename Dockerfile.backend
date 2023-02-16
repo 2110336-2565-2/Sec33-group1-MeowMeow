@@ -48,5 +48,6 @@ COPY --from=builder --chown=user:container /app/packages/config/dist /app/packag
 COPY --from=builder --chown=user:container /app/packages/database/package.json /app/packages/database/package.json
 COPY --from=builder --chown=user:container /app/packages/database/node_modules /app/packages/database/node_modules
 COPY --from=builder --chown=user:container /app/packages/database/dist /app/packages/database/dist
+COPY --chown=user:container ./packages/database/prisma /app/packages/database/prisma
 
-CMD pnpm --filter backend start:prod
+CMD pnpm --filter database db:migrate:deploy && pnpm --filter backend start:prod

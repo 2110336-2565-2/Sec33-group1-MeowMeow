@@ -5,7 +5,7 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { CreateReviewDto } from './dtos/CreateReview.dto';
+import { CreateReviewDto } from './dto/CreateReview.dto';
 import { ReviewService } from './service/review/review.service';
 
 @Controller('review')

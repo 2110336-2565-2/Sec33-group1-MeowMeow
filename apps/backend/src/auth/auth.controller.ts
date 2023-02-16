@@ -8,13 +8,8 @@ import {
   HttpException,
   Req,
 } from '@nestjs/common';
-import { AuthService, AuthServiceImpl } from './auth.service';
-import {
-  LoginRequest,
-  LoginResponse,
-  LogoutRequest,
-  LogoutResponse,
-} from './auth.dto';
+import { AuthService } from './auth.service';
+import { LoginRequest, LogoutRequest } from './auth.dto';
 import {
   InvalidAuthenticationError,
   InvalidRequestError,

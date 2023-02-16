@@ -29,6 +29,7 @@ export class AuthServiceMock {
 
     return {
       userId: 100,
+      username: 'david',
       role: 'admin',
     };
   }

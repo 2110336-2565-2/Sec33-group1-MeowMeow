@@ -19,6 +19,7 @@ import {
   InvalidAuthenticationError,
   InvalidRequestError,
 } from './auth.commons';
+import { UserNotFoundError } from 'src/users/user.common';
 
 @Controller({ path: 'auth', version: '1' })
 export class AuthController {
@@ -52,8 +53,11 @@ export class AuthController {
           HttpStatus.UNAUTHORIZED,
         );
       }
+      if (e instanceof UserNotFoundError) {
+        throw new HttpException({ message: e.message }, HttpStatus.NOT_FOUND);
+      }
       throw new HttpException(
-        { message: e.message },
+        { message: 'internal server error' },
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }

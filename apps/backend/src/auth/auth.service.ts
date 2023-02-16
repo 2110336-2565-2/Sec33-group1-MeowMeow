@@ -1,9 +1,6 @@
 import * as jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcrypt';
-import {
-  InvalidAuthenticationError,
-  InvalidRequestError,
-} from './auth.commons';
+import { InvalidAuthenticationError } from './auth.commons';
 import { LoginRequest, LoginResponse, AccountMetadata } from './auth.dto';
 
 import { Injectable } from '@nestjs/common';
@@ -38,18 +35,14 @@ export class AuthServiceImpl {
       throw new InvalidAuthenticationError('invalid email or password');
     }
 
-    const account = {
-      id: user.id.toString(),
+    const account: AccountMetadata = {
+      userId: user.id,
       username: user.username,
       role: user.role,
     };
 
-    const accessToken = jwt.sign(account, this.jwt_secret, {
-      expiresIn: 600,
-    });
-    const refreshToken = jwt.sign(account, this.jwt_secret, {
-      expiresIn: '10 days',
-    });
+    const accessToken = await this.issueAccessToken(account);
+    const refreshToken = await this.issueRefreshToken(account);
 
     return [{ message: 'success' }, accessToken, refreshToken];
   }
@@ -59,6 +52,7 @@ export class AuthServiceImpl {
       const decoded = jwt.verify(credential, this.jwt_secret) as jwt.JwtPayload;
       return {
         userId: Number(decoded.id),
+        username: decoded.username,
         role: decoded.role,
       };
     } catch (e) {
@@ -76,21 +70,29 @@ export class AuthServiceImpl {
       const user = await this.userRepo.getUserById(Number(decoded.id));
 
       const account = {
-        id: user.id,
-        usernae: user.username,
+        userId: user.id,
+        username: user.username,
         role: user.role,
       };
 
-      const newAccessToken = jwt.sign(account, this.jwt_secret, {
-        expiresIn: 600,
-      });
-      const newRefreshToken = jwt.sign(account, this.jwt_secret, {
-        expiresIn: '10 days',
-      });
+      const newAccessToken = await this.issueAccessToken(account);
+      const newRefreshToken = await this.issueRefreshToken(account);
 
       return [newAccessToken, newRefreshToken];
     } catch (e) {
       throw new InvalidAuthenticationError('invalid credentials');
     }
+  }
+
+  private async issueAccessToken(account: AccountMetadata): Promise<string> {
+    return jwt.sign(account, this.jwt_secret, {
+      expiresIn: this.accessTokenExpire,
+    });
+  }
+
+  private async issueRefreshToken(account: AccountMetadata): Promise<string> {
+    return jwt.sign(account, this.jwt_secret, {
+      expiresIn: '10 days',
+    });
   }
 }

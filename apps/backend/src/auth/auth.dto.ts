@@ -9,6 +9,7 @@ export interface LoginResponse {
 
 export interface AccountMetadata {
   userId: number;
+  username: string;
   role: string;
 }
 

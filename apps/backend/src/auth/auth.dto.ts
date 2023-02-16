@@ -1,20 +1,20 @@
-export interface LoginRequest {
+export class LoginRequest {
   email: string;
   password: string;
 }
 
-export interface LoginResponse {
+export class LoginResponse {
   message: string;
 }
 
-export interface AccountMetadata {
+export class AccountMetadata {
   userId: number;
   username: string;
   role: string;
 }
 
-export interface LogoutRequest {}
+export class LogoutRequest {}
 
-export interface LogoutResponse {
+export class LogoutResponse {
   message: string;
 }

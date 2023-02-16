@@ -48,37 +48,36 @@ export class AuthServiceImpl {
   }
 
   async validate(credential: string): Promise<AccountMetadata> {
-    try {
-      const decoded = jwt.verify(credential, this.jwt_secret) as jwt.JwtPayload;
-      return {
-        userId: Number(decoded.id),
-        username: decoded.username,
-        role: decoded.role,
-      };
-    } catch (e) {
-      throw new InvalidAuthenticationError('invalid credentials');
-    }
+    const account = this.decodeToken(credential);
+    return account;
   }
 
   async refresh(refreshToken: string): Promise<[string, string]> {
-    try {
-      const decoded = jwt.verify(
-        refreshToken,
-        this.jwt_secret,
-      ) as jwt.JwtPayload;
+    const account = await this.decodeToken(refreshToken);
+    const user = await this.userRepo.getUserById(account.userId);
 
-      const user = await this.userRepo.getUserById(Number(decoded.id));
+    const newAccount: AccountMetadata = {
+      userId: user.id,
+      username: user.username,
+      role: user.role,
+    };
+    const newAccessToken = await this.issueAccessToken(newAccount);
+    const newRefreshToken = await this.issueRefreshToken(newAccount);
+
+    return [newAccessToken, newRefreshToken];
+  }
+
+  private async decodeToken(token: string): Promise<AccountMetadata> {
+    try {
+      const decoded = jwt.verify(token, this.jwt_secret) as jwt.JwtPayload;
 
       const account = {
-        userId: user.id,
-        username: user.username,
-        role: user.role,
+        userId: Number(decoded.userId),
+        username: decoded.username,
+        role: decoded.role,
       };
 
-      const newAccessToken = await this.issueAccessToken(account);
-      const newRefreshToken = await this.issueRefreshToken(account);
-
-      return [newAccessToken, newRefreshToken];
+      return account;
     } catch (e) {
       throw new InvalidAuthenticationError('invalid credentials');
     }

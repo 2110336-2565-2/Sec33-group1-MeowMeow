@@ -82,6 +82,7 @@ export class AuthController {
       if (e instanceof InvalidRequestError) {
         throw new HttpException({ message: e.message }, HttpStatus.BAD_REQUEST);
       }
+      console.log(e);
       if (e instanceof InvalidAuthenticationError) {
         throw new HttpException(
           { message: e.message },

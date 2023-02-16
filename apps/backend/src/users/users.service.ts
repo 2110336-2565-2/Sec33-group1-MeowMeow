@@ -1,10 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma } from 'database';
 import * as bcrypt from 'bcrypt';
-import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserRequest, CreateUserResponse } from './dto/createUser.dto';
 import { UpdateUserRequest, UpdateUserResponse } from './dto/updateProfile.dto';
-import { PropertyAlreadyUsedError, UserNotFoundError } from './user.common';
+import { UserNotFoundError } from './user.common';
 import { GetUserByIdRequest, GetUserByIdResponse } from './dto/getUserById.dto';
 import { backendConfig } from 'config';
 import { UserRepository } from './user.repository';

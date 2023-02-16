@@ -1,16 +1,19 @@
 import {
   Body,
   Controller,
+  Inject,
   Post,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { CreateReviewDto } from './dto/CreateReview.dto';
-import { ReviewService } from './service/review/review.service';
+import { ReviewService } from './review.service';
 
 @Controller('review')
 export class ReviewController {
-  constructor(private reviewService: ReviewService) {}
+  constructor(
+    @Inject('ReviewService') private readonly reviewService: ReviewService,
+  ) {}
 
   @Post()
   @UsePipes(new ValidationPipe())

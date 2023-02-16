@@ -2,10 +2,14 @@ import { HttpException, Injectable, HttpStatus } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { createReviewType } from 'src/review/utils/types';
 
+export interface ReviewService {
+  createReview(req: createReviewType);
+}
+
 @Injectable()
-export class ReviewService {
+export class ReviewServiceImpl {
   constructor(private prisma: PrismaService) {}
-  private demo_review = [];
+
   async createReview(reviewData: createReviewType) {
     const rating: number = reviewData.rating;
     if (rating < 0 || rating > 5 || rating % 0.5 != 0) {

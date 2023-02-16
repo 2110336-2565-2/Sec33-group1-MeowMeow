@@ -5,6 +5,7 @@ import {
   CreateReviewResponse,
 } from './dto/CreateReview.dto';
 import { InvalidRequestError } from 'src/auth/auth.commons';
+import { ReviewRepository } from './review.repository';
 
 export interface ReviewService {
   createReview(req: CreateReviewRequest);
@@ -12,21 +13,19 @@ export interface ReviewService {
 
 @Injectable()
 export class ReviewServiceImpl {
-  constructor(private prisma: PrismaService) {}
+  constructor(private readonly reviewRepo: ReviewRepository) {}
 
   async createReview(req: CreateReviewRequest): Promise<CreateReviewResponse> {
     if ((req.score % 1).toFixed(1) !== '0.5') {
       throw new InvalidRequestError('review score must ends with .5');
     }
 
-    const review = await this.prisma.review.create({
-      data: {
-        publishDate: new Date(),
-        score: req.score,
-        text: req.text,
-        reviewerId: 20,
-        guideId: req.guideId,
-      },
+    const review = await this.reviewRepo.createReview({
+      publishDate: new Date(),
+      reviewerId: 20,
+      guideId: req.guideId,
+      score: req.score,
+      text: req.text,
     });
 
     return {

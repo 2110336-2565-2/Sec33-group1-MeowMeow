@@ -12,6 +12,7 @@ import {
 import { CreateReviewRequest } from './dto/CreateReview.dto';
 import { ReviewService } from './review.service';
 import { InvalidRequestError } from 'src/auth/auth.commons';
+import { FailedRelationConstraintError } from './review.common';
 
 @Controller('review')
 export class ReviewController {
@@ -31,6 +32,9 @@ export class ReviewController {
     } catch (e) {
       console.log(e);
       if (e instanceof InvalidRequestError) {
+        throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
+      }
+      if (e instanceof FailedRelationConstraintError) {
         throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
       }
       throw new HttpException(

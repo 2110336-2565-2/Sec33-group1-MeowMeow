@@ -22,7 +22,7 @@ export class ReviewServiceImpl {
 
     const review = await this.reviewRepo.createReview({
       publishDate: new Date(),
-      reviewerId: 20,
+      reviewerId: req.reviewerId,
       guideId: req.guideId,
       score: req.score,
       text: req.text,

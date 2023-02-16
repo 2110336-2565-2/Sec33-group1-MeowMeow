@@ -1,5 +1,16 @@
+import {
+  IsEmail,
+  IsEnum,
+  IsInt,
+  IsNumberString,
+  IsStrongPassword,
+} from 'class-validator';
+
 export class LoginRequest {
+  @IsEmail()
   email: string;
+
+  @IsStrongPassword({ minLength: 8 })
   password: string;
 }
 
@@ -8,8 +19,11 @@ export class LoginResponse {
 }
 
 export class AccountMetadata {
+  @IsInt()
   userId: number;
+
   username: string;
+
   role: string;
 }
 

@@ -1,6 +1,7 @@
-import { User } from 'database';
+import { Role, User } from 'database';
 import { Prisma } from 'database';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { PropertyAlreadyUsedError } from './user.common';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
@@ -21,5 +22,77 @@ export class UserRepository {
     });
 
     return user;
+  }
+
+  async createUser(data: {
+    createdAt: Date;
+    email: string;
+    username: string;
+    firstName: string;
+    lastName: string;
+    hashPassword: string;
+    role: Role;
+  }): Promise<User> {
+    try {
+      const user = await this.prismaService.user.create({
+        data: {
+          createdAt: data.createdAt,
+          email: data.email,
+          username: data.username,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          hashPassword: data.hashPassword,
+          role: data.role,
+        },
+      });
+
+      return user;
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code === 'P2002') {
+          throw new PropertyAlreadyUsedError(
+            `There is a unique constraint violation, ${e.meta.target} have already been used`,
+          );
+        }
+      }
+      throw e;
+    }
+  }
+
+  async updateUserById(
+    id: number,
+    update: {
+      email?: string;
+      username?: string;
+      firstName?: string;
+      lastName?: string;
+      hashPassword?: string;
+      role?: Role;
+    },
+  ): Promise<User> {
+    try {
+      const user = await this.prismaService.user.update({
+        where: { id: id },
+        data: {
+          email: update.email,
+          username: update.username,
+          firstName: update.firstName,
+          lastName: update.lastName,
+          hashPassword: update.hashPassword,
+          role: update.role,
+        },
+      });
+
+      return user;
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code === 'P2002') {
+          throw new PropertyAlreadyUsedError(
+            `There is a unique constraint violation, ${e.meta.target} have already been used`,
+          );
+        }
+      }
+      throw e;
+    }
   }
 }

@@ -1,12 +1,14 @@
 import { ILoginForm } from "@/components/LoginPage/types/loginForm";
 import apiClient from "@/utils/apiClient";
+import { AlertColor } from "@mui/material";
 import { useState, FormEventHandler, useCallback } from "react";
 
 interface IUseLoginForm {
-  onError: (message: string) => void;
+  onError: (message: string, severity: AlertColor) => void;
+  onSuccess: (message: string, severity: AlertColor) => void;
 }
 
-const useLoginForm = ({ onError }: IUseLoginForm) => {
+const useLoginForm = ({ onError, onSuccess }: IUseLoginForm) => {
   const [isLoading, setLoading] = useState<boolean>(false);
 
   const onSubmit: FormEventHandler<HTMLFormElement> = useCallback(
@@ -20,9 +22,10 @@ const useLoginForm = ({ onError }: IUseLoginForm) => {
           email,
           password,
         });
+        onSuccess("Login success.", "success");
       } catch (err) {
         const error = err as Error;
-        onError(error.message);
+        onError(error.message, "error");
       } finally {
         setLoading(false);
       }

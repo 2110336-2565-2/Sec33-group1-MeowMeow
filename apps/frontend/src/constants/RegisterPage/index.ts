@@ -1,7 +1,7 @@
 export const REGISTER_INPUT_IDs = [
   "firstName",
   "lastName",
-  "userName",
+  "username",
   "email",
   "password",
   "confirmPassword",

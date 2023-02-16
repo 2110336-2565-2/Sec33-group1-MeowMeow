@@ -7,8 +7,17 @@ import { GetUserByIdRequest, GetUserByIdResponse } from './dto/getUserById.dto';
 import { backendConfig } from 'config';
 import { UserRepository } from './user.repository';
 
+export interface UserService {
+  getUserById(req: GetUserByIdRequest): Promise<GetUserByIdResponse>;
+  create(req: CreateUserRequest): Promise<CreateUserResponse>;
+  updateUser(
+    id: number,
+    updates: UpdateUserRequest,
+  ): Promise<UpdateUserResponse>;
+}
+
 @Injectable()
-export class UsersService {
+export class UserServiceImpl {
   private hashRound: number;
 
   constructor(private readonly userRepo: UserRepository) {
@@ -31,18 +40,15 @@ export class UsersService {
     };
   }
 
-  async create(createUserDto: CreateUserRequest): Promise<CreateUserResponse> {
-    const hashPassword = await bcrypt.hash(
-      createUserDto.password,
-      this.hashRound,
-    );
+  async create(req: CreateUserRequest): Promise<CreateUserResponse> {
+    const hashPassword = await bcrypt.hash(req.password, this.hashRound);
 
     const user = await this.userRepo.createUser({
       createdAt: new Date(),
-      email: createUserDto.email,
-      username: createUserDto.username,
-      firstName: createUserDto.firstName,
-      lastName: createUserDto.lastName,
+      email: req.email,
+      username: req.username,
+      firstName: req.firstName,
+      lastName: req.lastName,
       hashPassword: hashPassword,
       role: 'USER',
     });

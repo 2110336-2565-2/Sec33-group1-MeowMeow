@@ -14,7 +14,7 @@ import { ReviewService } from './review.service';
 import { InvalidRequestError } from 'src/auth/auth.commons';
 import { FailedRelationConstraintError } from './review.common';
 
-@Controller('review')
+@Controller('reviews')
 export class ReviewController {
   constructor(
     @Inject('ReviewService') private readonly reviewService: ReviewService,

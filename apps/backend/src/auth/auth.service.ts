@@ -20,9 +20,11 @@ export interface AuthService {
 @Injectable()
 export class AuthServiceImpl {
   private jwt_secret: string;
+  private accessTokenExpire: number;
 
   constructor(private readonly userRepo: UserRepository) {
     this.jwt_secret = backendConfig.jwt.secret;
+    this.accessTokenExpire = backendConfig.jwt.expire;
   }
 
   async login(req: LoginRequest): Promise<[LoginResponse, string, string]> {

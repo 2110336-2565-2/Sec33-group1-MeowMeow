@@ -1,6 +1,6 @@
 import { User } from 'database';
+import { Prisma } from 'database';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { UserNotFoundError } from './user.common';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
@@ -9,28 +9,16 @@ export class UserRepository {
 
   async getUserByEmail(email: string): Promise<User> {
     const user = await this.prismaService.user.findUnique({
-      where: {
-        email: email,
-      },
+      where: { email: email },
     });
-
-    if (!user) {
-      throw new UserNotFoundError('user with given email not found');
-    }
 
     return user;
   }
 
   async getUserById(id: number): Promise<User> {
-    const user = await this.prismaService.user.findUnique({
-      where: {
-        id: id,
-      },
+    const user = await this.prismaService.user.findUniqueOrThrow({
+      where: { id: id },
     });
-
-    if (!user) {
-      throw new UserNotFoundError('user with given email not found');
-    }
 
     return user;
   }

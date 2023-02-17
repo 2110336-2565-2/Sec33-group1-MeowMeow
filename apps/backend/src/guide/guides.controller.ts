@@ -14,7 +14,6 @@ export class GuidesController {
   @Get()
   @UsePipes(new ValidationPipe())
   findGuides(@Body() searchDetails: GuideSearchDto) {
-    // console.log(searchDetails);
     return this.guidesService.getGuides(searchDetails);
   }
 }

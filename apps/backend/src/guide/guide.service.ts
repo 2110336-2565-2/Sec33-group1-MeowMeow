@@ -2,21 +2,20 @@ import { Injectable } from '@nestjs/common';
 import { Guide } from 'database';
 
 import {
-  GuideSearchRequest,
-  GuideSearchResponse,
-} from 'src/guide/dto/guideSearch.dto';
+  SearchGuidesRequest,
+  SearchGuidesResponse,
+} from 'src/guide/dto/searchGuide';
 import { GuideRepository } from './guide.repository';
 
 export interface GuideService {
-  getAllGuides(): Promise<Guide[]>;
-  getGuides(searchInfo: GuideSearchRequest): Promise<Guide[]>;
+  searchGuides(searchInfo: SearchGuidesRequest): Promise<SearchGuidesResponse>;
 }
 
 @Injectable()
 export class GuideServiceImpl {
   constructor(private readonly guideRepo: GuideRepository) {}
 
-  async getGuides(req: GuideSearchRequest): Promise<GuideSearchResponse> {
+  async searchGuides(req: SearchGuidesRequest): Promise<SearchGuidesResponse> {
     const guides = await this.guideRepo.paginateGuides(req);
     return { results: guides };
   }

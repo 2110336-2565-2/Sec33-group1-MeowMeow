@@ -7,7 +7,7 @@ import {
   Min,
 } from 'class-validator';
 
-export class GuideSearchRequest {
+export class SearchGuidesRequest {
   @Min(0)
   @IsInt()
   offset: number;
@@ -34,7 +34,7 @@ export class GuideSearchRequest {
   datetime: string;
 }
 
-export class GuideSearchResponse {
+export class SearchGuidesResponse {
   results: {
     id: number;
     firstName: string;

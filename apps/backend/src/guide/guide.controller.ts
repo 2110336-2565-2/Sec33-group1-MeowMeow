@@ -1,12 +1,15 @@
 import {
+  Body,
   Controller,
   Get,
-  Body,
+  HttpException,
+  HttpStatus,
   Inject,
+  Res,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { GuideSearchRequest } from './dto/guideSearch.dto';
+import { SearchGuidesRequest } from './dto/searchGuide';
 import { GuideService } from './guide.service';
 
 @Controller('guides')
@@ -17,7 +20,19 @@ export class GuidesController {
 
   @Get()
   @UsePipes(new ValidationPipe())
-  findGuides(@Body() searchDetails: GuideSearchRequest) {
-    return this.guidesService.getGuides(searchDetails);
+  async findGuides(
+    @Body() reqBody: SearchGuidesRequest,
+    @Res({ passthrough: true }) res,
+  ) {
+    try {
+      const resBody = await this.guidesService.searchGuides(reqBody);
+      res.status(HttpStatus.OK).send(resBody);
+    } catch (e) {
+      console.log(e);
+      throw new HttpException(
+        'internal server error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 }

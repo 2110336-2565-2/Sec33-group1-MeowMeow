@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { GuidesController } from './guides.controller';
-import { GuideServiceImpl, GuideService } from './guides.service';
+import { GuidesController } from './guide.controller';
+import { GuideServiceImpl, GuideService } from './guide.service';
 
 @Module({
   controllers: [GuidesController],

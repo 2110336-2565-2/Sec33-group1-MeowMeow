@@ -6,7 +6,7 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { GuideSearchDto } from './dto/guideSearch.dto';
+import { GuideSearchRequest } from './dto/guideSearch.dto';
 import { GuideService } from './guide.service';
 
 @Controller('guides')
@@ -17,7 +17,7 @@ export class GuidesController {
 
   @Get()
   @UsePipes(new ValidationPipe())
-  findGuides(@Body() searchDetails: GuideSearchDto) {
+  findGuides(@Body() searchDetails: GuideSearchRequest) {
     return this.guidesService.getGuides(searchDetails);
   }
 }

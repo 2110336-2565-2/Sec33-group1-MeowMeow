@@ -1,18 +1,46 @@
-import { IsDateString, IsNumber, IsOptional } from 'class-validator';
+import {
+  IsDateString,
+  IsInt,
+  IsNumber,
+  IsOptional,
+  Max,
+  Min,
+} from 'class-validator';
 
-export class GuideSearchDto {
+export class GuideSearchRequest {
+  @Min(0)
+  @IsInt()
+  offset: number;
+
+  @Min(1)
+  @IsInt()
+  limit: number;
+
   @IsOptional()
   location: string;
 
-  @IsNumber()
+  @IsNumber({ maxDecimalPlaces: 2 })
+  @Max(99999999.99)
   @IsOptional()
-  fee: number; //decimal(10,2)
+  fee: number;
 
   @IsNumber()
+  @Max(99999999.99)
   @IsOptional()
-  reviewScore: number; //decimal(10,2)
+  reviewScore: number;
 
   @IsDateString()
   @IsOptional()
   datetime: string;
+}
+
+export class GuideSearchResponse {
+  results: {
+    id: number;
+    firstName: string;
+    lastName: string;
+    fee: number;
+    certificate: string;
+    averageReviewScore: number;
+  }[];
 }

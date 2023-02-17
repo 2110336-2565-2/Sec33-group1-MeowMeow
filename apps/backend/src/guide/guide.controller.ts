@@ -14,6 +14,7 @@ export class GuidesController {
   constructor(
     @Inject('GuideService') private readonly guidesService: GuideService,
   ) {}
+
   @Get()
   @UsePipes(new ValidationPipe())
   findGuides(@Body() searchDetails: GuideSearchDto) {

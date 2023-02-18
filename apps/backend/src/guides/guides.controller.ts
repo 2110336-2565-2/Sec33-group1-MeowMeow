@@ -9,8 +9,9 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { SearchGuidesRequest } from './dtos/searchGuide';
+import { SearchGuidesRequest, SearchGuidesResponse } from './dtos/searchGuide';
 import { GuidesService } from './guides.service';
+import { ApiCookieAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 @Controller('guides')
 export class GuidesController {
@@ -18,9 +19,26 @@ export class GuidesController {
     @Inject('GuidesService') private readonly guidesService: GuidesService,
   ) {}
 
+  @ApiCookieAuth('access_token')
+  @ApiOperation({
+    summary: 'paginate guides with filter',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'successfully paginated guides',
+    type: SearchGuidesResponse,
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'access token not provided',
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'internal server error',
+  })
   @Get()
   @UsePipes(new ValidationPipe())
-  async findGuides(
+  async searchGuides(
     @Body() reqBody: SearchGuidesRequest,
     @Res({ passthrough: true }) res,
   ) {

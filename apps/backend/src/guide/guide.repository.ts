@@ -30,29 +30,29 @@ export class GuideRepository {
       const maxGuideFeeCondition = Prisma.sql`WHERE "Guide"."fee" <= ${filter.maxFee}`;
 
       const results = await this.prismaService.$queryRaw<any[]>`
-      WITH guideid_with_satisfied_avg_review_score AS (
-        SELECT "Guide"."id" as id, AVG("Review"."score") AS avg_review_score
+        WITH guideid_with_satisfied_avg_review_score AS (
+          SELECT "Guide"."id" as id, AVG("Review"."score") AS avg_review_score
+          FROM "Guide"
+          INNER JOIN "Review" ON "Guide"."id" = "Review"."guideId"
+          GROUP BY "Guide"."id"
+          ${filter.minReviewScore ? minReviewCondition : Prisma.empty}
+        ),
+        guideid_having_provided_location AS (
+          SELECT DISTINCT("Guide"."id") as id
+          FROM "Guide"
+          LEFT JOIN "Location" ON "Guide"."id" = "Location"."guideId"
+          ${filter.location ? locationCondition : Prisma.empty}
+        )
+        SELECT "Guide"."id", "Guide"."fee", "Guide"."certificate",
+        "User"."firstName", "User"."lastName",
+        c1."avg_review_score" as average_review_score
         FROM "Guide"
-        INNER JOIN "Review" ON "Guide"."id" = "Review"."guideId"
-        GROUP BY "Guide"."id"
-        ${filter.minReviewScore ? minReviewCondition : Prisma.empty}
-      ),
-      guideid_having_provided_location AS (
-        SELECT DISTINCT("Guide"."id") as id
-        FROM "Guide"
-        LEFT JOIN "Location" ON "Guide"."id" = "Location"."guideId"
-        ${filter.location ? locationCondition : Prisma.empty}
-      )
-      SELECT "Guide"."id", "Guide"."fee", "Guide"."certificate",
-      "User"."firstName", "User"."lastName",
-      c1."avg_review_score" as average_review_score
-      FROM "Guide"
-      INNER JOIN "User" ON "Guide"."userId" = "User"."id"
-      INNER JOIN "guideid_with_satisfied_avg_review_score" c1 ON "Guide"."id" = c1.id
-      INNER JOIN "guideid_having_provided_location" c2 ON "Guide"."id" = c2.id
-      ${filter.maxFee ? maxGuideFeeCondition : Prisma.empty}
-      OFFSET ${filter.offset} LIMIT ${filter.limit}
-    `;
+        INNER JOIN "User" ON "Guide"."userId" = "User"."id"
+        INNER JOIN "guideid_with_satisfied_avg_review_score" c1 ON "Guide"."id" = c1.id
+        INNER JOIN "guideid_having_provided_location" c2 ON "Guide"."id" = c2.id
+        ${filter.maxFee ? maxGuideFeeCondition : Prisma.empty}
+        OFFSET ${filter.offset} LIMIT ${filter.limit}
+      `;
 
       var guides = new Array(results.length);
       for (let i = 0; i < results.length; i++) {

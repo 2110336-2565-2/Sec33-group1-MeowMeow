@@ -18,10 +18,12 @@ export interface AuthService {
 export class AuthServiceImpl {
   private jwt_secret: string;
   private accessTokenExpire: number;
+  private refreshTokenExpire: number;
 
   constructor(private readonly userRepo: UserRepository) {
     this.jwt_secret = backendConfig.jwt.secret;
     this.accessTokenExpire = backendConfig.jwt.expire;
+    this.refreshTokenExpire = backendConfig.jwt.refreshExpire;
   }
 
   async login(req: LoginRequest): Promise<[LoginResponse, string, string]> {
@@ -91,7 +93,7 @@ export class AuthServiceImpl {
 
   private async issueRefreshToken(account: AccountMetadata): Promise<string> {
     return jwt.sign(account, this.jwt_secret, {
-      expiresIn: '10 days',
+      expiresIn: this.refreshTokenExpire,
     });
   }
 }

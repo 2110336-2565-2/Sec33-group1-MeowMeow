@@ -3,7 +3,7 @@ import { Prisma } from 'database';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
-export class GuideRepository {
+export class GuidesRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
   async paginateGuides(filter: {

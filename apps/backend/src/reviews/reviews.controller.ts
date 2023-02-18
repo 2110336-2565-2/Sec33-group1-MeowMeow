@@ -10,14 +10,14 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { CreateReviewRequest } from './dtos/CreateReview.dto';
-import { ReviewService } from './reviews.service';
+import { ReviewsService } from './reviews.service';
 import { InvalidRequestError } from 'src/auth/auth.commons';
 import { FailedRelationConstraintError } from './reviews.common';
 
 @Controller('reviews')
-export class ReviewController {
+export class ReviewsController {
   constructor(
-    @Inject('ReviewService') private readonly reviewService: ReviewService,
+    @Inject('ReviewsService') private readonly reviewsService: ReviewsService,
   ) {}
 
   @Post()
@@ -27,7 +27,7 @@ export class ReviewController {
     @Res({ passthrough: true }) res,
   ) {
     try {
-      const resBody = await this.reviewService.createReview(reqBody);
+      const resBody = await this.reviewsService.createReview(reqBody);
       res.status(HttpStatus.CREATED).send(resBody);
     } catch (e) {
       console.log(e);

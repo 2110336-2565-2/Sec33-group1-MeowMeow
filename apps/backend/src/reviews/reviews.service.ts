@@ -5,22 +5,22 @@ import {
   CreateReviewResponse,
 } from './dtos/CreateReview.dto';
 import { InvalidRequestError } from 'src/auth/auth.commons';
-import { ReviewRepository } from './reviews.repository';
+import { ReviewsRepository } from './reviews.repository';
 
-export interface ReviewService {
+export interface ReviewsService {
   createReview(req: CreateReviewRequest);
 }
 
 @Injectable()
-export class ReviewServiceImpl {
-  constructor(private readonly reviewRepo: ReviewRepository) {}
+export class ReviewsServiceImpl {
+  constructor(private readonly reviewsRepo: ReviewsRepository) {}
 
   async createReview(req: CreateReviewRequest): Promise<CreateReviewResponse> {
     if ((req.score % 1).toFixed(1) !== '0.5') {
       throw new InvalidRequestError('review score must ends with .5');
     }
 
-    const review = await this.reviewRepo.createReview({
+    const review = await this.reviewsRepo.createReview({
       publishDate: new Date(),
       reviewerId: req.reviewerId,
       guideId: req.guideId,

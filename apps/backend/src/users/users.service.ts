@@ -11,9 +11,9 @@ import {
 } from './dtos/updateProfile.dto';
 import { UserNotFoundError } from './users.common';
 import { backendConfig } from 'config';
-import { UserRepository } from './users.repository';
+import { UsersRepository } from './users.repository';
 
-export interface UserService {
+export interface UsersService {
   getUserById(req: GetUserByIdRequest): Promise<GetUserByIdResponse>;
   create(req: CreateUserRequest): Promise<CreateUserResponse>;
   updateUser(
@@ -23,15 +23,15 @@ export interface UserService {
 }
 
 @Injectable()
-export class UserServiceImpl {
+export class UsersServiceImpl {
   private hashRound: number;
 
-  constructor(private readonly userRepo: UserRepository) {
+  constructor(private readonly usersRepo: UsersRepository) {
     this.hashRound = backendConfig.bcrypt.salt;
   }
 
   async getUserById(req: GetUserByIdRequest): Promise<GetUserByIdResponse> {
-    const user = await this.userRepo.getUserById(req.id);
+    const user = await this.usersRepo.getUserById(req.id);
     if (!user) {
       throw new UserNotFoundError('user with given id not found');
     }
@@ -49,7 +49,7 @@ export class UserServiceImpl {
   async create(req: CreateUserRequest): Promise<CreateUserResponse> {
     const hashPassword = await bcrypt.hash(req.password, this.hashRound);
 
-    const user = await this.userRepo.createUser({
+    const user = await this.usersRepo.createUser({
       createdAt: new Date(),
       email: req.email,
       username: req.username,
@@ -71,7 +71,7 @@ export class UserServiceImpl {
     id: number,
     updates: UpdateUserRequest,
   ): Promise<UpdateUserResponse> {
-    const user = await this.userRepo.updateUserById(id, updates);
+    const user = await this.usersRepo.updateUserById(id, updates);
     if (!user) {
       throw new UserNotFoundError('user with given id not found');
     }

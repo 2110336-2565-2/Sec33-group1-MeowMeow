@@ -15,12 +15,12 @@ import {
 import { CreateUserRequest } from './dtos/createUser.dto';
 import { AccountMetadata } from 'src/auth/auth.dto';
 import { PropertyAlreadyUsedError, UserNotFoundError } from './users.common';
-import { UserService } from './users.service';
+import { UsersService } from './users.service';
 
 @Controller('users')
 export class UsersController {
   constructor(
-    @Inject('UserService') private readonly userService: UserService,
+    @Inject('UsersService') private readonly usersService: UsersService,
   ) {}
 
   @Get(':id')
@@ -29,7 +29,7 @@ export class UsersController {
     @Res({ passthrough: true }) res,
   ) {
     try {
-      const resBody = await this.userService.getUserById({ id: userId });
+      const resBody = await this.usersService.getUserById({ id: userId });
       res.status(HttpStatus.OK).send(resBody);
     } catch (e) {
       console.log(e);
@@ -52,7 +52,7 @@ export class UsersController {
     @Res({ passthrough: true }) res,
   ) {
     try {
-      const resBody = await this.userService.create(data);
+      const resBody = await this.usersService.create(data);
       res.status(HttpStatus.CREATED).send(resBody);
     } catch (e) {
       console.log(e);
@@ -71,7 +71,7 @@ export class UsersController {
   ) {
     try {
       const account: AccountMetadata = req.account;
-      const resBody = await this.userService.updateUser(
+      const resBody = await this.usersService.updateUser(
         account.userId,
         reqBody,
       );

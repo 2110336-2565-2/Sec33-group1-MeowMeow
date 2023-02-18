@@ -3,7 +3,7 @@ import { AuthController } from './auth.controller';
 import { PrismaService } from '../prisma/prisma.service';
 import { AuthMiddleware } from 'src/common/middleware/auth.middleware';
 import { AuthServiceImpl } from './auth.service';
-import { UserRepository } from 'src/users/users.repository';
+import { UsersRepository } from 'src/users/users.repository';
 
 @Module({
   imports: [],
@@ -13,7 +13,7 @@ import { UserRepository } from 'src/users/users.repository';
       provide: 'AuthService',
       useClass: AuthServiceImpl,
     },
-    UserRepository,
+    UsersRepository,
     PrismaService,
   ],
 })

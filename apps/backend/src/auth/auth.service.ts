@@ -5,7 +5,7 @@ import { LoginRequest, LoginResponse, AccountMetadata } from './auth.dto';
 
 import { Injectable } from '@nestjs/common';
 import { UserNotFoundError } from 'src/users/users.common';
-import { UserRepository } from 'src/users/users.repository';
+import { UsersRepository } from 'src/users/users.repository';
 import { backendConfig } from 'config';
 
 export interface AuthService {
@@ -20,14 +20,14 @@ export class AuthServiceImpl {
   private accessTokenExpire: number;
   private refreshTokenExpire: number;
 
-  constructor(private readonly userRepo: UserRepository) {
+  constructor(private readonly usersRepo: UsersRepository) {
     this.jwt_secret = backendConfig.jwt.secret;
     this.accessTokenExpire = backendConfig.jwt.expire;
     this.refreshTokenExpire = backendConfig.jwt.refreshExpire;
   }
 
   async login(req: LoginRequest): Promise<[LoginResponse, string, string]> {
-    const user = await this.userRepo.getUserByEmail(req.email);
+    const user = await this.usersRepo.getUserByEmail(req.email);
     if (!user) {
       throw new UserNotFoundError('user with given email not found');
     }
@@ -56,7 +56,7 @@ export class AuthServiceImpl {
 
   async refresh(refreshToken: string): Promise<[string, string]> {
     const account = await this.decodeToken(refreshToken);
-    const user = await this.userRepo.getUserById(account.userId);
+    const user = await this.usersRepo.getUserById(account.userId);
 
     const newAccount: AccountMetadata = {
       userId: user.id,

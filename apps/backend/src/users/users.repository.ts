@@ -5,7 +5,7 @@ import { PropertyAlreadyUsedError } from './users.common';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class UserRepository {
+export class UsersRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
   async getUserByEmail(email: string): Promise<User> {

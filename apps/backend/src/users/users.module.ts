@@ -2,9 +2,9 @@ import { Module, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { AuthMiddleware } from '../common/middleware/auth.middleware';
 import { UsersController } from './users.controller';
-import { UserServiceImpl } from './users.service';
+import { UsersServiceImpl } from './users.service';
 import { AuthServiceImpl } from 'src/auth/auth.service';
-import { UserRepository } from './users.repository';
+import { UsersRepository } from './users.repository';
 
 @Module({
   imports: [],
@@ -15,10 +15,10 @@ import { UserRepository } from './users.repository';
       useClass: AuthServiceImpl,
     },
     {
-      provide: 'UserService',
-      useClass: UserServiceImpl,
+      provide: 'UsersService',
+      useClass: UsersServiceImpl,
     },
-    UserRepository,
+    UsersRepository,
     PrismaService,
   ],
 })

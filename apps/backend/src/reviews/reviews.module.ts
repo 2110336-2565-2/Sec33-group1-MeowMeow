@@ -1,29 +1,29 @@
 import { PrismaService } from 'src/prisma/prisma.service';
-import { ReviewController } from './reviews.controller';
-import { ReviewServiceImpl } from './reviews.service';
+import { ReviewsController } from './reviews.controller';
+import { ReviewsServiceImpl } from './reviews.service';
 import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
-import { ReviewRepository } from './reviews.repository';
+import { ReviewsRepository } from './reviews.repository';
 import { AuthMiddleware } from 'src/common/middleware/auth.middleware';
 import { AuthServiceImpl } from 'src/auth/auth.service';
-import { UserRepository } from 'src/users/users.repository';
+import { UsersRepository } from 'src/users/users.repository';
 
 @Module({
-  controllers: [ReviewController],
+  controllers: [ReviewsController],
   providers: [
     {
-      provide: 'ReviewService',
-      useClass: ReviewServiceImpl,
+      provide: 'ReviewsService',
+      useClass: ReviewsServiceImpl,
     },
     {
       provide: 'AuthService',
       useClass: AuthServiceImpl,
     },
-    UserRepository,
-    ReviewRepository,
+    UsersRepository,
+    ReviewsRepository,
     PrismaService,
   ],
 })
-export class ReviewModule {
+export class ReviewsModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(AuthMiddleware)

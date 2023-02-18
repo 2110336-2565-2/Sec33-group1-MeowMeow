@@ -4,7 +4,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { FailedRelationConstraintError } from './reviews.common';
 
 @Injectable()
-export class ReviewRepository {
+export class ReviewsRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
   async createReview(data: {

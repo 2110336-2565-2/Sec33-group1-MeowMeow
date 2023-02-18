@@ -10,12 +10,12 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { SearchGuidesRequest } from './dtos/searchGuide';
-import { GuideService } from './guides.service';
+import { GuidesService } from './guides.service';
 
 @Controller('guides')
 export class GuidesController {
   constructor(
-    @Inject('GuideService') private readonly guidesService: GuideService,
+    @Inject('GuidesService') private readonly guidesService: GuidesService,
   ) {}
 
   @Get()

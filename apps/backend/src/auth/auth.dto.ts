@@ -1,15 +1,12 @@
-import {
-  IsEmail,
-  IsEnum,
-  IsInt,
-  IsNumberString,
-  IsStrongPassword,
-} from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsEmail, IsStrongPassword } from 'class-validator';
 
 export class LoginRequest {
+  @ApiProperty()
   @IsEmail()
   email: string;
 
+  @ApiProperty()
   @IsStrongPassword({ minLength: 8 })
   password: string;
 }
@@ -19,11 +16,8 @@ export class LoginResponse {
 }
 
 export class AccountMetadata {
-  @IsInt()
   userId: number;
-
   username: string;
-
   role: string;
 }
 

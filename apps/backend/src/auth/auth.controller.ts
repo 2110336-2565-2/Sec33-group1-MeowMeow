@@ -9,12 +9,13 @@ import {
   Req,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LoginRequest, LogoutRequest } from './auth.dto';
+import { LoginRequest, LoginResponse, LogoutRequest } from './auth.dto';
 import {
   InvalidAuthenticationError,
   InvalidRequestError,
 } from './auth.commons';
 import { UserNotFoundError } from 'src/users/users.common';
+import { ApiCookieAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 @Controller({ path: 'auth', version: '1' })
 export class AuthController {
@@ -22,6 +23,26 @@ export class AuthController {
     @Inject('AuthService') private readonly authService: AuthService,
   ) {}
 
+  @ApiOperation({
+    summary: 'sign in with username and password',
+  })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'successfully signed in',
+    type: LoginResponse,
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'email or password not provided',
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'email invalid or password not matched',
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'internal server error',
+  })
   @Post('sign-in')
   async signIn(@Body() req: LoginRequest, @Res({ passthrough: true }) res) {
     try {
@@ -39,9 +60,6 @@ export class AuthController {
       res.status(HttpStatus.CREATED).send(resBody);
     } catch (e) {
       console.log(e);
-      if (e instanceof InvalidRequestError) {
-        throw new HttpException({ message: e.message }, HttpStatus.BAD_REQUEST);
-      }
       if (e instanceof InvalidAuthenticationError) {
         throw new HttpException(
           { message: e.message },
@@ -49,7 +67,10 @@ export class AuthController {
         );
       }
       if (e instanceof UserNotFoundError) {
-        throw new HttpException({ message: e.message }, HttpStatus.NOT_FOUND);
+        throw new HttpException(
+          { message: e.message },
+          HttpStatus.UNAUTHORIZED,
+        );
       }
       throw new HttpException(
         { message: 'internal server error' },
@@ -58,6 +79,26 @@ export class AuthController {
     }
   }
 
+  @ApiCookieAuth('refresh_token')
+  @ApiOperation({
+    summary: 'issue new access token',
+  })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'successfully refresh credential',
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'refresh token not provided',
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'refresh token invalid or time out',
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'internal server error',
+  })
   @Post('refresh')
   async refresh(@Req() req, @Res({ passthrough: true }) res) {
     try {
@@ -74,10 +115,10 @@ export class AuthController {
         httpOnly: true,
       });
     } catch (e) {
+      console.log(e);
       if (e instanceof InvalidRequestError) {
         throw new HttpException({ message: e.message }, HttpStatus.BAD_REQUEST);
       }
-      console.log(e);
       if (e instanceof InvalidAuthenticationError) {
         throw new HttpException(
           { message: e.message },
@@ -91,6 +132,23 @@ export class AuthController {
     }
   }
 
+  @ApiCookieAuth('access_token')
+  @ApiCookieAuth('refresh_token')
+  @ApiOperation({
+    summary: 'sign out',
+  })
+  @ApiResponse({
+    status: HttpStatus.NO_CONTENT,
+    description: 'successfully signed out',
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'access token not provided',
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'internal server error',
+  })
   @Post('sign-out')
   async signOut(@Body() req: LogoutRequest, @Res({ passthrough: true }) res) {
     try {
@@ -98,9 +156,6 @@ export class AuthController {
       res.clearCookie('refresh_token');
       res.status(HttpStatus.NO_CONTENT).send({ message: 'success' });
     } catch (e) {
-      if (e instanceof InvalidRequestError) {
-        throw new HttpException({ message: e.message }, HttpStatus.BAD_REQUEST);
-      }
       throw new HttpException(
         { message: e.message },
         HttpStatus.INTERNAL_SERVER_ERROR,

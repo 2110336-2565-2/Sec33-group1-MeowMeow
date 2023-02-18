@@ -1,10 +1,10 @@
 import {
-  Body,
   Controller,
   Get,
   HttpException,
   HttpStatus,
   Inject,
+  Query,
   Res,
   UsePipes,
   ValidationPipe,
@@ -12,6 +12,8 @@ import {
 import { SearchGuidesRequest, SearchGuidesResponse } from './dtos/searchGuide';
 import { GuidesService } from './guides.service';
 import { ApiCookieAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { off } from 'process';
+import { IsEmail } from 'class-validator';
 
 @Controller('guides')
 export class GuidesController {
@@ -37,13 +39,18 @@ export class GuidesController {
     description: 'internal server error',
   })
   @Get()
-  @UsePipes(new ValidationPipe())
+  @UsePipes(
+    new ValidationPipe({
+      transform: true,
+      transformOptions: { enableImplicitConversion: true },
+    }),
+  )
   async searchGuides(
-    @Body() reqBody: SearchGuidesRequest,
+    @Query() queryParams: SearchGuidesRequest,
     @Res({ passthrough: true }) res,
   ) {
     try {
-      const resBody = await this.guidesService.searchGuides(reqBody);
+      const resBody = await this.guidesService.searchGuides(queryParams);
       res.status(HttpStatus.OK).send(resBody);
     } catch (e) {
       console.log(e);

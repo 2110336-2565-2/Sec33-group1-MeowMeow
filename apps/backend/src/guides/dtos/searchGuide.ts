@@ -7,38 +7,39 @@ import {
   Max,
   Min,
 } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class SearchGuidesRequest {
-  @ApiProperty()
+  @Type(() => Number)
   @Min(0)
   @IsInt()
   offset: number;
 
-  @ApiProperty()
+  @Type(() => Number)
   @Min(1)
   @IsInt()
   limit: number;
 
-  @ApiPropertyOptional()
   @IsOptional()
-  location: string;
+  location?: string;
 
-  @ApiPropertyOptional()
+  @Type(() => Number)
   @IsNumber({ maxDecimalPlaces: 2 })
   @Max(99999999.99)
+  @Min(0)
   @IsOptional()
-  fee: number;
+  fee?: number;
 
-  @ApiPropertyOptional()
-  @IsNumber()
-  @Max(99999999.99)
+  @Type(() => Number)
+  @IsNumber({ maxDecimalPlaces: 1 })
+  @Max(5)
+  @Min(0)
   @IsOptional()
-  reviewScore: number;
+  reviewScore?: number;
 
-  @ApiPropertyOptional()
   @IsDateString()
   @IsOptional()
-  datetime: string;
+  datetime?: string;
 }
 
 export class SearchGuidesGuideResponse {

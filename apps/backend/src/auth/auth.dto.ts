@@ -1,19 +1,28 @@
-export interface LoginRequest {
+import { ApiProperty } from '@nestjs/swagger';
+import { IsEmail, IsStrongPassword } from 'class-validator';
+
+export class LoginRequest {
+  @ApiProperty()
+  @IsEmail()
   email: string;
+
+  @ApiProperty()
+  @IsStrongPassword({ minLength: 8 })
   password: string;
 }
 
-export interface LoginResponse {
+export class LoginResponse {
   message: string;
 }
 
-export interface AccountMetadata {
+export class AccountMetadata {
   userId: number;
+  username: string;
   role: string;
 }
 
-export interface LogoutRequest {}
+export class LogoutRequest {}
 
-export interface LogoutResponse {
+export class LogoutResponse {
   message: string;
 }

@@ -1,7 +1,4 @@
-import {
-  InvalidAuthenticationError,
-  InvalidRequestError,
-} from './auth.commons';
+import { InvalidAuthenticationError } from './auth.commons';
 import { AccountMetadata, LoginRequest, LoginResponse } from './auth.dto';
 
 import { Injectable } from '@nestjs/common';
@@ -29,6 +26,7 @@ export class AuthServiceMock {
 
     return {
       userId: 100,
+      username: 'david',
       role: 'admin',
     };
   }

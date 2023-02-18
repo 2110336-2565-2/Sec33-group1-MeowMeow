@@ -1,32 +1,32 @@
-import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { GuidesController } from './guides.controller';
-import { GuidesServiceImpl, GuidesService } from './guides.service';
-import { GuidesRepository } from './guides.repository';
+import { ReviewsController } from './reviews.controller';
+import { ReviewsServiceImpl } from './reviews.service';
+import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
+import { ReviewsRepository } from './reviews.repository';
 import { AuthMiddleware } from 'src/common/middleware/auth.middleware';
 import { AuthServiceImpl } from 'src/auth/auth.service';
 import { UsersRepository } from 'src/users/users.repository';
 
 @Module({
-  controllers: [GuidesController],
+  controllers: [ReviewsController],
   providers: [
     {
-      provide: 'GuidesService',
-      useClass: GuidesServiceImpl,
+      provide: 'ReviewsService',
+      useClass: ReviewsServiceImpl,
     },
     {
       provide: 'AuthService',
       useClass: AuthServiceImpl,
     },
     UsersRepository,
-    GuidesRepository,
+    ReviewsRepository,
     PrismaService,
   ],
 })
-export class GuidesModule {
+export class ReviewsModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(AuthMiddleware)
-      .forRoutes({ path: '/guides/**', method: RequestMethod.ALL });
+      .forRoutes({ path: '/reviews/**', method: RequestMethod.ALL });
   }
 }

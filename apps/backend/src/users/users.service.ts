@@ -1,26 +1,37 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma } from 'database';
 import * as bcrypt from 'bcrypt';
-import { PrismaService } from '../prisma/prisma.service';
-import { CreateUserRequest, CreateUserResponse } from './dto/createUser.dto';
-import { UpdateUserRequest, UpdateUserResponse } from './dto/updateProfile.dto';
-import { PropertyAlreadyUsedError, UserNotFoundError } from './user.common';
-import { GetUserByIdRequest, GetUserByIdResponse } from './dto/getUserById.dto';
+import { CreateUserRequest, CreateUserResponse } from './dtos/createUser.dto';
+import {
+  GetUserByIdRequest,
+  GetUserByIdResponse,
+} from './dtos/getUserById.dto';
+import {
+  UpdateUserRequest,
+  UpdateUserResponse,
+} from './dtos/updateProfile.dto';
+import { UserNotFoundError } from './users.common';
 import { backendConfig } from 'config';
+import { UsersRepository } from './users.repository';
+
+export interface UsersService {
+  getUserById(req: GetUserByIdRequest): Promise<GetUserByIdResponse>;
+  create(req: CreateUserRequest): Promise<CreateUserResponse>;
+  updateUser(
+    id: number,
+    updates: UpdateUserRequest,
+  ): Promise<UpdateUserResponse>;
+}
 
 @Injectable()
-export class UsersService {
+export class UsersServiceImpl {
   private hashRound: number;
 
-  constructor(private prisma: PrismaService) {
+  constructor(private readonly usersRepo: UsersRepository) {
     this.hashRound = backendConfig.bcrypt.salt;
   }
 
   async getUserById(req: GetUserByIdRequest): Promise<GetUserByIdResponse> {
-    const user = await this.prisma.user.findUnique({
-      where: { id: Number(req.id) },
-    });
-
+    const user = await this.usersRepo.getUserById(req.id);
     if (!user) {
       throw new UserNotFoundError('user with given id not found');
     }
@@ -35,72 +46,42 @@ export class UsersService {
     };
   }
 
-  async create(createUserDto: CreateUserRequest): Promise<CreateUserResponse> {
-    try {
-      const hashPassword = await bcrypt.hash(
-        createUserDto.password,
-        this.hashRound,
-      );
-      const user = await this.prisma.user.create({
-        data: {
-          createdAt: new Date(),
-          email: createUserDto.email,
-          username: createUserDto.username,
-          firstName: createUserDto.firstName,
-          lastName: createUserDto.lastName,
-          hashPassword: hashPassword,
-          role: 'USER',
-        },
-      });
+  async create(req: CreateUserRequest): Promise<CreateUserResponse> {
+    const hashPassword = await bcrypt.hash(req.password, this.hashRound);
 
-      return {
-        message: 'success',
-        id: user.id,
-        username: user.username,
-        role: user.role,
-      };
-    } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        if (e.code === 'P2002') {
-          throw new PropertyAlreadyUsedError(
-            `There is a unique constraint violation, ${e.meta.target} have already been used`,
-          );
-        }
-      }
-      throw e;
-    }
+    const user = await this.usersRepo.createUser({
+      createdAt: new Date(),
+      email: req.email,
+      username: req.username,
+      firstName: req.firstName,
+      lastName: req.lastName,
+      hashPassword: hashPassword,
+      role: 'USER',
+    });
+
+    return {
+      message: 'success',
+      id: user.id,
+      username: user.username,
+      role: user.role,
+    };
   }
 
   async updateUser(
     id: number,
     updates: UpdateUserRequest,
   ): Promise<UpdateUserResponse> {
-    try {
-      const user = await this.prisma.user.update({
-        where: { id: id },
-        data: updates,
-      });
-
-      if (!user) {
-        throw new UserNotFoundError('user with given id not found');
-      }
-
-      return {
-        message: 'success',
-        email: user.email,
-        username: user.username,
-        firstName: user.firstName,
-        lastName: user.lastName,
-      };
-    } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        if (e.code === 'P2002') {
-          throw new PropertyAlreadyUsedError(
-            `There is a unique constraint violation, ${e.meta.target} have already been used`,
-          );
-        }
-      }
-      throw e;
+    const user = await this.usersRepo.updateUserById(id, updates);
+    if (!user) {
+      throw new UserNotFoundError('user with given id not found');
     }
+
+    return {
+      message: 'success',
+      email: user.email,
+      username: user.username,
+      firstName: user.firstName,
+      lastName: user.lastName,
+    };
   }
 }

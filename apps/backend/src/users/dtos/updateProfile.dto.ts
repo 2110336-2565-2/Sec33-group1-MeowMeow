@@ -13,10 +13,6 @@ export class UpdateUserRequest {
 
   @ApiProperty({ type: String })
   @IsOptional()
-  password?: string;
-
-  @ApiProperty({ type: String })
-  @IsOptional()
   firstName?: string;
 
   @ApiProperty({ type: String })

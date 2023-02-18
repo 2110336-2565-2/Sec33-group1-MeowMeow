@@ -5,20 +5,23 @@ import {
   Get,
   HttpException,
   HttpStatus,
+  Inject,
   Param,
   Post,
   Put,
   Req,
   Res,
 } from '@nestjs/common';
-import { UsersService } from './users.service';
-import { CreateUserRequest } from './dto/createUser.dto';
+import { CreateUserRequest } from './dtos/createUser.dto';
 import { AccountMetadata } from 'src/auth/auth.dto';
-import { PropertyAlreadyUsedError, UserNotFoundError } from './user.common';
+import { PropertyAlreadyUsedError, UserNotFoundError } from './users.common';
+import { UsersService } from './users.service';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    @Inject('UsersService') private readonly usersService: UsersService,
+  ) {}
 
   @Get(':id')
   async getUserById(

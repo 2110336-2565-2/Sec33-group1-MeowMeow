@@ -8,6 +8,7 @@ export type BackendConfig = {
   jwt: {
     secret: string;
     expire: number;
+    refreshExpire: number;
   };
   swagger: {
     enable: boolean;
@@ -27,6 +28,7 @@ export const loadBackendConfig = (): BackendConfig => ({
   jwt: {
     secret: process.env.BACKEND_JWT_SECRET ?? "xxxx-9ababe0jge9j",
     expire: Number(process.env.BACKEND_JWT_EXPIRE) ?? 600,
+    refreshExpire: Number(process.env.BACKEND_REFRESH_TOKEN_EXPIRE) ?? 864000,
   },
   swagger: {
     enable: process.env.BACKEND_SWAGGER_ENABLE === "true",

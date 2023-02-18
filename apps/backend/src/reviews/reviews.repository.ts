@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma, Review } from 'database';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { FailedRelationConstraintError } from './review.common';
+import { FailedRelationConstraintError } from './reviews.common';
 
 @Injectable()
 export class ReviewRepository {

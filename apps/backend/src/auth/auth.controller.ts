@@ -14,7 +14,7 @@ import {
   InvalidAuthenticationError,
   InvalidRequestError,
 } from './auth.commons';
-import { UserNotFoundError } from 'src/user/user.common';
+import { UserNotFoundError } from 'src/users/users.common';
 
 @Controller({ path: 'auth', version: '1' })
 export class AuthController {

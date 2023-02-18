@@ -9,8 +9,8 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { SearchGuidesRequest } from './dto/searchGuide';
-import { GuideService } from './guide.service';
+import { SearchGuidesRequest } from './dtos/searchGuide';
+import { GuideService } from './guides.service';
 
 @Controller('guides')
 export class GuidesController {

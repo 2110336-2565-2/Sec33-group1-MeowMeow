@@ -1,7 +1,7 @@
 import { Role, User } from 'database';
 import { Prisma } from 'database';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { PropertyAlreadyUsedError } from './user.common';
+import { PropertyAlreadyUsedError } from './users.common';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()

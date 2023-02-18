@@ -3,7 +3,7 @@ import { AuthController } from './auth.controller';
 import { PrismaService } from '../prisma/prisma.service';
 import { AuthMiddleware } from 'src/common/middleware/auth.middleware';
 import { AuthServiceImpl } from './auth.service';
-import { UserRepository } from 'src/user/user.repository';
+import { UserRepository } from 'src/users/users.repository';
 
 @Module({
   imports: [],

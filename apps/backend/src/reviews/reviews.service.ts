@@ -3,9 +3,9 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import {
   CreateReviewRequest,
   CreateReviewResponse,
-} from './dto/CreateReview.dto';
+} from './dtos/CreateReview.dto';
 import { InvalidRequestError } from 'src/auth/auth.commons';
-import { ReviewRepository } from './review.repository';
+import { ReviewRepository } from './reviews.repository';
 
 export interface ReviewService {
   createReview(req: CreateReviewRequest);

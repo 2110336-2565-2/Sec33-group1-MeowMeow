@@ -1,11 +1,11 @@
 import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { GuidesController } from './guide.controller';
-import { GuideServiceImpl, GuideService } from './guide.service';
-import { GuideRepository } from './guide.repository';
+import { GuidesController } from './guides.controller';
+import { GuideServiceImpl, GuideService } from './guides.service';
+import { GuideRepository } from './guides.repository';
 import { AuthMiddleware } from 'src/common/middleware/auth.middleware';
 import { AuthServiceImpl } from 'src/auth/auth.service';
-import { UserRepository } from 'src/user/user.repository';
+import { UserRepository } from 'src/users/users.repository';
 
 @Module({
   controllers: [GuidesController],

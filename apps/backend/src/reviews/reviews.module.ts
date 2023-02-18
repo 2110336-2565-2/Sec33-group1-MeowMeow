@@ -1,11 +1,11 @@
 import { PrismaService } from 'src/prisma/prisma.service';
-import { ReviewController } from './review.controller';
-import { ReviewServiceImpl } from './review.service';
+import { ReviewController } from './reviews.controller';
+import { ReviewServiceImpl } from './reviews.service';
 import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
-import { ReviewRepository } from './review.repository';
+import { ReviewRepository } from './reviews.repository';
 import { AuthMiddleware } from 'src/common/middleware/auth.middleware';
 import { AuthServiceImpl } from 'src/auth/auth.service';
-import { UserRepository } from 'src/user/user.repository';
+import { UserRepository } from 'src/users/users.repository';
 
 @Module({
   controllers: [ReviewController],

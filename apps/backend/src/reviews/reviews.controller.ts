@@ -9,10 +9,10 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { CreateReviewRequest } from './dto/CreateReview.dto';
-import { ReviewService } from './review.service';
+import { CreateReviewRequest } from './dtos/CreateReview.dto';
+import { ReviewService } from './reviews.service';
 import { InvalidRequestError } from 'src/auth/auth.commons';
-import { FailedRelationConstraintError } from './review.common';
+import { FailedRelationConstraintError } from './reviews.common';
 
 @Controller('reviews')
 export class ReviewController {

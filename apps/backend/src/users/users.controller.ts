@@ -12,9 +12,9 @@ import {
   Req,
   Res,
 } from '@nestjs/common';
-import { CreateUserRequest } from './dto/createUser.dto';
+import { CreateUserRequest } from './dtos/createUser.dto';
 import { AccountMetadata } from 'src/auth/auth.dto';
-import { PropertyAlreadyUsedError, UserNotFoundError } from './user.common';
+import { PropertyAlreadyUsedError, UserNotFoundError } from './users.common';
 import { UserService } from './users.service';
 
 @Controller('users')

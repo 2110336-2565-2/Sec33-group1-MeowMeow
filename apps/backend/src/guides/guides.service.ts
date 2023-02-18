@@ -1,11 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { Guide } from 'database';
 
-import {
-  SearchGuidesRequest,
-  SearchGuidesResponse,
-} from 'src/guide/dto/searchGuide';
-import { GuideRepository } from './guide.repository';
+import { SearchGuidesRequest, SearchGuidesResponse } from './dtos/searchGuide';
+import { GuideRepository } from './guides.repository';
 
 export interface GuideService {
   searchGuides(searchInfo: SearchGuidesRequest): Promise<SearchGuidesResponse>;

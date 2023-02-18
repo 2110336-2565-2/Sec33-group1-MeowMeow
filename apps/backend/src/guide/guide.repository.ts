@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Guide, Prisma } from 'database';
+import { Prisma } from 'database';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -25,27 +25,23 @@ export class GuideRepository {
     }[]
   > {
     try {
+      const minReviewCondition = Prisma.sql`HAVING AVG("Review"."score") >= ${filter.minReviewScore}`;
+      const locationCondition = Prisma.sql`WHERE "Location"."locationName" = ${filter.location}`;
+      const maxGuideFeeCondition = Prisma.sql`WHERE "Guide"."fee" <= ${filter.maxFee}`;
+
       const results = await this.prismaService.$queryRaw<any[]>`
       WITH guideid_with_satisfied_avg_review_score AS (
         SELECT "Guide"."id" as id, AVG("Review"."score") AS avg_review_score
         FROM "Guide"
         INNER JOIN "Review" ON "Guide"."id" = "Review"."guideId"
         GROUP BY "Guide"."id"
-        ${
-          filter.minReviewScore
-            ? `HAVING AVG("Review"."score") >= ${filter.minReviewScore}`
-            : Prisma.empty
-        }
+        ${filter.minReviewScore ? minReviewCondition : Prisma.empty}
       ),
       guideid_having_provided_location AS (
         SELECT DISTINCT("Guide"."id") as id
         FROM "Guide"
         LEFT JOIN "Location" ON "Guide"."id" = "Location"."guideId"
-        ${
-          filter.location
-            ? `WHERE "Location"."locationName" = ${filter.location}`
-            : Prisma.empty
-        }
+        ${filter.location ? locationCondition : Prisma.empty}
       )
       SELECT "Guide"."id", "Guide"."fee", "Guide"."certificate",
       "User"."firstName", "User"."lastName",
@@ -54,9 +50,7 @@ export class GuideRepository {
       INNER JOIN "User" ON "Guide"."userId" = "User"."id"
       INNER JOIN "guideid_with_satisfied_avg_review_score" c1 ON "Guide"."id" = c1.id
       INNER JOIN "guideid_having_provided_location" c2 ON "Guide"."id" = c2.id
-      ${
-        filter.maxFee ? `WHERE "Guide"."fee" <= ${filter.maxFee}` : Prisma.empty
-      }
+      ${filter.maxFee ? maxGuideFeeCondition : Prisma.empty}
       OFFSET ${filter.offset} LIMIT ${filter.limit}
     `;
 

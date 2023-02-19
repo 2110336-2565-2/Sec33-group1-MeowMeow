@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { Button, ButtonGroup } from "@mui/material";
 import { Router, useRouter } from "next/router";
 import React from "react";
@@ -34,3 +35,17 @@ export default function GuidePost() {
     </>
   );
 }
+=======
+import CreateingPost from "@/components/guide-post/creatingPost";
+import React from "react";
+
+function GuidePost() {
+  return (
+    <>
+      <CreateingPost />
+    </>
+  );
+}
+
+export default GuidePost;
+>>>>>>> 9f25609 (fix: init form-post)

@@ -40,9 +40,10 @@ export default function PostContainer({ children }: IPostProps) {
         alignItems="center"
         sx={{
           width: "100%",
-          height: "100vh",
+          height: "100%",
+          minHeight: "100vh",
           background:
-            "linear-gradient(90deg, #FF9A9E 0%, #FAD0C4 99%, #FAD0C4 100%)",
+            "linear-gradient(90deg, #ff6e4a 0%, #FAD0C4 99%, #FAD0C4 100%)",
         }}
       >
         <ResponsiveBox>{children}</ResponsiveBox>

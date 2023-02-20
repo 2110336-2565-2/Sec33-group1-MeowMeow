@@ -1,6 +1,6 @@
 import { Typography } from "@mui/material";
 import React from "react";
-import GuidePostForm from "./form";
+import PostForm from "./creatingPostForm";
 import PostContainer from "./postContainer";
 
 export default function CreateingPost() {
@@ -8,10 +8,9 @@ export default function CreateingPost() {
     <>
       <PostContainer>
         <Typography variant="h5" fontWeight="600" marginBottom={"40px"}>
-          {" "}
-          Create Post{" "}
+          Create Post
         </Typography>
-        <GuidePostForm />
+        <PostForm />
       </PostContainer>
     </>
   );

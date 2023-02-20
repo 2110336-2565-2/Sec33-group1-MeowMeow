@@ -54,6 +54,7 @@ export default function PostForm({ methodType }: IPostForm) {
         onChange={onChange}
       />
       <Stack direction="row" spacing="20px">
+<<<<<<< HEAD
         <TextField
           id="startDate"
           name="startDate"
@@ -78,6 +79,42 @@ export default function PostForm({ methodType }: IPostForm) {
           }}
           onChange={onChange}
         />
+=======
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DesktopDatePicker
+            label="Start Date"
+            inputFormat="DD/MM/YYYY"
+            value={startDate}
+            onChange={handleStartChange}
+            renderInput={(params: JSX.IntrinsicAttributes & TextFieldProps) => (
+              <TextField
+                name="startDate"
+                id="startDate"
+                {...params}
+                value={formBody.startDate}
+                sx={{ width: "100%" }}
+                onChange={onChange}
+              />
+            )}
+          />
+          <DesktopDatePicker
+            label="End Date"
+            inputFormat="DD/MM/YYYY"
+            value={endDate}
+            onChange={handleEndChange}
+            renderInput={(params: JSX.IntrinsicAttributes & TextFieldProps) => (
+              <TextField
+                name="endDate"
+                id="endDate"
+                {...params}
+                value={formBody.endDate}
+                sx={{ width: "100%" }}
+                onChange={onChange}
+              />
+            )}
+          />
+        </LocalizationProvider>
+>>>>>>> 5d06461 (fix: edit Form)
       </Stack>
       <TextField
         name="description"

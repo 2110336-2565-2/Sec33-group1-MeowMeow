@@ -1,9 +1,10 @@
+import EditingPost from "@/components/guide-post/editingPost";
 import React from "react";
 
 export default function GuidePostEdit() {
   return (
     <>
-      <h1>Edit Post</h1>
+      <EditingPost />
     </>
   );
 }

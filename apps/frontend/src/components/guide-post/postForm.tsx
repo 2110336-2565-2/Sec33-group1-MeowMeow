@@ -19,7 +19,11 @@ import usePostForm from "@/hooks/usePostForm";
 import useSnackbar from "@/hooks/useSnackbar";
 import useEditPostForm from "@/hooks/useEditForm";
 
-export default function PostForm() {
+export interface IPostForm {
+  methodType: "POST" | "PUT";
+}
+
+export default function PostForm({ methodType }: IPostForm) {
   const [endDate, setEndDate] = React.useState<Dayjs | null>(dayjs(undefined));
   const [startDate, setStartDate] = React.useState<Dayjs | null>(
     dayjs(undefined)
@@ -36,10 +40,10 @@ export default function PostForm() {
   const { onSubmit, isLoading } = usePostForm({
     onError: onAddSnackbar,
     onSuccess: onAddSnackbar,
+    methodType: methodType,
   });
 
-  const { formBody, onChange } = useEditPostForm();
-  console.log(formBody);
+  const { formBody, onChange } = useEditPostForm({ methodType: methodType });
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -56,12 +60,21 @@ export default function PostForm() {
       onSubmit={onSubmit}
     >
       <TextField
+        name="tripName"
         id="tripName"
         label="Trip Name"
         variant="outlined"
-        defaultValue={formBody.tripName + "yyyy"}
+        value={formBody.tripName}
+        onChange={onChange}
       />
-      <TextField id="location" label="Location" variant="outlined" />
+      <TextField
+        name="location"
+        id="location"
+        label="Location"
+        variant="outlined"
+        value={formBody.location}
+        onChange={onChange}
+      />
       <Stack direction="row" spacing="20px">
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DesktopDatePicker
@@ -70,7 +83,14 @@ export default function PostForm() {
             value={startDate}
             onChange={handleStartChange}
             renderInput={(params: JSX.IntrinsicAttributes & TextFieldProps) => (
-              <TextField id="startDate" {...params} sx={{ width: "100%" }} />
+              <TextField
+                name="startDate"
+                id="startDate"
+                {...params}
+                value={formBody.startDate}
+                sx={{ width: "100%" }}
+                onChange={onChange}
+              />
             )}
           />
           <DesktopDatePicker
@@ -79,33 +99,56 @@ export default function PostForm() {
             value={endDate}
             onChange={handleEndChange}
             renderInput={(params: JSX.IntrinsicAttributes & TextFieldProps) => (
-              <TextField id="endDate" {...params} sx={{ width: "100%" }} />
+              <TextField
+                name="endDate"
+                id="endDate"
+                {...params}
+                value={formBody.endDate}
+                sx={{ width: "100%" }}
+                onChange={onChange}
+              />
             )}
           />
         </LocalizationProvider>
       </Stack>
-      <TextField id="description" label="Description" variant="outlined" />
+      <TextField
+        name="description"
+        id="description"
+        label="Description"
+        variant="outlined"
+        value={formBody.description}
+        onChange={onChange}
+      />
       <Stack direction="row" spacing="20px">
         <TextField
+          name="price"
           id="price"
           label="Price"
           variant="outlined"
           type="float"
           sx={{ width: "100%" }}
+          value={formBody.price}
+          onChange={onChange}
         />
         <TextField
+          name="maxParticipant"
           id="maxParticipant"
           label="Max Participant"
           variant="outlined"
           type="number"
           sx={{ width: "100%" }}
+          value={formBody.maxParticipant}
+          onChange={onChange}
         />
       </Stack>
       <TextField
+        name="lineid"
         id="lineid"
         label="Line ID"
         variant="outlined"
         sx={{ width: "100%" }}
+        value={formBody.lineid}
+        onChange={onChange}
       />
       <Button
         type="submit"

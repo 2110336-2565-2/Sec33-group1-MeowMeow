@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { POST_INPUT_IDs } from "@/constants/PostPage";
 import dayjs, { Dayjs } from "dayjs";
 
 export interface IEditPostForm {
@@ -13,7 +12,11 @@ export interface IEditPostForm {
   lineid: string;
 }
 
-const useEditPostForm = () => {
+export interface IUseEditPostForm {
+  methodType: "POST" | "PUT";
+}
+
+const useEditPostForm = ({ methodType }: IUseEditPostForm) => {
   const [formBody, setFormBody] = React.useState<IEditPostForm>({
     tripName: "",
     location: "",
@@ -28,18 +31,20 @@ const useEditPostForm = () => {
   // Get Data Post from API Here
   //
   // Mock Data
-  useEffect(() => {
-    setFormBody({
-      tripName: "Trip to Phuket",
-      location: "Phuket",
-      startDate: dayjs("2021-10-10"),
-      endDate: dayjs("2021-10-20"),
-      description: "Trip to Phuket",
-      price: 100.56,
-      maxParticipant: 10,
-      lineid: "lineid",
-    });
-  }, []);
+  if (methodType === "PUT") {
+    useEffect(() => {
+      setFormBody({
+        tripName: "Trip to Phuket",
+        location: "Phuket",
+        startDate: dayjs("2021-10-10"),
+        endDate: dayjs("2021-10-20"),
+        description: "Trip to Phuket",
+        price: 100.56,
+        maxParticipant: 10,
+        lineid: "lineid",
+      });
+    }, []);
+  }
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;

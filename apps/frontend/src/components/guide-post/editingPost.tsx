@@ -10,7 +10,7 @@ export default function EditingPost() {
         <Typography variant="h5" fontWeight="600" marginBottom={"40px"}>
           Edit Post
         </Typography>
-        <PostForm />
+        <PostForm methodType="PUT" />
       </PostContainer>
     </>
   );

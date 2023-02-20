@@ -10,7 +10,7 @@ export default function CreateingPost() {
         <Typography variant="h5" fontWeight="600" marginBottom={"40px"}>
           Create Post
         </Typography>
-        <PostForm />
+        <PostForm methodType="POST" />
       </PostContainer>
     </>
   );

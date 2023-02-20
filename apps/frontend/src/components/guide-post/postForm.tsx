@@ -17,13 +17,13 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import usePostForm from "@/hooks/usePostForm";
 import useSnackbar from "@/hooks/useSnackbar";
+import useEditPostForm from "@/hooks/useEditForm";
 
 export default function PostForm() {
   const [endDate, setEndDate] = React.useState<Dayjs | null>(dayjs(undefined));
   const [startDate, setStartDate] = React.useState<Dayjs | null>(
     dayjs(undefined)
   );
-  const [location, setLocation] = React.useState<string | null>(null);
 
   const handleEndChange = (newValue: Dayjs | null) => {
     setEndDate(newValue);
@@ -37,6 +37,10 @@ export default function PostForm() {
     onError: onAddSnackbar,
     onSuccess: onAddSnackbar,
   });
+
+  const { formBody, onChange } = useEditPostForm();
+  console.log(formBody);
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -51,7 +55,12 @@ export default function PostForm() {
       sx={{ padding: "10px" }}
       onSubmit={onSubmit}
     >
-      <TextField id="tripName" label="Trip Name" variant="outlined" />
+      <TextField
+        id="tripName"
+        label="Trip Name"
+        variant="outlined"
+        defaultValue={formBody.tripName + "yyyy"}
+      />
       <TextField id="location" label="Location" variant="outlined" />
       <Stack direction="row" spacing="20px">
         <LocalizationProvider dateAdapter={AdapterDayjs}>

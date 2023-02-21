@@ -96,6 +96,8 @@ model Booking {
   id            Int           @id @default(autoincrement())
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
+  startDate     DateTime
+  endDate       DateTime
   bookingStatus BookingStatus @default(PENDING)
   postId        Int
   userId        Int

@@ -45,8 +45,13 @@ export class AuthServiceImpl {
 
     const accessToken = await this.issueAccessToken(account);
     const refreshToken = await this.issueRefreshToken(account);
-
-    return [{ message: 'success' }, accessToken, refreshToken];
+    const resp = {
+      message: 'success',
+      userId: user.id,
+      username: user.username,
+      role: user.role,
+    };
+    return [resp, accessToken, refreshToken];
   }
 
   async validate(credential: string): Promise<AccountMetadata> {

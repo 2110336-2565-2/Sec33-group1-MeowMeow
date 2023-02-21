@@ -12,6 +12,9 @@ export class LoginRequest {
 
 export class LoginResponse {
   message: string;
+  userId: number;
+  username: string;
+  role: string;
 }
 
 export class AccountMetadata {

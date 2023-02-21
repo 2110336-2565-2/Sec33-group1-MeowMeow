@@ -1,7 +1,7 @@
-import { IsInt, IsNumberString } from 'class-validator';
+import { IsInt } from 'class-validator';
 
 export class GetUserByIdRequest {
-  @IsNumberString()
+  @IsInt()
   id: number;
 }
 

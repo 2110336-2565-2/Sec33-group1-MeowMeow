@@ -77,9 +77,8 @@ export class AuthServiceImpl {
   private async decodeToken(token: string): Promise<AccountMetadata> {
     try {
       const decoded = jwt.verify(token, this.jwt_secret) as jwt.JwtPayload;
-
-      const account = {
-        userId: Number(decoded.userId),
+      const account: AccountMetadata = {
+        userId: decoded.userId,
         username: decoded.username,
         role: decoded.role,
       };

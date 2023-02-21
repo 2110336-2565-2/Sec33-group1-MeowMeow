@@ -7,7 +7,6 @@ export class LoginRequest {
   email: string;
 
   @ApiProperty()
-  @IsStrongPassword({ minLength: 8 })
   password: string;
 }
 

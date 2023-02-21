@@ -30,7 +30,7 @@ export class UsersRepository {
     username: string;
     firstName: string;
     lastName: string;
-    hashPassword: string;
+    hashedPassword: string;
     role: Role;
   }): Promise<User> {
     try {
@@ -41,7 +41,7 @@ export class UsersRepository {
           username: data.username,
           firstName: data.firstName,
           lastName: data.lastName,
-          hashPassword: data.hashPassword,
+          hashedPassword: data.hashedPassword,
           role: data.role,
         },
       });
@@ -66,7 +66,7 @@ export class UsersRepository {
       username?: string;
       firstName?: string;
       lastName?: string;
-      hashPassword?: string;
+      hashedPassword?: string;
       role?: Role;
     },
   ): Promise<User> {
@@ -78,7 +78,7 @@ export class UsersRepository {
           username: update.username,
           firstName: update.firstName,
           lastName: update.lastName,
-          hashPassword: update.hashPassword,
+          hashedPassword: update.hashedPassword,
           role: update.role,
         },
       });

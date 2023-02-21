@@ -19,7 +19,7 @@ const useRegisterForm = ({ onError, onSuccess }: IUseRegisterForm) => {
         prev[formId] = event.currentTarget[formId].value;
         return prev;
       }, {} as { [key: string]: string });
-      formBody["hashPassword"] = formBody["password"];
+      formBody["hashedPassword"] = formBody["password"];
       if (formBody["password"] !== formBody["confirmPassword"]) {
         onError("Confirm password doesn't match with password", "error");
         return;

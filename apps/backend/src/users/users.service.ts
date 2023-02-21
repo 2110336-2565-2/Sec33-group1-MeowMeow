@@ -47,7 +47,7 @@ export class UsersServiceImpl {
   }
 
   async create(req: CreateUserRequest): Promise<CreateUserResponse> {
-    const hashPassword = await bcrypt.hash(req.password, this.hashRound);
+    const hashedPassword = await bcrypt.hash(req.password, this.hashRound);
 
     const user = await this.usersRepo.createUser({
       createdAt: new Date(),
@@ -55,7 +55,7 @@ export class UsersServiceImpl {
       username: req.username,
       firstName: req.firstName,
       lastName: req.lastName,
-      hashPassword: hashPassword,
+      hashedPassword: hashedPassword,
       role: 'USER',
     });
 

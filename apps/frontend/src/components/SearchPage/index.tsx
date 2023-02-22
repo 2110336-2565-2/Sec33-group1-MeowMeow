@@ -1,18 +1,12 @@
-import { Search } from "@mui/icons-material";
-import {
-  Box,
-  Container,
-  InputAdornment,
-  Pagination,
-  TextField,
-} from "@mui/material";
-import { useState } from "react";
+import { useSearchPosts } from "@/hooks/useSearchPosts";
+import { Box, Container, Pagination } from "@mui/material";
 import Navbar from "../common/Navbar";
 import PostFeed from "./PostFeed";
+import SearchBox from "./SearchBox";
 
 export default function SearchPage() {
-  const [search, setSearch] = useState<string>("");
-  const [pageNo, setPageNo] = useState<number>(1);
+  const { search, setSearch, setPageNo, pageNo, feed, handleSearch } =
+    useSearchPosts();
 
   return (
     <>
@@ -23,20 +17,12 @@ export default function SearchPage() {
           paddingTop: "2rem",
         }}
       >
-        <TextField
-          placeholder="Search..."
-          fullWidth
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="start">
-                <Search />
-              </InputAdornment>
-            ),
-          }}
+        <SearchBox
+          search={search}
+          setSearch={setSearch}
+          handleSearch={handleSearch}
         />
-        <PostFeed />
+        <PostFeed feed={feed} />
         <Box my={4} display="flex" justifyContent="center">
           <Pagination
             page={pageNo}

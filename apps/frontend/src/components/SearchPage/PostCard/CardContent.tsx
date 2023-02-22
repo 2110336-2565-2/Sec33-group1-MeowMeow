@@ -12,7 +12,7 @@ interface ICardContent {
 export default function CardContent(props: ICardContent) {
   const { title, body, price, location, amount } = props;
   return (
-    <Box m={2} flexGrow={1}>
+    <Box p={2} flexGrow={1}>
       <Box mb={2}>
         <Typography variant="h6">{title}</Typography>
 

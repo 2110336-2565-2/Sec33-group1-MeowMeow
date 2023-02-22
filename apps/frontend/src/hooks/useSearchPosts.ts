@@ -3,25 +3,28 @@ import { useEffect } from "react";
 import { mockPost } from "@/components/SearchPage/PostCard";
 import { IPost } from "@/components/SearchPage/types";
 import { useState } from "react";
+import { FeedStatus } from "./types/FeedStatus";
 
 const mockFeed: IPost[] = [mockPost, mockPost, mockPost];
 
 export const useSearchPosts = () => {
   const [pageNo, setPageNo] = useState<number>(0);
   const [feed, setFeed] = useState<IPost[]>([]);
+  const [feedStatus, setFeedStatus] = useState<FeedStatus>(FeedStatus.INITIAL);
   const [search, setSearch] = useState<string>("");
 
   useEffect(() => {
-    console.log("refreshing feed");
-
     if (search) {
+      setFeedStatus(FeedStatus.LOADING);
       const postLoading: Promise<IPost[]> = fetchPosts();
       postLoading
         .then((post: IPost[]) => {
           setFeed(post);
+          setFeedStatus(FeedStatus.SHOWING);
         })
         .catch((err) => {
           console.log("error fetching : ", err.stack);
+          // TODO: Show error message via notification
         });
     }
   }, [pageNo]); // refetch feed when page number changes : pagination
@@ -41,9 +44,11 @@ export const useSearchPosts = () => {
     async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       console.log("search", search);
+      setFeedStatus(FeedStatus.LOADING);
 
       const post: IPost[] = await fetchPosts();
       setFeed(post);
+      setFeedStatus(FeedStatus.SHOWING);
     },
     [search]
   );
@@ -55,5 +60,6 @@ export const useSearchPosts = () => {
     pageNo,
     setPageNo,
     handleSearch,
+    feedStatus,
   };
 };

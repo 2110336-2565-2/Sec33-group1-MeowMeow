@@ -55,6 +55,9 @@ export default function PostForm({ methodType }: IPostForm) {
       />
       <Stack direction="row" spacing="20px">
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 5f05c9e (fix: date and time in post's form)
         <TextField
           id="startDate"
           name="startDate"
@@ -79,6 +82,7 @@ export default function PostForm({ methodType }: IPostForm) {
           }}
           onChange={onChange}
         />
+<<<<<<< HEAD
 =======
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DesktopDatePicker
@@ -115,6 +119,8 @@ export default function PostForm({ methodType }: IPostForm) {
           />
         </LocalizationProvider>
 >>>>>>> 5d06461 (fix: edit Form)
+=======
+>>>>>>> 5f05c9e (fix: date and time in post's form)
       </Stack>
       <TextField
         name="description"

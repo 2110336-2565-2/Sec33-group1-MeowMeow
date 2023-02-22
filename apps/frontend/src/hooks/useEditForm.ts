@@ -1,11 +1,10 @@
 import React, { useEffect } from "react";
-import dayjs, { Dayjs } from "dayjs";
 
 export interface IEditPostForm {
   tripName: string;
   location: string;
-  startDate: Dayjs;
-  endDate: Dayjs;
+  startDate: string;
+  endDate: string;
   description: string;
   price: number;
   maxParticipant: number;
@@ -20,8 +19,8 @@ const useEditPostForm = ({ methodType }: IUseEditPostForm) => {
   const [formBody, setFormBody] = React.useState<IEditPostForm>({
     tripName: "",
     location: "",
-    startDate: dayjs(undefined),
-    endDate: dayjs(undefined),
+    startDate: "",
+    endDate: "",
     description: "",
     price: 0.0,
     maxParticipant: 0,
@@ -36,8 +35,8 @@ const useEditPostForm = ({ methodType }: IUseEditPostForm) => {
       setFormBody({
         tripName: "Trip to Phuket",
         location: "Phuket",
-        startDate: dayjs("2021-10-10"),
-        endDate: dayjs("2021-10-20"),
+        startDate: "2017-05-24T10:30",
+        endDate: "2021-10-20T10:30",
         description: "Trip to Phuket",
         price: 100.56,
         maxParticipant: 10,

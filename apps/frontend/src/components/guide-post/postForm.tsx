@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import dayjs, { Dayjs } from "dayjs";
 import React from "react";
-import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import usePostForm from "@/hooks/usePostForm";
@@ -76,40 +76,30 @@ export default function PostForm({ methodType }: IPostForm) {
         onChange={onChange}
       />
       <Stack direction="row" spacing="20px">
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DesktopDatePicker
-            label="Start Date"
-            inputFormat="DD/MM/YYYY"
-            value={startDate}
-            onChange={handleStartChange}
-            renderInput={(params: JSX.IntrinsicAttributes & TextFieldProps) => (
-              <TextField
-                name="startDate"
-                id="startDate"
-                {...params}
-                value={formBody.startDate}
-                sx={{ width: "100%" }}
-                onChange={onChange}
-              />
-            )}
-          />
-          <DesktopDatePicker
-            label="End Date"
-            inputFormat="DD/MM/YYYY"
-            value={endDate}
-            onChange={handleEndChange}
-            renderInput={(params: JSX.IntrinsicAttributes & TextFieldProps) => (
-              <TextField
-                name="endDate"
-                id="endDate"
-                {...params}
-                value={formBody.endDate}
-                sx={{ width: "100%" }}
-                onChange={onChange}
-              />
-            )}
-          />
-        </LocalizationProvider>
+        <TextField
+          id="startDate"
+          name="startDate"
+          label="Start Date"
+          type="datetime-local"
+          value={formBody.startDate}
+          sx={{ width: "100%" }}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          onChange={onChange}
+        />
+        <TextField
+          id="endDate"
+          name="endDate"
+          label="End Date"
+          type="datetime-local"
+          value={formBody.endDate}
+          sx={{ width: "100%" }}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          onChange={onChange}
+        />
       </Stack>
       <TextField
         name="description"

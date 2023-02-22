@@ -1,3 +1,4 @@
+import { FeedStatus } from "@/hooks/types/FeedStatus";
 import { SearchOff } from "@mui/icons-material";
 import { Box, Skeleton, Stack, Typography } from "@mui/material";
 import PostCard, { mockPost } from "./PostCard";

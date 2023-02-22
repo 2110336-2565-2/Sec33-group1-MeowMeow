@@ -35,7 +35,7 @@ export default function Navbar() {
               textDecoration: "none",
               color: "inherit",
             }}
-            href="/landing"
+            href="/"
           >
             GuideKai
           </Typography>

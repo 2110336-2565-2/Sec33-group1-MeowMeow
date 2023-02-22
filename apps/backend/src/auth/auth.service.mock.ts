@@ -12,7 +12,13 @@ export class AuthServiceMock {
       );
     }
 
-    return [{ message: 'success' }, 'xxxx', 'rrrr'];
+    const resp = {
+      message: 'success',
+      userId: 100,
+      username: 'david',
+      role: 'admin',
+    };
+    return [resp, 'xxxx', 'rrrr'];
   }
 
   async validate(credential: string): Promise<AccountMetadata> {

@@ -11,7 +11,18 @@ import { IData, Order } from "./data/recordType";
 import { rows } from "./data/mockData";
 import TableHeader from "./headTable";
 import { stableSort, getComparator } from "./data/sorting";
-import { styled, Typography } from "@mui/material";
+import {
+  Button,
+  Container,
+  Grid,
+  IconButton,
+  ListItemIcon,
+  styled,
+  Typography,
+} from "@mui/material";
+import DescriptionIcon from "@mui/icons-material/Description";
+import dayjs from "dayjs";
+import StatusDialog from "./dialogStatus";
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
@@ -55,9 +66,18 @@ export default function TableRecord() {
         sx={{ width: "100%", mb: 2, padding: "20px", alignItems: "center" }}
         elevation={3}
       >
-        <Typography variant="h5" component="h5" sx={{ fontWeight: "bold" }}>
-          Traveller's Records
-        </Typography>
+        <Grid
+          container
+          direction="row"
+          justifyContent="flex-start"
+          alignItems="center"
+        >
+          <DescriptionIcon />
+          <Typography variant="h5" component="span" sx={{ fontWeight: "bold" }}>
+            Traveller's Records
+          </Typography>
+        </Grid>
+
         <TableContainer sx={{ padding: "20px" }}>
           <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
             <TableHeader
@@ -81,14 +101,25 @@ export default function TableRecord() {
                       >
                         {row.name}
                       </TableCell>
-                      <TableCell align="right">{row.location}</TableCell>
-                      <TableCell align="right">{row.description}</TableCell>
-                      <TableCell align="right">{row.startDate}</TableCell>
-                      <TableCell align="right">{row.endDate}</TableCell>
-                      <TableCell align="right">{row.participant}</TableCell>
-                      <TableCell align="right">{row.price}</TableCell>
-                      <TableCell align="right">{row.lineid}</TableCell>
-                      <TableCell align="right">{row.status}</TableCell>
+                      <TableCell align="center">{row.location}</TableCell>
+                      <TableCell align="center">{row.description}</TableCell>
+                      <TableCell align="center">
+                        {row.startDate.split("T", 2)[0] +
+                          " " +
+                          row.startDate.split("T", 2)[1]}
+                      </TableCell>
+                      <TableCell align="center">
+                        {row.endDate.split("T", 2)[0] +
+                          " " +
+                          row.endDate.split("T", 2)[1]}
+                      </TableCell>
+                      <TableCell align="center">{row.participant}</TableCell>
+                      <TableCell align="center">{row.price}</TableCell>
+                      <TableCell align="center">{row.lineid}</TableCell>
+                      <TableCell align="center">
+                        {/* <Button variant="contained" sx={{backgroundColor: "#ffd7b8"}}> {row.status} </Button> */}
+                        <StatusDialog nameButton={row.status} />
+                      </TableCell>
                     </StyledTableRow>
                   );
                 })}

@@ -73,16 +73,6 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  "&:nth-of-type(odd)": {
-    backgroundColor: theme.palette.action.hover,
-  },
-  // hide last border
-  "&:last-child td, &:last-child th": {
-    border: 0,
-  },
-}));
-
 interface EnhancedTableProps {
   onRequestSort: (
     event: React.MouseEvent<unknown>,
@@ -105,7 +95,7 @@ export default function TableHeader(props: EnhancedTableProps) {
         {headCells.map((headCell) => (
           <StyledTableCell
             key={headCell.id}
-            align={headCell.numeric ? "right" : "left"}
+            align="center"
             sortDirection={orderBy === headCell.id ? order : false}
           >
             <TableSortLabel

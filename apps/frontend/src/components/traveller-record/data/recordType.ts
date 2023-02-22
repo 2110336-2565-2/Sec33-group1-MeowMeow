@@ -23,4 +23,29 @@ export enum statusType {
   FINISHED = "finished",
 }
 
+const buttonName = {
+  CANCEL: "Cancel",
+  PAY: "Pay",
+  REFUND: "Refund",
+  REVIEW: "Review",
+} as const;
+
+export let buttonMapping = new Map<string, string[]>();
+buttonMapping.set(statusType.WAITING_FOR_GUIDE, [buttonName.CANCEL]);
+buttonMapping.set(statusType.GUIDE_REJECTED, []);
+buttonMapping.set(statusType.WAITING_FOR_PAYMENT, [
+  buttonName.PAY,
+  buttonName.CANCEL,
+]);
+buttonMapping.set(statusType.CANCEL_BOOKING, []);
+buttonMapping.set(statusType.WAITING, [buttonName.CANCEL]);
+buttonMapping.set(statusType.WAITING_FOR_REFUND, []);
+buttonMapping.set(statusType.CANCEL_TRAVEL, []);
+buttonMapping.set(statusType.TEAVELLING, []);
+buttonMapping.set(statusType.WAITING_FOR_REVIEW, [
+  buttonName.REVIEW,
+  buttonName.REFUND,
+]);
+buttonMapping.set(statusType.FINISHED, []);
+
 export type Order = "asc" | "desc";

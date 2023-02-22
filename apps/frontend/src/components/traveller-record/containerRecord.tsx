@@ -18,7 +18,7 @@ export default function ContainerTableRecord({
         height: "100%",
         minHeight: "100vh",
         background:
-          "linear-gradient(90deg, #FF9A9E 0%, #FAD0C4 99%, #FAD0C4 100%)",
+          "linear-gradient(90deg, #fcc0c2 0%, #FAD0C4 99%, #FAD0C4 100%)",
         padding: "40px 20px",
       }}
     >

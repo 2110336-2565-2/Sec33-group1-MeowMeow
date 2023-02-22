@@ -40,7 +40,7 @@ const LoginPageContainer = ({ children }: ILoginPageContainerProps) => {
         justifyContent: "center",
         alignItems: "center",
         width: "100%",
-        height: "100vh",
+        minHeight: "100vh",
         background:
           "linear-gradient(90deg, #FF9A9E 0%, #FAD0C4 99%, #FAD0C4 100%)",
       }}

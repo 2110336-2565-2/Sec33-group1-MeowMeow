@@ -1,11 +1,10 @@
-import EnhancedTable from "@/components/traveller-record/table";
+import TravellerRecordComponent from "@/components/traveller-record";
 import React from "react";
 
 export default function TravellerRecord() {
   return (
     <>
-      <h2> Traveller Record </h2>
-      <EnhancedTable />
+      <TravellerRecordComponent />
     </>
   );
 }

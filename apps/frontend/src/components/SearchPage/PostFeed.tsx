@@ -1,21 +1,21 @@
 import { SearchOff } from "@mui/icons-material";
-import { Box, Typography } from "@mui/material";
+import { Box, Skeleton, Stack, Typography } from "@mui/material";
 import PostCard, { mockPost } from "./PostCard";
 import { IPost } from "./types";
 
-const mockList: IPost[] = [mockPost, mockPost, mockPost];
+interface IPostFeedProps {
+  feed: IPost[];
+}
 
-export default function PostFeed() {
+export default function PostFeed({ feed }: IPostFeedProps) {
   return (
     <Box margin={2} display="flex" flexDirection="column" gap={2}>
-      {mockList.length !== 0 ? (
-        mockList.map((item, idx) => {
+      {feed.length !== 0 ? (
+        feed.map((item, idx) => {
           return <PostCard key={idx} {...item} />;
         })
       ) : (
-        <Box
-          display="flex"
-          flexDirection="column"
+        <Stack
           gap={2}
           alignItems="center"
           justifyContent="center"
@@ -23,7 +23,7 @@ export default function PostFeed() {
         >
           <SearchOff fontSize="large" />
           <Typography variant="body1">No Post Found</Typography>
-        </Box>
+        </Stack>
       )}
     </Box>
   );

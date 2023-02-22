@@ -24,12 +24,20 @@ export default function PostCard(props: IPost) {
     <Grid
       container
       overflow="hidden"
+      boxShadow={2}
       sx={{
-        backgroundColor: "grey.100",
+        backgroundColor: "white",
         borderRadius: 2,
       }}
     >
-      <Grid item display="flex" justifyContent="space-between" m={2} xs={12}>
+      <Grid
+        item
+        display="flex"
+        justifyContent="space-between"
+        py={1}
+        px={2}
+        xs={12}
+      >
         <CardHeader {...author} />
       </Grid>
       <Grid

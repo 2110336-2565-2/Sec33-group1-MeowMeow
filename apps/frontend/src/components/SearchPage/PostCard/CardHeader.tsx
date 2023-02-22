@@ -10,7 +10,7 @@ export default function CardHeader(props: ICardHeader) {
   const { profile, name } = props;
   return (
     <>
-      <Box display="flex" gap={2}>
+      <Box display="flex" gap={2} alignItems="center">
         <Avatar
           src={profile}
           sx={{

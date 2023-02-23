@@ -22,7 +22,7 @@ export default function FooterBar() {
         elevation={0}
         component="footer"
         color="default"
-        style={{ marginTop: "20px", background: "#FFFF" }}
+        style={{ marginTop: "20px", backgroundColor: "inherit" }}
       >
         <Container maxWidth="xl">
           <Grid

@@ -10,7 +10,6 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
-import { AccountMetadata } from 'src/auth/auth.dto';
 import {
   InvalidAuthenticationError,
   InvalidRequestError,
@@ -24,9 +23,7 @@ export class AuthMiddleware implements NestMiddleware {
   async use(@Req() req, @Res({ passthrough: true }) res, @Next() next) {
     const accessToken: string = req.cookies['access_token'];
     try {
-      const accountMetadata: AccountMetadata = await this.authService.validate(
-        accessToken,
-      );
+      const accountMetadata = await this.authService.validate(accessToken);
       req.account = accountMetadata;
       next();
     } catch (e) {
@@ -36,7 +33,10 @@ export class AuthMiddleware implements NestMiddleware {
       if (e instanceof InvalidAuthenticationError) {
         throw new HttpException(e.message, HttpStatus.UNAUTHORIZED);
       }
-      throw new HttpException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpException(
+        'internal server error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 }

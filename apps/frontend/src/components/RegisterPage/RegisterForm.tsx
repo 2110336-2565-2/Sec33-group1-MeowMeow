@@ -2,13 +2,14 @@ import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import StyleTextField from "../LoginPage/StyledTextField";
 import useRegisterForm from "@/hooks/useRegisterForm";
-import useSnackbar from "@/hooks/useSnackbar";
+import useCustomSnackbar from "@/hooks/useCustomSnackbar";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import Typography from "@mui/material/Typography";
+import AppSnackbar from "../common/AppSnackbar";
 
 const RegisterForm = () => {
-  const { onClose, onExit, isOpen, messageInfo } = useSnackbar();
+  const { onClose, onExit, isOpen, messageInfo } = useCustomSnackbar();
   const { onSubmit, isLoading } = useRegisterForm();
 
   return (
@@ -47,37 +48,12 @@ const RegisterForm = () => {
       >
         REGISTER
       </Button>
-      <Snackbar
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        key={messageInfo ? messageInfo.key : undefined}
-        open={isOpen}
-        autoHideDuration={3000}
+      <AppSnackbar
+        messageInfo={messageInfo}
+        isOpen={isOpen}
         onClose={onClose}
-        sx={{
-          width: "100vw",
-          left: "0px",
-        }}
-        TransitionProps={{ onExited: onExit }}
-        message={messageInfo ? messageInfo.message : undefined}
-      >
-        <Alert
-          severity={messageInfo?.severity ?? "error"}
-          variant="filled"
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Typography
-            fontWeight="500"
-            textTransform="capitalize"
-            variant="subtitle1"
-          >
-            {messageInfo?.message}
-          </Typography>
-        </Alert>
-      </Snackbar>
+        onExit={onExit}
+      />
     </Stack>
   );
 };

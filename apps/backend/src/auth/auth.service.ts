@@ -48,8 +48,13 @@ export class AuthServiceImpl {
 
     const accessToken = await this.issueAccessToken(account);
     const refreshToken = await this.issueRefreshToken(account);
-
-    return [{ message: 'success' }, accessToken, refreshToken];
+    const resp = {
+      message: 'success',
+      userId: user.id,
+      username: user.username,
+      role: user.role,
+    };
+    return [resp, accessToken, refreshToken];
   }
 
   async validate(credential: string): Promise<AccountMetadata> {
@@ -75,9 +80,8 @@ export class AuthServiceImpl {
   private async decodeToken(token: string): Promise<AccountMetadata> {
     try {
       const decoded = jwt.verify(token, this.jwt_secret) as jwt.JwtPayload;
-
-      const account = {
-        userId: Number(decoded.userId),
+      const account: AccountMetadata = {
+        userId: decoded.userId,
         username: decoded.username,
         role: decoded.role,
       };

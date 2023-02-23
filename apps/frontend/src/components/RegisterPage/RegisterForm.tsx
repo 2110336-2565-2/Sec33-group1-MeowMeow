@@ -8,14 +8,9 @@ import Alert from "@mui/material/Alert";
 import Typography from "@mui/material/Typography";
 
 const RegisterForm = () => {
-  const { onAddSnackbar, onClose, onExit, isOpen, messageInfo } = useSnackbar();
-  const { onSubmit, isLoading } = useRegisterForm({
-    onError: onAddSnackbar,
-    onSuccess: onAddSnackbar,
-  });
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  const { onClose, onExit, isOpen, messageInfo } = useSnackbar();
+  const { onSubmit, isLoading } = useRegisterForm();
+
   return (
     <Stack
       component="form"
@@ -59,8 +54,8 @@ const RegisterForm = () => {
         autoHideDuration={3000}
         onClose={onClose}
         sx={{
-          width: "75%",
-          minWidth: "300px",
+          width: "100vw",
+          left: "0px",
         }}
         TransitionProps={{ onExited: onExit }}
         message={messageInfo ? messageInfo.message : undefined}
@@ -74,7 +69,11 @@ const RegisterForm = () => {
             alignItems: "center",
           }}
         >
-          <Typography fontWeight="500" textTransform="capitalize">
+          <Typography
+            fontWeight="500"
+            textTransform="capitalize"
+            variant="subtitle1"
+          >
             {messageInfo?.message}
           </Typography>
         </Alert>

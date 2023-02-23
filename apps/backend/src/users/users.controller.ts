@@ -23,7 +23,23 @@ export class UsersController {
     @Inject('UsersService') private readonly usersService: UsersService,
   ) {}
 
-  @Get(':id')
+  @Get('/profiles')
+  async getUserProfile(@Req() req, @Res({ passthrough: true }) res) {
+    try {
+      const account: AccountMetadata = req.account;
+      const resBody = await this.usersService.getUserById({
+        id: account.userId,
+      });
+      res.status(HttpStatus.OK).send(resBody);
+    } catch (e) {
+      throw new HttpException(
+        'internal server error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  @Get('/:id')
   async getUserById(
     @Param('id', ParseIntPipe) userId: number,
     @Res({ passthrough: true }) res,
@@ -46,7 +62,7 @@ export class UsersController {
     }
   }
 
-  @Post('register')
+  @Post('/register')
   async createUser(
     @Body() data: CreateUserRequest,
     @Res({ passthrough: true }) res,
@@ -63,7 +79,7 @@ export class UsersController {
     }
   }
 
-  @Put('user')
+  @Put('/users')
   async editUserProfile(
     @Req() req,
     @Body() reqBody,

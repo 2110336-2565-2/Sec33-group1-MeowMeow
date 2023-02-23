@@ -86,7 +86,7 @@ model Post {
   content   String?
   authorId  Int
   tags      String[]
-  fee       Decimal  @db.Decimal(10, 2) @default(1000)
+  fee       Decimal  @db.Decimal(10, 2)
 
   author  User      @relation(fields: [authorId], references: [id])
   Booking Booking[]

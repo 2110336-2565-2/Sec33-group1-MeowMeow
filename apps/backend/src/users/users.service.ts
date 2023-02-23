@@ -27,7 +27,7 @@ export class UsersServiceImpl {
   private hashRound: number;
 
   constructor(private readonly usersRepo: UsersRepository) {
-    this.hashRound = backendConfig.bcrypt.salt;
+    this.hashRound = backendConfig.bcrypt.hashRound;
   }
 
   async getUserById(req: GetUserByIdRequest): Promise<GetUserByIdResponse> {

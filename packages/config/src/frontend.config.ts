@@ -6,5 +6,5 @@ export type FrontendConfig = {
 
 export const loadFrontendConfig = (): FrontendConfig => ({
   BACKEND_BASE_URL:
-    process.env.BACKEND_BASE_URL || "https://se2-api-dev.pongdev.dev",
+    process.env.BACKEND_BASE_URL || "https://se2-api-beta.pongdev.dev/",
 });

@@ -9,13 +9,15 @@ export const responseReject = async (error: Error) => {
   if (isAxiosError(error)) {
     const err: AxiosError<{ message: string }> = error;
     const { response, config } = err;
-
+    console.log("response.status = ", response);
     if (response?.status === 401) {
+      console.log("config = ", config);
       if (config && config.url !== "/auth/refresh") {
-        await apiClient.post("/auth/refresh");
+        console.log("can refresh");
         return await apiClient(config);
       }
       if (config && config.url === "/auth/refresh") {
+        console.log("navigate to login");
         window.location.href = "/login";
       }
     }

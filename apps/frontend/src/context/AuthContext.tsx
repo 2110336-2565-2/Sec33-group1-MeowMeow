@@ -1,8 +1,15 @@
-import { createContext, ReactNode, useCallback, useState } from "react";
-import { IUser } from "./type/authContext";
+import apiClient from "@/utils/apiClient";
+import {
+  createContext,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
+import { IProfileResponse, IUser } from "./type/authContext";
 interface IAuthContext {
-  user: IUser;
-  updateUser: (newUser: IUser) => void;
+  user: IUser | undefined;
+  updateUser: (newUser: IUser | undefined) => void;
 }
 
 export const AuthContext = createContext<IAuthContext>({} as IAuthContext);
@@ -12,10 +19,25 @@ interface IAuthProviderProps {
 }
 
 const AuthProvider = ({ children }: IAuthProviderProps) => {
-  const [user, setUser] = useState<IUser>({} as IUser);
-  const updateUser = useCallback((newUser: IUser) => {
+  const [user, setUser] = useState<IUser | undefined>({} as IUser);
+  const updateUser = useCallback((newUser: IUser | undefined) => {
     setUser(newUser);
   }, []);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const { data } = await apiClient.get<IProfileResponse>(
+          "/users/profiles"
+        );
+        setUser(data);
+      } catch (err) {
+        console.log("err");
+      }
+    };
+    fetchProfile();
+  }, []);
+
   return (
     <AuthContext.Provider value={{ user, updateUser }}>
       {children}

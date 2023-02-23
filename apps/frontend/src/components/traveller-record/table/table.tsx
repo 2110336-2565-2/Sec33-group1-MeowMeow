@@ -2,37 +2,17 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
-import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { IData, Order } from "./data/recordType";
-import { rows } from "./data/mockData";
+import { IData, Order } from "../data/recordType";
+import { rows } from "../data/mockData";
 import TableHeader from "./headTable";
-import { stableSort, getComparator } from "./data/sorting";
-import {
-  Button,
-  Container,
-  Grid,
-  IconButton,
-  ListItemIcon,
-  styled,
-  Typography,
-} from "@mui/material";
+import { stableSort, getComparator } from "../data/sorting";
+import { Grid, styled, Typography } from "@mui/material";
 import DescriptionIcon from "@mui/icons-material/Description";
-import dayjs from "dayjs";
-import StatusDialog from "./dialogStatus";
-
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  "&:nth-of-type(odd)": {
-    backgroundColor: "#faf7f5",
-  },
-
-  "&:last-child td, &:last-child th": {
-    border: 0,
-  },
-}));
+import ContentComponent from "./content";
 
 export default function TableRecord() {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -85,42 +65,16 @@ export default function TableRecord() {
               orderBy={orderBy}
               onRequestSort={handleRequestSort}
             />
-            <TableBody>
+            <TableBody sx={{ backgroundColor: "#faf7f5" }}>
               {stableSort(rows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const labelId = `record-${index}`;
-
                   return (
-                    <StyledTableRow hover key={row.name}>
-                      <TableCell
-                        component="th"
-                        id={labelId}
-                        scope="row"
-                        padding="none"
-                      >
-                        {row.name}
-                      </TableCell>
-                      <TableCell align="center">{row.location}</TableCell>
-                      <TableCell align="center">{row.description}</TableCell>
-                      <TableCell align="center">
-                        {row.startDate.split("T", 2)[0] +
-                          " " +
-                          row.startDate.split("T", 2)[1]}
-                      </TableCell>
-                      <TableCell align="center">
-                        {row.endDate.split("T", 2)[0] +
-                          " " +
-                          row.endDate.split("T", 2)[1]}
-                      </TableCell>
-                      <TableCell align="center">{row.participant}</TableCell>
-                      <TableCell align="center">{row.price}</TableCell>
-                      <TableCell align="center">{row.lineid}</TableCell>
-                      <TableCell align="center">
-                        {/* <Button variant="contained" sx={{backgroundColor: "#ffd7b8"}}> {row.status} </Button> */}
-                        <StatusDialog nameButton={row.status} />
-                      </TableCell>
-                    </StyledTableRow>
+                    <ContentComponent
+                      key={row.name + index}
+                      row={row}
+                      index={index}
+                    />
                   );
                 })}
             </TableBody>

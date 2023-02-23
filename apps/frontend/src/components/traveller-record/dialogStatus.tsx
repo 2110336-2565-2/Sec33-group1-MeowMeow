@@ -3,14 +3,22 @@ import {
   Box,
   Button,
   Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
   DialogProps,
+  DialogTitle,
   Grid,
   IconButton,
   Typography,
 } from "@mui/material";
 import React from "react";
 import CancelIcon from "@mui/icons-material/Cancel";
-import { statusType, buttonMapping } from "./data/recordType";
+import {
+  statusType,
+  buttonMapping,
+  statusDescription,
+} from "./data/recordType";
 
 export interface IStatusDialog {
   nameButton: string;
@@ -74,29 +82,26 @@ export default function StatusDialog({ nameButton }: IStatusDialog) {
           direction="row"
           justifyContent="center"
           alignItems="center"
+          sx={{ padding: { sm: 2, xs: 2 } }}
         >
-          <Grid
-            container
-            direction="column"
-            justifyContent="center"
-            alignItems="center"
-          >
-            <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-              Status: {nameButton}
-            </Typography>
-          </Grid>
-          {buttonMapping.get(nameButton)!.map((item: string) => {
-            return (
-              <Box
-                key={item}
-                justifyContent="center"
-                alignItems="center"
-                sx={{ padding: "20px" }}
-              >
-                <Button variant="contained">{item}</Button>
-              </Box>
-            );
-          })}
+          <DialogTitle id="alert-dialog-title" sx={{ fontWeight: "bold" }}>
+            Status: {nameButton}
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              {statusDescription.get(nameButton)}
+            </DialogContentText>
+          </DialogContent>
+          {buttonMapping.get(nameButton) &&
+            buttonMapping
+              .get(nameButton)!
+              .map((item: string, index: number) => {
+                return (
+                  <DialogActions key={nameButton + "-" + index}>
+                    <Button variant="contained">{item}</Button>
+                  </DialogActions>
+                );
+              })}
         </Grid>
       </Dialog>
     </>

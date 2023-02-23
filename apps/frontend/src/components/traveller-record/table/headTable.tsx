@@ -7,7 +7,7 @@ import {
   styled,
   tableCellClasses,
 } from "@mui/material";
-import { IData, Order } from "./data/recordType";
+import { IData, Order } from "../data/recordType";
 
 interface HeadCell {
   id: keyof IData;
@@ -25,11 +25,6 @@ const headCells: readonly HeadCell[] = [
     id: "location",
     numeric: false,
     label: "Location",
-  },
-  {
-    id: "description",
-    numeric: false,
-    label: "Description",
   },
   {
     id: "startDate",
@@ -50,11 +45,6 @@ const headCells: readonly HeadCell[] = [
     id: "price",
     numeric: true,
     label: "Price",
-  },
-  {
-    id: "lineid",
-    numeric: false,
-    label: "Line ID",
   },
   {
     id: "status",
@@ -92,6 +82,7 @@ export default function TableHeader(props: EnhancedTableProps) {
   return (
     <TableHead>
       <TableRow>
+        <StyledTableCell align="center"></StyledTableCell>
         {headCells.map((headCell) => (
           <StyledTableCell
             key={headCell.id}

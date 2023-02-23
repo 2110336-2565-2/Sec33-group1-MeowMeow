@@ -7,12 +7,14 @@ export class LoginRequest {
   email: string;
 
   @ApiProperty()
-  @IsStrongPassword({ minLength: 8 })
   password: string;
 }
 
 export class LoginResponse {
   message: string;
+  userId: number;
+  username: string;
+  role: string;
 }
 
 export class AccountMetadata {

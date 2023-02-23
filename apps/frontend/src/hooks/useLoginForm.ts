@@ -1,31 +1,36 @@
 import { ILoginForm } from "@/components/LoginPage/types/loginForm";
+import { NotificationContext } from "@/context/NotificationContext";
 import apiClient from "@/utils/apiClient";
-import { AlertColor } from "@mui/material";
-import { useState, FormEventHandler, useCallback } from "react";
+import { useState, FormEventHandler, useCallback, useContext } from "react";
 
-interface IUseLoginForm {
-  onError: (message: string, severity: AlertColor) => void;
-  onSuccess: (message: string, severity: AlertColor) => void;
-}
+interface IUseLoginForm {}
 
-const useLoginForm = ({ onError, onSuccess }: IUseLoginForm) => {
+const useLoginForm = () => {
+  const { addNotification } = useContext(NotificationContext);
   const [isLoading, setLoading] = useState<boolean>(false);
 
   const onSubmit: FormEventHandler<HTMLFormElement> = useCallback(
     async (event) => {
       event.preventDefault();
       setLoading(true);
-      const email = event.currentTarget.email.value;
+      const email = event.currentTarget.email.value.toLowerCase();
       const password = event.currentTarget.password.value;
       try {
+        if (!email || !password) {
+          addNotification(
+            "You must fill in every input field before submit the form.",
+            "error"
+          );
+          return;
+        }
         await apiClient.post<ILoginForm>("/auth/sign-in", {
           email,
           password,
         });
-        onSuccess("Login success.", "success");
+        addNotification("Login success.", "success");
       } catch (err) {
         const error = err as Error;
-        onError(error.message, "error");
+        addNotification(error.message, "error");
       } finally {
         setLoading(false);
       }

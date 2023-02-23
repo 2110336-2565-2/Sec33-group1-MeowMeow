@@ -1,18 +1,19 @@
+import { NotificationContext } from "@/context/NotificationContext";
 import { SnackbarMessage } from "@/hooks/types/snackbarMessage";
-import { AlertColor } from "@mui/material";
 import { SnackbarCloseReason } from "@mui/material/Snackbar";
-import { useState, useCallback, SyntheticEvent, useEffect } from "react";
+import {
+  useState,
+  useCallback,
+  SyntheticEvent,
+  useEffect,
+  useContext,
+} from "react";
 
 const useCustomSnackbar = () => {
-  const [snackPack, setSnackPack] = useState<SnackbarMessage[]>([]);
+  const { notificationLists, removeNotification } =
+    useContext(NotificationContext);
   const [isOpen, setOpen] = useState<boolean>(false);
   const [messageInfo, setMessageInfo] = useState<SnackbarMessage | undefined>();
-  const onAddSnackbar = useCallback((message: string, severity: AlertColor) => {
-    setSnackPack((prev) => [
-      ...prev,
-      { key: new Date().getTime(), message, severity },
-    ]);
-  }, []);
   const onClose = useCallback(
     (_: Event | SyntheticEvent<any, Event>, reason: SnackbarCloseReason) => {
       if (reason === "clickaway") {
@@ -27,16 +28,17 @@ const useCustomSnackbar = () => {
   }, []);
 
   useEffect(() => {
-    if (snackPack.length && !messageInfo) {
-      setMessageInfo({ ...snackPack[0] });
-      setSnackPack((prev) => prev.slice(1));
+    if (notificationLists.length && !messageInfo) {
+      setMessageInfo({ ...notificationLists[0] });
+      removeNotification();
       setOpen(true);
-    } else if (snackPack.length && messageInfo && isOpen) {
+    }
+    if (notificationLists.length && messageInfo && isOpen) {
       setOpen(false);
     }
-  }, [snackPack, messageInfo, isOpen]);
+  }, [notificationLists, messageInfo, isOpen]);
 
-  return { onAddSnackbar, onClose, onExit, isOpen, messageInfo };
+  return { onClose, onExit, isOpen, messageInfo };
 };
 
 export default useCustomSnackbar;

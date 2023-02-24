@@ -60,4 +60,14 @@ export class GuidesController {
       );
     }
   }
+
+  @Get(':id')
+  async getGuideById(@Query('id') id: number) {
+    // TODO: Implement this
+  }
+
+  @Get(':id/reviews/:page')
+  async getGuideReviews(@Query('id') id: number, @Query('page') page: number) {
+    // TODO: Implement this
+  }
 }

@@ -32,7 +32,10 @@ export class AuthServiceImpl {
       throw new UserNotFoundError('user with given email not found');
     }
 
-    const passwordMatch = await bcrypt.compare(req.password, user.hashPassword);
+    const passwordMatch = await bcrypt.compare(
+      req.password,
+      user.hashedPassword,
+    );
     if (!passwordMatch) {
       throw new InvalidAuthenticationError('invalid email or password');
     }

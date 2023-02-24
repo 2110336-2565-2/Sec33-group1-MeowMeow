@@ -5,6 +5,7 @@
       "dependsOn": ["^build", "^db:generate"],
       "outputs": ["dist/**", ".next/**"]
     },
+
     "lint": {
       "outputs": []
     },

@@ -34,6 +34,7 @@ const useRegisterForm = () => {
         );
         return;
       }
+
       if (formBody["password"] !== formBody["confirmPassword"]) {
         addNotification(
           "Confirm password doesn't match with password",

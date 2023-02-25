@@ -16,11 +16,15 @@ const useRegisterForm = () => {
       event.preventDefault();
       const formBody = REGISTER_INPUT_IDs.reduce((prev, formId) => {
         if (formId === "email") {
-          prev[formId] = event.currentTarget[formId].value.toLowerCase();
-          return prev;
+          return {
+            ...prev,
+            [formId]: event.currentTarget[formId].value.toLowerCase(),
+          };
         }
-        prev[formId] = event.currentTarget[formId].value;
-        return prev;
+        return {
+          ...prev,
+          [formId]: event.currentTarget[formId].value,
+        };
       }, {} as { [key: string]: string });
       formBody["hashPassword"] = formBody["password"];
       const hasMissingValue = !!REGISTER_INPUT_IDs.find((inputId: string) => {

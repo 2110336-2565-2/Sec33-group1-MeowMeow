@@ -1,4 +1,5 @@
-import { IData, statusType } from "./recordType";
+import { IData } from "./recordType";
+import { statusType } from "./statusHandle";
 
 function createData(
   name: string,

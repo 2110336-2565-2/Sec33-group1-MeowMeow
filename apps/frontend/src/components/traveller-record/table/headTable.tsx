@@ -55,7 +55,7 @@ const headCells: readonly HeadCell[] = [
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: "#fc9c8b",
+    backgroundColor: theme.palette.primary.main,
     color: theme.palette.common.white,
   },
   [`&.${tableCellClasses.body}`]: {

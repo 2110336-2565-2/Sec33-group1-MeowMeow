@@ -10,15 +10,10 @@ import {
   DialogTitle,
   Grid,
   IconButton,
-  Typography,
 } from "@mui/material";
 import React from "react";
 import CancelIcon from "@mui/icons-material/Cancel";
-import {
-  statusType,
-  buttonMapping,
-  statusDescription,
-} from "./data/recordType";
+import { buttonMapping, statusDetail } from "./data/statusHandle";
 
 export interface IStatusDialog {
   nameButton: string;
@@ -27,6 +22,7 @@ export interface IStatusDialog {
 export default function StatusDialog({ nameButton }: IStatusDialog) {
   const [open, setOpen] = React.useState(false);
   const [scroll, setScroll] = React.useState<DialogProps["scroll"]>("paper");
+  const statusValue = { ...statusDetail.get(nameButton) };
 
   const handleClickOpen = (scrollType: DialogProps["scroll"]) => () => {
     setOpen(true);
@@ -54,8 +50,9 @@ export default function StatusDialog({ nameButton }: IStatusDialog) {
         size="small"
         sx={{
           fontSize: { xs: 10, sm: 12, md: 16 },
-          backgroundColor: "#ffd7b8",
+          backgroundColor: statusValue.color,
         }}
+        fullWidth
         onClick={handleClickOpen("paper")}
       >
         {" "}
@@ -89,7 +86,7 @@ export default function StatusDialog({ nameButton }: IStatusDialog) {
           </DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              {statusDescription.get(nameButton)}
+              {statusValue.description}
             </DialogContentText>
           </DialogContent>
           {buttonMapping.get(nameButton) &&

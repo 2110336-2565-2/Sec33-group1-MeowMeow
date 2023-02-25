@@ -9,7 +9,7 @@ export default function GuidePost() {
     router.push("guide-post/create");
   };
   const onChangeEdit = () => {
-    router.push("guide-post/edit");
+    router.push("guide-post/edit/1");
   };
   const onChangeDelete = () => {
     console.log("delete");

@@ -1,6 +1,16 @@
-import { Search } from "@mui/icons-material";
-import { Box, Button, InputAdornment, Stack, TextField } from "@mui/material";
-import { Dispatch } from "react";
+import { Filter, FilterList, Search } from "@mui/icons-material";
+import {
+  Badge,
+  Box,
+  Button,
+  Drawer,
+  IconButton,
+  InputAdornment,
+  Stack,
+  TextField,
+} from "@mui/material";
+import { Dispatch, useState } from "react";
+import FilterForm from "./FilterForm";
 
 interface ISearchBoxProps {
   search: string;
@@ -13,6 +23,8 @@ export default function SearchBox({
   setSearch,
   handleSearch,
 }: ISearchBoxProps) {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
   return (
     <Stack component="form" onSubmit={handleSearch}>
       <TextField
@@ -22,9 +34,26 @@ export default function SearchBox({
         onChange={(e) => setSearch(e.target.value)}
         InputProps={{
           endAdornment: (
-            <Button type="submit">
-              <Search />
-            </Button>
+            <>
+              <Button type="submit">
+                <Search />
+              </Button>
+              <Badge badgeContent={10} max={9} color="primary">
+                <IconButton
+                  color="primary"
+                  onClick={() => setIsOpen((prev) => !prev)}
+                >
+                  <FilterList color="primary" />
+                </IconButton>
+                <Drawer
+                  anchor="right"
+                  open={isOpen}
+                  onClose={() => setIsOpen(false)}
+                >
+                  <FilterForm />
+                </Drawer>
+              </Badge>
+            </>
           ),
         }}
       />

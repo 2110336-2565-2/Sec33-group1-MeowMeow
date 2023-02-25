@@ -1,7 +1,6 @@
 import { REGISTER_INPUT_IDs } from "@/constants/RegisterPage";
 import { NotificationContext } from "@/context/NotificationContext";
 import apiClient from "@/utils/apiClient";
-import { AlertColor } from "@mui/material";
 import { useRouter } from "next/router";
 import { FormEventHandler, useCallback, useContext, useState } from "react";
 

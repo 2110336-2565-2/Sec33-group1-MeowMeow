@@ -14,6 +14,7 @@ export default function SearchPage() {
     feed,
     feedStatus,
     handleSearch,
+    filterStuff, // extract filter logic inside useSearchPosts
   } = useSearchPosts();
 
   return (
@@ -29,6 +30,7 @@ export default function SearchPage() {
           search={search}
           setSearch={setSearch}
           handleSearch={handleSearch}
+          filterStuff={filterStuff} // props drilling
         />
         {feedStatus === FeedStatus.LOADING ? (
           <Stack m={2} gap={2}>

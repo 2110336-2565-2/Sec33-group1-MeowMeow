@@ -1,11 +1,10 @@
-import { Filter, FilterList, Search } from "@mui/icons-material";
+import { TFilterForm } from "@/hooks/useFilterForm";
+import { FilterList, Search } from "@mui/icons-material";
 import {
   Badge,
-  Box,
   Button,
   Drawer,
   IconButton,
-  InputAdornment,
   Stack,
   TextField,
 } from "@mui/material";
@@ -14,6 +13,7 @@ import FilterForm from "./FilterForm";
 
 interface ISearchBoxProps {
   search: string;
+  filterStuff: TFilterForm;
   setSearch: Dispatch<React.SetStateAction<string>>;
   handleSearch: (e: React.FormEvent<HTMLFormElement>) => void;
 }
@@ -22,6 +22,7 @@ export default function SearchBox({
   search,
   setSearch,
   handleSearch,
+  filterStuff,
 }: ISearchBoxProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -38,21 +39,21 @@ export default function SearchBox({
               <Button type="submit">
                 <Search />
               </Button>
-              <Badge badgeContent={10} max={9} color="primary">
-                <IconButton
-                  color="primary"
-                  onClick={() => setIsOpen((prev) => !prev)}
-                >
-                  <FilterList color="primary" />
-                </IconButton>
-                <Drawer
-                  anchor="right"
-                  open={isOpen}
-                  onClose={() => setIsOpen(false)}
-                >
-                  <FilterForm />
-                </Drawer>
-              </Badge>
+              <IconButton
+                color="primary"
+                onClick={() => setIsOpen((prev) => !prev)}
+              >
+                <FilterList color="primary" />
+              </IconButton>
+              <Drawer
+                anchor="right"
+                open={isOpen}
+                onClose={() => setIsOpen(false)}
+              >
+                <FilterForm
+                  filterStuff={filterStuff} // props drilling
+                />
+              </Drawer>
             </>
           ),
         }}

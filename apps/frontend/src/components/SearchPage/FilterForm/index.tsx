@@ -1,35 +1,22 @@
-import {
-  Box,
-  Button,
-  Container,
-  Slider,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
-import { useState } from "react";
-import { IFilterOptions } from "../types";
+import { TFilterForm } from "@/hooks/useFilterForm";
+import { Button, Container, Stack, TextField, Typography } from "@mui/material";
+import DateInput from "./DateInput";
 import SliderInput from "./SliderInput";
 
-export default function FilterForm() {
-  const [options, setOptions] = useState<IFilterOptions>({
-    location: "",
-    price: [0, 1000],
-    rating: [0, 5],
-  });
+interface FilterFormProps {
+  filterStuff: TFilterForm;
+}
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-  };
-
-  const handleChange = (e: Event, newValue: number | number[]) => {
-    if (!e.target) return;
-
-    setOptions((prev) => ({
-      ...prev,
-      [e.target.name]: newValue as number[], // pull key name from event
-    }));
-  };
+export default function FilterForm({ filterStuff }: FilterFormProps) {
+  const {
+    options,
+    handleChangeLocation,
+    handleChangePrice,
+    handleChangeRating,
+    handleChangeStartDate,
+    handleChangeEndDate,
+    handleSubmit,
+  } = filterStuff;
 
   return (
     <Container component="form" onSubmit={handleSubmit}>
@@ -40,30 +27,38 @@ export default function FilterForm() {
           mx: 2,
         }}
       >
+        {
+          JSON.stringify(options) // tests
+        }
         <Typography variant="h6">Filter</Typography>
         <TextField
           label="Location"
           variant="outlined"
           placeholder="Insert place name"
           value={options.location}
-          onChange={(e) =>
-            setOptions((prev) => ({
-              ...prev,
-              location: e.target.value, // specify key name
-            }))
-          }
+          onChange={handleChangeLocation}
         />
         <SliderInput
           name="price"
+          max={9999}
           displayText="Price"
           value={options.price}
-          onChange={handleChange}
+          onChange={handleChangePrice}
         />
         <SliderInput
           name="rating"
+          max={5}
           displayText="Rating score"
           value={options.rating}
-          onChange={handleChange}
+          onChange={handleChangeRating}
+        />
+
+        <DateInput
+          displayText="Date"
+          startDate={options.startDate}
+          endDate={options.endDate}
+          handleChangeStartDate={handleChangeStartDate}
+          handleChangeEndDate={handleChangeEndDate}
         />
 
         <Button type="submit" variant="contained">

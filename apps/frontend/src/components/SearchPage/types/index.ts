@@ -11,3 +11,9 @@ export interface IPost {
   location: string;
   amount: number;
 }
+
+export interface IFilterOptions {
+  location: string;
+  price: number[];
+  rating: number[];
+}

@@ -1,29 +1,18 @@
-import { TFilterForm } from "@/hooks/useFilterForm";
+import { IFilterMethod } from "@/hooks/useFilterForm";
 import { FilterList, Search } from "@mui/icons-material";
-import {
-  Badge,
-  Button,
-  Drawer,
-  IconButton,
-  Stack,
-  TextField,
-} from "@mui/material";
+import { Button, Drawer, IconButton, Stack, TextField } from "@mui/material";
 import { Dispatch, useState } from "react";
 import FilterForm from "./FilterForm";
 
 interface ISearchBoxProps {
-  search: string;
-  filterStuff: TFilterForm;
-  setSearch: Dispatch<React.SetStateAction<string>>;
+  tempSearch: string;
+  filterStuff: IFilterMethod;
+  setTempSearch: Dispatch<React.SetStateAction<string>>;
   handleSearch: (e: React.FormEvent<HTMLFormElement>) => void;
 }
 
-export default function SearchBox({
-  search,
-  setSearch,
-  handleSearch,
-  filterStuff,
-}: ISearchBoxProps) {
+export default function SearchBox(props: ISearchBoxProps) {
+  const { tempSearch, setTempSearch, handleSearch, filterStuff } = props;
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   return (
@@ -31,8 +20,8 @@ export default function SearchBox({
       <TextField
         placeholder="Search..."
         fullWidth
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
+        value={tempSearch}
+        onChange={(e) => setTempSearch(e.target.value)}
         InputProps={{
           endAdornment: (
             <>

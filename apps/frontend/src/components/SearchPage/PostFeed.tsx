@@ -1,7 +1,6 @@
-import { FeedStatus } from "@/hooks/types/FeedStatus";
 import { SearchOff } from "@mui/icons-material";
-import { Box, Skeleton, Stack, Typography } from "@mui/material";
-import PostCard, { mockPost } from "./PostCard";
+import { Box, Stack, Typography } from "@mui/material";
+import PostCard from "./PostCard";
 import { IPost } from "./types";
 
 interface IPostFeedProps {

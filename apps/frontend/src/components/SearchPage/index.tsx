@@ -7,14 +7,14 @@ import SearchBox from "./SearchBox";
 
 export default function SearchPage() {
   const {
-    search,
-    setSearch,
-    setPageNo,
+    tempSearch,
     pageNo,
     feed,
     feedStatus,
-    handleSearch,
     filterStuff, // extract filter logic inside useSearchPosts
+    setTempSearch,
+    setPageNo,
+    handleSearch,
   } = useSearchPosts();
 
   return (
@@ -27,8 +27,8 @@ export default function SearchPage() {
         }}
       >
         <SearchBox
-          search={search}
-          setSearch={setSearch}
+          tempSearch={tempSearch}
+          setTempSearch={setTempSearch}
           handleSearch={handleSearch}
           filterStuff={filterStuff} // props drilling
         />

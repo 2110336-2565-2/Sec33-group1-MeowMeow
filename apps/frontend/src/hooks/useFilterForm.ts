@@ -1,15 +1,17 @@
 import { IFilterOptions } from "@/components/SearchPage/types";
-import { useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 
-export type TFilterForm = {
+export interface IFilterMethod {
   options: IFilterOptions;
-  handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
-  handleChangeLocation: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  tempOptions: IFilterOptions;
+  handleSubmit: (e: FormEvent<HTMLFormElement>) => void;
+  handleChangeLocation: (e: ChangeEvent<HTMLInputElement>) => void;
   handleChangePrice: (e: Event, newValue: number | number[]) => void;
   handleChangeRating: (e: Event, newValue: number | number[]) => void;
   handleChangeStartDate: (newValue: Date | null) => void;
   handleChangeEndDate: (newValue: Date | null) => void;
-};
+}
+
 const useFilterForm = () => {
   const [options, setOptions] = useState<IFilterOptions>({
     location: "",
@@ -19,41 +21,47 @@ const useFilterForm = () => {
     endDate: null,
   });
 
+  const [tempOptions, setTempOptions] = useState<IFilterOptions>(options); // temp options for form submission
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // TODO: submit form
+    e.stopPropagation();
+
+    console.log("Submit");
+
+    setOptions(tempOptions); // update global options in search module
   };
 
   const handleChangeLocation = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setOptions((prev) => ({
+    setTempOptions((prev) => ({
       ...prev,
       location: e.target.value,
     }));
   };
 
   const handleChangePrice = (e: Event, newValue: number | number[]) => {
-    setOptions((prev) => ({
+    setTempOptions((prev) => ({
       ...prev,
       price: newValue as number[],
     }));
   };
 
   const handleChangeRating = (e: Event, newValue: number | number[]) => {
-    setOptions((prev) => ({
+    setTempOptions((prev) => ({
       ...prev,
       rating: newValue as number[],
     }));
   };
 
   const handleChangeStartDate = (newValue: Date | null) => {
-    setOptions((prev) => ({
+    setTempOptions((prev) => ({
       ...prev,
       startDate: newValue,
     }));
   };
 
   const handleChangeEndDate = (newValue: Date | null) => {
-    setOptions((prev) => ({
+    setTempOptions((prev) => ({
       ...prev,
       endDate: newValue,
     }));
@@ -61,6 +69,7 @@ const useFilterForm = () => {
 
   return {
     options,
+    tempOptions,
     handleSubmit,
     handleChangeLocation,
     handleChangePrice,

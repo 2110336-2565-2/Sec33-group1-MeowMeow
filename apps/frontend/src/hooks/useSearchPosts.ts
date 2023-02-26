@@ -6,8 +6,6 @@ import { useState } from "react";
 import { FeedStatus } from "./types/FeedStatus";
 import useFilterForm from "./useFilterForm";
 
-const mockFeed: IPost[] = [mockPost, mockPost, mockPost];
-
 interface IFetchPosts {
   pageNo: number;
   search: string;
@@ -18,6 +16,7 @@ const fetchPosts = async (props: IFetchPosts): Promise<IPost[]> => {
   const { pageNo, search, filterOptions } = props;
   // TODO: fetch posts here with search and filter options
 
+  console.log("fetching posts with page number\t\t: ", pageNo);
   console.log("fetching posts with search \t\t\t: ", search);
   console.log("fetching posts with filter options\t: ", filterOptions);
 
@@ -29,16 +28,19 @@ const fetchPosts = async (props: IFetchPosts): Promise<IPost[]> => {
   });
 };
 
+const mockFeed: IPost[] = [mockPost, mockPost, mockPost];
+
 export const useSearchPosts = () => {
   const [pageNo, setPageNo] = useState<number>(1); // start with first page
   const [feed, setFeed] = useState<IPost[]>([]);
   const [feedStatus, setFeedStatus] = useState<FeedStatus>(FeedStatus.INITIAL);
   const [search, setSearch] = useState<string>("");
+  const [tempSearch, setTempSearch] = useState<string>(""); // temp search for debouncing
 
   const filterStuff = useFilterForm(); // init filter module
 
   useEffect(() => {
-    if (search) {
+    if (feedStatus !== FeedStatus.INITIAL) {
       setFeedStatus(FeedStatus.LOADING);
       const postLoading: Promise<IPost[]> = fetchPosts({
         pageNo,
@@ -55,14 +57,13 @@ export const useSearchPosts = () => {
           // TODO: Show error message via notification
         });
     }
-  }, [pageNo, filterStuff.options]); // refetch feed when page number changes : pagination
+  }, [search, pageNo, filterStuff.options]); // refetch feed when page number changes : pagination
 
   const handleSearch = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       setFeedStatus(FeedStatus.LOADING);
-
-      console.log("manual search");
+      setSearch(tempSearch); // update global search
 
       const post: IPost[] = await fetchPosts({
         pageNo,
@@ -73,17 +74,17 @@ export const useSearchPosts = () => {
       setFeed(post);
       setFeedStatus(FeedStatus.SHOWING);
     },
-    [search, filterStuff.options]
+    [tempSearch, search, filterStuff.options]
   );
 
   return {
     feed,
-    search,
-    setSearch,
     pageNo,
+    feedStatus,
+    tempSearch,
+    filterStuff,
+    setTempSearch,
     setPageNo,
     handleSearch,
-    feedStatus,
-    filterStuff,
   };
 };

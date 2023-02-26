@@ -1,15 +1,15 @@
-import { TFilterForm } from "@/hooks/useFilterForm";
+import { IFilterMethod } from "@/hooks/useFilterForm";
 import { Button, Container, Stack, TextField, Typography } from "@mui/material";
 import DateInput from "./DateInput";
 import SliderInput from "./SliderInput";
 
 interface FilterFormProps {
-  filterStuff: TFilterForm;
+  filterStuff: IFilterMethod;
 }
 
 export default function FilterForm({ filterStuff }: FilterFormProps) {
   const {
-    options,
+    tempOptions,
     handleChangeLocation,
     handleChangePrice,
     handleChangeRating,
@@ -28,35 +28,35 @@ export default function FilterForm({ filterStuff }: FilterFormProps) {
         }}
       >
         {
-          JSON.stringify(options) // tests
+          JSON.stringify(tempOptions) // tests
         }
         <Typography variant="h6">Filter</Typography>
         <TextField
           label="Location"
           variant="outlined"
           placeholder="Insert place name"
-          value={options.location}
+          value={tempOptions.location}
           onChange={handleChangeLocation}
         />
         <SliderInput
           name="price"
           max={9999}
           displayText="Price"
-          value={options.price}
+          value={tempOptions.price}
           onChange={handleChangePrice}
         />
         <SliderInput
           name="rating"
           max={5}
           displayText="Rating score"
-          value={options.rating}
+          value={tempOptions.rating}
           onChange={handleChangeRating}
         />
 
         <DateInput
           displayText="Date"
-          startDate={options.startDate}
-          endDate={options.endDate}
+          startDate={tempOptions.startDate}
+          endDate={tempOptions.endDate}
           handleChangeStartDate={handleChangeStartDate}
           handleChangeEndDate={handleChangeEndDate}
         />

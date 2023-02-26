@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma } from 'database';
+import { Guide, Prisma, User } from 'database';
+import { InvalidRequestError } from 'src/auth/auth.commons';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -66,6 +67,45 @@ export class GuidesRepository {
         };
       }
       return guides;
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  async getGuideById(guideId: number): Promise<{
+    id: number;
+    userId: number;
+    firstName: string;
+    lastName: string;
+    certificate: string;
+    averageReviewScore: number;
+  }> {
+    try {
+      const guideResult = await this.prismaService.guide.findUnique({
+        where: {
+          id: guideId,
+        },
+      });
+      if (!guideResult) return null;
+      const userResult = await this.prismaService.user.findUnique({
+        where: {
+          id: guideResult.userId,
+        },
+      });
+      const scoreResult = await this.prismaService.$queryRaw<any>`
+      SELECT AVG("Review"."score") AS avg_review_score
+        FROM "Review"
+        WHERE "Review"."guideId" = ${guideId}
+        GROUP BY "Review"."guideId"
+      `;
+      return {
+        id: guideResult.id,
+        userId: guideResult.userId,
+        firstName: userResult.firstName,
+        lastName: userResult.lastName,
+        certificate: guideResult.certificate,
+        averageReviewScore: scoreResult[0].avg_review_score,
+      };
     } catch (e) {
       console.log(e);
     }

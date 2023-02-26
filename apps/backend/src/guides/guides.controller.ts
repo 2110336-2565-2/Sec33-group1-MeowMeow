@@ -4,6 +4,8 @@ import {
   HttpException,
   HttpStatus,
   Inject,
+  NotFoundException,
+  Param,
   Query,
   Res,
   UsePipes,
@@ -12,6 +14,7 @@ import {
 import { SearchGuidesRequest, SearchGuidesResponse } from 'types';
 import { GuidesService } from './guides.service';
 import { ApiCookieAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { GetGuideByIdRequest, GetGuideByIdResponse } from './dtos/getGuideById';
 
 @Controller('guides')
 export class GuidesController {
@@ -60,12 +63,32 @@ export class GuidesController {
   }
 
   @Get(':id')
-  async getGuideById(@Query('id') id: number) {
-    // TODO: Implement this
+  @UsePipes(
+    new ValidationPipe({
+      transform: true,
+      transformOptions: { enableImplicitConversion: true },
+    }),
+  )
+  async getGuideById(
+    @Param() queryParams: GetGuideByIdRequest,
+    @Res({ passthrough: true }) res,
+  ) {
+    try {
+      const resBody = await this.guidesService.getGuideById(queryParams);
+      if (!resBody) {
+        throw new NotFoundException(
+          `Guide with id ${queryParams.id} does not exist.`,
+        );
+      }
+      res.status(HttpStatus.OK).send(resBody);
+    } catch (e) {
+      console.log(e);
+      throw e;
+    }
   }
 
-  @Get(':id/reviews/:page')
-  async getGuideReviews(@Query('id') id: number, @Query('page') page: number) {
-    // TODO: Implement this
-  }
+  // @Get(':id/reviews/:page')
+  // async getGuideReviews(@Query('id') id: number, @Query('page') page: number) {
+  //   // TODO: Implement this
+  // }
 }

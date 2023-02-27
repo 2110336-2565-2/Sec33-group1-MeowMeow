@@ -3,7 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { PrismaService } from './prisma/prisma.service';
-import { backendConfig as config } from 'config';
+import { backendConfig as config, frontendConfig } from 'config';
 import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
@@ -23,7 +23,10 @@ async function bootstrap() {
 
   app.use(cookieParser());
   if (config.cors.enable) {
-    app.enableCors();
+    app.enableCors({
+      origin: frontendConfig.FRONTEND_BASE_URL,
+      credentials: true,
+    });
   }
 
   await prismaService.enableShutdownHooks(app);

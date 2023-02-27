@@ -4,3 +4,4 @@ export * from "./guide";
 export * from "./posts";
 export * from "./review";
 export * from "./user";
+export * from "./media";

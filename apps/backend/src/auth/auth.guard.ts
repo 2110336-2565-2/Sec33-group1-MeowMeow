@@ -13,6 +13,10 @@ import {
 
 import { AuthService } from 'src/auth/auth.service';
 
+<<<<<<< HEAD
+=======
+@Injectable()
+>>>>>>> f79eff0... feat: implement auth guard
 export class AuthGuard implements CanActivate {
   constructor(@Inject('AuthService') private authService: AuthService) {}
 

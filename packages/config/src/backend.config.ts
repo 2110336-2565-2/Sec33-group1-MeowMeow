@@ -14,6 +14,9 @@ export type BackendConfig = {
     enable: boolean;
     prefixPath: string;
   };
+  cors: {
+    enable: boolean;
+  };
   //   graphql: {
   //     debug: boolean;
   //     playground: boolean;
@@ -34,5 +37,8 @@ export const loadBackendConfig = (): BackendConfig => ({
   swagger: {
     enable: process.env.BACKEND_SWAGGER_ENABLE === "true",
     prefixPath: process.env.BACKEND_SWAGGER_PREFIX_PATH ?? "api",
+  },
+  cors: {
+    enable: process.env.BACKEND_CORS_ENABLE === "true",
   },
 });

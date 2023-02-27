@@ -1,7 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Guide } from 'database';
-
-import { SearchGuidesRequest, SearchGuidesResponse } from './dtos/searchGuide';
+import { SearchGuidesRequest, SearchGuidesResponse } from 'types';
 import { GuidesRepository } from './guides.repository';
 import { validate } from 'class-validator';
 import { InvalidRequestError } from 'src/auth/auth.commons';

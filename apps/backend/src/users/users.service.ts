@@ -1,14 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import { CreateUserRequest, CreateUserResponse } from './dtos/createUser.dto';
 import {
   GetUserByIdRequest,
   GetUserByIdResponse,
-} from './dtos/getUserById.dto';
-import {
   UpdateUserRequest,
   UpdateUserResponse,
-} from './dtos/updateProfile.dto';
+  CreateUserRequest,
+  CreateUserResponse,
+} from 'types';
 import { UserNotFoundError } from './users.common';
 import { backendConfig } from 'config';
 import { UsersRepository } from './users.repository';

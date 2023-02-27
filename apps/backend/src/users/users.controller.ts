@@ -12,8 +12,7 @@ import {
   Req,
   Res,
 } from '@nestjs/common';
-import { CreateUserRequest } from './dtos/createUser.dto';
-import { AccountMetadata } from 'src/auth/auth.dto';
+import { CreateUserRequest, AccountMetadata } from 'types';
 import { PropertyAlreadyUsedError, UserNotFoundError } from './users.common';
 import { UsersService } from './users.service';
 

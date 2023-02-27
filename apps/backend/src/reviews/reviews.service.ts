@@ -1,9 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
-import {
-  CreateReviewRequest,
-  CreateReviewResponse,
-} from './dtos/CreateReview.dto';
+import { CreateReviewRequest, CreateReviewResponse } from 'types';
 import { InvalidRequestError } from 'src/auth/auth.commons';
 import { ReviewsRepository } from './reviews.repository';
 

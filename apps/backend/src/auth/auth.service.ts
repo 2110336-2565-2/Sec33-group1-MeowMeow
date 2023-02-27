@@ -1,7 +1,7 @@
 import * as jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcrypt';
 import { InvalidAuthenticationError } from './auth.commons';
-import { LoginRequest, LoginResponse, AccountMetadata } from './auth.dto';
+import { LoginRequest, LoginResponse, AccountMetadata } from 'types';
 
 import { Injectable } from '@nestjs/common';
 import { UserNotFoundError } from 'src/users/users.common';

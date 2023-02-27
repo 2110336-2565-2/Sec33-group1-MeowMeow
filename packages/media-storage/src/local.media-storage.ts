@@ -1,7 +1,7 @@
 import { readFile, writeFile } from "fs";
 import { join } from "path";
 
-import { backendConfig } from "./../config/src/index";
+import { backendConfig } from "../../config/src/index";
 import { StorageReadError, StorageWriteError } from "./commons";
 
 export class LocalMediaStorage {
@@ -11,7 +11,7 @@ export class LocalMediaStorage {
     this.rootDir = backendConfig.mediaStorage.local.rootDir;
   }
 
-  async read(path): Promise<Buffer> {
+  async read(path: string): Promise<Buffer> {
     return new Promise((resolve, reject) => {
       readFile(join(this.rootDir, path), function (err, data) {
         if (err) {

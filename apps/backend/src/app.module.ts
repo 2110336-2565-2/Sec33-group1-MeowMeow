@@ -8,6 +8,7 @@ import { GuidesModule } from './guides/guides.module';
 import { ReviewsModule } from './reviews/reviews.module';
 import { PostsModule } from './posts/posts.module';
 import { BookingsModule } from './bookings/bookings.module';
+import { MediaModule } from './media/media.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { BookingsModule } from './bookings/bookings.module';
     ReviewsModule,
     PostsModule,
     BookingsModule,
+    MediaModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],

@@ -4,12 +4,10 @@ import { useRouter } from "next/router";
 import { FormEventHandler, useCallback, useState } from "react";
 
 interface IUsePostForm {
-  onError: (message: string, severity: AlertColor) => void;
-  onSuccess: (message: string, severity: AlertColor) => void;
   methodType: "POST" | "PUT";
 }
 
-const usePostForm = ({ onError, onSuccess }: IUsePostForm) => {
+const usePostForm = ({ methodType }: IUsePostForm) => {
   const [isLoading, setLoading] = useState<boolean>(false);
   const router = useRouter();
   const onSubmit: FormEventHandler<HTMLFormElement> = useCallback(

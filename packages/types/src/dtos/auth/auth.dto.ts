@@ -6,7 +6,7 @@ export class LoginRequest {
   @IsEmail()
   email: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: () => String })
   password: string;
 }
 

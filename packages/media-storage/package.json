@@ -15,7 +15,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "src/index.ts",
+  "type": "commonjs",
   "scripts": {
+    "build": "tsc",
+    "dev": "tsc -w",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "K. Jetnipit",

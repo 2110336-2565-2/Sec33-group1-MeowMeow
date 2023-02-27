@@ -11,10 +11,13 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { SearchGuidesRequest, SearchGuidesResponse } from 'types';
+import {
+  GetGuideByIdRequest,
+  SearchGuidesRequest,
+  SearchGuidesResponse,
+} from 'types';
 import { GuidesService } from './guides.service';
 import { ApiCookieAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { GetGuideByIdRequest, GetGuideByIdResponse } from './dtos/getGuideById';
 
 @Controller('guides')
 export class GuidesController {
@@ -87,8 +90,8 @@ export class GuidesController {
     }
   }
 
-  // @Get(':id/reviews/:page')
-  // async getGuideReviews(@Query('id') id: number, @Query('page') page: number) {
-  //   // TODO: Implement this
-  // }
+  @Get(':id/reviews/:page')
+  async getGuideReviews(@Query('id') id: number, @Query('page') page: number) {
+    // TODO: Implement this
+  }
 }

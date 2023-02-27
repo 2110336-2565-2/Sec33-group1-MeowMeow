@@ -3,7 +3,7 @@ import { SearchGuidesRequest, SearchGuidesResponse } from 'types';
 import { GuidesRepository } from './guides.repository';
 import { validate } from 'class-validator';
 import { InvalidRequestError } from 'src/auth/auth.commons';
-import { GetGuideByIdRequest, GetGuideByIdResponse } from './dtos/getGuideById';
+import { GetGuideByIdRequest, GetGuideByIdResponse } from 'types';
 
 export interface GuidesService {
   searchGuides(searchInfo: SearchGuidesRequest): Promise<SearchGuidesResponse>;

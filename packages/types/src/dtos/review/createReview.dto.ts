@@ -5,7 +5,7 @@ import {
   MaxLength,
   Min,
   Max,
-} from 'class-validator';
+} from "class-validator";
 
 export class CreateReviewRequest {
   @IsInt()
@@ -21,8 +21,8 @@ export class CreateReviewRequest {
   @IsNumber(
     { maxDecimalPlaces: 1 },
     {
-      message: 'score must have one decimal place',
-    },
+      message: "score must have one decimal place",
+    }
   )
   @IsNotEmpty()
   score: number;

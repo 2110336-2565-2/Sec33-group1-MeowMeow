@@ -1,5 +1,5 @@
 import { InvalidAuthenticationError } from './auth.commons';
-import { AccountMetadata, LoginRequest, LoginResponse } from './auth.dto';
+import { AccountMetadata, LoginRequest, LoginResponse } from 'types';
 
 import { Injectable } from '@nestjs/common';
 

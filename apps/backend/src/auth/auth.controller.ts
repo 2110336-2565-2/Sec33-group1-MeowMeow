@@ -9,7 +9,7 @@ import {
   Req,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LoginRequest, LoginResponse, LogoutRequest } from './auth.dto';
+import { LoginRequest, LoginResponse, LogoutRequest } from 'types';
 import {
   InvalidAuthenticationError,
   InvalidRequestError,

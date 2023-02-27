@@ -64,6 +64,7 @@ importers:
       ts-loader: ^9.2.3
       ts-node: ^10.0.0
       tsconfig-paths: 4.1.1
+      types: workspace:*
       typescript: ^4.7.4
       webpack: ^5.75.0
     dependencies:
@@ -85,6 +86,7 @@ importers:
       passport-local: 1.0.0
       reflect-metadata: 0.1.13
       rxjs: 7.8.0
+      types: link:../../packages/types
       webpack: 5.75.0
     devDependencies:
       '@nestjs/cli': 9.1.8
@@ -135,6 +137,7 @@ importers:
       next: ^13.1.1
       react: 18.2.0
       react-dom: 18.2.0
+      types: workspace:*
       typescript: 4.9.4
     dependencies:
       '@emotion/cache': 11.10.5
@@ -157,6 +160,7 @@ importers:
       next: 13.1.4_biqbaboplfbrettd7655fr4n2y
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
+      types: link:../../packages/types
       typescript: 4.9.4
 
   packages/config:
@@ -194,13 +198,31 @@ importers:
       eslint: 7.32.0
       eslint-config-next: 13.0.0_yfqovispp7u7jaktymfaqwl2py
       eslint-config-prettier: 8.6.0_eslint@7.32.0
-      eslint-config-turbo: 0.0.7_eslint@7.32.0
+      eslint-config-turbo: 0.0.8_eslint@7.32.0
       eslint-plugin-react: 7.31.8_eslint@7.32.0
     devDependencies:
       typescript: 4.9.4
 
   packages/tsconfig:
     specifiers: {}
+
+  packages/types:
+    specifiers:
+      '@nestjs/common': ^9.0.0
+      '@nestjs/core': ^9.0.0
+      '@nestjs/swagger': ^6.1.4
+      class-transformer: ^0.5.1
+      class-validator: ^0.14.0
+      reflect-metadata: ^0.1.13
+      rxjs: ^7.2.0
+    dependencies:
+      '@nestjs/common': 9.2.1_welcnyot5bzd5wa2aovbkxpi4i
+      '@nestjs/core': 9.2.1_b4pxbpa7chblgbyake5iz5rdmu
+      '@nestjs/swagger': 6.1.4_4fhhxyztwhblafku3krlstrun4
+      class-transformer: 0.5.1
+      class-validator: 0.14.0
+      reflect-metadata: 0.1.13
+      rxjs: 7.8.0
 
   packages/ui:
     specifiers:
@@ -1572,6 +1594,38 @@ packages:
       rxjs: 7.8.0
       tslib: 2.4.1
       uuid: 9.0.0
+
+  /@nestjs/core/9.2.1_b4pxbpa7chblgbyake5iz5rdmu:
+    resolution: {integrity: sha512-a9GkXuu8uXgNgCVW+17iI8kLCltO+HwHpU2IhR+32JKnN2WEQ1YEWU4t3GJ2MNq44YkjIw9zrKvFkjJBlYrNbQ==}
+    requiresBuild: true
+    peerDependencies:
+      '@nestjs/common': ^9.0.0
+      '@nestjs/microservices': ^9.0.0
+      '@nestjs/platform-express': ^9.0.0
+      '@nestjs/websockets': ^9.0.0
+      reflect-metadata: ^0.1.12
+      rxjs: ^7.1.0
+    peerDependenciesMeta:
+      '@nestjs/microservices':
+        optional: true
+      '@nestjs/platform-express':
+        optional: true
+      '@nestjs/websockets':
+        optional: true
+    dependencies:
+      '@nestjs/common': 9.2.1_welcnyot5bzd5wa2aovbkxpi4i
+      '@nuxtjs/opencollective': 0.3.2
+      fast-safe-stringify: 2.1.1
+      iterare: 1.2.1
+      object-hash: 3.0.0
+      path-to-regexp: 3.2.0
+      reflect-metadata: 0.1.13
+      rxjs: 7.8.0
+      tslib: 2.4.1
+      uuid: 9.0.0
+    transitivePeerDependencies:
+      - encoding
+    dev: false
 
   /@nestjs/core/9.2.1_e6la6qvsclaae2becwjnmfvsuq:
     resolution: {integrity: sha512-a9GkXuu8uXgNgCVW+17iI8kLCltO+HwHpU2IhR+32JKnN2WEQ1YEWU4t3GJ2MNq44YkjIw9zrKvFkjJBlYrNbQ==}
@@ -3757,13 +3811,13 @@ packages:
       eslint: 8.32.0
     dev: true
 
-  /eslint-config-turbo/0.0.7_eslint@7.32.0:
-    resolution: {integrity: sha512-WbrGlyfs94rOXrhombi1wjIAYGdV2iosgJRndOZtmDQeq5GLTzYmBUCJQZWtLBEBUPCj96RxZ2OL7Cn+xv/Azg==}
+  /eslint-config-turbo/0.0.8_eslint@7.32.0:
+    resolution: {integrity: sha512-ijj6uv0QX2kWahg3OYnTK1/q4MueXsqY2uE4MP9yeUA5CzVhL7GU+biKlv1BfMMqPltixHUcpZoW4yyNLCnMiw==}
     peerDependencies:
       eslint: '>6.6.0'
     dependencies:
       eslint: 7.32.0
-      eslint-plugin-turbo: 0.0.7_eslint@7.32.0
+      eslint-plugin-turbo: 0.0.8_eslint@7.32.0
     dev: false
 
   /eslint-import-resolver-node/0.3.7:
@@ -4069,8 +4123,8 @@ packages:
       string.prototype.matchall: 4.0.8
     dev: false
 
-  /eslint-plugin-turbo/0.0.7_eslint@7.32.0:
-    resolution: {integrity: sha512-iajOH8eD4jha3duztGVBD1BEmvNrQBaA/y3HFHf91vMDRYRwH7BpHSDFtxydDpk5ghlhRxG299SFxz7D6z4MBQ==}
+  /eslint-plugin-turbo/0.0.8_eslint@7.32.0:
+    resolution: {integrity: sha512-pExSCmjWw/KFKb3/0PVqxiWb30FbcwDEf6kKv3alvNBSVEzDHalyAGHc9klbLSG+nFmbkfNE3Ky/UHDryCqt8g==}
     peerDependencies:
       eslint: '>6.6.0'
     dependencies:

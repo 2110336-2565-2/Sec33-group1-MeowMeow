@@ -1,4 +1,4 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import {
   IsDateString,
   IsInt,
@@ -6,8 +6,8 @@ import {
   IsOptional,
   Max,
   Min,
-} from 'class-validator';
-import { Type } from 'class-transformer';
+} from "class-validator";
+import { Type } from "class-transformer";
 
 export class SearchGuidesRequest {
   @Type(() => Number)
@@ -43,21 +43,21 @@ export class SearchGuidesRequest {
 }
 
 export class SearchGuidesGuideResponse {
-  @ApiProperty()
+  @ApiProperty({ type: () => Number })
   id: number;
-  @ApiProperty()
+  @ApiProperty({ type: () => String })
   firstName: string;
-  @ApiProperty()
+  @ApiProperty({ type: () => String })
   lastName: string;
-  @ApiProperty()
+  @ApiProperty({ type: () => Number })
   fee: number;
-  @ApiProperty()
+  @ApiProperty({ type: () => String })
   certificate: string;
-  @ApiProperty()
+  @ApiProperty({ type: () => Number })
   averageReviewScore: number;
 }
 
 export class SearchGuidesResponse {
-  @ApiProperty({ isArray: true, type: SearchGuidesGuideResponse })
+  @ApiProperty({ isArray: true, type: () => SearchGuidesGuideResponse })
   results: SearchGuidesGuideResponse[];
 }

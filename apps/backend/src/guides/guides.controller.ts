@@ -9,11 +9,9 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { SearchGuidesRequest, SearchGuidesResponse } from './dtos/searchGuide';
+import { SearchGuidesRequest, SearchGuidesResponse } from 'types';
 import { GuidesService } from './guides.service';
 import { ApiCookieAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { off } from 'process';
-import { IsEmail } from 'class-validator';
 
 @Controller('guides')
 export class GuidesController {

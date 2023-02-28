@@ -10,6 +10,9 @@ import {
 
 export class UpdatePostRequest {
   // Todo: Implement this
+  @IsInt()
+  @IsNotEmpty()
+  authorId: number;
 
   @IsOptional()
   title: string;
@@ -36,11 +39,11 @@ export class UpdatePostResponse {
 
 class post {
   id: number;
-  authorId: number;
-  createdAt: Date;
+  createdAt: Date
   updatedAt: Date;
   title: string;
   content: string;
-  tags: string[];
+  authorId: number;
   fee: number;
+  tags: string[];
 }

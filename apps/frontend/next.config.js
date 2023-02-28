@@ -6,7 +6,7 @@ const nextConfig = {
   experimental: {
     appDir: false,
   },
-  publicRuntimeConfig: {
+  env: {
     backendBaseURL: config.frontendConfig.BACKEND_BASE_URL,
   },
 };

@@ -33,7 +33,6 @@ const AuthProvider = ({ children }: IAuthProviderProps) => {
         setUser(data);
       } catch (err) {
         window.location.href = "/login";
-        console.log("err");
       }
     };
     fetchProfile();

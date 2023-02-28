@@ -8,6 +8,7 @@ on:
       - dev
     paths:
       - 'apps/frontend/**'
+  workflow_dispatch:
 
 jobs:
   deploy_image:

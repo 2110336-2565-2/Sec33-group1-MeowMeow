@@ -10,6 +10,7 @@ on:
       - 'apps/backend/**'
       - 'packages/config/**'
       - 'packages/database/**'
+  workflow_dispatch:
 
 jobs:
   deploy_image:

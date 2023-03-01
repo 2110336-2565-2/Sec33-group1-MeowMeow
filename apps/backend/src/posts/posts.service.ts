@@ -5,8 +5,9 @@ import {
   DeletePostResponse,
   UpdatePostRequest,
   UpdatePostResponse,
-} from '../../../../packages/types/src';
+} from 'types';
 
+import { PostsRepository } from './posts.repository';
 export interface PostsService {
   createPost(createPostDto: CreatePostRequest): Promise<CreatePostResponse>;
   updatePost(
@@ -17,12 +18,33 @@ export interface PostsService {
 }
 @Injectable()
 export class PostsServiceImpl {
-  constructor() {}
+  constructor(private readonly postsRepo: PostsRepository) {}
+
   async createPost(
     createPostDto: CreatePostRequest,
   ): Promise<CreatePostResponse> {
     //TODO: Implement this
+    const post = await this.postsRepo.createPost({
+      title: createPostDto.title,
+      createdAt: new Date(),
+      content: createPostDto.content,
+      authorId: createPostDto.authorId,
+      fee: createPostDto.fee,
+      tags: createPostDto.tags,
+    });
+
+    return {
+      message: 'success',
+      id: post.id,
+      createdAt: post.createdAt,
+      title: post.title,
+      content: post.content,
+      authorId: post.authorId,
+      fee: post.fee.toNumber(),
+      tags: post.tags,
+    };
   }
+
   async updatePost(
     updatePostDto: UpdatePostRequest,
     id: number,

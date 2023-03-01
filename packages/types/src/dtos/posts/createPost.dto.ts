@@ -15,10 +15,6 @@ export class CreatePostRequest {
   authorId: number;
 
   @IsNotEmpty()
-  @IsDateString()
-  postTime: string;
-
-  @IsNotEmpty()
   title: string;
 
   @IsOptional()
@@ -36,10 +32,10 @@ export class CreatePostRequest {
 
 export class CreatePostResponse {
   // Todo: Implement this
+  message: string;
   id: number;
   authorId: number;
-  authorName: string;
-  createdAt: string;
+  createdAt: Date;
   title: string;
   content: string;
   tags: string[];

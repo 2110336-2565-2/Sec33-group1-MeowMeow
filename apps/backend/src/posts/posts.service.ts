@@ -50,6 +50,38 @@ export class PostsServiceImpl {
     id: number,
   ): Promise<UpdatePostResponse> {
     //TODO: Implement this
+    const post = await this.postsRepo.updatePost(id, {
+      title: updatePostDto.title,
+      content: updatePostDto.content,
+      fee: updatePostDto.fee,
+      tags: updatePostDto.tags,
+    });
+    const fPost = post.formerPost;
+    const uPost = post.updatedPost;
+
+    return {
+      message: 'success',
+      formerPost: {
+        id: fPost.id,
+        createdAt: fPost.createdAt,
+        updatedAt: fPost.updatedAt,
+        title: fPost.title,
+        content: fPost.content,
+        authorId: fPost.authorId,
+        fee: fPost.fee.toNumber(),
+        tags: fPost.tags,
+      },
+      updatedPost: {
+        id: uPost.id,
+        createdAt: uPost.createdAt,
+        updatedAt: uPost.updatedAt,
+        title: uPost.title,
+        content: uPost.content,
+        authorId: uPost.authorId,
+        fee: uPost.fee.toNumber(),
+        tags: uPost.tags,
+      },
+    };
   }
   async deletePost(id: number): Promise<DeletePostResponse> {
     //TODO: Implement this

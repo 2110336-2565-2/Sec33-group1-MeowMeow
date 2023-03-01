@@ -6,6 +6,12 @@ import { FailedRelationConstraintError } from 'src/reviews/reviews.common';
 export class PostsRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
+  async getPost(id: number) {
+    const post = await this.prismaService.post.findUnique({
+      where: { id },
+    });
+    return post;
+  }
   async createPost(data: {
     title: string;
     createdAt: Date;
@@ -32,6 +38,34 @@ export class PostsRepository {
           throw new FailedRelationConstraintError('relation constraint failed');
         }
       }
+      throw e;
+    }
+  }
+
+  async updatePost(
+    id: number,
+    data: {
+      title: string;
+      content: string;
+      fee: number;
+      tags: string[];
+    },
+  ) {
+    try {
+      const fpost = await this.prismaService.post.findUniqueOrThrow({
+        where: { id },
+      });
+      const post = await this.prismaService.post.update({
+        where: { id },
+        data: {
+          title: data.title,
+          content: data.content,
+          fee: data.fee,
+          tags: data.tags,
+        },
+      });
+      return { formerPost: fpost, updatedPost: post };
+    } catch (e) {
       throw e;
     }
   }

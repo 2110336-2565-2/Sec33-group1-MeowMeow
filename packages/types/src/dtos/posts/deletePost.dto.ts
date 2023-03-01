@@ -3,12 +3,11 @@ export class DeletePostRequest {
 }
 
 export class DeletePostResponse {
-  // Todo: Implement this
+  message: string;
   id: number;
   authorId: number;
-  authorName: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: Date;
+  updatedAt: Date;
   title: string;
   content: string;
   tags: string[];

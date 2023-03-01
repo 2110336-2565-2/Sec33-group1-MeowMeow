@@ -69,4 +69,14 @@ export class PostsRepository {
       throw e;
     }
   }
+  async deletePost(id: number) {
+    try {
+      const post = await this.prismaService.post.delete({
+        where: { id },
+      });
+      return post;
+    } catch (e) {
+      throw e;
+    }
+  }
 }

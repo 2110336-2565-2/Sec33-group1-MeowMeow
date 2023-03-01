@@ -85,5 +85,17 @@ export class PostsServiceImpl {
   }
   async deletePost(id: number): Promise<DeletePostResponse> {
     //TODO: Implement this
+    const post = await this.postsRepo.deletePost(id);
+    return {
+      message: 'success',
+      id: post.id,
+      createdAt: post.createdAt,
+      updatedAt: post.updatedAt,
+      title: post.title,
+      content: post.content,
+      authorId: post.authorId,
+      fee: post.fee.toNumber(),
+      tags: post.tags,
+    };
   }
 }

@@ -24,6 +24,7 @@ RUN pnpm prune --prod
 RUN cd apps/backend && pnpm prune --prod && cd ../..
 RUN cd packages/config && pnpm prune --prod && cd ../..
 RUN cd packages/database && pnpm prune --prod && cd ../..
+RUN cd packages/types && pnpm prune --prod && cd ../..
 
 FROM base AS deploy
 
@@ -49,5 +50,9 @@ COPY --from=builder --chown=user:container /app/packages/database/package.json /
 COPY --from=builder --chown=user:container /app/packages/database/node_modules /app/packages/database/node_modules
 COPY --from=builder --chown=user:container /app/packages/database/dist /app/packages/database/dist
 COPY --chown=user:container ./packages/database/prisma /app/packages/database/prisma
+
+COPY --from=builder --chown=user:container /app/packages/types/package.json /app/packages/types/package.json
+COPY --from=builder --chown=user:container /app/packages/types/node_modules /app/packages/types/node_modules
+COPY --from=builder --chown=user:container /app/packages/types/dist /app/packages/types/dist
 
 CMD pnpm --filter database db:migrate:deploy && pnpm --filter backend start:prod

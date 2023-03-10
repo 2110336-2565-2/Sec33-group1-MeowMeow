@@ -1,6 +1,8 @@
 import {
   Controller,
   Get,
+  HttpException,
+  HttpStatus,
   Inject,
   Param,
   Req,
@@ -19,12 +21,15 @@ export class MediaController {
 
   @UseGuards(AuthGuard)
   @Get()
-  async download(
-    @Param('id') id: string,
-    @Req() req,
-    @Res({ passthrough: true }) res,
-  ) {
-    const account: AccountMetadata = req.account;
-    console.log(account);
+  async download(@Param('id') id: string, @Res({ passthrough: true }) res) {
+    try {
+      const resBody = await this.mediaService.download({ id: id });
+      res.status(HttpStatus.OK).send(resBody.file);
+    } catch (e) {
+      throw new HttpException(
+        'internal server error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 }

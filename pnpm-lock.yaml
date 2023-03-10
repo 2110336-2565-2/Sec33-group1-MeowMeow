@@ -204,6 +204,12 @@ importers:
     devDependencies:
       typescript: 4.9.4
 
+  packages/media-storage:
+    specifiers:
+      config: workspace:*
+    dependencies:
+      config: link:../config
+
   packages/tsconfig:
     specifiers: {}
 

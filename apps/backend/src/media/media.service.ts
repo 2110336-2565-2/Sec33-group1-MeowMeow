@@ -1,4 +1,4 @@
-import { Inject } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { join } from 'path';
 import { UploadRequest, UploadResponse } from 'types';
 import { DownloadRequest, DownloadResponse } from 'types';
@@ -13,6 +13,7 @@ export interface MediaService {
   download(req: DownloadRequest): Promise<DownloadResponse>;
 }
 
+@Injectable()
 export class MediaServiceImpl {
   private pathPrefix: string;
   constructor(

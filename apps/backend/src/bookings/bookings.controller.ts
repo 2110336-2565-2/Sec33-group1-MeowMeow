@@ -10,9 +10,15 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { AcceptBookingResponse, DeclineBookingResponse } from 'types';
+import {
+  AcceptBookingResponse,
+  DeclineBookingResponse,
+  GetBookingsByUserIdRequest,
+  GetBookingsByUserIdResponse,
+} from 'types';
 import { RecordNotFound } from './bookings.common';
 import { IBookingsService } from './bookings.service';
+import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 @Controller('bookings')
 export class BookingsController {
@@ -26,16 +32,76 @@ export class BookingsController {
     // Todo: Implement this
   }
 
+  @ApiOperation({
+    summary: 'create new booking',
+  })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'successfully craete a booking',
+    type: GetBookingsByUserIdResponse,
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: '',
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: '',
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'internal server error',
+  })
   @Post()
   async createBooking() {
     // Todo: Implement this
   }
 
-  @Put()
+  @ApiOperation({
+    summary: 'update booking by ID',
+  })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'successfully get bookings',
+    type: GetBookingsByUserIdResponse,
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: '',
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: '',
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'internal server error',
+  })
+  @Put(':id')
   async updateBooking() {
     // Todo: Implement this
   }
 
+  @ApiOperation({
+    summary: 'accept booking by ID',
+  })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'successfully accept booking',
+    type: GetBookingsByUserIdResponse,
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: '',
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: '',
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'internal server error',
+  })
   @Post(':id/accept')
   @HttpCode(201)
   async acceptBooking(
@@ -54,6 +120,26 @@ export class BookingsController {
     }
   }
 
+  @ApiOperation({
+    summary: 'decline booking by ID',
+  })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'successfully decline bookings',
+    type: GetBookingsByUserIdResponse,
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: '',
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: '',
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'internal server error',
+  })
   @Post(':id/decline')
   async declineBooking(
     @Param('id', ParseIntPipe) id: number,

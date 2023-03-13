@@ -58,7 +58,7 @@ export class AuthServiceImpl {
   }
 
   async validate(credential: string): Promise<AccountMetadata> {
-    const account = this.decodeToken(credential);
+    const account = await this.decodeToken(credential);
     return account;
   }
 

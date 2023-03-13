@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { join } from 'path';
+import * as crypto from 'crypto';
 import { UploadRequest, UploadResponse } from 'types';
 import { DownloadRequest, DownloadResponse } from 'types';
 
@@ -9,7 +10,7 @@ export interface MediaStorage {
 }
 
 export interface MediaService {
-  upload(req: DownloadRequest): Promise<UploadResponse>;
+  upload(req: UploadRequest): Promise<UploadResponse>;
   download(req: DownloadRequest): Promise<DownloadResponse>;
 }
 
@@ -18,13 +19,11 @@ export class MediaServiceImpl {
   private pathPrefix: string;
   constructor(
     @Inject('MediaStorage') private readonly mediaStorage: MediaStorage,
-  ) {
-    this.pathPrefix = 'file';
-  }
+  ) {}
 
   async upload(req: UploadRequest): Promise<UploadResponse> {
     const fileId = crypto.randomUUID();
-    const path = join(this.pathPrefix, fileId);
+    const path = fileId;
     await this.mediaStorage.write(path, req.file);
     return {
       message: 'success',
@@ -33,7 +32,8 @@ export class MediaServiceImpl {
   }
 
   async download(req: DownloadRequest): Promise<DownloadResponse> {
-    const path = join(this.pathPrefix, req.id);
+    const path = req.id;
+    ``;
     const file = await this.mediaStorage.read(path);
     return {
       message: 'success',

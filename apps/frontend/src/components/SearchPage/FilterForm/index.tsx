@@ -27,9 +27,6 @@ export default function FilterForm({ filterStuff }: FilterFormProps) {
           mx: 2,
         }}
       >
-        {
-          JSON.stringify(tempOptions) // tests
-        }
         <Typography variant="h6">Filter</Typography>
         <TextField
           label="Location"
@@ -61,7 +58,7 @@ export default function FilterForm({ filterStuff }: FilterFormProps) {
           handleChangeEndDate={handleChangeEndDate}
         />
 
-        <Button type="submit" variant="contained">
+        <Button type="submit" variant="contained" sx={{ color: "white" }}>
           Apply
         </Button>
       </Stack>

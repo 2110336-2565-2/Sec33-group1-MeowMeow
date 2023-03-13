@@ -1,13 +1,26 @@
-import { MoreHoriz } from "@mui/icons-material";
-import { Avatar, Box, IconButton, Typography } from "@mui/material";
+import { MoreHoriz, Delete } from "@mui/icons-material";
+import {
+  Avatar,
+  Box,
+  Button,
+  IconButton,
+  Menu,
+  MenuItem,
+  Stack,
+  Typography,
+} from "@mui/material";
+import { useState } from "react";
+import OptionMenu from "./OptionMenu";
 
 interface ICardHeader {
   profile: string;
   name: string;
+  isOwner: boolean;
 }
 
 export default function CardHeader(props: ICardHeader) {
-  const { profile, name } = props;
+  const { profile, name, isOwner } = props;
+
   return (
     <>
       <Box display="flex" gap={2} alignItems="center">
@@ -20,9 +33,7 @@ export default function CardHeader(props: ICardHeader) {
         />
         <Typography variant="h6">{name}</Typography>
       </Box>
-      <IconButton>
-        <MoreHoriz />
-      </IconButton>
+      <OptionMenu isOwner={isOwner} />
     </>
   );
 }

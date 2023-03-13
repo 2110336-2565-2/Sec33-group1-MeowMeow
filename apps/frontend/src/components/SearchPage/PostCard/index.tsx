@@ -4,6 +4,8 @@ import { IPost } from "../types";
 import CardContent from "./CardContent";
 import CardHeader from "./CardHeader";
 
+const myName = "John Doe";
+
 export const mockPost: IPost = {
   id: 1,
   title: "Trip 3 days 2 nights to Bali",
@@ -38,7 +40,7 @@ export default function PostCard(props: IPost) {
         px={2}
         xs={12}
       >
-        <CardHeader {...author} />
+        <CardHeader {...author} isOwner={myName === author.name} />
       </Grid>
       <Grid
         item

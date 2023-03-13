@@ -1,5 +1,5 @@
 import { Delete, Edit, MoreHoriz, Report } from "@mui/icons-material";
-import { IconButton, Menu, MenuItem, Stack } from "@mui/material";
+import { Box, IconButton, Menu, MenuItem, Stack } from "@mui/material";
 import { useState } from "react";
 
 interface IOptionMenu {
@@ -55,8 +55,8 @@ const OptionMenu = (props: IOptionMenu) => {
           <Report />
           Report
         </MenuItem>
-        {isOwner ? (
-          <>
+        {isOwner && (
+          <Box>
             <MenuItem onClick={handleClose} sx={{ gap: 1 }}>
               <Edit />
               Edit
@@ -67,9 +67,7 @@ const OptionMenu = (props: IOptionMenu) => {
             >
               <Delete /> Delete
             </MenuItem>
-          </>
-        ) : (
-          <></>
+          </Box>
         )}
       </Menu>
     </>

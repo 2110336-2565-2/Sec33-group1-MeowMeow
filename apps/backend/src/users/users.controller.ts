@@ -11,10 +11,12 @@ import {
   Put,
   Req,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { CreateUserRequest, AccountMetadata } from 'types';
 import { PropertyAlreadyUsedError, UserNotFoundError } from './users.common';
 import { UsersService } from './users.service';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('users')
 export class UsersController {
@@ -22,6 +24,7 @@ export class UsersController {
     @Inject('UsersService') private readonly usersService: UsersService,
   ) {}
 
+  @UseGuards(AuthGuard)
   @Get('/profiles')
   async getUserProfile(@Req() req, @Res({ passthrough: true }) res) {
     try {
@@ -78,6 +81,7 @@ export class UsersController {
     }
   }
 
+  @UseGuards(AuthGuard)
   @Put('/users')
   async editUserProfile(
     @Req() req,

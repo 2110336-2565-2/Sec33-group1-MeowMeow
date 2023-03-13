@@ -1,0 +1,13 @@
+{
+  "name": "media-storage",
+  "main": "dist/index.js",
+  "types": "src/index.ts",
+  "type": "commonjs",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc -w"
+  },
+  "dependencies": {
+    "config": "workspace:*"
+  }
+}

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import {
   CreatePostRequest,
   CreatePostResponse,
@@ -12,9 +12,10 @@ export interface PostsService {
   createPost(createPostDto: CreatePostRequest): Promise<CreatePostResponse>;
   updatePost(
     updatePostDto: UpdatePostRequest,
-    id: number,
+    postId: number,
+    authorId: number,
   ): Promise<UpdatePostResponse>;
-  deletePost(id: number): Promise<DeletePostResponse>;
+  deletePost(postId: number, authorId: number): Promise<DeletePostResponse>;
 }
 @Injectable()
 export class PostsServiceImpl {
@@ -47,17 +48,30 @@ export class PostsServiceImpl {
 
   async updatePost(
     updatePostDto: UpdatePostRequest,
-    id: number,
+    postId: number,
+    authorId: number,
   ): Promise<UpdatePostResponse> {
     //TODO: Implement this
-    const post = await this.postsRepo.updatePost(id, {
+
+    // get post by id
+    const fPost = await this.postsRepo.getPost(postId);
+    if (!fPost) {
+      throw new HttpException('Post not found', HttpStatus.NOT_FOUND);
+    }
+    // check if editor is the author of the post
+    else if (fPost.authorId != authorId) {
+      throw new HttpException(
+        'You are forbidden from editing thispost',
+        HttpStatus.FORBIDDEN,
+      );
+    }
+
+    const uPost = await this.postsRepo.updatePost(postId, {
       title: updatePostDto.title,
       content: updatePostDto.content,
       fee: updatePostDto.fee,
       tags: updatePostDto.tags,
     });
-    const fPost = post.formerPost;
-    const uPost = post.updatedPost;
 
     return {
       message: 'success',
@@ -83,9 +97,24 @@ export class PostsServiceImpl {
       },
     };
   }
-  async deletePost(id: number): Promise<DeletePostResponse> {
-    //TODO: Implement this
-    const post = await this.postsRepo.deletePost(id);
+  async deletePost(
+    postId: number,
+    authorId: number,
+  ): Promise<DeletePostResponse> {
+    //get post by id
+    const fPost = await this.postsRepo.getPost(postId);
+    if (!fPost) {
+      throw new HttpException('Post not found', HttpStatus.NOT_FOUND);
+    }
+    // check if editor is the author of the post
+    else if (fPost.authorId != authorId) {
+      throw new HttpException(
+        'You are forbidden from deleting this post',
+        HttpStatus.FORBIDDEN,
+      );
+    }
+
+    const post = await this.postsRepo.deletePost(postId);
     return {
       message: 'success',
       id: post.id,

@@ -1,5 +1,13 @@
-export class GetBookingsByUserIdRequest {}
+export class GetBookingsByUserIdRequest {
+  userId: number;
+}
 
 export class GetBookingsByUserIdResponse {
-  // Todo: Implement this
+  results: {
+    id: number;
+    startDate: string;
+    endDate: string;
+    bookingStatus: string;
+    postId: number;
+  }[];
 }

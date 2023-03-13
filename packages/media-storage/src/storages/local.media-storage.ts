@@ -1,4 +1,4 @@
-import { readFile, writeFile } from "fs";
+import { readFile, writeFile, existsSync, mkdirSync } from "fs";
 import { join } from "path";
 import { backendConfig } from "config";
 import { StorageReadError, StorageWriteError } from "./commons";
@@ -8,6 +8,7 @@ export class LocalMediaStorage {
 
   constructor() {
     this.rootDir = backendConfig.mediaStorage.local.rootDir;
+    this.ensureStorageDir();
   }
 
   async read(path: string): Promise<Buffer> {
@@ -30,5 +31,11 @@ export class LocalMediaStorage {
         resolve();
       });
     });
+  }
+
+  private async ensureStorageDir(): Promise<void> {
+    if (!existsSync(this.rootDir)) {
+      mkdirSync(this.rootDir);
+    }
   }
 }

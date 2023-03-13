@@ -21,7 +21,7 @@ export const mockPost: IPost = {
 };
 
 export default function PostCard(props: IPost) {
-  const { id, title, author, body, price, image, location, amount } = props;
+  const { title, author, image } = props;
   return (
     <Grid
       container
@@ -50,7 +50,7 @@ export default function PostCard(props: IPost) {
         sx={{
           height: {
             xs: 300,
-            md: 200,
+            md: "auto",
           },
         }}
       >

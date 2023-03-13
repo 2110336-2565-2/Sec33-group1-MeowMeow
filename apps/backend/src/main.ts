@@ -10,7 +10,11 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const prismaService = app.get(PrismaService);
   const port = config.port;
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(
+    new ValidationPipe({
+      forbidUnknownValues: false,
+    }),
+  );
   if (config.swagger.enable) {
     const swaggerConfig = new DocumentBuilder()
       .setTitle('API Document')

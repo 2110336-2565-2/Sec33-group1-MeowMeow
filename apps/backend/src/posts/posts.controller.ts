@@ -17,7 +17,7 @@ import {
   CreatePostResponse,
   UpdatePostRequest,
   UpdatePostResponse,
-} from '../../../../packages/types/src';
+} from 'types';
 import { PostsService } from './posts.service';
 
 @Controller('posts')

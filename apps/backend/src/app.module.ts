@@ -29,10 +29,6 @@ import { UsersRepository } from './users/users.repository';
     AppService,
     PrismaService,
     {
-      provide: APP_GUARD,
-      useClass: AuthGuard,
-    },
-    {
       provide: 'AuthService',
       useClass: AuthServiceImpl,
     },

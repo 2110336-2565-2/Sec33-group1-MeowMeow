@@ -2,12 +2,13 @@ import theme from "@/config/theme";
 import { Button, Dialog, DialogProps, Grid, IconButton } from "@mui/material";
 import React from "react";
 import CancelIcon from "@mui/icons-material/Cancel";
-import Review from "../../pages/review";
+import Review from ".";
 import CreateIcon from "@mui/icons-material/Create";
+import { useState } from "react";
 
 export default function ReviewDialog() {
-  const [open, setOpen] = React.useState(false);
-  const [scroll, setScroll] = React.useState<DialogProps["scroll"]>("paper");
+  const [open, setOpen] = useState(false);
+  const [scroll, setScroll] = useState<DialogProps["scroll"]>("paper");
 
   const handleClickOpen = (scrollType: DialogProps["scroll"]) => () => {
     setOpen(true);

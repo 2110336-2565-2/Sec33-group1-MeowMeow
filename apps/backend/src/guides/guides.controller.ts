@@ -13,11 +13,13 @@ import {
 } from '@nestjs/common';
 import {
   GetGuideByIdRequest,
+  GetGuideReviewsRequest,
   SearchGuidesRequest,
   SearchGuidesResponse,
 } from 'types';
 import { GuidesService } from './guides.service';
 import { ApiCookieAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { Response } from 'express';
 
 @Controller('guides')
 export class GuidesController {
@@ -91,7 +93,19 @@ export class GuidesController {
   }
 
   @Get(':id/reviews/:page')
-  async getGuideReviews(@Query('id') id: number, @Query('page') page: number) {
-    // TODO: Implement this
+  @UsePipes(
+    new ValidationPipe({
+      transform: true,
+      transformOptions: { enableImplicitConversion: true },
+    }),
+  )
+  async getGuideReviews(
+    @Param() queryParams: GetGuideReviewsRequest,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    let resBody = {
+      paramReceived: queryParams,
+    };
+    res.status(HttpStatus.OK).send(resBody);
   }
 }

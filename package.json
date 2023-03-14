@@ -42,8 +42,5 @@
     "extends": [
       "@commitlint/config-conventional"
     ]
-  },
-  "dependencies": {
-    "@mui/x-date-pickers": "^5.0.19"
   }
 }

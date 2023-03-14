@@ -2,7 +2,7 @@ import Detail from "@/components/review/detail";
 import Star from "@/components/review/star";
 import theme from "@/config/theme";
 import useReviewForm from "@/hooks/useReviewForm";
-import useSnackbar from "@/hooks/useSnackbar";
+import useCustomSnackbar from "@/hooks/useCustomSnackbar";
 import {
   Alert,
   Button,
@@ -19,7 +19,7 @@ interface reviewProps {
 }
 
 export default function Review(props: reviewProps) {
-  const { onClose, onExit, isOpen, messageInfo } = useSnackbar();
+  const { onClose, onExit, isOpen, messageInfo } = useCustomSnackbar();
   const { onSubmit, isLoading } = useReviewForm();
 
   if (isLoading) {

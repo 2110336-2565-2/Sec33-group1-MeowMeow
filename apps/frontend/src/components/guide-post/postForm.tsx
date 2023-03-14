@@ -9,7 +9,7 @@ import {
 import dayjs, { Dayjs } from "dayjs";
 import React from "react";
 import usePostForm from "@/hooks/usePostForm";
-import useSnackbar from "@/hooks/useSnackbar";
+import useCustomSnackbar from "@/hooks/useCustomSnackbar";
 import useEditPostForm from "@/hooks/useEditForm";
 
 export interface IPostForm {
@@ -29,7 +29,7 @@ export default function PostForm({ methodType }: IPostForm) {
     setStartDate(newValue);
   };
 
-  const { onClose, onExit, isOpen, messageInfo } = useSnackbar();
+  const { onClose, onExit, isOpen, messageInfo } = useCustomSnackbar();
   const { onSubmit, isLoading } = usePostForm({
     methodType: methodType,
   });

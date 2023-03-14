@@ -22,6 +22,7 @@ import { UsersRepository } from 'src/users/users.repository';
     ReviewsRepository,
     PrismaService,
   ],
+  exports: ['ReviewsService'],
 })
 export class ReviewsModule {
   configure(consumer: MiddlewareConsumer) {

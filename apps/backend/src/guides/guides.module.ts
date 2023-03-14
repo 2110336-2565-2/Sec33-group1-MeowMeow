@@ -6,6 +6,7 @@ import { GuidesRepository } from './guides.repository';
 import { AuthMiddleware } from 'src/common/middleware/auth.middleware';
 import { AuthServiceImpl } from 'src/auth/auth.service';
 import { UsersRepository } from 'src/users/users.repository';
+import { ReviewsModule } from 'src/reviews/reviews.module';
 
 @Module({
   controllers: [GuidesController],
@@ -22,6 +23,7 @@ import { UsersRepository } from 'src/users/users.repository';
     GuidesRepository,
     PrismaService,
   ],
+  imports: [ReviewsModule],
 })
 export class GuidesModule {
   configure(consumer: MiddlewareConsumer) {

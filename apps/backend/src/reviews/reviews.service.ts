@@ -1,10 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import { CreateReviewRequest, CreateReviewResponse } from 'types';
+import {
+  CreateReviewRequest,
+  CreateReviewResponse,
+  GetGuideReviewsRequest,
+  GetGuideReviewsResponse,
+} from 'types';
 import { InvalidRequestError } from 'src/auth/auth.commons';
 import { ReviewsRepository } from './reviews.repository';
+import { validate } from 'class-validator';
 
 export interface ReviewsService {
   createReview(req: CreateReviewRequest);
+  getGuideReviews(
+    req: GetGuideReviewsRequest,
+  ): Promise<GetGuideReviewsResponse>;
 }
 
 @Injectable()
@@ -32,5 +41,16 @@ export class ReviewsServiceImpl {
       score: review.score.toNumber(),
       text: review.text,
     };
+  }
+
+  async getGuideReviews(
+    req: GetGuideReviewsRequest,
+  ): Promise<GetGuideReviewsResponse> {
+    const err = await validate(req);
+    if (err.length > 0) {
+      throw new InvalidRequestError(err.toString());
+    }
+    const guideReviews = await this.reviewsRepo.getGuideReviews(req);
+    return { reviews: guideReviews };
   }
 }

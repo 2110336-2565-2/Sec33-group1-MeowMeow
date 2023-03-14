@@ -20,11 +20,13 @@ import {
 import { GuidesService } from './guides.service';
 import { ApiCookieAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { Response } from 'express';
+import { ReviewsService } from 'src/reviews/reviews.service';
 
 @Controller('guides')
 export class GuidesController {
   constructor(
     @Inject('GuidesService') private readonly guidesService: GuidesService,
+    @Inject('ReviewsService') private readonly reviewsService: ReviewsService,
   ) {}
 
   @ApiCookieAuth('access_token')
@@ -103,9 +105,12 @@ export class GuidesController {
     @Param() queryParams: GetGuideReviewsRequest,
     @Res({ passthrough: true }) res: Response,
   ) {
-    let resBody = {
-      paramReceived: queryParams,
-    };
-    res.status(HttpStatus.OK).send(resBody);
+    try {
+      const reviews = await this.reviewsService.getGuideReviews(queryParams);
+      res.status(HttpStatus.OK).send(reviews);
+    } catch (e) {
+      console.log(e);
+      throw e;
+    }
   }
 }

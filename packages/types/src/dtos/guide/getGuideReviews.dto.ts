@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
-import { IsInt } from "class-validator";
+import { IsInt, Min } from "class-validator";
 
 export class GetGuideReviewsRequest {
   @Type(() => Number)
@@ -9,6 +9,7 @@ export class GetGuideReviewsRequest {
 
   @Type(() => Number)
   @IsInt()
+  @Min(1)
   page: number;
 }
 

@@ -37,15 +37,4 @@ export class GuidesServiceImpl {
     const guideResult = await this.guidesRepo.getGuideById(req.id);
     return guideResult;
   }
-
-  async getGuideReviews(
-    req: GetGuideReviewsRequest,
-  ): Promise<GetGuideReviewsResponse> {
-    const err = await validate(req);
-    if (err.length > 0) {
-      throw new InvalidRequestError(err.toString());
-    }
-    const guideReviews = await this.guidesRepo.getGuideReviews(req);
-    return { reviews: guideReviews };
-  }
 }

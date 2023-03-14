@@ -110,22 +110,4 @@ export class GuidesRepository {
       console.log(e);
     }
   }
-
-  async getGuideReviews(param: { id: number; page: number }): Promise<
-    {
-      id: number;
-      guideId: number;
-      reviewerId: number;
-      score: number;
-      text: string;
-    }[]
-  > {
-    try {
-      const maxPage = 10;
-      const results = await this.prismaService.$queryRaw<any[]>`
-        
-      `;
-    } catch {}
-    return;
-  }
 }

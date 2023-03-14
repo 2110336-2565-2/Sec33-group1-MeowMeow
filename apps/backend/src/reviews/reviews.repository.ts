@@ -34,4 +34,39 @@ export class ReviewsRepository {
       throw e;
     }
   }
+
+  async getGuideReviews(param: { id: number; page: number }): Promise<
+    {
+      id: number;
+      guideId: number;
+      reviewerId: number;
+      score: number;
+      text: string;
+    }[]
+  > {
+    try {
+      const maxPage = 10;
+      const results = await this.prismaService.review.findMany({
+        where: {
+          guideId: param.id,
+        },
+        skip: maxPage * (param.page - 1),
+        take: maxPage,
+      });
+      let reviews = new Array(results.length);
+      for (let i = 0; i < results.length; i++) {
+        reviews[i] = {
+          reviewId: results[i].id,
+          publishDate: results[i].publishDate,
+          score: results[i].score.toNumber(),
+          text: results[i].text,
+          reviewerId: results[i].reviewerId,
+          guideId: results[i].guideId,
+        };
+      }
+      return reviews;
+    } catch (e) {
+      console.log(e);
+    }
+  }
 }

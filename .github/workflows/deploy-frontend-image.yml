@@ -7,7 +7,15 @@ on:
       - beta
       - dev
     paths:
-      - 'apps/frontend/**'
+      - "apps/frontend/**"
+  pull_request:
+    branches:
+      - main
+      - beta
+      - dev
+    paths:
+      - "apps/frontend/**"
+
   workflow_dispatch:
 
 jobs:

@@ -1,4 +1,10 @@
+import { ApiProperty } from "@nestjs/swagger";
+
 export class GetBookingsByUserIdRequest {
+  @ApiProperty({
+    type: () => Number,
+    minimum: 1,
+  })
   userId: number;
 }
 

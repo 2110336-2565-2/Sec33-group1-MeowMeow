@@ -1,4 +1,15 @@
+import { ApiProperty } from "@nestjs/swagger";
+
 export class DeclineBookingRequest {}
+
 export class DeclineBookingResponse {
-  // Todo: Implement this
+  @ApiProperty({
+    type: () => Number,
+  })
+  id: number;
+
+  @ApiProperty({
+    type: () => String,
+  })
+  bookingStatus: string;
 }

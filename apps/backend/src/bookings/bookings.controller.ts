@@ -15,13 +15,16 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import {
+  AcceptBookingRequest,
   AcceptBookingResponse,
   AccountMetadata,
   CreateBookingRequest,
   CreateBookingResponse,
+  DeclineBookingRequest,
   DeclineBookingResponse,
   GetBookingsByUserIdRequest,
   GetBookingsByUserIdResponse,
+  UpdateBookingRequest,
   UpdatePostResponse,
 } from 'types';
 import {
@@ -32,7 +35,9 @@ import {
 } from './bookings.common';
 import { IBookingsService } from './bookings.service';
 import {
+  ApiBody,
   ApiCookieAuth,
+  ApiExtraModels,
   ApiOperation,
   ApiResponse,
   ApiTags,
@@ -89,6 +94,9 @@ export class BookingsController {
   @ApiOperation({
     summary: 'create new booking',
   })
+  @ApiBody({
+    type: CreateBookingRequest,
+  })
   @ApiResponse({
     status: HttpStatus.CREATED,
     description: 'successfully craete a booking',
@@ -141,6 +149,9 @@ export class BookingsController {
   }
 
   @ApiCookieAuth('access_token')
+  @ApiBody({
+    type: UpdateBookingRequest,
+  })
   @ApiOperation({
     summary: '(not implimented) update booking by ID',
   })
@@ -168,6 +179,9 @@ export class BookingsController {
   }
 
   @ApiCookieAuth('access_token')
+  @ApiBody({
+    type: AcceptBookingRequest,
+  })
   @ApiOperation({
     summary: 'accept booking by ID',
   })
@@ -210,6 +224,9 @@ export class BookingsController {
   @ApiCookieAuth('access_token')
   @ApiOperation({
     summary: 'decline booking by ID',
+  })
+  @ApiBody({
+    type: DeclineBookingRequest,
   })
   @ApiResponse({
     status: HttpStatus.CREATED,

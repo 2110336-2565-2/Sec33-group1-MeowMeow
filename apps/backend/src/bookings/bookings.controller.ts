@@ -22,6 +22,7 @@ import {
   DeclineBookingResponse,
   GetBookingsByUserIdRequest,
   GetBookingsByUserIdResponse,
+  UpdatePostResponse,
 } from 'types';
 import {
   FailedRelationConstraintError,
@@ -30,9 +31,15 @@ import {
   RecordNotFound,
 } from './bookings.common';
 import { IBookingsService } from './bookings.service';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiCookieAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { AuthGuard } from 'src/auth/auth.guard';
 
+@ApiTags('bookings')
 @Controller('bookings')
 export class BookingsController {
   constructor(
@@ -40,6 +47,23 @@ export class BookingsController {
     private readonly bookingsService: IBookingsService,
   ) {}
 
+  @ApiCookieAuth('access_token')
+  @ApiOperation({
+    summary: 'get bookings by user ID in the session',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'successfully get the bookings',
+    type: GetBookingsByUserIdResponse,
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'valid session is not provided',
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'internal server error',
+  })
   @UseGuards(AuthGuard)
   @Get('/self')
   async getBookings(@Req() req, @Res({ passthrough: true }) res) {
@@ -61,6 +85,7 @@ export class BookingsController {
     }
   }
 
+  @ApiCookieAuth('access_token')
   @ApiOperation({
     summary: 'create new booking',
   })
@@ -71,11 +96,15 @@ export class BookingsController {
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
-    description: '',
+    description: 'some required information is absent or invalid',
   })
   @ApiResponse({
     status: HttpStatus.UNAUTHORIZED,
-    description: '',
+    description: 'valid session is not provided',
+  })
+  @ApiResponse({
+    status: HttpStatus.CONFLICT,
+    description: 'record ',
   })
   @ApiResponse({
     status: HttpStatus.INTERNAL_SERVER_ERROR,
@@ -111,13 +140,14 @@ export class BookingsController {
     }
   }
 
+  @ApiCookieAuth('access_token')
   @ApiOperation({
-    summary: 'update booking by ID',
+    summary: '(not implimented) update booking by ID',
   })
   @ApiResponse({
     status: HttpStatus.CREATED,
     description: 'successfully get bookings',
-    type: GetBookingsByUserIdResponse,
+    type: UpdatePostResponse,
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
@@ -137,21 +167,22 @@ export class BookingsController {
     // Todo: Implement this
   }
 
+  @ApiCookieAuth('access_token')
   @ApiOperation({
     summary: 'accept booking by ID',
   })
   @ApiResponse({
     status: HttpStatus.CREATED,
     description: 'successfully accept booking',
-    type: GetBookingsByUserIdResponse,
-  })
-  @ApiResponse({
-    status: HttpStatus.BAD_REQUEST,
-    description: '',
+    type: AcceptBookingResponse,
   })
   @ApiResponse({
     status: HttpStatus.UNAUTHORIZED,
-    description: '',
+    description: 'valid session is not provided',
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'booking with given ID was not found',
   })
   @ApiResponse({
     status: HttpStatus.INTERNAL_SERVER_ERROR,
@@ -176,21 +207,22 @@ export class BookingsController {
     }
   }
 
+  @ApiCookieAuth('access_token')
   @ApiOperation({
     summary: 'decline booking by ID',
   })
   @ApiResponse({
     status: HttpStatus.CREATED,
     description: 'successfully decline bookings',
-    type: GetBookingsByUserIdResponse,
-  })
-  @ApiResponse({
-    status: HttpStatus.BAD_REQUEST,
-    description: '',
+    type: DeclineBookingResponse,
   })
   @ApiResponse({
     status: HttpStatus.UNAUTHORIZED,
-    description: '',
+    description: 'valid session is not provided',
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'booking with given ID was not found',
   })
   @ApiResponse({
     status: HttpStatus.INTERNAL_SERVER_ERROR,

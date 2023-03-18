@@ -1,5 +1,4 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { Exclude } from "class-transformer";
 import {
   IsInt,
   IsNotEmpty,
@@ -37,10 +36,16 @@ export class CreateReviewRequest {
 }
 
 export class CreateReviewResponse {
+  @ApiProperty({ type: () => String })
   message: string;
+  @ApiProperty({ type: () => Number })
   id: number;
+  @ApiProperty({ type: () => Number })
   guideId: number;
+  @ApiProperty({ type: () => Number })
   reviewerId: number;
+  @ApiProperty({ type: () => Number })
   score: number;
+  @ApiProperty({ type: () => String })
   text: string;
 }

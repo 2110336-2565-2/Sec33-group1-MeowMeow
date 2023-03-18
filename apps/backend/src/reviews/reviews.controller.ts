@@ -42,7 +42,7 @@ export class ReviewsController {
   })
   @ApiResponse({
     status: HttpStatus.CREATED,
-    description: 'successfully decline bookings',
+    description: 'successfully created new booking',
     type: CreateReviewResponse,
   })
   @ApiResponse({

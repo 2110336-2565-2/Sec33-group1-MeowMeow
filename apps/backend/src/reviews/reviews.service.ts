@@ -21,8 +21,8 @@ export class ReviewsServiceImpl {
   constructor(private readonly reviewsRepo: ReviewsRepository) {}
 
   async createReview(req: CreateReviewRequest): Promise<CreateReviewResponse> {
-    if (!Number.isInteger(req.score) || (req.score % 1).toFixed(1) !== '0.5') {
-      throw new InvalidRequestError('review score must ends with .5');
+    if (!Number.isInteger(req.score) && (req.score % 1).toFixed(1) !== '0.5') {
+      throw new InvalidRequestError('review score must be divisible with .5');
     }
 
     const review = await this.reviewsRepo.createReview({

@@ -6,10 +6,9 @@ import {
   Snackbar,
   Typography,
 } from "@mui/material";
-import dayjs, { Dayjs } from "dayjs";
 import React from "react";
 import usePostForm from "@/hooks/usePostForm";
-import useSnackbar from "@/hooks/useSnackbar";
+import useCustomSnackbar from "@/hooks/useCustomSnackbar";
 import useEditPostForm from "@/hooks/useEditForm";
 
 export interface IPostForm {
@@ -17,19 +16,7 @@ export interface IPostForm {
 }
 
 export default function PostForm({ methodType }: IPostForm) {
-  const [endDate, setEndDate] = React.useState<Dayjs | null>(dayjs(undefined));
-  const [startDate, setStartDate] = React.useState<Dayjs | null>(
-    dayjs(undefined)
-  );
-
-  const handleEndChange = (newValue: Dayjs | null) => {
-    setEndDate(newValue);
-  };
-  const handleStartChange = (newValue: Dayjs | null) => {
-    setStartDate(newValue);
-  };
-
-  const { onClose, onExit, isOpen, messageInfo } = useSnackbar();
+  const { onClose, onExit, isOpen, messageInfo } = useCustomSnackbar();
   const { onSubmit, isLoading } = usePostForm({
     methodType: methodType,
   });

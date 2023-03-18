@@ -1,3 +1,5 @@
+import { ApiProperty } from "@nestjs/swagger";
+import { Exclude } from "class-transformer";
 import {
   IsInt,
   IsNotEmpty,
@@ -5,17 +7,16 @@ import {
   MaxLength,
   Min,
   Max,
+  IsEmpty,
 } from "class-validator";
 
 export class CreateReviewRequest {
+  @ApiProperty({ type: () => Number })
   @IsInt()
   @IsNotEmpty()
   guideId: number;
 
-  @IsInt()
-  @IsNotEmpty()
-  reviewerId: number;
-
+  @ApiProperty({ type: () => Number })
   @Max(5)
   @Min(0)
   @IsNumber(
@@ -27,8 +28,12 @@ export class CreateReviewRequest {
   @IsNotEmpty()
   score: number;
 
+  @ApiProperty({ type: () => String })
   @MaxLength(200)
   text: string;
+
+  @IsEmpty()
+  reviewerId: number;
 }
 
 export class CreateReviewResponse {

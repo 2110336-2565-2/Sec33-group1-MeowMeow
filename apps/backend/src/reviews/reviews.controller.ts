@@ -20,7 +20,12 @@ import { ReviewsService } from './reviews.service';
 import { InvalidRequestError } from 'src/auth/auth.commons';
 import { FailedRelationConstraintError } from './reviews.common';
 import { AuthGuard } from 'src/auth/auth.guard';
-import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiCookieAuth,
+  ApiOperation,
+  ApiResponse,
+} from '@nestjs/swagger';
 
 @Controller('reviews')
 export class ReviewsController {
@@ -28,6 +33,7 @@ export class ReviewsController {
     @Inject('ReviewsService') private readonly reviewsService: ReviewsService,
   ) {}
 
+  @ApiCookieAuth('access_token')
   @ApiOperation({
     summary: 'decline booking by ID',
   })
@@ -41,11 +47,7 @@ export class ReviewsController {
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
-    description: '',
-  })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: '',
+    description: 'some required information is absent or invalid',
   })
   @ApiResponse({
     status: HttpStatus.INTERNAL_SERVER_ERROR,

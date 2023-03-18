@@ -1,3 +1,4 @@
+import { Exclude } from "class-transformer";
 import {
   IsInt,
   IsNotEmpty,
@@ -5,16 +6,13 @@ import {
   MaxLength,
   Min,
   Max,
+  IsEmpty,
 } from "class-validator";
 
 export class CreateReviewRequest {
   @IsInt()
   @IsNotEmpty()
   guideId: number;
-
-  @IsInt()
-  @IsNotEmpty()
-  reviewerId: number;
 
   @Max(5)
   @Min(0)
@@ -29,6 +27,9 @@ export class CreateReviewRequest {
 
   @MaxLength(200)
   text: string;
+
+  @IsEmpty()
+  reviewerId: number;
 }
 
 export class CreateReviewResponse {

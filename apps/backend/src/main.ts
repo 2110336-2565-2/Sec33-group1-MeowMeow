@@ -5,6 +5,7 @@ import { AppModule } from './app.module';
 import { PrismaService } from './prisma/prisma.service';
 import { backendConfig as config, frontendConfig } from 'config';
 import { ValidationPipe } from '@nestjs/common';
+import { Role } from 'database';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -34,6 +35,24 @@ async function bootstrap() {
   }
 
   await prismaService.enableShutdownHooks(app);
+  try {
+    const user = await prismaService.user.create({
+      data: {
+        email: 'bronte@gmail.com',
+        username: 'ccc',
+        hashedPassword: 'wtf',
+        firstName: 'Arthur',
+        lastName: 'Morgan',
+        role: Role.GUIDE,
+      },
+    });
+    await prismaService.guide.create({
+      data: {
+        userId: user.id,
+        certificate: 'unknown',
+      },
+    });
+  } catch (e) {}
   await app.listen(port);
 }
 bootstrap();

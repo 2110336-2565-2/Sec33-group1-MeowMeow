@@ -49,8 +49,6 @@ export class SearchGuidesGuideResponse {
   firstName: string;
   @ApiProperty({ type: () => String })
   lastName: string;
-  @ApiProperty({ type: () => Number })
-  fee: number;
   @ApiProperty({ type: () => String })
   certificate: string;
   @ApiProperty({ type: () => Number })

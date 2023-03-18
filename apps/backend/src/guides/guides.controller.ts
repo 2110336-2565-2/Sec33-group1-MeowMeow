@@ -18,7 +18,13 @@ import {
   SearchGuidesResponse,
 } from 'types';
 import { GuidesService } from './guides.service';
-import { ApiCookieAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiCookieAuth,
+  ApiOperation,
+  ApiParam,
+  ApiQuery,
+  ApiResponse,
+} from '@nestjs/swagger';
 import { Response } from 'express';
 import { ReviewsService } from 'src/reviews/reviews.service';
 
@@ -30,9 +36,9 @@ export class GuidesController {
   ) {}
 
   @ApiCookieAuth('access_token')
-  @ApiOperation({
-    summary: 'paginate guides with filter',
-  })
+  @ApiOperation({ summary: 'paginate guides with filter' })
+  @ApiQuery({ name: 'offset', type: Number })
+  @ApiQuery({ name: 'limit', type: Number })
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'successfully paginated guides',

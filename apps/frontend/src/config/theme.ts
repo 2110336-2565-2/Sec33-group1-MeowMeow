@@ -31,6 +31,15 @@ let theme = createTheme({
     text: {
       primary: "#000000",
     },
+    info: {
+      main: "#00aaff",
+    },
+    success: {
+      main: "#4CAF50",
+    },
+    warning: {
+      main: "#ffd500",
+    },
   },
   typography: {
     fontFamily: ["Inter", "sans-serif"].join(","),

@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { Sql } from '@prisma/client/runtime';
 import { Guide, Prisma, User } from 'database';
 import { InvalidRequestError } from 'src/auth/auth.commons';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -24,15 +25,19 @@ export class GuidesRepository {
     }[]
   > {
     try {
-      const minReviewCondition = Prisma.sql`HAVING AVG("Review"."score") >= ${filter.minReviewScore}`;
+      const minReviewCondition = Prisma.sql`WHERE "avg_review_score" >= ${filter.minReviewScore}`;
       const locationCondition = Prisma.sql`WHERE "Location"."locationName" = ${filter.location}`;
 
       const results = await this.prismaService.$queryRaw<any[]>`
-        WITH guideid_with_satisfied_avg_review_score AS (
+        WITH guideid_with_avg_review_score AS (
           SELECT "Guide"."id" as id, AVG("Review"."score") AS avg_review_score
           FROM "Guide"
-          INNER JOIN "Review" ON "Guide"."id" = "Review"."guideId"
+          LEFT JOIN "Review" ON "Guide"."id" = "Review"."guideId"
           GROUP BY "Guide"."id"
+        ),
+        guideid_with_satisfied_avg_review_score AS (
+          SELECT "id", "avg_review_score"
+          FROM guideid_with_avg_review_score
           ${filter.minReviewScore ? minReviewCondition : Prisma.empty}
         ),
         guideid_having_provided_location AS (
@@ -43,11 +48,11 @@ export class GuidesRepository {
         )
         SELECT "Guide"."id", "Guide"."certificate",
         "User"."firstName", "User"."lastName",
-        c1."avg_review_score" as average_review_score
+        c1."avg_review_score" as "averageReviewScore"
         FROM "Guide"
         INNER JOIN "User" ON "Guide"."userId" = "User"."id"
-        LEFT JOIN "guideid_with_satisfied_avg_review_score" c1 ON "Guide"."id" = c1.id
-        LEFT JOIN "guideid_having_provided_location" c2 ON "Guide"."id" = c2.id
+        INNER JOIN "guideid_with_satisfied_avg_review_score" c1 ON "Guide"."id" = c1.id
+        INNER JOIN "guideid_having_provided_location" c2 ON "Guide"."id" = c2.id
         OFFSET ${filter.offset} LIMIT ${filter.limit}
       `;
 
@@ -58,7 +63,7 @@ export class GuidesRepository {
           firstName: results[i].firstName ?? null,
           lastName: results[i].lastName ?? null,
           certificate: results[i].certificate ?? null,
-          averageReviewScore: results[i].averageReview ?? null,
+          averageReviewScore: results[i].averageReviewScore ?? null,
         };
       }
       return guides;

@@ -33,7 +33,7 @@ export class LocalMediaStorage {
     });
   }
 
-  private async ensureStorageDir(): Promise<void> {
+  private ensureStorageDir() {
     if (!existsSync(this.rootDir)) {
       mkdirSync(this.rootDir);
     }

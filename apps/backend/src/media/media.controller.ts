@@ -5,6 +5,7 @@ import {
   HttpStatus,
   Inject,
   Param,
+  ParseFilePipe,
   Post,
   Req,
   Res,
@@ -30,6 +31,8 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import path from 'path';
+import { FileIsDefinedValidator } from './file.validators';
 
 @ApiTags('media')
 @Controller('media')
@@ -63,7 +66,10 @@ export class MediaController {
   @UseInterceptors(FileInterceptor('file'))
   @Post()
   async upload(
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile(
+      new ParseFilePipe({ validators: [new FileIsDefinedValidator()] }),
+    )
+    file: Express.Multer.File,
     @Res({ passthrough: true }) res,
   ) {
     try {

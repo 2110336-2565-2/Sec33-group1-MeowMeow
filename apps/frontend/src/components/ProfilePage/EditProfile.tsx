@@ -14,15 +14,52 @@ import StyleTextField from "../LoginPage/StyledTextField";
 import { IProfileData } from "./types/profilePage";
 import useCustomSnackbar from "@/hooks/useCustomSnackbar";
 import AppSnackbar from "../common/AppSnackbar";
+import { AlertColor } from "@mui/material/Alert";
 
 interface IEditProfileProps {
   profileData: IProfileData;
+  onEndEdit: () => void;
 }
 
-const EditProfile = ({ profileData }: IEditProfileProps) => {
+const uploadMedia = async (
+  image: File,
+  addNotification: (message: string, severity: AlertColor) => void
+) => {
+  const formData = new FormData();
+  formData.append("file", image);
+  try {
+    const response = await apiClient.post<{ message: string; id: string }>(
+      "/media",
+      formData,
+      {
+        headers: { "Content-Type": "multipart/form-data" },
+      }
+    );
+    return response.data.id;
+  } catch (err) {
+    const error = err as Error;
+    addNotification(error.message, "error");
+  }
+};
+
+const updateProfile = async (
+  formBody: { [key: string]: string },
+  addNotification: (message: string, severity: AlertColor) => void
+) => {
+  try {
+    const response = await apiClient.put("/users/users", formBody);
+    return response;
+  } catch (err) {
+    const error = err as Error;
+    addNotification(error.message, "error");
+  }
+};
+
+const EditProfile = ({ profileData, onEndEdit }: IEditProfileProps) => {
   const [image, setImage] = useState<File | undefined>(undefined);
   const { addNotification } = useContext(NotificationContext);
   const { onClose, onExit, isOpen, messageInfo } = useCustomSnackbar();
+
   const onUploadImage: ChangeEventHandler<HTMLInputElement> = (event) => {
     if (!event.target.files) {
       return;
@@ -36,12 +73,13 @@ const EditProfile = ({ profileData }: IEditProfileProps) => {
       prev[formId] = event.currentTarget[formId].value;
       return prev;
     }, {} as { [key: string]: string });
-
-    try {
-      await apiClient.put("/users/users", formBody);
-    } catch (err) {
-      const error = err as Error;
-      addNotification(error.message, "error");
+    if (image) {
+      const imageId = await uploadMedia(image, addNotification);
+      formBody.id = imageId || "";
+    }
+    const response = await updateProfile(formBody, addNotification);
+    if (response) {
+      onEndEdit();
     }
   };
 
@@ -68,8 +106,8 @@ const EditProfile = ({ profileData }: IEditProfileProps) => {
       <StyleTextField
         label="Username"
         placeholder="Username"
-        defaultValue={profileData.userName}
-        id="userName"
+        defaultValue={profileData.username}
+        id="username"
       />
       <StyleTextField
         label="Email"

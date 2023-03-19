@@ -6,6 +6,7 @@ export type FrontendConfig = {
 };
 
 export const loadFrontendConfig = (): FrontendConfig => ({
-  BACKEND_BASE_URL: process.env.BACKEND_BASE_URL || "http://localhost:8080/",
+  BACKEND_BASE_URL:
+    process.env.BACKEND_BASE_URL || "https://se2-api-beta.pongdev.dev/",
   FRONTEND_BASE_URL: process.env.FRONTEND_BASE_URL || "http://localhost:3000/",
 });

@@ -21,7 +21,7 @@ let theme = createTheme({
       main: "#1976D2",
     },
     error: {
-      main: red.A400,
+      main: "#ff8789",
     },
     grey: {
       100: "#F3F4F6",
@@ -32,13 +32,13 @@ let theme = createTheme({
       primary: "#000000",
     },
     info: {
-      main: "#00aaff",
+      main: "#b0fff3",
     },
     success: {
-      main: "#4CAF50",
+      main: "#05ff48",
     },
     warning: {
-      main: "#ffd500",
+      main: "#ffec8c",
     },
   },
   typography: {

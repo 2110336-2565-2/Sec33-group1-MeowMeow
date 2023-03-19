@@ -6,7 +6,7 @@ import {
   styled,
 } from "@mui/material";
 import React from "react";
-import { IData } from "../data/recordType";
+import { ITravellerData } from "../data/recordType";
 import StatusDialog from "../dialogStatus";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -19,7 +19,7 @@ const StyledTableRow = styled(TableRow)(() => ({
 }));
 
 interface IContentTable {
-  row: IData;
+  row: ITravellerData;
   index: number;
 }
 

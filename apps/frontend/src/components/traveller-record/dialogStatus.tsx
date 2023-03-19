@@ -12,7 +12,11 @@ import {
 } from "@mui/material";
 import React from "react";
 import CancelIcon from "@mui/icons-material/Cancel";
-import { buttonMapping, statusDetail } from "./data/statusHandle";
+import {
+  buttonMapLink,
+  buttonMapStatus,
+  statusDetail,
+} from "./data/statusHandle";
 
 export interface IStatusDialog {
   nameButton: string;
@@ -88,13 +92,15 @@ export default function StatusDialog({ nameButton }: IStatusDialog) {
               {statusValue.description}
             </DialogContentText>
           </DialogContent>
-          {buttonMapping.get(nameButton) &&
-            buttonMapping
+          {buttonMapStatus.get(nameButton) &&
+            buttonMapStatus
               .get(nameButton)!
               .map((item: string, index: number) => {
                 return (
                   <DialogActions key={nameButton + "-" + index}>
-                    <Button variant="contained">{item}</Button>
+                    <Button variant="contained" href={buttonMapLink.get(item)}>
+                      {item}
+                    </Button>
                   </DialogActions>
                 );
               })}

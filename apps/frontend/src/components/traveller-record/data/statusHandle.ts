@@ -26,23 +26,29 @@ const subButtonName = {
   REVIEW: "Review",
 } as const;
 
-export let buttonMapping = new Map<string, string[]>();
-buttonMapping.set(statusType.WAITING_FOR_GUIDE, [subButtonName.CANCEL]);
-buttonMapping.set(statusType.GUIDE_REJECTED, []);
-buttonMapping.set(statusType.WAITING_FOR_PAYMENT, [
+export let buttonMapStatus = new Map<string, string[]>();
+buttonMapStatus.set(statusType.WAITING_FOR_GUIDE, [subButtonName.CANCEL]);
+buttonMapStatus.set(statusType.GUIDE_REJECTED, []);
+buttonMapStatus.set(statusType.WAITING_FOR_PAYMENT, [
   subButtonName.PAY,
   subButtonName.CANCEL,
 ]);
-buttonMapping.set(statusType.CANCEL_BOOKING, []);
-buttonMapping.set(statusType.WAITING, [subButtonName.CANCEL]);
-buttonMapping.set(statusType.WAITING_FOR_REFUND, []);
-buttonMapping.set(statusType.CANCEL_TRAVEL, [subButtonName.REFUND]);
-buttonMapping.set(statusType.TEAVELLING, []);
-buttonMapping.set(statusType.WAITING_FOR_REVIEW, [
+buttonMapStatus.set(statusType.CANCEL_BOOKING, []);
+buttonMapStatus.set(statusType.WAITING, [subButtonName.CANCEL]);
+buttonMapStatus.set(statusType.WAITING_FOR_REFUND, []);
+buttonMapStatus.set(statusType.CANCEL_TRAVEL, [subButtonName.REFUND]);
+buttonMapStatus.set(statusType.TEAVELLING, []);
+buttonMapStatus.set(statusType.WAITING_FOR_REVIEW, [
   subButtonName.REVIEW,
   subButtonName.REFUND,
 ]);
-buttonMapping.set(statusType.FINISHED, []);
+buttonMapStatus.set(statusType.FINISHED, []);
+
+export let buttonMapLink = new Map<string, string>();
+buttonMapLink.set(subButtonName.CANCEL, "/cancel-trip");
+buttonMapLink.set(subButtonName.PAY, "/");
+buttonMapLink.set(subButtonName.REFUND, "/");
+buttonMapLink.set(subButtonName.REVIEW, "/guide-profile/1");
 
 export let statusDetail = new Map<string, IStatus>();
 statusDetail.set(statusType.WAITING_FOR_GUIDE, {

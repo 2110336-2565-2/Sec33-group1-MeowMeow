@@ -1,4 +1,4 @@
-import { IData } from "./recordType";
+import { ITravellerData } from "./recordType";
 import { statusType } from "./statusHandle";
 
 function createData(
@@ -11,7 +11,7 @@ function createData(
   price: number,
   lineid: string,
   status: statusType
-): IData {
+): ITravellerData {
   return {
     name,
     location,

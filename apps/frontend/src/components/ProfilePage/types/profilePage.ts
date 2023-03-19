@@ -1,6 +1,9 @@
-export interface IProfileData {
+export interface IGetProfileResponse {
+  message: string;
+  id: number;
+  email: string;
+  username: string;
   firstName: string;
   lastName: string;
-  email: string;
-  userName: string;
 }
+export type IProfileData = Omit<IGetProfileResponse, "id" | "message">;

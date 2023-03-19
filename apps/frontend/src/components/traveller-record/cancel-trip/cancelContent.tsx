@@ -1,3 +1,4 @@
+import theme from "@/config/theme";
 import useCancelTrip from "@/hooks/useCancelTrip";
 import {
   Card,
@@ -5,7 +6,6 @@ import {
   Typography,
   CardActions,
   Button,
-  Box,
   Stack,
 } from "@mui/material";
 import React, { useEffect } from "react";
@@ -27,36 +27,37 @@ export default function CancelContent() {
     );
   }
   return (
-    <Stack
-      component="form"
-      direction="row"
-      justifyContent="center"
-      alignItems="center"
-      onSubmit={onSubmit}
-    >
-      <Card sx={{ minWidth: 275, justifyContent: "center" }}>
-        <CardContent>
-          <Typography variant="body2">
-            Are you sure to cancel this trip?
-            <br></br>
-          </Typography>
+    <Card sx={{ justifyContent: "center" }}>
+      <CardContent>
+        <Typography variant="h4">
+          Are you sure to cancel this trip?
           <br></br>
-          <Typography variant="h5" component="div">
-            Trip's Name
-          </Typography>
-          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-            Trip's Description
-          </Typography>
-          <Typography variant="body2">Price</Typography>
-          <Typography variant="body2">Participant</Typography>
-          <Typography variant="body2">StartDate - EndDate</Typography>
-        </CardContent>
-        <CardActions>
-          <Button size="small" type="submit">
+        </Typography>
+        <br></br>
+      </CardContent>
+      <CardActions>
+        <Stack
+          component="form"
+          direction="row"
+          justifyContent="center"
+          alignItems="center"
+          onSubmit={onSubmit}
+        >
+          <Button size="large" type="submit" variant="contained">
             Confirm
           </Button>
-        </CardActions>
-      </Card>
-    </Stack>
+        </Stack>
+        <Button
+          size="large"
+          type="submit"
+          variant="contained"
+          sx={{ marginLeft: "10px" }}
+          color="secondary"
+          href="/traveller-record"
+        >
+          Back to my record
+        </Button>
+      </CardActions>
+    </Card>
   );
 }

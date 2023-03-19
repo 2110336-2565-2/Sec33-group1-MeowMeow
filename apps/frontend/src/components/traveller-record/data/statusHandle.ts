@@ -19,7 +19,7 @@ const TRAVELLINGCOLOR = theme.palette.info.main;
 const FINISHEDCOLOR = theme.palette.success.main;
 const CANCELCOLOR = theme.palette.error.main;
 
-const subButtonName = {
+export const subButtonName = {
   CANCEL: "Cancel",
   PAY: "Pay",
   REFUND: "Refund",

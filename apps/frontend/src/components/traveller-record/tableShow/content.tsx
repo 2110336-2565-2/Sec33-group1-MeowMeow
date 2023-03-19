@@ -60,7 +60,7 @@ export default function ContentComponent({ row, index }: IContentTable) {
         <TableCell align="center">{row.participant}</TableCell>
         <TableCell align="center">{row.price}</TableCell>
         <TableCell align="center">
-          <StatusDialog nameButton={row.status} />
+          <StatusDialog nameButton={row.status} tripId={row.id} />
         </TableCell>
       </StyledTableRow>
       <StyledTableRow>

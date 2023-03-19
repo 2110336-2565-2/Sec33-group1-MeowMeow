@@ -2,6 +2,7 @@ import { ITravellerData } from "./recordType";
 import { statusType } from "./statusHandle";
 
 function createData(
+  id: string,
   name: string,
   location: string,
   description: string,
@@ -13,6 +14,7 @@ function createData(
   status: statusType
 ): ITravellerData {
   return {
+    id,
     name,
     location,
     description,
@@ -27,6 +29,7 @@ function createData(
 
 export const rows = [
   createData(
+    "1",
     "Camping 1",
     "Chiang Mai",
     "Camping in Chiang Mai",
@@ -38,6 +41,7 @@ export const rows = [
     statusType.WAITING_FOR_GUIDE
   ),
   createData(
+    "2",
     "Camping 2",
     "Bangkok",
     "Camping in Bangkok",
@@ -49,6 +53,7 @@ export const rows = [
     statusType.GUIDE_REJECTED
   ),
   createData(
+    "3",
     "Camping 3",
     "Pathumthani",
     "Camping in Pathumthani",
@@ -60,6 +65,7 @@ export const rows = [
     statusType.WAITING_FOR_PAYMENT
   ),
   createData(
+    "4",
     "Camping 4",
     "Chiang Rai",
     "Camping in Chiang Rai",
@@ -71,6 +77,7 @@ export const rows = [
     statusType.CANCEL_BOOKING
   ),
   createData(
+    "5",
     "Camping 5",
     "Rayong",
     "Camping in Rayong",
@@ -82,6 +89,7 @@ export const rows = [
     statusType.WAITING
   ),
   createData(
+    "6",
     "Camping 6",
     "Trad",
     "Camping in Trad",
@@ -93,6 +101,7 @@ export const rows = [
     statusType.WAITING_FOR_REFUND
   ),
   createData(
+    "7",
     "Camping 7",
     "Chiang Mai",
     "Camping in Chiang Mai",
@@ -104,6 +113,7 @@ export const rows = [
     statusType.CANCEL_TRAVEL
   ),
   createData(
+    "8",
     "Camping 8",
     "Chiang Rai",
     "Camping in Chiang Rai",
@@ -115,6 +125,7 @@ export const rows = [
     statusType.TEAVELLING
   ),
   createData(
+    "9",
     "Camping 9",
     "Bangkok",
     "Camping in Bangkok",
@@ -126,6 +137,7 @@ export const rows = [
     statusType.WAITING_FOR_REVIEW
   ),
   createData(
+    "10",
     "Camping 10",
     "Phuket",
     "Camping in Phuket",
@@ -137,6 +149,7 @@ export const rows = [
     statusType.FINISHED
   ),
   createData(
+    "11",
     "Camping 11",
     "Chiang Mai",
     "Camping in Chiang Mai",
@@ -148,6 +161,7 @@ export const rows = [
     statusType.WAITING_FOR_GUIDE
   ),
   createData(
+    "12",
     "Camping 12",
     "Bangkok",
     "Camping in Bangkok",
@@ -159,6 +173,7 @@ export const rows = [
     statusType.GUIDE_REJECTED
   ),
   createData(
+    "13",
     "Camping 13",
     "Pathumthani",
     "Camping in Pathumthani",

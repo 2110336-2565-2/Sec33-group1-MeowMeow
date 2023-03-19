@@ -16,13 +16,17 @@ import {
   buttonMapLink,
   buttonMapStatus,
   statusDetail,
+  subButtonName,
 } from "./data/statusHandle";
+import { useRouter } from "next/router";
 
 export interface IStatusDialog {
+  tripId: string;
   nameButton: string;
 }
 
-export default function StatusDialog({ nameButton }: IStatusDialog) {
+export default function StatusDialog({ tripId, nameButton }: IStatusDialog) {
+  const router = useRouter();
   const [open, setOpen] = React.useState(false);
   const [scroll, setScroll] = React.useState<DialogProps["scroll"]>("paper");
   const statusValue = { ...statusDetail.get(nameButton) };
@@ -98,7 +102,18 @@ export default function StatusDialog({ nameButton }: IStatusDialog) {
               .map((item: string, index: number) => {
                 return (
                   <DialogActions key={nameButton + "-" + index}>
-                    <Button variant="contained" href={buttonMapLink.get(item)}>
+                    <Button
+                      variant="contained"
+                      onClick={() => {
+                        if (item == subButtonName.CANCEL) {
+                          router.push(
+                            buttonMapLink.get(item)!.concat("/" + tripId)
+                          );
+                        } else {
+                          router.push(buttonMapLink.get(item)!);
+                        }
+                      }}
+                    >
                       {item}
                     </Button>
                   </DialogActions>

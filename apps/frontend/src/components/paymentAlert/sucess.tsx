@@ -12,9 +12,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 export default function PaymentSuccess() {
   return (
     <ContainerPaymentAlert>
-      <Card
-        sx={{ textAlign: "center", alignItems: "center", width: "fit-content" }}
-      >
+      <Card sx={{ textAlign: "center", width: "fit-content" }}>
         <CardContent>
           <CheckCircleIcon />
           <Typography variant="h5" component="div">

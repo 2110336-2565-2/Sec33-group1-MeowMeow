@@ -1,4 +1,3 @@
-import theme from "@/config/theme";
 import useCancelTrip from "@/hooks/useCancelTrip";
 import {
   Card,

@@ -4,7 +4,7 @@ import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
 import TablePagination from "@mui/material/TablePagination";
 import Paper from "@mui/material/Paper";
-import { IData, Order } from "../data/recordType";
+import { ITravellerData, Order } from "../data/recordType";
 import { rows } from "../data/mockData";
 import TableHeader from "./headTable";
 import { stableSort, getComparator } from "../data/sorting";
@@ -14,13 +14,13 @@ import ContentComponent from "./content";
 
 export default function TableRecord() {
   const [order, setOrder] = React.useState<Order>("asc");
-  const [orderBy, setOrderBy] = React.useState<keyof IData>("name");
+  const [orderBy, setOrderBy] = React.useState<keyof ITravellerData>("name");
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
-    property: keyof IData
+    property: keyof ITravellerData
   ) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");

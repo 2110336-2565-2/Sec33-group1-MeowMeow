@@ -1,15 +1,10 @@
-import { statusType } from "./statusHandle";
-
 export interface IData {
-  name: string;
-  location: string;
-  description: string;
-  startDate: string;
-  endDate: string;
-  participant: number;
+  id: string;
+  userID: string;
+  guideID: string;
+  timeStamp: string;
   price: number;
-  lineid: string;
-  status: statusType;
+  paymentStatus: string;
 }
 
 export interface IStatus {

@@ -8,28 +8,28 @@ import {
 } from "@mui/material";
 import React from "react";
 import ContainerPaymentAlert from "./container";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import CancelIcon from "@mui/icons-material/Cancel";
 import theme from "@/config/theme";
 
-export default function PaymentSuccess() {
+export default function PaymentFail() {
   return (
     <ContainerPaymentAlert>
       <Card
         sx={{ textAlign: "center", alignItems: "center", width: "fit-content" }}
       >
         <CardContent>
-          <CheckCircleIcon
+          <CancelIcon
             sx={{
-              color: theme.palette.success.main,
+              color: theme.palette.error.main,
               width: "80px",
               height: "80px",
             }}
           />
           <Typography variant="h4" component="div">
-            Payment Success
+            Payment Fail
           </Typography>
           <Typography variant="body2" sx={{ marginTop: "20px" }}>
-            Your payment has been successfully processed.
+            Your payment has been failed. Please try again.
           </Typography>
         </CardContent>
         <CardActions>
@@ -42,9 +42,9 @@ export default function PaymentSuccess() {
             <Button
               size="small"
               variant="contained"
-              sx={{ backgroundColor: theme.palette.success.main }}
+              sx={{ backgroundColor: theme.palette.error.main }}
             >
-              Done
+              Close
             </Button>
           </Grid>
         </CardActions>

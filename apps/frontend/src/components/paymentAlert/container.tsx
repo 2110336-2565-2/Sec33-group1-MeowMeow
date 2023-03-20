@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import React, { ReactNode } from "react";
 
 interface IAlertContainerProps {
@@ -9,7 +9,9 @@ export default function ContainerPaymentAlert({
   children,
 }: IAlertContainerProps) {
   return (
-    <Box
+    <Grid
+      container
+      direction="row"
       justifyContent="center"
       alignItems="center"
       sx={{
@@ -22,6 +24,6 @@ export default function ContainerPaymentAlert({
       }}
     >
       {children}
-    </Box>
+    </Grid>
   );
 }

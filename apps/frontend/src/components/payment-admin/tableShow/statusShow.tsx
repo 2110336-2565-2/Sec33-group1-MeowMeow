@@ -11,7 +11,7 @@ const Item = styled(Paper)(({ theme, color }) => ({
   backgroundColor: color,
   padding: theme.spacing(1),
   textAlign: "center",
-  color: theme.palette.grey[100],
+  color: theme.palette.text.primary,
 }));
 
 export default function PaymentStatus({ status }: IStatusShow) {
@@ -22,7 +22,7 @@ export default function PaymentStatus({ status }: IStatusShow) {
   } else if (status === statusPaymentType.REFUNDED) {
     return <Item color={theme.palette.info.main}>Refunded</Item>;
   } else if (status === statusPaymentType.HOLDING) {
-    return <Item color={theme.palette.secondary.main}>Holding</Item>;
+    return <Item color={theme.palette.secondary.light}>Holding</Item>;
   }
-  return <Item color={theme.palette.primary.main}>Guide get paid</Item>;
+  return <Item color={theme.palette.primary.light}>Guide get paid</Item>;
 }

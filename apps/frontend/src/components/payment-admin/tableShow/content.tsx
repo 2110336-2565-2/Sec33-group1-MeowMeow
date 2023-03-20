@@ -10,8 +10,21 @@ import { IData } from "../data/recordType";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import ContentDescription from "./contentDescription";
+import PaymentStatus from "./statusShow";
 
-const StyledTableRow = styled(TableRow)(() => ({
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  "&:nth-of-type(4n+1)": {
+    backgroundColor: theme.palette.grey[200],
+  },
+  "&:nth-of-type(4n+2)": {
+    backgroundColor: theme.palette.grey[200],
+  },
+  "&:nth-of-type(4n-1)": {
+    backgroundColor: "#ffffff",
+  },
+  "&:nth-of-type(4n)": {
+    backgroundColor: "#ffffff",
+  },
   "&:last-child td, &:last-child th": {
     border: 0,
   },
@@ -28,7 +41,7 @@ export default function ContentComponent({ row, index }: IContentTable) {
 
   return (
     <>
-      <StyledTableRow hover>
+      <StyledTableRow>
         <TableCell>
           <IconButton
             aria-label="expand row"
@@ -45,31 +58,21 @@ export default function ContentComponent({ row, index }: IContentTable) {
           padding="none"
           align="center"
         >
-          {row.name}
+          {row.id}
         </TableCell>
-        <TableCell align="center">{row.location}</TableCell>
-        <TableCell align="center">
-          {row.startDate.split("T", 2)[0] +
-            " " +
-            row.startDate.split("T", 2)[1]}
-        </TableCell>
-        <TableCell align="center">
-          {row.endDate.split("T", 2)[0] + " " + row.endDate.split("T", 2)[1]}
-        </TableCell>
-        <TableCell align="center">{row.participant}</TableCell>
+        <TableCell align="center">{row.userID}</TableCell>
+        <TableCell align="center">{row.guideID}</TableCell>
+        <TableCell align="center">{row.timeStamp}</TableCell>
         <TableCell align="center">{row.price}</TableCell>
+        <TableCell align="center">
+          <PaymentStatus status={row.paymentStatus} />
+        </TableCell>
       </StyledTableRow>
       <StyledTableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={8}>
           <Collapse in={open} timeout="auto" unmountOnExit>
-            <ContentDescription
-              title="Trip's Description"
-              description={row.description}
-            />
-            <ContentDescription
-              title="Guide's LineID"
-              description={row.lineid}
-            />
+            <ContentDescription title="Note: " description="ccccc" />
+            <ContentDescription title="Guide's LineID" description="xxxx" />
           </Collapse>
         </TableCell>
       </StyledTableRow>

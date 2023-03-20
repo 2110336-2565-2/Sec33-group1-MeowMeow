@@ -9,12 +9,13 @@ import { rows } from "../data/mockData";
 import TableHeader from "./headTable";
 import { stableSort, getComparator } from "../data/sorting";
 import { Grid, Typography } from "@mui/material";
-import DescriptionIcon from "@mui/icons-material/Description";
+import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import ContentComponent from "./content";
+import theme from "@/config/theme";
 
 export default function TableRecord() {
   const [order, setOrder] = React.useState<Order>("asc");
-  const [orderBy, setOrderBy] = React.useState<keyof IData>("name");
+  const [orderBy, setOrderBy] = React.useState<keyof IData>("id");
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -49,14 +50,15 @@ export default function TableRecord() {
           direction="row"
           justifyContent="flex-start"
           alignItems="center"
+          sx={{ backgroundColor: theme.palette.primary.main, padding: "20px" }}
         >
-          <DescriptionIcon />
+          <MonetizationOnIcon />
           <Typography variant="h5" component="span" sx={{ fontWeight: "bold" }}>
-            Traveller's Records
+            Transaction Record
           </Typography>
         </Grid>
 
-        <TableContainer sx={{ padding: "20px" }}>
+        <TableContainer sx={{}}>
           <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
             <TableHeader
               order={order}
@@ -69,7 +71,7 @@ export default function TableRecord() {
                 .map((row, index) => {
                   return (
                     <ContentComponent
-                      key={row.name + index}
+                      key={row.id + index}
                       row={row}
                       index={index}
                     />

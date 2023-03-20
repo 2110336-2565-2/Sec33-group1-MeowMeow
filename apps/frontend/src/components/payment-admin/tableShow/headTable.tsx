@@ -16,29 +16,24 @@ interface HeadCell {
 
 const headCells: readonly HeadCell[] = [
   {
-    id: "name",
+    id: "id",
     numeric: false,
-    label: "Trip Name",
+    label: "ID",
   },
   {
-    id: "location",
+    id: "userID",
     numeric: false,
-    label: "Location",
+    label: "User ID",
   },
   {
-    id: "startDate",
+    id: "guideID",
     numeric: false,
-    label: "Start Date",
+    label: "Guide ID",
   },
   {
-    id: "endDate",
+    id: "timeStamp",
     numeric: false,
-    label: "End Date",
-  },
-  {
-    id: "participant",
-    numeric: true,
-    label: "Participant",
+    label: "TimeStamp",
   },
   {
     id: "price",
@@ -46,16 +41,15 @@ const headCells: readonly HeadCell[] = [
     label: "Price",
   },
   {
-    id: "status",
-    numeric: false,
-    label: "Status",
+    id: "paymentStatus",
+    numeric: true,
+    label: "Payment Status",
   },
 ];
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.primary.main,
-    color: theme.palette.common.white,
+    color: theme.palette.common.black,
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,

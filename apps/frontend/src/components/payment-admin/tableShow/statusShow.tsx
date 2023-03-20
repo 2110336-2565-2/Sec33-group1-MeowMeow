@@ -1,7 +1,7 @@
 import theme from "@/config/theme";
 import { Box, Paper, styled } from "@mui/material";
 import React from "react";
-import { statusType } from "../data/statusHandle";
+import { statusPaymentType } from "../data/statusHandle";
 
 interface IStatusShow {
   status: string;
@@ -15,13 +15,13 @@ const Item = styled(Paper)(({ theme, color }) => ({
 }));
 
 export default function PaymentStatus({ status }: IStatusShow) {
-  if (status === statusType.TRAVELLER_PAID) {
+  if (status === statusPaymentType.TRAVELLER_PAID) {
     return <Item color={theme.palette.success.main}>Traveller Paid</Item>;
-  } else if (status === statusType.WAITING_REFUND) {
+  } else if (status === statusPaymentType.WAITING_REFUND) {
     return <Item color={theme.palette.warning.main}>Waiting Refund</Item>;
-  } else if (status === statusType.REFUNDED) {
+  } else if (status === statusPaymentType.REFUNDED) {
     return <Item color={theme.palette.info.main}>Refunded</Item>;
-  } else if (status === statusType.HOLDING) {
+  } else if (status === statusPaymentType.HOLDING) {
     return <Item color={theme.palette.secondary.main}>Holding</Item>;
   }
   return <Item color={theme.palette.primary.main}>Guide get paid</Item>;

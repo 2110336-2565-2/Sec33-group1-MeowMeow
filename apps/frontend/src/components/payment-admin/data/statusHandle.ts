@@ -1,4 +1,4 @@
-export enum statusType {
+export enum statusPaymentType {
   TRAVELLER_PAID = "Traveller Paid",
   WAITING_REFUND = "Waiting Refund",
   REFUNDED = "Refunded",

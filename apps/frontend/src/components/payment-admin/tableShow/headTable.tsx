@@ -6,10 +6,10 @@ import {
   styled,
   tableCellClasses,
 } from "@mui/material";
-import { IData, Order } from "../data/recordType";
+import { IPaymentData, Order } from "../data/recordType";
 
 interface HeadCell {
-  id: keyof IData;
+  id: keyof IPaymentData;
   label: string;
   numeric: boolean;
 }
@@ -59,7 +59,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 interface EnhancedTableProps {
   onRequestSort: (
     event: React.MouseEvent<unknown>,
-    property: keyof IData
+    property: keyof IPaymentData
   ) => void;
   order: Order;
   orderBy: string;
@@ -68,7 +68,7 @@ interface EnhancedTableProps {
 export default function TableHeader(props: EnhancedTableProps) {
   const { order, orderBy, onRequestSort } = props;
   const createSortHandler =
-    (property: keyof IData) => (event: React.MouseEvent<unknown>) => {
+    (property: keyof IPaymentData) => (event: React.MouseEvent<unknown>) => {
       onRequestSort(event, property);
     };
 

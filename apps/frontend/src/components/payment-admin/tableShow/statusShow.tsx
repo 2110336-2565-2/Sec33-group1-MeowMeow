@@ -11,7 +11,7 @@ const Item = styled(Paper)(({ theme, color }) => ({
   backgroundColor: color,
   padding: theme.spacing(1),
   textAlign: "center",
-  color: theme.palette.text.secondary,
+  color: theme.palette.grey[100],
 }));
 
 export default function PaymentStatus({ status }: IStatusShow) {

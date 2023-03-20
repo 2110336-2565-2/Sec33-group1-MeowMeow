@@ -1,4 +1,3 @@
-import theme from "@/config/theme";
 import useCancelTrip from "@/hooks/useCancelTrip";
 import {
   Card,
@@ -8,12 +7,10 @@ import {
   Button,
   Stack,
 } from "@mui/material";
-import React, { useEffect } from "react";
+import React from "react";
 
 export default function CancelContent() {
   const { isLoading, onSubmit } = useCancelTrip();
-
-  useEffect(() => {}, []);
 
   if (isLoading) {
     return (
@@ -29,10 +26,7 @@ export default function CancelContent() {
   return (
     <Card sx={{ justifyContent: "center" }}>
       <CardContent>
-        <Typography variant="h4">
-          Are you sure to cancel this trip?
-          <br></br>
-        </Typography>
+        <Typography variant="h4">Are you sure to cancel this trip?</Typography>
         <br></br>
       </CardContent>
       <CardActions>

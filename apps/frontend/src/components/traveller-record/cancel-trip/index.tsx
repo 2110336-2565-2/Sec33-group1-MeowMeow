@@ -4,10 +4,8 @@ import CancelContent from "./cancelContent";
 
 export default function CancelTripComponent() {
   return (
-    <>
-      <CancelContainer>
-        <CancelContent />
-      </CancelContainer>
-    </>
+    <CancelContainer>
+      <CancelContent />
+    </CancelContainer>
   );
 }

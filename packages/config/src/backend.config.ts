@@ -21,6 +21,7 @@ export type BackendConfig = {
   };
   cors: {
     enable: boolean;
+    allowOrigin: string[];
   };
   //   graphql: {
   //     debug: boolean;
@@ -50,5 +51,8 @@ export const loadBackendConfig = (): BackendConfig => ({
   },
   cors: {
     enable: process.env.BACKEND_CORS_ENABLE === "true",
+    allowOrigin: (
+      process.env.BACKEND_CORS_ALLOW_ORIGIN ?? "http://localhost:3000"
+    ).split(","),
   },
 });

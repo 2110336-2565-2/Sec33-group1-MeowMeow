@@ -22,8 +22,7 @@ const useReviewForm = () => {
       }, {} as { [key: string]: string });
 
       formBody["guideId"] = router.query.id as string;
-      formBody["reviewerId"] = ""; // will be filled later
-      // console.log("===> ", formBody);  // debug purpose only
+      console.log("===> ", formBody); // debug purpose only
 
       if (formBody.score === "" || formBody.text === "") {
         addNotification(
@@ -36,7 +35,8 @@ const useReviewForm = () => {
       setLoading(true);
 
       try {
-        // await apiClient.post("/users/register", formBody);
+        const tmp = await apiClient.post("/reviews", formBody);
+        console.log("===> ", tmp); // debug purpose only
         addNotification("Review success", "success");
         setTimeout(() => {
           router.reload();

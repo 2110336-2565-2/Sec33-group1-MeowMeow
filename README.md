@@ -32,7 +32,9 @@
 - To run all apps `pnpm run dev`
 - To run only frontend app `pnpm run dev:frontend`
 - To run only backend app `pnpm run dev:backend`
-- To run backend end to end test `pnpm run test:e2e` (default it will run all test to spacific test run `pnpm run test:e2e -t "<describeString> <itString>"`
+- To run backend end to end test `pnpm run e2e:backend` (default it will run all test to spacific test run `pnpm run e2e:backend -t "<describeString> <itString>"`
+
+#### If can't run e2e test try to run `db:test:up` first ensure docker is running
 
 ### Production Build
 

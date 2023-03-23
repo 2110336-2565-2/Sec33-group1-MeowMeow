@@ -32,6 +32,7 @@
 - To run all apps `pnpm run dev`
 - To run only frontend app `pnpm run dev:frontend`
 - To run only backend app `pnpm run dev:backend`
+- To run backend end to end test `pnpm run test:e2e` (default it will run all test to spacific test run `pnpm run test:e2e -t "<describeString> <itString>"`
 
 ### Production Build
 

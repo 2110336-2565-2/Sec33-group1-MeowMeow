@@ -2,9 +2,8 @@ import * as React from "react";
 import { styled } from "@mui/material/styles";
 import Chip from "@mui/material/Chip";
 import Paper from "@mui/material/Paper";
-import TagFacesIcon from "@mui/icons-material/TagFaces";
-import { ChipData } from "./form";
 import { Button, Grid, TextField, Typography } from "@mui/material";
+import { ChipData } from "./form";
 
 interface ILocationChipProps {
   id: string;
@@ -18,11 +17,12 @@ const ListItem = styled("li")(({ theme }) => ({
 }));
 
 export default function ChipsArray({
+  id,
   label,
   chipData,
   setChipData,
 }: ILocationChipProps) {
-  const valueRef = React.createRef<HTMLInputElement>();
+  const [customTag, setCustomTag] = React.useState("");
 
   const handleDelete = (chipToDelete: ChipData) => () => {
     setChipData((chips) =>
@@ -31,14 +31,17 @@ export default function ChipsArray({
   };
 
   const handleAdd = () => {
+    if (customTag.trim().length === 0) {
+      return;
+    }
     setChipData((chips) => [
       ...chips,
       {
-        key: chipData[chipData.length - 1].key + 1,
-        label: valueRef.current?.value!,
+        key: chipData.length === 0 ? 1 : chipData[chipData.length - 1].key + 1,
+        label: customTag.trim()!,
       },
     ]);
-    valueRef.current!.value = "";
+    setCustomTag("");
   };
 
   return (
@@ -72,18 +75,12 @@ export default function ChipsArray({
         {chipData.map((data) => {
           let icon;
 
-          if (data.label === "React") {
-            icon = <TagFacesIcon />;
-          }
-
           return (
-            <ListItem key={data.key}>
+            <ListItem key={data.key} id={id} value={data.label}>
               <Chip
                 icon={icon}
                 label={data.label}
-                onDelete={
-                  data.label === "React" ? undefined : handleDelete(data)
-                }
+                onDelete={handleDelete(data)}
                 sx={{ margin: "10px" }}
               />
             </ListItem>
@@ -97,18 +94,22 @@ export default function ChipsArray({
           sx={{ margin: "10px" }}
         >
           <TextField
+            id="outlined-basic"
             label="Add more"
-            id="outlined-size-small"
             size="small"
-            inputRef={valueRef}
+            value={customTag}
+            onChange={(e) => setCustomTag(e.target.value)}
           />
+
           <Button
+            disabled={customTag === ""}
             variant="contained"
             color="primary"
-            onClick={handleAdd}
             sx={{ color: "white", marginLeft: "10px" }}
+            type="button"
+            onClick={handleAdd}
           >
-            Add
+            +
           </Button>
         </Grid>
       </Grid>

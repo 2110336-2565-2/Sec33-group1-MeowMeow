@@ -1,5 +1,7 @@
 import useCustomSnackbar from "@/hooks/useCustomSnackbar";
-import useRegisterGuideForm from "@/hooks/useRegisterGuideForm";
+import useRegisterGuideForm, {
+  setLocationAndTourStyle,
+} from "@/hooks/useRegisterGuideForm";
 import {
   Stack,
   TextField,
@@ -8,7 +10,7 @@ import {
   Alert,
   Typography,
 } from "@mui/material";
-import React, { ChangeEventHandler, useState } from "react";
+import React, { ChangeEventHandler, useEffect, useState } from "react";
 import ChipsArray from "./chipArray";
 
 export interface ChipData {
@@ -18,7 +20,6 @@ export interface ChipData {
 
 export default function GuideRegisterForm() {
   const { onClose, onExit, isOpen, messageInfo } = useCustomSnackbar();
-  const { onSubmit, isLoading } = useRegisterGuideForm();
   const [image, setImage] = useState<File | undefined>(undefined);
 
   const onUploadImage: ChangeEventHandler<HTMLInputElement> = (event) => {
@@ -31,13 +32,17 @@ export default function GuideRegisterForm() {
   const [location, setLocation] = React.useState<readonly ChipData[]>([
     { key: 0, label: "Bangkok" },
     { key: 1, label: "Thailand" },
-    { key: 2, label: "Mountain" },
   ]);
   const [tourStyle, setTourStyle] = React.useState<readonly ChipData[]>([
     { key: 0, label: "Playful" },
     { key: 1, label: "Knowledge" },
-    { key: 2, label: "Luxury" },
   ]);
+
+  useEffect(() => {
+    setLocationAndTourStyle(location, tourStyle);
+  }, [location, tourStyle]);
+
+  const { onSubmit, isLoading } = useRegisterGuideForm();
 
   if (isLoading) {
     return <div>Loading...</div>;

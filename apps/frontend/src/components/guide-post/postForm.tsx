@@ -96,6 +96,9 @@ export default function PostForm({ methodType }: IPostForm) {
           type="float"
           sx={{ width: "100%" }}
           value={formBody.price}
+          InputProps={{
+            readOnly: methodType === "PUT",
+          }}
           onChange={onChange}
         />
         <TextField

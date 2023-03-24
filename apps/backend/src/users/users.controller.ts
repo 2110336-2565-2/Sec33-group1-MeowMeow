@@ -13,11 +13,17 @@ import {
   UseGuards,
   HttpCode,
 } from '@nestjs/common';
-import { CreateUserRequest, AccountMetadata } from 'types';
+import {
+  CreateUserRequest,
+  AccountMetadata,
+  GetUserByIdResponse,
+  CreateUserResponse,
+  UpdateUserResponse,
+} from 'types';
 import { PropertyAlreadyUsedError, UserNotFoundError } from './users.common';
 import { UsersService } from './users.service';
 import { AuthGuard } from '../auth/auth.guard';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiCookieAuth, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Users')
 @Controller('users')
@@ -41,10 +47,19 @@ export class UsersController {
     );
   }
 
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'successfully get current user profile',
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'user with given id not found',
+  })
+  @ApiCookieAuth()
   @UseGuards(AuthGuard)
-  @Get('/profiles')
+  @Get('profiles')
   @HttpCode(HttpStatus.OK)
-  async getUserProfile(@Req() req) {
+  async getUserProfile(@Req() req): Promise<GetUserByIdResponse> {
     try {
       const account: AccountMetadata = req.account;
       const resBody = await this.usersService.getUserById({
@@ -56,9 +71,26 @@ export class UsersController {
     }
   }
 
-  @Get('/:id')
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'successfully get the user profile by id',
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'user with given id not found',
+  })
+  @ApiParam({
+    name: 'id',
+    type: 'number',
+    required: true,
+    description: 'user id',
+    example: 1,
+  })
+  @Get(':id')
   @HttpCode(HttpStatus.OK)
-  async getUserById(@Param('id', ParseIntPipe) userId: number) {
+  async getUserById(
+    @Param('id', ParseIntPipe) userId: number,
+  ): Promise<GetUserByIdResponse> {
     try {
       return await this.usersService.getUserById({ id: userId });
     } catch (e) {
@@ -66,9 +98,19 @@ export class UsersController {
     }
   }
 
-  @Post('/register')
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'successfully register a new user',
+  })
+  @ApiResponse({
+    status: HttpStatus.CONFLICT,
+    description: 'email or username already used',
+  })
+  @Post('register')
   @HttpCode(HttpStatus.CREATED)
-  async createUser(@Body() data: CreateUserRequest) {
+  async createUser(
+    @Body() data: CreateUserRequest,
+  ): Promise<CreateUserResponse> {
     try {
       return await this.usersService.create(data);
     } catch (e) {
@@ -76,10 +118,22 @@ export class UsersController {
     }
   }
 
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'successfully edit current user profile',
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'user with given id not found',
+  })
+  @ApiCookieAuth()
   @UseGuards(AuthGuard)
-  @Put('/users')
+  @Put('users')
   @HttpCode(HttpStatus.CREATED)
-  async editUserProfile(@Req() req, @Body() reqBody) {
+  async editUserProfile(
+    @Req() req,
+    @Body() reqBody,
+  ): Promise<UpdateUserResponse> {
     try {
       const account: AccountMetadata = req.account;
       const resBody = await this.usersService.updateUser(

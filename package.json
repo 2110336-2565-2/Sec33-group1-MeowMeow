@@ -15,7 +15,7 @@
     "db:seed-dev": "pnpm --filter database db:seed-dev",
     "dev": "turbo run build --filter config --filter database && turbo run dev --parallel",
     "dev:frontend": "turbo run build --filter config && turbo run dev --filter frontend --filter config",
-    "dev:backend": "turbo run build --filter config --filter database && turbo run dev --filter backend --filter config --filter database",
+    "dev:backend": "turbo run build --filter config --filter database && turbo run dev --filter backend --filter config --filter database --filter media-storage --filter types",
     "test:backend": "turbo run test --filter backend",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",

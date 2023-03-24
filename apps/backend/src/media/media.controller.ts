@@ -14,7 +14,6 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import {
-  AccountMetadata,
   DownloadRequest,
   DownloadResponse,
   UploadRequest,
@@ -22,7 +21,7 @@ import {
 } from 'types';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { MediaService } from './media.service';
-import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor } from '@nestjs/platform-express';
 import {
   ApiBody,
   ApiConsumes,
@@ -31,8 +30,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import path from 'path';
-import { FileIsDefinedValidator } from './file.validators';
+import { FileIsDefinedValidator } from 'src/common/file.validator';
 
 @ApiTags('media')
 @Controller('media')

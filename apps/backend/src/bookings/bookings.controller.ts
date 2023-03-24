@@ -45,6 +45,7 @@ import {
 import { AuthGuard } from 'src/auth/auth.guard';
 
 @ApiTags('bookings')
+
 @Controller('bookings')
 export class BookingsController {
   constructor(

@@ -53,7 +53,7 @@ export class ReviewsRepository {
         skip: maxPage * (param.page - 1),
         take: maxPage,
       });
-      let reviews = new Array(results.length);
+      const reviews = new Array(results.length);
       for (let i = 0; i < results.length; i++) {
         reviews[i] = {
           reviewId: results[i].id,

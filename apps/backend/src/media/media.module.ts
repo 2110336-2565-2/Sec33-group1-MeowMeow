@@ -3,7 +3,6 @@ import { Module } from '@nestjs/common';
 import { LocalMediaStorage } from 'media-storage';
 import { MediaController } from './media.controller';
 import { MediaServiceImpl } from './media.service';
-import { AuthGuard } from '../auth/auth.guard';
 import { AuthModule } from '../auth/auth.module';
 
 @Module({

@@ -3,9 +3,8 @@ import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { PrismaService } from './prisma/prisma.service';
-import { backendConfig, backendConfig as config, frontendConfig } from 'config';
+import { backendConfig, backendConfig as config } from 'config';
 import { ValidationPipe } from '@nestjs/common';
-import { Role } from 'database';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

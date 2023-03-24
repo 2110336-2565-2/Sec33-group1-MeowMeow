@@ -1,5 +1,4 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { join } from 'path';
 import * as crypto from 'crypto';
 import { UploadRequest, UploadResponse } from 'types';
 import { DownloadRequest, DownloadResponse } from 'types';

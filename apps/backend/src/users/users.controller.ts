@@ -10,8 +10,8 @@ import {
   Post,
   Put,
   Req,
-  Res,
   UseGuards,
+  HttpCode,
 } from '@nestjs/common';
 import { CreateUserRequest, AccountMetadata } from 'types';
 import { PropertyAlreadyUsedError, UserNotFoundError } from './users.common';
@@ -26,86 +26,69 @@ export class UsersController {
     @Inject('UsersService') private readonly usersService: UsersService,
   ) {}
 
+  handleException(e: Error) {
+    console.log(e);
+    if (e instanceof PropertyAlreadyUsedError)
+      throw new HttpException(e.message, HttpStatus.CONFLICT);
+    if (e instanceof UserNotFoundError)
+      throw new HttpException(
+        'user with given id not found',
+        HttpStatus.NOT_FOUND,
+      );
+    throw new HttpException(
+      'internal server error',
+      HttpStatus.INTERNAL_SERVER_ERROR,
+    );
+  }
+
   @UseGuards(AuthGuard)
   @Get('/profiles')
-  async getUserProfile(@Req() req, @Res({ passthrough: true }) res) {
+  @HttpCode(HttpStatus.OK)
+  async getUserProfile(@Req() req) {
     try {
       const account: AccountMetadata = req.account;
       const resBody = await this.usersService.getUserById({
         id: account.userId,
       });
-      res.status(HttpStatus.OK).send(resBody);
+      return resBody;
     } catch (e) {
-      throw new HttpException(
-        'internal server error',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      this.handleException(e);
     }
   }
 
   @Get('/:id')
-  async getUserById(
-    @Param('id', ParseIntPipe) userId: number,
-    @Res({ passthrough: true }) res,
-  ) {
+  @HttpCode(HttpStatus.OK)
+  async getUserById(@Param('id', ParseIntPipe) userId: number) {
     try {
-      const resBody = await this.usersService.getUserById({ id: userId });
-      res.status(HttpStatus.OK).send(resBody);
+      return await this.usersService.getUserById({ id: userId });
     } catch (e) {
-      console.log(e);
-      if (e instanceof UserNotFoundError) {
-        throw new HttpException(
-          'user with given id not found',
-          HttpStatus.NOT_FOUND,
-        );
-      }
-      throw new HttpException(
-        'internal server error',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      this.handleException(e);
     }
   }
 
   @Post('/register')
-  async createUser(
-    @Body() data: CreateUserRequest,
-    @Res({ passthrough: true }) res,
-  ) {
+  @HttpCode(HttpStatus.CREATED)
+  async createUser(@Body() data: CreateUserRequest) {
     try {
-      const resBody = await this.usersService.create(data);
-      res.status(HttpStatus.CREATED).send(resBody);
+      return await this.usersService.create(data);
     } catch (e) {
-      console.log(e);
-      if (e instanceof PropertyAlreadyUsedError) {
-        throw new HttpException(e.message, HttpStatus.CONFLICT);
-      }
-      throw new HttpException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
+      this.handleException(e);
     }
   }
 
   @UseGuards(AuthGuard)
   @Put('/users')
-  async editUserProfile(
-    @Req() req,
-    @Body() reqBody,
-    @Res({ passthrough: true }) res,
-  ) {
+  @HttpCode(HttpStatus.CREATED)
+  async editUserProfile(@Req() req, @Body() reqBody) {
     try {
       const account: AccountMetadata = req.account;
       const resBody = await this.usersService.updateUser(
         account.userId,
         reqBody,
       );
-      res.status(HttpStatus.CREATED).send(resBody);
+      return resBody;
     } catch (e) {
-      console.log(e);
-      if (e instanceof PropertyAlreadyUsedError) {
-        throw new HttpException(e.message, HttpStatus.CONFLICT);
-      }
-      throw new HttpException(
-        'internal server error',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      this.handleException(e);
     }
   }
 }

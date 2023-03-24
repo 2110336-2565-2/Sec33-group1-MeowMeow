@@ -134,7 +134,7 @@ export const rows = [
     2,
     22.67,
     "lineid 9",
-    statusType.WAITING_FOR_REVIEW
+    statusType.FINISHED
   ),
   createData(
     "10",

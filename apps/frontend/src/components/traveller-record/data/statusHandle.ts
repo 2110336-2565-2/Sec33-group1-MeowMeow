@@ -10,7 +10,6 @@ export enum statusType {
   WAITING_FOR_REFUND = "waiting for refund",
   CANCEL_TRAVEL = "cancel travel",
   TEAVELLING = "travelling",
-  WAITING_FOR_REVIEW = "waiting for review",
   FINISHED = "finished",
 }
 
@@ -38,10 +37,6 @@ buttonMapStatus.set(statusType.WAITING, [subButtonName.CANCEL]);
 buttonMapStatus.set(statusType.WAITING_FOR_REFUND, []);
 buttonMapStatus.set(statusType.CANCEL_TRAVEL, [subButtonName.REFUND]);
 buttonMapStatus.set(statusType.TEAVELLING, []);
-buttonMapStatus.set(statusType.WAITING_FOR_REVIEW, [
-  subButtonName.REVIEW,
-  subButtonName.REFUND,
-]);
 buttonMapStatus.set(statusType.FINISHED, []);
 
 export let buttonMapLink = new Map<string, string>();
@@ -85,11 +80,6 @@ statusDetail.set(statusType.CANCEL_TRAVEL, {
 statusDetail.set(statusType.TEAVELLING, {
   description: "You are travelling with this trip Enjoy!",
   color: TRAVELLINGCOLOR,
-});
-statusDetail.set(statusType.WAITING_FOR_REVIEW, {
-  description:
-    "Your trip is finished, please press the button to review your trip",
-  color: WAITINGCOLOR,
 });
 statusDetail.set(statusType.FINISHED, {
   description: "Your trip is finished, thank you for your review",

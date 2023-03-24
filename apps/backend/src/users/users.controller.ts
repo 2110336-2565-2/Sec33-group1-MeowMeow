@@ -16,8 +16,10 @@ import {
 import { CreateUserRequest, AccountMetadata } from 'types';
 import { PropertyAlreadyUsedError, UserNotFoundError } from './users.common';
 import { UsersService } from './users.service';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthGuard } from '../auth/auth.guard';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Users')
 @Controller('users')
 export class UsersController {
   constructor(

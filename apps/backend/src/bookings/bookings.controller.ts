@@ -42,9 +42,9 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthGuard } from '../auth/auth.guard';
 
-@ApiTags('bookings')
+@ApiTags('Bookings')
 @Controller('bookings')
 export class BookingsController {
   constructor(

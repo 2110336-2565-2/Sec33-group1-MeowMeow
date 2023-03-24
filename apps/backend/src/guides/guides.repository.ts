@@ -1,8 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { Sql } from '@prisma/client/runtime';
-import { Guide, Prisma, User } from 'database';
-import { InvalidRequestError } from 'src/auth/auth.commons';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { Prisma } from 'database';
+import { PrismaService } from '../prisma/prisma.service';
 import {
   FailedRelationConstraintError,
   RecordAlreadyExist,
@@ -60,7 +58,7 @@ export class GuidesRepository {
         OFFSET ${filter.offset} LIMIT ${filter.limit}
       `;
 
-      var guides = new Array(results.length);
+      const guides = new Array(results.length);
       for (let i = 0; i < results.length; i++) {
         guides[i] = {
           id: results[i].id,

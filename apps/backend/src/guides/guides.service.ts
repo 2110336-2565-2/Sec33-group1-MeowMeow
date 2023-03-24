@@ -7,7 +7,7 @@ import {
 } from 'types';
 import { GuidesRepository } from './guides.repository';
 import { validate } from 'class-validator';
-import { InvalidRequestError } from 'src/auth/auth.commons';
+import { InvalidRequestError } from '../auth/auth.commons';
 import { GetGuideByIdRequest, GetGuideByIdResponse } from 'types';
 import { MediaService } from 'src/media/media.service';
 

@@ -1,5 +1,4 @@
 import {
-  Body,
   Controller,
   Delete,
   HttpException,
@@ -24,6 +23,7 @@ import {
 } from 'types';
 import { PostsService } from './posts.service';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('posts')
 export class PostsController {
@@ -31,6 +31,7 @@ export class PostsController {
     @Inject('PostsService') private readonly postsService: PostsService,
   ) {}
 
+  @ApiTags('Not Implemented')
   @Post()
   @UsePipes(new ValidationPipe({ transform: true }))
   @UseGuards(AuthGuard)
@@ -73,6 +74,7 @@ export class PostsController {
     }
   }
 
+  @ApiTags('Not Implemented')
   @Put('id')
   async updatePost(
     @Req() req,
@@ -110,6 +112,7 @@ export class PostsController {
     }
   }
 
+  @ApiTags('Not Implemented')
   @Delete(':id')
   async deletePost(
     @Req() req,

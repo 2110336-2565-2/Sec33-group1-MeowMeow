@@ -4,8 +4,8 @@ import { InvalidAuthenticationError } from './auth.commons';
 import { LoginRequest, LoginResponse, AccountMetadata } from 'types';
 
 import { Injectable } from '@nestjs/common';
-import { UserNotFoundError } from 'src/users/users.common';
-import { UsersRepository } from 'src/users/users.repository';
+import { UserNotFoundError } from '../users/users.common';
+import { UsersRepository } from '../users/users.repository';
 import { backendConfig } from 'config';
 
 export interface AuthService {

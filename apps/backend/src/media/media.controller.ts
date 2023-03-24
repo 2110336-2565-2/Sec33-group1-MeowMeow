@@ -19,7 +19,7 @@ import {
   UploadRequest,
   UploadResponse,
 } from 'types';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthGuard } from '../auth/auth.guard';
 import { MediaService } from './media.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import {
@@ -32,7 +32,7 @@ import {
 } from '@nestjs/swagger';
 import { FileIsDefinedValidator } from 'src/common/file.validator';
 
-@ApiTags('media')
+@ApiTags('Media')
 @Controller('media')
 export class MediaController {
   constructor(

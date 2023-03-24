@@ -1,5 +1,4 @@
 import {
-  Body,
   Controller,
   Get,
   HttpException,
@@ -31,22 +30,18 @@ import {
   ApiConsumes,
   ApiCookieAuth,
   ApiOperation,
-  ApiParam,
   ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { Response } from 'express';
-import { ReviewsService } from 'src/reviews/reviews.service';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { ReviewsService } from '../reviews/reviews.service';
+import { FileIsDefinedValidator } from '../common/file.validator';
+import { RecordAlreadyExist } from './guides.common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { FileIsDefinedValidator } from 'src/common/file.validator';
-import {
-  FailedRelationConstraintError,
-  RecordAlreadyExist,
-} from './guides.common';
+import { AuthGuard } from '../auth/auth.guard';
 
-@ApiTags('guides')
+@ApiTags('Guides')
 @Controller('guides')
 export class GuidesController {
   constructor(

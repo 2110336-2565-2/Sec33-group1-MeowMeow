@@ -33,7 +33,7 @@ export class BookingsService implements IBookingsService {
       userId: req.userId,
     });
 
-    let results = [];
+    const results = [];
     for (let i = 0; i < bookings.length; i++) {
       const booking = bookings[i];
       results.push({

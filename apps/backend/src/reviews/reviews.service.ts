@@ -5,7 +5,7 @@ import {
   GetGuideReviewsRequest,
   GetGuideReviewsResponse,
 } from 'types';
-import { InvalidRequestError } from 'src/auth/auth.commons';
+import { InvalidRequestError } from '../auth/auth.commons';
 import { ReviewsRepository } from './reviews.repository';
 import { validate } from 'class-validator';
 

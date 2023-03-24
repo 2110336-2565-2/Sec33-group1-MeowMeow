@@ -17,16 +17,18 @@ import {
   CreateReviewResponse,
 } from 'types';
 import { ReviewsService } from './reviews.service';
-import { InvalidRequestError } from 'src/auth/auth.commons';
+import { InvalidRequestError } from '../auth/auth.commons';
 import { FailedRelationConstraintError } from './reviews.common';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthGuard } from '../auth/auth.guard';
 import {
   ApiBody,
   ApiCookieAuth,
   ApiOperation,
   ApiResponse,
+  ApiTags,
 } from '@nestjs/swagger';
 
+@ApiTags('Reviews')
 @Controller('reviews')
 export class ReviewsController {
   constructor(

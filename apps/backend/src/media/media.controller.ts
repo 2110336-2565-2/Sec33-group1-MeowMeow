@@ -7,7 +7,6 @@ import {
   Param,
   ParseFilePipe,
   Post,
-  Req,
   Res,
   UploadedFile,
   UseGuards,
@@ -30,7 +29,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { FileIsDefinedValidator } from 'src/common/file.validator';
+import { FileIsDefinedValidator } from '../common/file.validator';
 
 @ApiTags('Media')
 @Controller('media')

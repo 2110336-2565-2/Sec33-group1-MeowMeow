@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Booking, BookingStatus } from 'database';
+import { BookingStatus } from 'database';
 import {
   AcceptBookingResponse,
   CreateBookingRequest,

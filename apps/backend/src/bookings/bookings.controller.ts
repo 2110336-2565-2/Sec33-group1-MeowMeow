@@ -22,7 +22,6 @@ import {
   CreateBookingResponse,
   DeclineBookingRequest,
   DeclineBookingResponse,
-  GetBookingsByUserIdRequest,
   GetBookingsByUserIdResponse,
   UpdateBookingRequest,
   UpdatePostResponse,
@@ -37,7 +36,6 @@ import { IBookingsService } from './bookings.service';
 import {
   ApiBody,
   ApiCookieAuth,
-  ApiExtraModels,
   ApiOperation,
   ApiResponse,
   ApiTags,

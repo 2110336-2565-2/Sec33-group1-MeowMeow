@@ -19,5 +19,6 @@ import { AuthModule } from 'src/auth/auth.module';
       useClass: LocalMediaStorage,
     },
   ],
+  exports: ['MediaService'],
 })
 export class MediaModule {}

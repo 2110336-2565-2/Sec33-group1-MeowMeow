@@ -8,6 +8,17 @@ import { Injectable } from '@nestjs/common';
 export class UsersRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
+  handleException(e: Error) {
+    if (e instanceof Prisma.PrismaClientKnownRequestError) {
+      if (e.code === 'P2002') {
+        throw new PropertyAlreadyUsedError(
+          `There is a unique constraint violation, ${e.meta.target} have already been used`,
+        );
+      }
+    }
+    throw e;
+  }
+
   async getUserByEmail(email: string): Promise<User> {
     const user = await this.prismaService.user.findUnique({
       where: { email: email },
@@ -48,14 +59,7 @@ export class UsersRepository {
 
       return user;
     } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        if (e.code === 'P2002') {
-          throw new PropertyAlreadyUsedError(
-            `There is a unique constraint violation, ${e.meta.target} have already been used`,
-          );
-        }
-      }
-      throw e;
+      this.handleException(e);
     }
   }
 
@@ -85,14 +89,7 @@ export class UsersRepository {
 
       return user;
     } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        if (e.code === 'P2002') {
-          throw new PropertyAlreadyUsedError(
-            `There is a unique constraint violation, ${e.meta.target} have already been used`,
-          );
-        }
-      }
-      throw e;
+      this.handleException(e);
     }
   }
 }

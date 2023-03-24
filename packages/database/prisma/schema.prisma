@@ -17,9 +17,15 @@ enum Role {
 }
 
 enum BookingStatus {
-  PENDING
-  ACCEPTED
-  REJECTED
+  WAITING_FOR_GUIDE_CONFIRMATION
+  GUIDE_CANCELLED
+  WAITING_FOR_PAYMENT
+  WAITING_FOR_REFUND
+  WAITING_FOR_TRAVELING
+  TRAVELING
+  WAITING_FOR_REVIEW
+  FINISHED
+  USER_CANCELLED
 }
 
 model User {
@@ -36,12 +42,14 @@ model User {
   review         Review[]
   posts          Post[]
   Booking        Booking[]
+  Transaction    Transaction[]
 }
 
 model Guide {
   id          Int    @id @default(autoincrement())
   userId      Int    @unique
   certificate String
+  paymentId   String
 
   user      User        @relation(fields: [userId], references: [id])
   location  Location[]
@@ -98,7 +106,7 @@ model Booking {
   updatedAt     DateTime      @updatedAt
   startDate     DateTime
   endDate       DateTime
-  bookingStatus BookingStatus @default(PENDING)
+  bookingStatus BookingStatus @default(WAITING_FOR_GUIDE_CONFIRMATION)
   postId        Int
   userId        Int
   guideId       Int
@@ -106,4 +114,17 @@ model Booking {
   post  Post  @relation(fields: [postId], references: [id])
   user  User  @relation(fields: [userId], references: [id])
   guide Guide @relation(fields: [guideId], references: [id])
+  Transaction Transaction[]
+}
+
+model Transaction {
+  id        Int      @ id @ default(autoincrement())
+  createdAt DateTime @ default(now())
+  updatedAt DateTime @ updatedAt
+  paymentID String
+  bookingId Int
+  userId    Int
+
+  booking Booking @ relation(fields: [bookingId], references: [id])
+  user User @ relation(fields: [userId], references: [id])
 }

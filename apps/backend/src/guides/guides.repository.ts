@@ -3,6 +3,10 @@ import { Sql } from '@prisma/client/runtime';
 import { Guide, Prisma, User } from 'database';
 import { InvalidRequestError } from 'src/auth/auth.commons';
 import { PrismaService } from 'src/prisma/prisma.service';
+import {
+  FailedRelationConstraintError,
+  RecordAlreadyExist,
+} from './guides.common';
 
 @Injectable()
 export class GuidesRepository {
@@ -108,6 +112,39 @@ export class GuidesRepository {
       };
     } catch (e) {
       console.log(e);
+    }
+  }
+
+  async registerUserForGuide(data: {
+    userId: number;
+    certificate: string;
+  }): Promise<{
+    guideId: number;
+    certificate: string;
+  }> {
+    try {
+      const guide = await this.prismaService.guide.create({
+        data: {
+          userId: data.userId,
+          certificate: data.certificate,
+        },
+      });
+      return {
+        guideId: guide.id,
+        certificate: guide.certificate,
+      };
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code == 'P2002') {
+          throw new RecordAlreadyExist(
+            'user with given ID has already been a guide',
+          );
+        }
+        if (e.code === 'P2003') {
+          throw new FailedRelationConstraintError('relation constraint failed');
+        }
+      }
+      throw e;
     }
   }
 }

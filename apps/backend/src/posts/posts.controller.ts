@@ -22,7 +22,7 @@ import {
   UpdatePostResponse,
 } from 'types';
 import { PostsService } from './posts.service';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthGuard } from '../auth/auth.guard';
 import { ApiTags } from '@nestjs/swagger';
 
 @Controller('posts')

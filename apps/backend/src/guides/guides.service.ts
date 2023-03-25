@@ -42,8 +42,7 @@ export class GuidesServiceImpl {
     if (err.length > 0) {
       throw new InvalidRequestError(err.toString());
     }
-    const guideResult = await this.guidesRepo.getGuideById(req.id);
-    return guideResult;
+    return await this.guidesRepo.getGuideById(req.id);
   }
 
   async registerUserForGuide(
@@ -61,7 +60,7 @@ export class GuidesServiceImpl {
     return {
       message: 'success',
       guideId: guide.guideId,
-      certificateId: guide.certificate,
+      certificateId: guide.certificateId,
     };
   }
 }

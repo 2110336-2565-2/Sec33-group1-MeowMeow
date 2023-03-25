@@ -31,7 +31,7 @@ model User {
   hashedPassword String
   firstName      String
   lastName       String
-  roles           Role[]    @default([USER])
+  roles          Role[]    @default([USER])
   guide          Guide?
   review         Review[]
   posts          Post[]
@@ -39,9 +39,9 @@ model User {
 }
 
 model Guide {
-  id          Int    @id @default(autoincrement())
-  userId      Int    @unique
-  certificate String
+  id            Int    @id @default(autoincrement())
+  userId        Int    @unique
+  certificateId String
 
   user      User        @relation(fields: [userId], references: [id])
   location  Location[]

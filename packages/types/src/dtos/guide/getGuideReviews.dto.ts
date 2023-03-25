@@ -1,6 +1,20 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty, PickType } from "@nestjs/swagger";
 import { Type } from "class-transformer";
 import { IsInt, Min } from "class-validator";
+import { Guide } from "./guide.dto";
+
+class GuideReview extends PickType(Guide, ["guideId"] as const) {
+  @ApiProperty({ type: () => Number })
+  reviewId: number;
+  @ApiProperty({ type: () => Number })
+  reviewerId: number;
+  @ApiProperty({ type: () => Number })
+  score: number;
+  @ApiProperty({ type: () => String })
+  text: string;
+  @ApiProperty({ type: () => Date })
+  publishDate: Date;
+}
 
 export class GetGuideReviewsRequest {
   @Type(() => Number)
@@ -13,20 +27,4 @@ export class GetGuideReviewsRequest {
   page: number;
 }
 
-export class GuideReview {
-  @ApiProperty({ type: () => Number })
-  id: number;
-  @ApiProperty({ type: () => Number })
-  guideId: number;
-  @ApiProperty({ type: () => Number })
-  reviewerId: number;
-  @ApiProperty({ type: () => Number })
-  score: number;
-  @ApiProperty({ type: () => String })
-  text: string;
-}
-
-export class GetGuideReviewsResponse {
-  @ApiProperty({ type: () => [GuideReview] })
-  reviews: GuideReview[];
-}
+export type GetGuideReviewsResponse = GuideReview[];

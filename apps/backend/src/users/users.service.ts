@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import {
-  GetUserByIdRequest,
   GetUserByIdResponse,
   UpdateUserRequest,
   UpdateUserResponse,

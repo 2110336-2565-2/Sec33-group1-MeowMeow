@@ -11,7 +11,8 @@
     "module": "commonjs",
     "outDir": "./dist",
     "experimentalDecorators": true,
-    "strictNullChecks": false
+    "strictNullChecks": false,
+    "target": "ES6"
   },
   "include": ["."],
   "exclude": ["dist", "build", "node_modules"]

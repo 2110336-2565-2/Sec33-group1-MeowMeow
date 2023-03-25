@@ -31,7 +31,7 @@ model User {
   hashedPassword String
   firstName      String
   lastName       String
-  role           Role      @default(USER)
+  roles           Role[]    @default([USER])
   guide          Guide?
   review         Review[]
   posts          Post[]

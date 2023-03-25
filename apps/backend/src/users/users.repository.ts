@@ -36,24 +36,22 @@ export class UsersRepository {
   }
 
   async createUser(data: {
-    createdAt: Date;
     email: string;
     username: string;
     firstName: string;
     lastName: string;
     hashedPassword: string;
-    role: Role;
+    roles: Role[];
   }): Promise<User> {
     try {
       const user = await this.prismaService.user.create({
         data: {
-          createdAt: data.createdAt,
           email: data.email,
           username: data.username,
           firstName: data.firstName,
           lastName: data.lastName,
           hashedPassword: data.hashedPassword,
-          role: data.role,
+          roles: data.roles,
         },
       });
 
@@ -71,7 +69,6 @@ export class UsersRepository {
       firstName?: string;
       lastName?: string;
       hashedPassword?: string;
-      role?: Role;
     },
   ): Promise<User> {
     try {
@@ -83,7 +80,6 @@ export class UsersRepository {
           firstName: update.firstName,
           lastName: update.lastName,
           hashedPassword: update.hashedPassword,
-          role: update.role,
         },
       });
 

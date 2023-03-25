@@ -43,7 +43,6 @@ export class ReviewsServiceImpl {
     id: number,
     page: number,
   ): Promise<GetGuideReviewsResponse> {
-    const guideReviews = await this.reviewsRepo.getGuideReviews(id, page);
-    return { reviews: guideReviews };
+    return await this.reviewsRepo.getGuideReviews(id, page);
   }
 }

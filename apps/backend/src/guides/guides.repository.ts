@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from 'database';
+import { GetGuideByIdResponse } from 'types';
 import { PrismaService } from '../prisma/prisma.service';
 import {
   FailedRelationConstraintError,
@@ -74,14 +75,7 @@ export class GuidesRepository {
     }
   }
 
-  async getGuideById(guideId: number): Promise<{
-    id: number;
-    userId: number;
-    firstName: string;
-    lastName: string;
-    certificate: string;
-    averageReviewScore: number;
-  }> {
+  async getGuideById(guideId: number): Promise<GetGuideByIdResponse> {
     try {
       const guideResult = await this.prismaService.guide.findUnique({
         where: {
@@ -101,11 +95,11 @@ export class GuidesRepository {
         GROUP BY "Review"."guideId"
       `;
       return {
-        id: guideResult.id,
+        guideId: guideResult.id,
         userId: guideResult.userId,
         firstName: userResult.firstName,
         lastName: userResult.lastName,
-        certificate: guideResult.certificate,
+        certificateId: guideResult.certificateId,
         averageReviewScore: scoreResult[0].avg_review_score,
       };
     } catch (e) {
@@ -119,18 +113,18 @@ export class GuidesRepository {
     certificate: string;
   }): Promise<{
     guideId: number;
-    certificate: string;
+    certificateId: string;
   }> {
     try {
       const guide = await this.prismaService.guide.create({
         data: {
           userId: data.userId,
-          certificate: data.certificate,
+          certificateId: data.certificate,
         },
       });
       return {
         guideId: guide.id,
-        certificate: guide.certificate,
+        certificateId: guide.certificateId,
       };
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {

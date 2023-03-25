@@ -1,4 +1,5 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty, PickType } from "@nestjs/swagger";
+import { Guide } from "./guide.dto";
 
 export class GuideRegisterRequest {
   @ApiProperty({
@@ -21,23 +22,8 @@ export class GuideRegisterRequest {
   certificate: Buffer;
 }
 
-export class GuideRegisterResponse {
-  @ApiProperty({
-    type: () => String,
-    description: "status message",
-    example: "success",
-  })
-  message: string;
-  @ApiProperty({
-    type: () => Number,
-    description: "guide id",
-    example: 1,
-  })
-  guideId: number;
-  @ApiProperty({
-    type: () => String,
-    description: "upload certificate id",
-    example: "9a5bb8cc-2af9-4057-8153-eaa8d4a2b0d1",
-  })
-  certificateId: string;
-}
+export class GuideRegisterResponse extends PickType(Guide, [
+  "message",
+  "guideId",
+  "certificateId",
+] as const) {}

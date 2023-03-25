@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from 'database';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { FailedRelationConstraintError } from 'src/reviews/reviews.common';
+import { PrismaService } from '../prisma/prisma.service';
+import { FailedRelationConstraintError } from '../reviews/reviews.common';
 @Injectable()
 export class PostsRepository {
   constructor(private readonly prismaService: PrismaService) {}

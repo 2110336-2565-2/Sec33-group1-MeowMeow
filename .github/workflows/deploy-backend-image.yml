@@ -10,11 +10,6 @@ on:
       - "apps/backend/**"
       - "packages/config/**"
       - "packages/database/**"
-  pull_request:
-    branches:
-      - main
-      - beta
-      - dev
   workflow_dispatch:
 
 jobs:

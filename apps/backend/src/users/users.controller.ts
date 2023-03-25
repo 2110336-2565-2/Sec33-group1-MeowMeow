@@ -19,6 +19,7 @@ import {
   GetUserByIdResponse,
   CreateUserResponse,
   UpdateUserResponse,
+  UpdateUserRequest,
 } from 'types';
 import { PropertyAlreadyUsedError, UserNotFoundError } from './users.common';
 import { UsersService } from './users.service';
@@ -50,6 +51,7 @@ export class UsersController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'successfully get current user profile',
+    type: GetUserByIdResponse,
   })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
@@ -57,15 +59,12 @@ export class UsersController {
   })
   @ApiCookieAuth()
   @UseGuards(AuthGuard)
-  @Get('profiles')
+  @Get('profile')
   @HttpCode(HttpStatus.OK)
   async getUserProfile(@Req() req): Promise<GetUserByIdResponse> {
     try {
       const account: AccountMetadata = req.account;
-      const resBody = await this.usersService.getUserById({
-        id: account.userId,
-      });
-      return resBody;
+      return await this.usersService.getUserById(account.userId);
     } catch (e) {
       this.handleException(e);
     }
@@ -74,6 +73,7 @@ export class UsersController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'successfully get the user profile by id',
+    type: GetUserByIdResponse,
   })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
@@ -92,7 +92,7 @@ export class UsersController {
     @Param('id', ParseIntPipe) userId: number,
   ): Promise<GetUserByIdResponse> {
     try {
-      return await this.usersService.getUserById({ id: userId });
+      return await this.usersService.getUserById(userId);
     } catch (e) {
       this.handleException(e);
     }
@@ -101,6 +101,7 @@ export class UsersController {
   @ApiResponse({
     status: HttpStatus.CREATED,
     description: 'successfully register a new user',
+    type: CreateUserResponse,
   })
   @ApiResponse({
     status: HttpStatus.CONFLICT,
@@ -109,10 +110,10 @@ export class UsersController {
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
   async createUser(
-    @Body() data: CreateUserRequest,
+    @Body() userData: CreateUserRequest,
   ): Promise<CreateUserResponse> {
     try {
-      return await this.usersService.create(data);
+      return await this.usersService.create(userData);
     } catch (e) {
       this.handleException(e);
     }
@@ -121,6 +122,7 @@ export class UsersController {
   @ApiResponse({
     status: HttpStatus.CREATED,
     description: 'successfully edit current user profile',
+    type: UpdateUserResponse,
   })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
@@ -128,19 +130,15 @@ export class UsersController {
   })
   @ApiCookieAuth()
   @UseGuards(AuthGuard)
-  @Put('users')
+  @Put()
   @HttpCode(HttpStatus.CREATED)
   async editUserProfile(
     @Req() req,
-    @Body() reqBody,
+    @Body() userData: UpdateUserRequest,
   ): Promise<UpdateUserResponse> {
     try {
       const account: AccountMetadata = req.account;
-      const resBody = await this.usersService.updateUser(
-        account.userId,
-        reqBody,
-      );
-      return resBody;
+      return await this.usersService.updateUser(account.userId, userData);
     } catch (e) {
       this.handleException(e);
     }

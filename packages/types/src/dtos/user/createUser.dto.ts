@@ -1,57 +1,17 @@
-import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
+import { ApiProperty, ApiPropertyOptional, PickType } from "@nestjs/swagger";
 import { IsEmail, IsNotEmpty } from "class-validator";
+import { User } from "./user.dto";
 
-export class CreateUserRequest {
-  @ApiProperty({
-    type: () => String,
-    required: true,
-    description: "email",
-    example: "john@example.com",
-  })
-  @IsEmail()
-  @IsNotEmpty()
-  email: string;
+export class CreateUserRequest extends PickType(User, [
+  "email",
+  "username",
+  "password",
+  "firstName",
+  "lastName",
+] as const) {}
 
-  @ApiProperty({
-    type: () => String,
-    required: true,
-    description: "username",
-    example: "user1",
-  })
-  @IsNotEmpty()
-  username: string;
-
-  @ApiProperty({
-    type: () => String,
-    required: true,
-    description: "password",
-    example: "s3cr3t",
-  })
-  @IsNotEmpty()
-  password: string;
-
-  @ApiProperty({
-    type: () => String,
-    required: true,
-    description: "firstname",
-    example: "john",
-  })
-  @IsNotEmpty()
-  firstName: string;
-
-  @ApiProperty({
-    type: () => String,
-    required: true,
-    description: "lastname",
-    example: "doe",
-  })
-  @IsNotEmpty()
-  lastName: string;
-}
-
-export class CreateUserResponse {
-  message: string;
-  id: number;
-  username: string;
-  role: string;
-}
+export class CreateUserResponse extends PickType(User, [
+  "message",
+  "id",
+  "username",
+] as const) {}

@@ -35,7 +35,10 @@ export class ReviewsRepository {
     }
   }
 
-  async getGuideReviews(param: { id: number; page: number }): Promise<
+  async getGuideReviews(
+    id: number,
+    page: number,
+  ): Promise<
     {
       id: number;
       guideId: number;
@@ -48,9 +51,9 @@ export class ReviewsRepository {
       const maxPage = 10;
       const results = await this.prismaService.review.findMany({
         where: {
-          guideId: param.id,
+          guideId: id,
         },
-        skip: maxPage * (param.page - 1),
+        skip: maxPage * (page - 1),
         take: maxPage,
       });
       const reviews = new Array(results.length);

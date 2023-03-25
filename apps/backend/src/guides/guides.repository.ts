@@ -110,6 +110,7 @@ export class GuidesRepository {
       };
     } catch (e) {
       console.log(e);
+      throw e;
     }
   }
 

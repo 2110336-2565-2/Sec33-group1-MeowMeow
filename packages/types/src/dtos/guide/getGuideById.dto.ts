@@ -3,24 +3,23 @@ import { Type } from "class-transformer";
 import { IsInt } from "class-validator";
 
 export class GetGuideByIdRequest {
+  @ApiProperty({ type: () => Number })
   @Type(() => Number)
   @IsInt()
   id: number;
 }
 
 export class GetGuideByIdResponse {
-  @ApiProperty()
+  @ApiProperty({ type: () => Number })
   id: number;
-  @ApiProperty()
+  @ApiProperty({ type: () => Number })
   userId: number;
-  @ApiProperty()
+  @ApiProperty({ type: () => String })
   firstName: string;
-  @ApiProperty()
+  @ApiProperty({ type: () => String })
   lastName: string;
-  //   @ApiProperty()
-  //   fee: number;
-  @ApiProperty()
+  @ApiProperty({ type: () => String })
   certificate: string;
-  @ApiProperty()
+  @ApiProperty({ type: () => Number })
   averageReviewScore: number;
 }

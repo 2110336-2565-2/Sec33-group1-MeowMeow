@@ -1,7 +1,7 @@
 import { Role, User } from 'database';
 import { Prisma } from 'database';
 import { PrismaService } from '../prisma/prisma.service';
-import { PropertyAlreadyUsedError } from './users.common';
+import { PropertyAlreadyUsedError, UserNotFoundError } from './users.common';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
@@ -84,6 +84,31 @@ export class UsersRepository {
       });
 
       return user;
+    } catch (e) {
+      this.handleException(e);
+    }
+  }
+
+  async addUserRole(id: number, role: Role): Promise<User> {
+    try {
+      const user = await this.prismaService.user.findUnique({
+        where: {
+          id: id,
+        },
+      });
+
+      if (!user) throw new UserNotFoundError('updated user not found');
+
+      if (user.roles.includes(role))
+        throw new PropertyAlreadyUsedError('user role already existed');
+
+      user.roles.push(role);
+      return await this.prismaService.user.update({
+        where: { id: id },
+        data: {
+          roles: user.roles,
+        },
+      });
     } catch (e) {
       this.handleException(e);
     }

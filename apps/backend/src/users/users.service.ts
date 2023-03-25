@@ -42,6 +42,7 @@ export class UsersServiceImpl {
       username: user.username,
       firstName: user.firstName,
       lastName: user.lastName,
+      roles: user.roles,
     };
   }
 

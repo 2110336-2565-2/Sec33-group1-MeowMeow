@@ -78,19 +78,21 @@ export class GuidesRepository {
           id: guideResult.userId,
         },
       });
-      const scoreResult = await this.prismaService.$queryRaw<any>`
-      SELECT AVG("Review"."score") AS avg_review_score
-        FROM "Review"
-        WHERE "Review"."guideId" = ${guideId}
-        GROUP BY "Review"."guideId"
-      `;
+      const scoreResult = await this.prismaService.review.aggregate({
+        _avg: {
+          score: true,
+        },
+        where: {
+          guideId: guideResult.id,
+        },
+      });
       return {
         guideId: guideResult.id,
         userId: guideResult.userId,
         firstName: userResult.firstName,
         lastName: userResult.lastName,
         certificateId: guideResult.certificateId,
-        averageReviewScore: scoreResult[0].avg_review_score,
+        averageReviewScore: scoreResult._avg.score?.toNumber() | 0,
       };
     } catch (e) {
       console.log(e);

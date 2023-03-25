@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from 'database';
-import { GetGuideByIdResponse } from 'types';
+import { GetGuideByIdResponse, SearchGuidesResponse } from 'types';
 import { PrismaService } from '../prisma/prisma.service';
 import {
   FailedRelationConstraintError,
@@ -18,15 +18,7 @@ export class GuidesRepository {
     minReviewScore?: number;
     startDate?: Date;
     endDate?: Date;
-  }): Promise<
-    {
-      id: number;
-      firstName: string;
-      lastName: string;
-      certificate: string;
-      averageReviewScore: number;
-    }[]
-  > {
+  }): Promise<SearchGuidesResponse> {
     try {
       const minReviewCondition = Prisma.sql`WHERE "avg_review_score" >= ${filter.minReviewScore}`;
       const locationCondition = Prisma.sql`WHERE "Location"."locationName" = ${filter.location}`;
@@ -59,17 +51,15 @@ export class GuidesRepository {
         OFFSET ${filter.offset} LIMIT ${filter.limit}
       `;
 
-      const guides = new Array(results.length);
-      for (let i = 0; i < results.length; i++) {
-        guides[i] = {
-          id: results[i].id,
-          firstName: results[i].firstName ?? null,
-          lastName: results[i].lastName ?? null,
-          certificate: results[i].certificate ?? null,
-          averageReviewScore: results[i].averageReviewScore ?? null,
+      return results.map((e) => {
+        return {
+          guideId: e.id,
+          firstName: e.firstName ?? null,
+          lastName: e.lastName ?? null,
+          certificateId: e.certificate ?? null,
+          averageReviewScore: e.averageReviewScore ?? null,
         };
-      }
-      return guides;
+      });
     } catch (e) {
       throw e;
     }

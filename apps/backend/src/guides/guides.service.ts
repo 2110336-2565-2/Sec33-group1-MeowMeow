@@ -8,12 +8,12 @@ import {
 import { GuidesRepository } from './guides.repository';
 import { validate } from 'class-validator';
 import { InvalidRequestError } from '../auth/auth.commons';
-import { GetGuideByIdRequest, GetGuideByIdResponse } from 'types';
+import { GetGuideByIdResponse } from 'types';
 import { MediaService } from '../media/media.service';
 
 export interface GuidesService {
   searchGuides(searchInfo: SearchGuidesRequest): Promise<SearchGuidesResponse>;
-  getGuideById(id: GetGuideByIdRequest): Promise<GetGuideByIdResponse>;
+  getGuideById(id: number): Promise<GetGuideByIdResponse>;
   registerUserForGuide(
     userId: number,
     guideRegisterData: GuideRegisterRequest,
@@ -33,16 +33,11 @@ export class GuidesServiceImpl {
       throw new InvalidRequestError(err.toString());
     }
 
-    const guides = await this.guidesRepo.paginateGuides(req);
-    return { results: guides };
+    return await this.guidesRepo.paginateGuides(req);
   }
 
-  async getGuideById(req: GetGuideByIdRequest): Promise<GetGuideByIdResponse> {
-    const err = await validate(req);
-    if (err.length > 0) {
-      throw new InvalidRequestError(err.toString());
-    }
-    return await this.guidesRepo.getGuideById(req.id);
+  async getGuideById(id: number): Promise<GetGuideByIdResponse> {
+    return await this.guidesRepo.getGuideById(id);
   }
 
   async registerUserForGuide(

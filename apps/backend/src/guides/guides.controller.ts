@@ -9,6 +9,7 @@ import {
   NotFoundException,
   Param,
   ParseFilePipe,
+  ParseIntPipe,
   Post,
   Query,
   Req,
@@ -20,16 +21,13 @@ import {
 } from '@nestjs/common';
 import {
   AccountMetadata,
-  GetGuideByIdRequest,
   GetGuideByIdResponse,
-  GetGuideReviewsRequest,
   GuideRegisterRequest,
+  SearchGuidesGuideResponse,
   SearchGuidesRequest,
-  SearchGuidesResponse,
 } from 'types';
 import { GuidesService } from './guides.service';
 import {
-  ApiBody,
   ApiConsumes,
   ApiCookieAuth,
   ApiOperation,
@@ -43,7 +41,6 @@ import { RecordAlreadyExist } from './guides.common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from '../auth/auth.guard';
 import { InvalidRequestError } from '../auth/auth.commons';
-import { validate } from 'class-validator';
 
 @ApiTags('Guides')
 @Controller('guides')
@@ -65,14 +62,13 @@ export class GuidesController {
     );
   }
 
-  @ApiCookieAuth('access_token')
   @ApiOperation({ summary: 'paginate guides with filter' })
   @ApiQuery({ name: 'offset', type: Number })
   @ApiQuery({ name: 'limit', type: Number })
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'successfully paginated guides',
-    type: SearchGuidesResponse,
+    type: [SearchGuidesGuideResponse],
   })
   @ApiResponse({
     status: HttpStatus.UNAUTHORIZED,
@@ -116,21 +112,13 @@ export class GuidesController {
   })
   @Get(':id')
   @HttpCode(HttpStatus.OK)
-  @UsePipes(
-    new ValidationPipe({
-      transform: true,
-      transformOptions: { enableImplicitConversion: true },
-    }),
-  )
   async getGuideById(
-    @Param() queryParams: GetGuideByIdRequest,
+    @Param('id', ParseIntPipe) id: number,
   ): Promise<GetGuideByIdResponse> {
     try {
-      const guild = await this.guidesService.getGuideById(queryParams);
+      const guild = await this.guidesService.getGuideById(id);
       if (!guild) {
-        throw new NotFoundException(
-          `Guide with id ${queryParams.id} does not exist.`,
-        );
+        throw new NotFoundException(`Guide with id ${id} does not exist.`);
       }
       return guild;
     } catch (e) {
@@ -144,27 +132,16 @@ export class GuidesController {
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
-    description: 'invalid request',
+    description: 'validation error',
   })
   @Get(':id/reviews/:page')
   @HttpCode(HttpStatus.OK)
-  @UsePipes(
-    new ValidationPipe({
-      transform: true,
-      transformOptions: { enableImplicitConversion: true },
-    }),
-  )
-  async getGuideReviews(@Param() queryParams: GetGuideReviewsRequest) {
+  async getGuideReviews(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('page', ParseIntPipe) page: number,
+  ) {
     try {
-      const err = await validate(queryParams);
-      if (err.length > 0) {
-        throw new InvalidRequestError(err.toString());
-      }
-
-      return await this.reviewsService.getGuideReviews(
-        queryParams.id,
-        queryParams.page,
-      );
+      return await this.reviewsService.getGuideReviews(id, page);
     } catch (e) {
       this.handleException(e);
     }
@@ -173,22 +150,10 @@ export class GuidesController {
   @ApiCookieAuth('access_token')
   @ApiOperation({ summary: 'register for a guide' })
   @ApiConsumes('multipart/form-data')
-  @ApiBody({
-    schema: {
-      type: 'object',
-      properties: {
-        certificate: {
-          description: 'certificate file in JPEG/PNG format',
-          type: 'string',
-          format: 'binary',
-        },
-      },
-    },
-  })
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'successfully registered for a guide',
-    type: SearchGuidesResponse,
+    type: [SearchGuidesGuideResponse],
   })
   @ApiResponse({
     status: HttpStatus.UNAUTHORIZED,
@@ -216,8 +181,8 @@ export class GuidesController {
     try {
       const account: AccountMetadata = req.account;
       return await this.guidesService.registerUserForGuide(account.userId, {
-        certificate,
         ...guideRegisterData,
+        certificate: certificate.buffer,
       });
     } catch (e) {
       if (e instanceof RecordAlreadyExist) {

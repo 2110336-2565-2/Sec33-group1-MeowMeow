@@ -10,6 +10,8 @@ import { validate } from 'class-validator';
 import { InvalidRequestError } from '../auth/auth.commons';
 import { GetGuideByIdResponse } from 'types';
 import { MediaService } from '../media/media.service';
+import { UsersRepository } from 'src/users/users.repository';
+import { Role } from 'database';
 
 export interface GuidesService {
   searchGuides(searchInfo: SearchGuidesRequest): Promise<SearchGuidesResponse>;
@@ -24,6 +26,7 @@ export interface GuidesService {
 export class GuidesServiceImpl {
   constructor(
     private readonly guidesRepo: GuidesRepository,
+    private readonly usersRepo: UsersRepository,
     @Inject('MediaService') private readonly mediaService: MediaService,
   ) {}
 
@@ -52,6 +55,7 @@ export class GuidesServiceImpl {
       userId: userId,
       certificate: certFileId,
     });
+    this.usersRepo.addUserRole(userId, Role.GUIDE);
     return {
       message: 'success',
       guideId: guide.guideId,

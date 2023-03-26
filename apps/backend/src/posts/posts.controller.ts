@@ -1,14 +1,17 @@
 import {
+  Body,
   Controller,
   Delete,
+  Get,
+  HttpCode,
   HttpException,
   HttpStatus,
   Inject,
   Param,
+  ParseIntPipe,
   Post,
   Put,
   Req,
-  Res,
   UseGuards,
   UsePipes,
   ValidationPipe,
@@ -18,133 +21,126 @@ import {
   CreatePostRequest,
   CreatePostResponse,
   DeletePostResponse,
+  GetPostResponse,
   UpdatePostRequest,
   UpdatePostResponse,
 } from 'types';
 import { PostsService } from './posts.service';
 import { AuthGuard } from '../auth/auth.guard';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { FailedRelationConstraintError, NotFoundError } from './posts.common';
 
+@ApiTags('Posts')
 @Controller('posts')
 export class PostsController {
   constructor(
     @Inject('PostsService') private readonly postsService: PostsService,
   ) {}
 
-  @ApiTags('Not Implemented')
+  handleException(e: Error) {
+    console.log(e);
+
+    if (e instanceof NotFoundError)
+      throw new HttpException(e.message, HttpStatus.NOT_FOUND);
+    if (e instanceof FailedRelationConstraintError)
+      throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
+    throw new HttpException(
+      'internal server error',
+      HttpStatus.INTERNAL_SERVER_ERROR,
+    );
+  }
+
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'get post successfully',
+    type: GetPostResponse,
+  })
+  @HttpCode(HttpStatus.OK)
+  @Get(':id')
+  async getPostById(
+    @Param('id', ParseIntPipe) postId: number,
+  ): Promise<GetPostResponse> {
+    try {
+      return await this.postsService.getPostById(postId);
+    } catch (e) {
+      this.handleException(e);
+    }
+  }
+
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'post created',
+    type: CreatePostResponse,
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'valid session is not provided',
+  })
+  @HttpCode(HttpStatus.CREATED)
   @Post()
   @UsePipes(new ValidationPipe({ transform: true }))
   @UseGuards(AuthGuard)
   async createPost(
     @Req() req,
-    //@Body() createPostDto: CreatePostRequest,
-    @Res({ passthrough: true }) res,
-  ) {
+    @Body() createPostDto: CreatePostRequest,
+  ): Promise<CreatePostResponse> {
     try {
-      const requestBody: CreatePostRequest = req.body;
       const account: AccountMetadata = req.account;
-      // check if user is authenticated
-      if (!account) {
-        throw new HttpException(
-          { message: 'User is not authenticated' },
-          HttpStatus.UNAUTHORIZED,
-        );
-      }
-      // check if user is authorized
-      if (account.userId != requestBody.authorId) {
-        throw new HttpException(
-          { message: "User is not allow to post in other user's names" },
-          HttpStatus.FORBIDDEN,
-        );
-      }
 
-      const resBody: CreatePostResponse = await this.postsService.createPost(
-        requestBody,
-      );
-      res.status(HttpStatus.CREATED).send(resBody);
+      return await this.postsService.createPost(account.userId, createPostDto);
     } catch (e) {
-      //TODO: Handle error
-      if (e instanceof HttpException) {
-        throw e;
-      } else
-        throw new HttpException(
-          { message: e.message },
-          HttpStatus.INTERNAL_SERVER_ERROR,
-        );
+      this.handleException(e);
     }
   }
 
-  @ApiTags('Not Implemented')
-  @Put('id')
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'post updated successfully',
+    type: UpdatePostResponse,
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'valid session is not provided',
+  })
+  @HttpCode(HttpStatus.OK)
+  @Put(':id')
+  @UsePipes(new ValidationPipe({ transform: true }))
+  @UseGuards(AuthGuard)
   async updatePost(
     @Req() req,
-    @Param('id') id: number,
-    @Res({ passthrough: true }) res,
-  ) {
+    @Param('id', ParseIntPipe) id: number,
+    @Body() postData: UpdatePostRequest,
+  ): Promise<UpdatePostResponse> {
     try {
       const account: AccountMetadata = req.account;
-      const requestBody: UpdatePostRequest = req.body;
-      // check if user is authenticated
-      if (!account) {
-        throw new HttpException(
-          { message: 'User is not authenticated' },
-          HttpStatus.UNAUTHORIZED,
-        );
-      }
 
-      const resBody: UpdatePostResponse = await this.postsService.updatePost(
-        requestBody,
-        id,
-        account.userId,
-      );
-      res.status(HttpStatus.OK).send(resBody);
+      return await this.postsService.updatePost(postData, id, account.userId);
     } catch (e) {
-      if (
-        e instanceof HttpException &&
-        e.getStatus() === HttpStatus.UNAUTHORIZED
-      ) {
-        throw e;
-      } else
-        throw new HttpException(
-          { message: e.message },
-          HttpStatus.INTERNAL_SERVER_ERROR,
-        );
+      this.handleException(e);
     }
   }
 
-  @ApiTags('Not Implemented')
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'post deleted successfully',
+    type: DeletePostResponse,
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'valid session is not provided',
+  })
+  @HttpCode(HttpStatus.OK)
   @Delete(':id')
+  @UseGuards(AuthGuard)
   async deletePost(
     @Req() req,
-    @Param('id') id: number,
-    @Res({ passthrough: true }) res,
-  ) {
+    @Param('id') postId: number,
+  ): Promise<DeletePostResponse> {
     try {
       const account: AccountMetadata = req.account;
-
-      // check if user is authenticated
-      if (!account) {
-        throw new HttpException(
-          { message: 'User is not authenticated' },
-          HttpStatus.UNAUTHORIZED,
-        );
-      }
-      const resBody: DeletePostResponse = await this.postsService.deletePost(
-        id,
-        account.userId,
-      );
-      res.status(HttpStatus.OK).send(resBody);
+      return await this.postsService.deletePost(postId, account.userId);
     } catch (e) {
-      if (
-        e instanceof HttpException &&
-        e.getStatus() === HttpStatus.UNAUTHORIZED
-      ) {
-        throw e;
-      } else
-        throw new HttpException(
-          { message: e.message },
-          HttpStatus.INTERNAL_SERVER_ERROR,
-        );
+      this.handleException(e);
     }
   }
 }

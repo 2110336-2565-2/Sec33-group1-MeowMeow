@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma } from 'database';
+import { Post, Prisma } from 'database';
+import { CreatePostRequest, UpdatePostRequest } from 'types';
 import { PrismaService } from '../prisma/prisma.service';
-import { FailedRelationConstraintError } from '../reviews/reviews.common';
+import { FailedRelationConstraintError } from './posts.common';
 @Injectable()
 export class PostsRepository {
   constructor(private readonly prismaService: PrismaService) {}
@@ -12,26 +13,18 @@ export class PostsRepository {
     });
     return post;
   }
-  async createPost(data: {
-    title: string;
-    createdAt: Date;
-    content: string;
-    authorId: number;
-    fee: number;
-    tags: string[];
-  }) {
+
+  async createPost(userId: number, data: CreatePostRequest) {
     try {
-      const post = await this.prismaService.post.create({
+      return await this.prismaService.post.create({
         data: {
-          createdAt: data.createdAt,
           title: data.title,
           content: data.content,
-          authorId: data.authorId,
+          authorId: userId,
           fee: data.fee,
           tags: data.tags,
         },
       });
-      return post;
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
         if (e.code === 'P2003') {
@@ -42,18 +35,14 @@ export class PostsRepository {
     }
   }
 
-  async updatePost(
-    id: number,
-    data: {
-      title: string;
-      content: string;
-      fee: number;
-      tags: string[];
-    },
-  ) {
+  async updateUserPost(
+    postId: number,
+    userId: number,
+    data: UpdatePostRequest,
+  ): Promise<Post> {
     try {
-      const post = await this.prismaService.post.update({
-        where: { id },
+      const post = await this.prismaService.post.updateMany({
+        where: { id: postId, authorId: userId },
         data: {
           title: data.title,
           content: data.content,
@@ -61,20 +50,19 @@ export class PostsRepository {
           tags: data.tags,
         },
       });
-      return post;
+      return post.count === 1 ? post[0] : null;
     } catch (e) {
-      //TODO: A more specific error handling is needed
       throw e;
     }
   }
-  async deletePost(id: number) {
+
+  async deleteUserPost(postId: number, userId: number): Promise<Post> {
     try {
-      const post = await this.prismaService.post.delete({
-        where: { id },
+      const post = await this.prismaService.post.deleteMany({
+        where: { id: postId, authorId: userId },
       });
-      return post;
+      return post.count === 1 ? post[0] : null;
     } catch (e) {
-      //TODO: A more specific error handling is needed
       throw e;
     }
   }

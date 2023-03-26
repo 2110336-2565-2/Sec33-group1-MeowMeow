@@ -1,46 +1,17 @@
-import {
-  IsDateString,
-  IsInt,
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  Max,
-  Min,
-} from "class-validator";
+import { PartialType, PickType } from "@nestjs/swagger";
+import { CreatePostRequest } from "./createPost.dto";
+import { Post } from "./post.dto";
 
-export class UpdatePostRequest {
-  // Todo: Implement this
+export class UpdatePostRequest extends PartialType(CreatePostRequest) {}
 
-  @IsOptional()
-  title: string;
-
-  @IsOptional()
-  content: string;
-
-  @IsOptional()
-  @IsNumber({ maxDecimalPlaces: 2 })
-  @Max(99999999.99)
-  @Min(0)
-  fee: number;
-
-  @IsOptional()
-  tags: string[];
-}
-
-export class UpdatePostResponse {
-  // Todo: Implement this
-  message: string;
-  formerPost: post;
-  updatedPost: post;
-}
-
-class post {
-  id: number;
-  authorId: number;
-  createdAt: Date;
-  updatedAt: Date;
-  title: string;
-  content: string;
-  tags: string[];
-  fee: number;
-}
+export class UpdatePostResponse extends PickType(Post, [
+  "message",
+  "id",
+  "authorId",
+  "createdAt",
+  "updatedAt",
+  "title",
+  "content",
+  "tags",
+  "fee",
+] as const) {}

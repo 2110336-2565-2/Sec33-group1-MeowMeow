@@ -1,15 +1,21 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import {
   CreatePostRequest,
   CreatePostResponse,
   DeletePostResponse,
+  GetPostResponse,
   UpdatePostRequest,
   UpdatePostResponse,
 } from 'types';
+import { NotFoundError } from './posts.common';
 
 import { PostsRepository } from './posts.repository';
 export interface PostsService {
-  createPost(createPostDto: CreatePostRequest): Promise<CreatePostResponse>;
+  getPostById(postId: number): Promise<GetPostResponse>;
+  createPost(
+    userId: number,
+    createPostDto: CreatePostRequest,
+  ): Promise<CreatePostResponse>;
   updatePost(
     updatePostDto: UpdatePostRequest,
     postId: number,
@@ -21,15 +27,32 @@ export interface PostsService {
 export class PostsServiceImpl {
   constructor(private readonly postsRepo: PostsRepository) {}
 
+  async getPostById(postId: number): Promise<GetPostResponse> {
+    const post = await this.postsRepo.getPost(postId);
+
+    if (!post) {
+      throw new NotFoundError('post not found');
+    }
+    return {
+      message: 'success',
+      id: post.id,
+      authorId: post.authorId,
+      createdAt: post.createdAt,
+      updatedAt: post.updatedAt,
+      title: post.title,
+      content: post.content,
+      tags: post.tags,
+      fee: post.fee.toNumber(),
+    };
+  }
+
   async createPost(
+    userId: number,
     createPostDto: CreatePostRequest,
   ): Promise<CreatePostResponse> {
-    //TODO: Implement this
-    const post = await this.postsRepo.createPost({
+    const post = await this.postsRepo.createPost(userId, {
       title: createPostDto.title,
-      createdAt: new Date(),
       content: createPostDto.content,
-      authorId: createPostDto.authorId,
       fee: createPostDto.fee,
       tags: createPostDto.tags,
     });
@@ -47,84 +70,51 @@ export class PostsServiceImpl {
   }
 
   async updatePost(
+    postId: number,
+    userId: number,
     updatePostDto: UpdatePostRequest,
-    postId: number,
-    authorId: number,
   ): Promise<UpdatePostResponse> {
-    //TODO: Implement this
+    const post = await this.postsRepo.updateUserPost(
+      postId,
+      userId,
+      updatePostDto,
+    );
 
-    // get post by id
-    const fPost = await this.postsRepo.getPost(postId);
-    if (!fPost) {
-      throw new HttpException('Post not found', HttpStatus.NOT_FOUND);
+    if (!post) {
+      throw new NotFoundError('update post not found');
     }
-    // check if editor is the author of the post
-    else if (fPost.authorId != authorId) {
-      throw new HttpException(
-        'You are forbidden from editing thispost',
-        HttpStatus.FORBIDDEN,
-      );
-    }
-
-    const uPost = await this.postsRepo.updatePost(postId, {
-      title: updatePostDto.title,
-      content: updatePostDto.content,
-      fee: updatePostDto.fee,
-      tags: updatePostDto.tags,
-    });
-
-    return {
-      message: 'success',
-      formerPost: {
-        id: fPost.id,
-        createdAt: fPost.createdAt,
-        updatedAt: fPost.updatedAt,
-        title: fPost.title,
-        content: fPost.content,
-        authorId: fPost.authorId,
-        fee: fPost.fee.toNumber(),
-        tags: fPost.tags,
-      },
-      updatedPost: {
-        id: uPost.id,
-        createdAt: uPost.createdAt,
-        updatedAt: uPost.updatedAt,
-        title: uPost.title,
-        content: uPost.content,
-        authorId: uPost.authorId,
-        fee: uPost.fee.toNumber(),
-        tags: uPost.tags,
-      },
-    };
-  }
-  async deletePost(
-    postId: number,
-    authorId: number,
-  ): Promise<DeletePostResponse> {
-    //get post by id
-    const fPost = await this.postsRepo.getPost(postId);
-    if (!fPost) {
-      throw new HttpException('Post not found', HttpStatus.NOT_FOUND);
-    }
-    // check if editor is the author of the post
-    else if (fPost.authorId != authorId) {
-      throw new HttpException(
-        'You are forbidden from deleting this post',
-        HttpStatus.FORBIDDEN,
-      );
-    }
-
-    const post = await this.postsRepo.deletePost(postId);
     return {
       message: 'success',
       id: post.id,
+      authorId: post.authorId,
       createdAt: post.createdAt,
       updatedAt: post.updatedAt,
       title: post.title,
       content: post.content,
-      authorId: post.authorId,
-      fee: post.fee.toNumber(),
       tags: post.tags,
+      fee: post.fee.toNumber(),
+    };
+  }
+
+  async deletePost(
+    postId: number,
+    userId: number,
+  ): Promise<DeletePostResponse> {
+    const post = await this.postsRepo.deleteUserPost(postId, userId);
+
+    if (!post) {
+      throw new NotFoundError('delete post not found');
+    }
+    return {
+      message: 'success',
+      id: post.id,
+      authorId: post.authorId,
+      createdAt: post.createdAt,
+      updatedAt: post.updatedAt,
+      title: post.title,
+      content: post.content,
+      tags: post.tags,
+      fee: post.fee.toNumber(),
     };
   }
 }

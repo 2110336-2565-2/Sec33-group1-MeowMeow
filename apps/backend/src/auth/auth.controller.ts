@@ -15,10 +15,16 @@ import {
   InvalidAuthenticationError,
   InvalidRequestError,
 } from './auth.commons';
-import { UserNotFoundError } from 'src/users/users.common';
-import { ApiCookieAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { UserNotFoundError } from '../users/users.common';
+import {
+  ApiCookieAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { AuthGuard } from './auth.guard';
 
+@ApiTags('Authentication')
 @Controller({ path: 'auth', version: '1' })
 export class AuthController {
   constructor(

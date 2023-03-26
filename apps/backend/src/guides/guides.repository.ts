@@ -1,8 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { Sql } from '@prisma/client/runtime';
-import { Guide, Prisma, User } from 'database';
-import { InvalidRequestError } from 'src/auth/auth.commons';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { Prisma } from 'database';
+import { GetGuideByIdResponse, SearchGuidesResponse } from 'types';
+import { PrismaService } from '../prisma/prisma.service';
+import {
+  FailedRelationConstraintError,
+  RecordAlreadyExist,
+} from './guides.common';
 
 @Injectable()
 export class GuidesRepository {
@@ -15,15 +18,7 @@ export class GuidesRepository {
     minReviewScore?: number;
     startDate?: Date;
     endDate?: Date;
-  }): Promise<
-    {
-      id: number;
-      firstName: string;
-      lastName: string;
-      certificate: string;
-      averageReviewScore: number;
-    }[]
-  > {
+  }): Promise<SearchGuidesResponse> {
     try {
       const minReviewCondition = Prisma.sql`WHERE "avg_review_score" >= ${filter.minReviewScore}`;
       const locationCondition = Prisma.sql`WHERE "Location"."locationName" = ${filter.location}`;
@@ -56,30 +51,21 @@ export class GuidesRepository {
         OFFSET ${filter.offset} LIMIT ${filter.limit}
       `;
 
-      var guides = new Array(results.length);
-      for (let i = 0; i < results.length; i++) {
-        guides[i] = {
-          id: results[i].id,
-          firstName: results[i].firstName ?? null,
-          lastName: results[i].lastName ?? null,
-          certificate: results[i].certificate ?? null,
-          averageReviewScore: results[i].averageReviewScore ?? null,
+      return results.map((e) => {
+        return {
+          guideId: e.id,
+          firstName: e.firstName ?? null,
+          lastName: e.lastName ?? null,
+          certificateId: e.certificate ?? null,
+          averageReviewScore: e.averageReviewScore ?? null,
         };
-      }
-      return guides;
+      });
     } catch (e) {
       throw e;
     }
   }
 
-  async getGuideById(guideId: number): Promise<{
-    id: number;
-    userId: number;
-    firstName: string;
-    lastName: string;
-    certificate: string;
-    averageReviewScore: number;
-  }> {
+  async getGuideById(guideId: number): Promise<GetGuideByIdResponse> {
     try {
       const guideResult = await this.prismaService.guide.findUnique({
         where: {
@@ -92,22 +78,58 @@ export class GuidesRepository {
           id: guideResult.userId,
         },
       });
-      const scoreResult = await this.prismaService.$queryRaw<any>`
-      SELECT AVG("Review"."score") AS avg_review_score
-        FROM "Review"
-        WHERE "Review"."guideId" = ${guideId}
-        GROUP BY "Review"."guideId"
-      `;
+      const scoreResult = await this.prismaService.review.aggregate({
+        _avg: {
+          score: true,
+        },
+        where: {
+          guideId: guideResult.id,
+        },
+      });
       return {
-        id: guideResult.id,
+        guideId: guideResult.id,
         userId: guideResult.userId,
         firstName: userResult.firstName,
         lastName: userResult.lastName,
-        certificate: guideResult.certificate,
-        averageReviewScore: scoreResult[0].avg_review_score,
+        certificateId: guideResult.certificateId,
+        averageReviewScore: scoreResult._avg.score?.toNumber() | 0,
       };
     } catch (e) {
       console.log(e);
+      throw e;
+    }
+  }
+
+  async registerUserForGuide(data: {
+    userId: number;
+    certificate: string;
+  }): Promise<{
+    guideId: number;
+    certificateId: string;
+  }> {
+    try {
+      const guide = await this.prismaService.guide.create({
+        data: {
+          userId: data.userId,
+          certificateId: data.certificate,
+        },
+      });
+      return {
+        guideId: guide.id,
+        certificateId: guide.certificateId,
+      };
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code == 'P2002') {
+          throw new RecordAlreadyExist(
+            'user with given ID has already been a guide',
+          );
+        }
+        if (e.code === 'P2003') {
+          throw new FailedRelationConstraintError('relation constraint failed');
+        }
+      }
+      throw e;
     }
   }
 }

@@ -1,10 +1,9 @@
-import { AuthService } from 'src/auth/auth.service';
+import { AuthService } from '../../auth/auth.service';
 
 import {
   Req,
   Res,
   Next,
-  Injectable,
   NestMiddleware,
   Inject,
   HttpException,
@@ -13,7 +12,7 @@ import {
 import {
   InvalidAuthenticationError,
   InvalidRequestError,
-} from 'src/auth/auth.commons';
+} from '../../auth/auth.commons';
 
 export class AuthMiddleware implements NestMiddleware {
   constructor(

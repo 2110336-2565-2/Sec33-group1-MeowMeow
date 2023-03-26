@@ -22,7 +22,6 @@ import {
   CreateBookingResponse,
   DeclineBookingRequest,
   DeclineBookingResponse,
-  GetBookingsByUserIdRequest,
   GetBookingsByUserIdResponse,
   UpdateBookingRequest,
   UpdatePostResponse,
@@ -37,15 +36,13 @@ import { IBookingsService } from './bookings.service';
 import {
   ApiBody,
   ApiCookieAuth,
-  ApiExtraModels,
   ApiOperation,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthGuard } from '../auth/auth.guard';
 
-@ApiTags('bookings')
-
+@ApiTags('Bookings')
 @Controller('bookings')
 export class BookingsController {
   constructor(

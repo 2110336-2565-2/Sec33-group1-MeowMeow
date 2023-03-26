@@ -2,18 +2,14 @@ import { Injectable } from '@nestjs/common';
 import {
   CreateReviewRequest,
   CreateReviewResponse,
-  GetGuideReviewsRequest,
   GetGuideReviewsResponse,
 } from 'types';
-import { InvalidRequestError } from 'src/auth/auth.commons';
+import { InvalidRequestError } from '../auth/auth.commons';
 import { ReviewsRepository } from './reviews.repository';
-import { validate } from 'class-validator';
 
 export interface ReviewsService {
   createReview(req: CreateReviewRequest);
-  getGuideReviews(
-    req: GetGuideReviewsRequest,
-  ): Promise<GetGuideReviewsResponse>;
+  getGuideReviews(id: number, page: number): Promise<GetGuideReviewsResponse>;
 }
 
 @Injectable()
@@ -44,13 +40,9 @@ export class ReviewsServiceImpl {
   }
 
   async getGuideReviews(
-    req: GetGuideReviewsRequest,
+    id: number,
+    page: number,
   ): Promise<GetGuideReviewsResponse> {
-    const err = await validate(req);
-    if (err.length > 0) {
-      throw new InvalidRequestError(err.toString());
-    }
-    const guideReviews = await this.reviewsRepo.getGuideReviews(req);
-    return { reviews: guideReviews };
+    return await this.reviewsRepo.getGuideReviews(id, page);
   }
 }

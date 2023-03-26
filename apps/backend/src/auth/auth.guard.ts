@@ -9,9 +9,9 @@ import {
 import {
   InvalidAuthenticationError,
   InvalidRequestError,
-} from 'src/auth/auth.commons';
+} from '../auth/auth.commons';
 
-import { AuthService } from 'src/auth/auth.service';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {

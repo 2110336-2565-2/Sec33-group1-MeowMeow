@@ -17,9 +17,14 @@ enum Role {
 }
 
 enum BookingStatus {
-  PENDING
-  ACCEPTED
-  REJECTED
+  WAITING_FOR_GUIDE_CONFIRMATION
+  GUIDE_CANCELLED
+  WAITING_FOR_PAYMENT
+  WAITING_FOR_REFUND
+  WAITING_FOR_TRAVELING
+  TRAVELING
+  FINISHED
+  USER_CANCELLED
 }
 
 model User {
@@ -35,19 +40,20 @@ model User {
   guide          Guide?
   review         Review[]
   posts          Post[]
-  Booking        Booking[]
+  bookings        Booking[]
+  transactions    Transaction[]
 }
 
 model Guide {
-  id            Int    @id @default(autoincrement())
-  userId        Int    @unique
+  id          Int    @id @default(autoincrement())
+  userId      Int    @unique
   certificateId String
-
+  paymentId   String
   user      User        @relation(fields: [userId], references: [id])
-  location  Location[]
-  tourStyle TourStyle[]
-  review    Review[]
-  Booking   Booking[]
+  locations  Location[]
+  tourStyles TourStyle[]
+  reviews    Review[]
+  Bookings   Booking[]
 }
 
 model Location {
@@ -89,7 +95,7 @@ model Post {
   fee       Decimal  @db.Decimal(10, 2)
 
   author  User      @relation(fields: [authorId], references: [id])
-  Booking Booking[]
+  bookings Booking[]
 }
 
 model Booking {
@@ -98,7 +104,7 @@ model Booking {
   updatedAt     DateTime      @updatedAt
   startDate     DateTime
   endDate       DateTime
-  bookingStatus BookingStatus @default(PENDING)
+  bookingStatus BookingStatus @default(WAITING_FOR_GUIDE_CONFIRMATION)
   postId        Int
   userId        Int
   guideId       Int
@@ -106,4 +112,17 @@ model Booking {
   post  Post  @relation(fields: [postId], references: [id])
   user  User  @relation(fields: [userId], references: [id])
   guide Guide @relation(fields: [guideId], references: [id])
+  transactions Transaction[]
+}
+
+model Transaction {
+  id        Int      @ id @ default(autoincrement())
+  createdAt DateTime @ default(now())
+  updatedAt DateTime @ updatedAt
+  paymentID String
+  bookingId Int
+  userId    Int
+
+  booking Booking @ relation(fields: [bookingId], references: [id])
+  user User @ relation(fields: [userId], references: [id])
 }

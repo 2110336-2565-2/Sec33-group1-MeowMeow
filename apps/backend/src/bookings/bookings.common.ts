@@ -2,7 +2,7 @@ export class InvalidDateFormat extends Error {
   constructor(msg: string) {
     super(msg);
 
-    Object.setPrototypeOf(this, InvalidDateFormat);
+    Object.setPrototypeOf(this, InvalidDateFormat.prototype);
   }
 }
 

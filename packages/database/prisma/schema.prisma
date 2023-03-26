@@ -23,7 +23,6 @@ enum BookingStatus {
   WAITING_FOR_REFUND
   WAITING_FOR_TRAVELING
   TRAVELING
-  WAITING_FOR_REVIEW
   FINISHED
   USER_CANCELLED
 }
@@ -41,8 +40,8 @@ model User {
   guide          Guide?
   review         Review[]
   posts          Post[]
-  Booking        Booking[]
-  Transaction    Transaction[]
+  bookings        Booking[]
+  transactions    Transaction[]
 }
 
 model Guide {
@@ -52,10 +51,10 @@ model Guide {
   paymentId   String
 
   user      User        @relation(fields: [userId], references: [id])
-  location  Location[]
-  tourStyle TourStyle[]
-  review    Review[]
-  Booking   Booking[]
+  locations  Location[]
+  tourStyles TourStyle[]
+  reviews    Review[]
+  Bookings   Booking[]
 }
 
 model Location {
@@ -97,7 +96,7 @@ model Post {
   fee       Decimal  @db.Decimal(10, 2)
 
   author  User      @relation(fields: [authorId], references: [id])
-  Booking Booking[]
+  bookings Booking[]
 }
 
 model Booking {
@@ -114,7 +113,7 @@ model Booking {
   post  Post  @relation(fields: [postId], references: [id])
   user  User  @relation(fields: [userId], references: [id])
   guide Guide @relation(fields: [guideId], references: [id])
-  Transaction Transaction[]
+  transactions Transaction[]
 }
 
 model Transaction {

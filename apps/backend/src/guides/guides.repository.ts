@@ -41,7 +41,7 @@ export class GuidesRepository {
           LEFT JOIN "Location" ON "Guide"."id" = "Location"."guideId"
           ${filter.location ? locationCondition : Prisma.empty}
         )
-        SELECT "Guide"."id", "Guide"."certificate",
+        SELECT "Guide"."id", "Guide"."certificateId",
         "User"."firstName", "User"."lastName",
         c1."avg_review_score" as "averageReviewScore"
         FROM "Guide"

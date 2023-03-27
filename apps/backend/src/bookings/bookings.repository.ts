@@ -7,9 +7,14 @@ import {
 } from './bookings.common';
 
 const bookingStatusEnumMapper = {
-  pending: BookingStatus.PENDING,
-  accepted: BookingStatus.ACCEPTED,
-  rejected: BookingStatus.REJECTED,
+  waitingForGuideConfirmation: BookingStatus.WAITING_FOR_GUIDE_CONFIRMATION,
+  guideCancelled: BookingStatus.GUIDE_CANCELLED,
+  waitingForPayment: BookingStatus.WAITING_FOR_PAYMENT,
+  waitingForRefund: BookingStatus.WAITING_FOR_REFUND,
+  waitingForTraveling: BookingStatus.WAITING_FOR_TRAVELING,
+  traveling: BookingStatus.TRAVELING,
+  finished: BookingStatus.FINISHED,
+  userCancelled: BookingStatus.USER_CANCELLED,
 };
 
 @Injectable()
@@ -73,11 +78,13 @@ export class BookingsRepository {
     }
   }
 
-  async updateBookingStatus(id: number, bookingStatus: BookingStatus) {
+  async updateBookingStatus(id: number, bookingStatus: string) {
     try {
+      const bookingStatusEnum: BookingStatus =
+        bookingStatusEnumMapper[bookingStatus];
       const result = await this.prismaService.booking.update({
         where: { id },
-        data: { bookingStatus },
+        data: { bookingStatus: bookingStatusEnum },
         select: {
           id: true,
           bookingStatus: true,

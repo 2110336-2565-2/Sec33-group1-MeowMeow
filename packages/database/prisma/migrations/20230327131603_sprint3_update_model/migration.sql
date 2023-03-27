@@ -2,12 +2,14 @@
   Warnings:
 
   - The values [PENDING,ACCEPTED,REJECTED] on the enum `BookingStatus` will be removed. If these variants are still used in the database, this will fail.
+  - You are about to drop the column `certificate` on the `Guide` table. All the data in the column will be lost.
+  - Added the required column `certificateId` to the `Guide` table without a default value. This is not possible if the table is not empty.
   - Added the required column `paymentId` to the `Guide` table without a default value. This is not possible if the table is not empty.
 
 */
 -- AlterEnum
 BEGIN;
-CREATE TYPE "BookingStatus_new" AS ENUM ('WAITING_FOR_GUIDE_CONFIRMATION', 'GUIDE_CANCELLED', 'WAITING_FOR_PAYMENT', 'WAITING_FOR_REFUND', 'WAITING_FOR_TRAVELING', 'TRAVELING', 'WAITING_FOR_REVIEW', 'FINISHED', 'USER_CANCELLED');
+CREATE TYPE "BookingStatus_new" AS ENUM ('WAITING_FOR_GUIDE_CONFIRMATION', 'GUIDE_CANCELLED', 'WAITING_FOR_PAYMENT', 'WAITING_FOR_REFUND', 'WAITING_FOR_TRAVELING', 'TRAVELING', 'FINISHED', 'USER_CANCELLED');
 ALTER TABLE "Booking" ALTER COLUMN "bookingStatus" DROP DEFAULT;
 ALTER TABLE "Booking" ALTER COLUMN "bookingStatus" TYPE "BookingStatus_new" USING ("bookingStatus"::text::"BookingStatus_new");
 ALTER TYPE "BookingStatus" RENAME TO "BookingStatus_old";
@@ -20,7 +22,9 @@ COMMIT;
 ALTER TABLE "Booking" ALTER COLUMN "bookingStatus" SET DEFAULT 'WAITING_FOR_GUIDE_CONFIRMATION';
 
 -- AlterTable
-ALTER TABLE "Guide" ADD COLUMN     "paymentId" TEXT NOT NULL;
+ALTER TABLE "Guide" DROP COLUMN "certificate",
+ADD COLUMN     "certificateId" TEXT NOT NULL,
+ADD COLUMN     "paymentId" TEXT NOT NULL;
 
 -- CreateTable
 CREATE TABLE "Transaction" (

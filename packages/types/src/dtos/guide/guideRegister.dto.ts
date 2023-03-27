@@ -20,6 +20,12 @@ export class GuideRegisterRequest {
     description: "guide certificate image",
   })
   certificate: Buffer;
+  @ApiProperty({
+    type: () => String,
+    description: "guide payment id",
+    example: "1234567890",
+  })
+  paymentId: string;
 }
 
 export class GuideRegisterResponse extends PickType(Guide, [

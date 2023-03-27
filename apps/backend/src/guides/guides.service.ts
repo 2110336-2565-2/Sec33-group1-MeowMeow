@@ -54,7 +54,7 @@ export class GuidesServiceImpl {
     const guide = await this.guidesRepo.registerUserForGuide({
       userId: userId,
       certificateId: certFileId,
-      paymentId: 'DUMMY_STRING',
+      paymentId: guideRegisterData.paymentId,
     });
     this.usersRepo.addUserRole(userId, Role.GUIDE);
     return {

@@ -29,6 +29,14 @@ export default function GuideRegisterForm() {
     const fileUploaded = event.target.files[0];
     setImage(fileUploaded);
   };
+  // function handleEmailBlur() {
+  //   const bankAccountRegex = /^[0-9]{9,17}$/;
+  //   if (!bankAccountRegex.test(email)) {
+  //     setEmailError('Please enter a valid email address');
+  //   } else {
+  //     setEmailError('');
+  //   }
+  // }
   const [location, setLocation] = React.useState<readonly ChipData[]>([
     { key: 0, label: "Bangkok" },
     { key: 1, label: "Thailand" },
@@ -119,6 +127,14 @@ export default function GuideRegisterForm() {
           </Typography>
         </Stack>
       </Stack>
+
+      <TextField
+        id="bankAccount"
+        name="bankAccount"
+        label="Bank Account"
+        variant="outlined"
+        type="text"
+      />
 
       <Button type="submit" variant="contained">
         <Typography

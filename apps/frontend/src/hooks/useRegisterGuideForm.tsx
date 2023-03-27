@@ -40,16 +40,33 @@ const useRegisterGuideForm = () => {
       formBody["tourStyle"] = tourStyleForm.join(", ");
       console.log("formBody: ", formBody);
 
-      // const hasMissingValue = !!REGISTER_INPUT_IDs.find((inputId: string) => {
-      //   return !formBody[inputId];
-      // });
-      // if (hasMissingValue) {
-      //   addNotification(
-      //     "You must fill in every input field before submit the form.",
-      //     "error"
-      //   );
-      //   return;
-      // }
+      const hasMissingValue = !!REGISTER_GUIDE_INPUT_IDs.find(
+        (inputId: string) => {
+          return !formBody[inputId];
+        }
+      );
+      if (hasMissingValue) {
+        addNotification(
+          "You must fill in every input field before submit the form.",
+          "error"
+        );
+        return;
+      }
+
+      if (formBody["bankAccount"].length !== 10) {
+        addNotification("Bank account must be 10 digits.", "error");
+        return;
+      }
+
+      const regX = /^[0-9]{10}$/;
+      if (!regX.test(formBody["bankAccount"])) {
+        console.log(formBody["bankAccount"]);
+        addNotification(
+          "Bank account must be 10 digits and consists of 0-9.",
+          "error"
+        );
+        return;
+      }
 
       setLoading(true);
 

@@ -204,10 +204,12 @@ export class BookingsController {
   @Post(':id/accept')
   @HttpCode(201)
   async acceptBooking(
+    @Req() req,
     @Param('id', ParseIntPipe) id: number,
   ): Promise<AcceptBookingResponse> {
     try {
-      return this.bookingsService.acceptBooking(id);
+      const account: AccountMetadata = req.account;
+      return this.bookingsService.acceptBookingByGuide(id, account.userId);
     } catch (e) {
       if (e instanceof RecordNotFound) {
         throw new HttpException(e.message, HttpStatus.NOT_FOUND);
@@ -246,10 +248,12 @@ export class BookingsController {
   @UseGuards(AuthGuard)
   @Post(':id/decline')
   async declineBooking(
+    @Req() req,
     @Param('id', ParseIntPipe) id: number,
   ): Promise<DeclineBookingResponse> {
     try {
-      return this.bookingsService.declineBooking(id);
+      const account: AccountMetadata = req.account;
+      return this.bookingsService.declineBookingByGuide(id, account.userId);
     } catch (e) {
       if (e instanceof RecordNotFound) {
         throw new HttpException(e.message, HttpStatus.NOT_FOUND);

@@ -13,11 +13,11 @@ import { InvalidDateFormat } from './bookings.common';
 export interface IBookingsService {
   acceptBookingByGuide(
     id: number,
-    guideId: number,
+    guideUserId: number,
   ): Promise<AcceptBookingResponse>;
   declineBookingByGuide(
     id: number,
-    guideId: number,
+    guideUserId: number,
   ): Promise<DeclineBookingResponse>;
   getBookingsByUserId(
     req: GetBookingsByUserIdRequest,
@@ -85,7 +85,7 @@ export class BookingsService implements IBookingsService {
 
   async acceptBookingByGuide(
     id: number,
-    guideId: number,
+    guideUserId: number,
   ): Promise<AcceptBookingResponse> {
     const booking = await this.bookingsRepo.updateBookingStatus(id, 'hello');
     return {
@@ -96,7 +96,7 @@ export class BookingsService implements IBookingsService {
 
   async declineBookingByGuide(
     id: number,
-    guideId: number,
+    guideUserId: number,
   ): Promise<DeclineBookingResponse> {
     const booking = await this.bookingsRepo.updateBookingStatus(id, 'hello');
     return {

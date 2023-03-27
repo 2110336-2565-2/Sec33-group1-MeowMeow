@@ -1,9 +1,13 @@
+export const Roles = { USER: "USER", GUIDE: "GUIDE", ADMIN: "ADMIN" };
+export type Roles_Types = keyof typeof Roles;
+
 export interface IUser {
   id: number;
   email: string;
   username: string;
   firstName: string;
   lastName: string;
+  roles: Roles_Types[];
 }
 
 export interface ILoginForm {
@@ -18,4 +22,5 @@ export interface IProfileResponse {
   username: IUser["username"];
   firstName: IUser["firstName"];
   lastName: IUser["lastName"];
+  roles: IUser["roles"];
 }

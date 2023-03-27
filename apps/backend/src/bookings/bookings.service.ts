@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { BookingStatus } from 'database';
 import {
   AcceptBookingResponse,
   CreateBookingRequest,
@@ -20,8 +19,13 @@ export interface IBookingsService {
   createBooking(req: CreateBookingRequest): Promise<CreateBookingResponse>;
 }
 
+interface bookingState {
+  bookingStatus: string;
+}
+
 @Injectable()
 export class BookingsService implements IBookingsService {
+  private;
   constructor(private readonly bookingsRepo: BookingsRepository) {}
 
   async getBookingsByUserId(
@@ -79,10 +83,7 @@ export class BookingsService implements IBookingsService {
   }
 
   async acceptBooking(id: number): Promise<AcceptBookingResponse> {
-    const booking = await this.bookingsRepo.updateBookingStatus(
-      id,
-      BookingStatus.ACCEPTED,
-    );
+    const booking = await this.bookingsRepo.updateBookingStatus(id, 'hello');
 
     return {
       id: booking.id,
@@ -91,10 +92,7 @@ export class BookingsService implements IBookingsService {
   }
 
   async declineBooking(id: number): Promise<DeclineBookingResponse> {
-    const booking = await this.bookingsRepo.updateBookingStatus(
-      id,
-      BookingStatus.REJECTED,
-    );
+    const booking = await this.bookingsRepo.updateBookingStatus(id, 'hello');
 
     return {
       id: booking.id,

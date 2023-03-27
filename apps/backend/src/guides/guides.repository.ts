@@ -102,7 +102,8 @@ export class GuidesRepository {
 
   async registerUserForGuide(data: {
     userId: number;
-    certificate: string;
+    certificateId: string;
+    paymentId: string;
   }): Promise<{
     guideId: number;
     certificateId: string;
@@ -111,7 +112,8 @@ export class GuidesRepository {
       const guide = await this.prismaService.guide.create({
         data: {
           userId: data.userId,
-          certificateId: data.certificate,
+          certificateId: data.certificateId,
+          paymentId: data.paymentId,
         },
       });
       return {

@@ -11,21 +11,22 @@ import { BookingsRepository } from './bookings.repository';
 import { InvalidDateFormat } from './bookings.common';
 
 export interface IBookingsService {
-  acceptBooking(id: number): Promise<AcceptBookingResponse>;
-  declineBooking(id: number): Promise<DeclineBookingResponse>;
+  acceptBookingByGuide(
+    id: number,
+    guideUserId: number,
+  ): Promise<AcceptBookingResponse>;
+  declineBookingByGuide(
+    id: number,
+    guideUserId: number,
+  ): Promise<DeclineBookingResponse>;
   getBookingsByUserId(
     req: GetBookingsByUserIdRequest,
   ): Promise<GetBookingsByUserIdResponse>;
   createBooking(req: CreateBookingRequest): Promise<CreateBookingResponse>;
 }
 
-interface bookingState {
-  bookingStatus: string;
-}
-
 @Injectable()
 export class BookingsService implements IBookingsService {
-  private;
   constructor(private readonly bookingsRepo: BookingsRepository) {}
 
   async getBookingsByUserId(
@@ -82,18 +83,22 @@ export class BookingsService implements IBookingsService {
     };
   }
 
-  async acceptBooking(id: number): Promise<AcceptBookingResponse> {
+  async acceptBookingByGuide(
+    id: number,
+    guideUserId: number,
+  ): Promise<AcceptBookingResponse> {
     const booking = await this.bookingsRepo.updateBookingStatus(id, 'hello');
-
     return {
       id: booking.id,
       bookingStatus: booking.bookingStatus,
     };
   }
 
-  async declineBooking(id: number): Promise<DeclineBookingResponse> {
+  async declineBookingByGuide(
+    id: number,
+    guideUserId: number,
+  ): Promise<DeclineBookingResponse> {
     const booking = await this.bookingsRepo.updateBookingStatus(id, 'hello');
-
     return {
       id: booking.id,
       bookingStatus: booking.bookingStatus,

@@ -23,8 +23,6 @@ import {
   DeclineBookingRequest,
   DeclineBookingResponse,
   GetBookingsByUserIdResponse,
-  UpdateBookingRequest,
-  UpdatePostResponse,
 } from 'types';
 import {
   FailedRelationConstraintError,
@@ -142,37 +140,6 @@ export class BookingsController {
     } catch (e) {
       this.handleException(e);
     }
-  }
-
-  @ApiCookieAuth('access_token')
-  @ApiBody({
-    type: UpdateBookingRequest,
-  })
-  @ApiOperation({
-    summary: '(not implimented) update booking by ID',
-  })
-  @ApiResponse({
-    status: HttpStatus.CREATED,
-    description: 'successfully get bookings',
-    type: UpdatePostResponse,
-  })
-  @ApiResponse({
-    status: HttpStatus.BAD_REQUEST,
-    description: '',
-  })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: '',
-  })
-  @ApiResponse({
-    status: HttpStatus.INTERNAL_SERVER_ERROR,
-    description: 'internal server error',
-  })
-  @HttpCode(HttpStatus.CREATED)
-  @UseGuards(AuthGuard)
-  @Put(':id')
-  async updateBooking() {
-    // Todo: Implement this
   }
 
   @ApiCookieAuth('access_token')

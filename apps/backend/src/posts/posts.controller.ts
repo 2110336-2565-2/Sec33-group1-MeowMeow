@@ -28,7 +28,11 @@ import {
 import { PostsService } from './posts.service';
 import { AuthGuard } from '../auth/auth.guard';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { FailedRelationConstraintError, NotFoundError } from './posts.common';
+import {
+  AccessDeniedError,
+  FailedRelationConstraintError,
+  NotFoundError,
+} from './posts.common';
 
 @ApiTags('Posts')
 @Controller('posts')
@@ -44,6 +48,8 @@ export class PostsController {
       throw new HttpException(e.message, HttpStatus.NOT_FOUND);
     if (e instanceof FailedRelationConstraintError)
       throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
+    if (e instanceof AccessDeniedError)
+      throw new HttpException(e.message, HttpStatus.UNAUTHORIZED);
     throw new HttpException(
       'internal server error',
       HttpStatus.INTERNAL_SERVER_ERROR,
@@ -128,6 +134,10 @@ export class PostsController {
   @ApiResponse({
     status: HttpStatus.UNAUTHORIZED,
     description: 'valid session is not provided',
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'access denied',
   })
   @HttpCode(HttpStatus.OK)
   @Delete(':id')

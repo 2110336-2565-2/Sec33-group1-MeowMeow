@@ -37,7 +37,7 @@ export class Post {
     example:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   })
-  @IsOptional()
+  @IsNotEmpty()
   content: string;
 
   @ApiProperty({
@@ -58,6 +58,29 @@ export class Post {
   })
   @IsOptional()
   tags: string[];
+
+  @ApiProperty({
+    type: () => [String],
+    description: "location of the post",
+    example: ["Bangkok", "Chiang Mai"],
+  })
+  @IsOptional()
+  locations: string[];
+
+  @ApiProperty({
+    type: () => Number,
+    description: "maximum number of participants",
+    example: 1,
+  })
+  maxParticipant: number;
+
+  @ApiProperty({
+    type: () => String,
+    description: "post's author contact info",
+    example:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  })
+  contactInfo: string;
 
   @ApiProperty({
     type: () => Date,

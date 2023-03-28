@@ -10,5 +10,8 @@ export class DeletePostResponse extends PickType(Post, [
   "title",
   "content",
   "tags",
+  "locations",
+  "maxParticipant",
+  "contactInfo",
   "fee",
 ] as const) {}

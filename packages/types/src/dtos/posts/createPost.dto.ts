@@ -6,6 +6,9 @@ export class CreatePostRequest extends PickType(Post, [
   "content",
   "fee",
   "tags",
+  "locations",
+  "maxParticipant",
+  "contactInfo",
 ] as const) {}
 
 export class CreatePostResponse extends PickType(Post, [
@@ -14,6 +17,9 @@ export class CreatePostResponse extends PickType(Post, [
   "content",
   "fee",
   "tags",
+  "locations",
+  "maxParticipant",
+  "contactInfo",
   "id",
   "authorId",
   "createdAt",

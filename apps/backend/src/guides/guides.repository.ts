@@ -100,38 +100,97 @@ export class GuidesRepository {
     }
   }
 
+  async getOrCreateLocationsID(locations: string[]): Promise<number[]> {
+    await this.prismaService.location.createMany({
+      data: locations.map((e) => ({ locationName: e })),
+      skipDuplicates: true,
+    });
+    return (
+      await this.prismaService.location.findMany({
+        where: {
+          locationName: {
+            in: locations,
+          },
+        },
+        select: {
+          id: true,
+        },
+        orderBy: {
+          id: 'asc',
+        },
+      })
+    ).map((e) => e.id);
+  }
+
+  async getOrCreateTourStylesID(tourStyles: string[]): Promise<number[]> {
+    await this.prismaService.tourStyle.createMany({
+      data: tourStyles.map((e) => ({ tourStyleName: e })),
+      skipDuplicates: true,
+    });
+    return (
+      await this.prismaService.location.findMany({
+        where: {
+          locationName: {
+            in: tourStyles,
+          },
+        },
+        select: {
+          id: true,
+        },
+        orderBy: {
+          id: 'asc',
+        },
+      })
+    ).map((e) => e.id);
+  }
+
   async registerUserForGuide(data: {
     userId: number;
     certificateId: string;
     paymentId: string;
+    locations: string[];
+    tourStyles: string[];
   }): Promise<{
     guideId: number;
     certificateId: string;
   }> {
-    try {
-      const guide = await this.prismaService.guide.create({
-        data: {
-          userId: data.userId,
-          certificateId: data.certificateId,
-          paymentId: data.paymentId,
+    const guide = await this.prismaService.guide.create({
+      data: {
+        userId: data.userId,
+        certificateId: data.certificateId,
+        paymentId: data.paymentId,
+        GuideLocation: {
+          createMany: {
+            data: (
+              await this.getOrCreateLocationsID(data.locations)
+            ).map((e) => ({ locationId: e })),
+          },
         },
-      });
-      return {
-        guideId: guide.id,
-        certificateId: guide.certificateId,
-      };
-    } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        if (e.code == 'P2002') {
-          throw new RecordAlreadyExist(
-            'user with given ID has already been a guide',
-          );
-        }
-        if (e.code === 'P2003') {
-          throw new FailedRelationConstraintError('relation constraint failed');
-        }
+        GuideTourStyle: {
+          createMany: {
+            data: (
+              await this.getOrCreateTourStylesID(data.tourStyles)
+            ).map((e) => ({ tourStyleId: e })),
+          },
+        },
+      },
+    });
+    return {
+      guideId: guide.id,
+      certificateId: guide.certificateId,
+    };
+  }
+  catch(e: Error) {
+    if (e instanceof Prisma.PrismaClientKnownRequestError) {
+      if (e.code == 'P2002') {
+        throw new RecordAlreadyExist(
+          'user with given ID has already been a guide',
+        );
       }
-      throw e;
+      if (e.code === 'P2003') {
+        throw new FailedRelationConstraintError('relation constraint failed');
+      }
     }
+    throw e;
   }
 }

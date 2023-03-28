@@ -65,7 +65,7 @@ model Guide {
   userId         Int              @unique
   certificateId  String
   paymentId      String
-  user           User             @relation(fields: [userId], references: [id])
+  user           User             @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   reviews        Review[]
   Bookings       Booking[]
   GuideLocation  GuideLocation[]
@@ -76,8 +76,8 @@ model GuideLocation {
   guideId    Int
   locationId Int
 
-  guide    Guide    @relation(fields: [guideId], references: [id])
-  location Location @relation(fields: [locationId], references: [id])
+  guide    Guide    @relation(fields: [guideId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  location Location @relation(fields: [locationId], references: [id], onUpdate: Cascade, onDelete: Cascade)
 
   @@id([guideId, locationId])
 }
@@ -86,8 +86,8 @@ model GuideTourStyle {
   guideId     Int
   tourStyleId Int
 
-  guide     Guide     @relation(fields: [guideId], references: [id])
-  tourStyle TourStyle @relation(fields: [tourStyleId], references: [id])
+  guide     Guide     @relation(fields: [guideId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  tourStyle TourStyle @relation(fields: [tourStyleId], references: [id], onUpdate: Cascade, onDelete: Cascade)
 
   @@id([guideId, tourStyleId])
 }
@@ -100,8 +100,8 @@ model Review {
   reviewerId  Int
   guideId     Int
 
-  reviewer User  @relation(fields: [reviewerId], references: [id])
-  guide    Guide @relation(fields: [guideId], references: [id])
+  reviewer User  @relation(fields: [reviewerId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  guide    Guide @relation(fields: [guideId], references: [id], onUpdate: Cascade, onDelete: Cascade)
 }
 
 model Post {
@@ -116,7 +116,7 @@ model Post {
   maxParticipant Int
   contactInfo    String
 
-  author       User           @relation(fields: [authorId], references: [id])
+  author       User           @relation(fields: [authorId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   bookings     Booking[]
   PostLocation PostLocation[]
 }
@@ -125,8 +125,8 @@ model PostLocation {
   postId     Int
   locationId Int
 
-  post     Post     @relation(fields: [postId], references: [id])
-  location Location @relation(fields: [locationId], references: [id])
+  post     Post     @relation(fields: [postId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  location Location @relation(fields: [locationId], references: [id], onUpdate: Cascade, onDelete: Cascade)
 
   @@id([postId, locationId])
 }
@@ -142,9 +142,9 @@ model Booking {
   userId        Int
   guideId       Int
 
-  post         Post          @relation(fields: [postId], references: [id])
-  user         User          @relation(fields: [userId], references: [id])
-  guide        Guide         @relation(fields: [guideId], references: [id])
+  post         Post          @relation(fields: [postId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  user         User          @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  guide        Guide         @relation(fields: [guideId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   transactions Transaction[]
 }
 
@@ -156,6 +156,6 @@ model Transaction {
   bookingId Int
   userId    Int
 
-  booking Booking @relation(fields: [bookingId], references: [id])
-  user    User    @relation(fields: [userId], references: [id])
+  booking Booking @relation(fields: [bookingId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
 }

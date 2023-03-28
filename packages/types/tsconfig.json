@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "moduleResolution": "node",
+    "preserveWatchOutput": true,
+    "skipLibCheck": true,
+    "noEmit": false,
+    "strict": true,
+    "module": "commonjs",
+    "outDir": "./dist",
+    "experimentalDecorators": true,
+    "strictNullChecks": false,
+    "target": "ES6"
+  },
+  "include": ["."],
+  "exclude": ["dist", "build", "node_modules"]
+}

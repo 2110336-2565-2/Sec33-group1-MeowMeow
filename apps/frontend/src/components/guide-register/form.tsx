@@ -47,8 +47,12 @@ export default function GuideRegisterForm() {
   ]);
 
   useEffect(() => {
-    setLocationAndTourStyle(location, tourStyle);
-  }, [location, tourStyle]);
+    setLocationAndTourStyle(location, tourStyle, image);
+  }, [location, tourStyle, image]);
+
+  useEffect(() => {
+    setImage(undefined);
+  }, []);
 
   const { onSubmit, isLoading } = useRegisterGuideForm();
 
@@ -123,7 +127,7 @@ export default function GuideRegisterForm() {
               window.open(objectURL);
             }}
           >
-            {image && image?.name.toString()}
+            {image && image?.name.toString().slice(0, 15) + "..."}
           </Typography>
         </Stack>
       </Stack>

@@ -43,7 +43,7 @@ export const setLocationAndTourStyle = (
 interface IUseRegisterGuideForm {
   location: string[];
   tourStyle: string[];
-  certificate: string;
+  certificate: BinaryData;
   paymentId: string;
 }
 
@@ -59,7 +59,7 @@ const useRegisterGuideForm = () => {
           ...prev,
           [formId]: event.currentTarget[formId]?.value,
         };
-      }, {} as { [key: string]: string });
+      }, {} as { [key: string]: any });
 
       // const fileInput = document.querySelector('#certificate')!
       // const formData = new FormData();
@@ -68,7 +68,8 @@ const useRegisterGuideForm = () => {
 
       // console.log("locationForm: ", locationForm);
       // console.log("tourStyleForm: ", tourStyleForm);
-      // formBody["location"] = locationForm;
+      formBody["location"] = locationForm;
+      formBody["tourStyle"] = tourStyleForm;
       // formBody["tourStyle"] = tourStyleForm.join(", ");
       // console.log("formBody: ", formBody);
 
@@ -89,14 +90,14 @@ const useRegisterGuideForm = () => {
         return;
       }
 
-      if (formBody["bankAccount"].length !== 10) {
+      if (formBody["paymentId"].length !== 10) {
         addNotification("Bank account must be 10 digits.", "error");
         return;
       }
 
       const regX = /^[0-9]{10}$/;
-      if (!regX.test(formBody["bankAccount"])) {
-        console.log(formBody["bankAccount"]);
+      if (!regX.test(formBody["paymentId"])) {
+        console.log(formBody["paymentId"]);
         addNotification(
           "Bank account must be 10 digits and consists of 0-9.",
           "error"
@@ -108,77 +109,68 @@ const useRegisterGuideForm = () => {
 
       var sending: IUseRegisterGuideForm = {} as IUseRegisterGuideForm;
 
-      function fileToString(file: File): Promise<void> {
-        return new Promise<void>((resolve, reject) => {
-          const reader = new FileReader();
-          reader.readAsBinaryString(file);
-          reader.onload = () => {
-            const binaryString = reader.result as string;
-            sending = {
-              location: locationForm,
-              tourStyle: tourStyleForm,
-              certificate: binaryString,
-              paymentId: formBody["bankAccount"],
-            };
+      // function fileToString(file: File): Promise<void> {
+      //   return new Promise<void>((resolve, reject) => {
+      //     const reader = new FileReader();
 
-            console.log("sending: ", sending);
-            apiClient
-              .post("/guides/register", sending)
-              .then((res) => {
-                addNotification("Register Guide Success", "success");
-                setTimeout(() => {
-                  // router.push("/login");
-                }, 2000);
-                console.log("res: ", res);
-                resolve();
-              })
-              .catch((err) => {
-                const error = err as Error;
-                addNotification(error.message, "error");
-                reject();
-              });
-          };
-          reader.onerror = () => {
-            reject(reader.error);
-          };
-        });
-      }
+      //     reader.onload = () => {
+      //       const buffer = reader.result as BinaryData;
 
-      fileToString(imageUpload!)
-        .then(() => {
-          setLoading(false);
-        })
-        .catch(() => {
-          setLoading(false);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
+      //       sending = {
+      //         location: locationForm,
+      //         tourStyle: tourStyleForm,
+      //         certificate: buffer,
+      //         paymentId: formBody["bankAccount"],
+      //       };
 
-      // fileToString(imageUpload!).then((imageBinary) => {
-      //   // console.log("data: ", imageBinary);
-      //   sending = {
-      //     location: locationForm,
-      //     tourStyle: tourStyleForm,
-      //     certificate: imageBinary,
-      //     paymentId: formBody["bankAccount"],
-      //   }
-      // }).then(() => {
-      // })
+      //       console.log("sending: ", sending);
+      //       apiClient
+      //         .post("/guides/register", sending)
+      //         .then((res) => {
+      //           addNotification("Register Guide Success", "success");
+      //           setTimeout(() => {
+      //             // router.push("/login");
+      //           }, 2000);
+      //           console.log("res: ", res);
+      //           resolve();
+      //         })
+      //         .catch((err) => {
+      //           const error = err as Error;
+      //           addNotification(error.message, "error");
+      //           reject();
+      //         });
+      //     };
+      //     reader.onerror = () => {
+      //       reject(reader.error);
+      //     };
 
-      // try {
-      //   console.log("sending: ", sending);
-      //   await apiClient.post("/guides/register", sending);
-      //   addNotification("Register Guide Success", "success");
-      //   setTimeout(() => {
-      //     // router.push("/login");
-      //   }, 2000);
-      // } catch (err) {
-      //   const error = err as Error;
-      //   addNotification(error.message, "error");
-      // } finally {
-      //   setLoading(false);
+      //     reader.readAsDataURL(file)
+      //   });
       // }
+
+      // fileToString(imageUpload!)
+      //   .then(() => {
+      //     setLoading(false);
+      //   })
+      //   .catch(() => {
+      //     setLoading(false);
+      //   })
+      //   .finally(() => {
+      //     setLoading(false);
+      //   });
+      console.log("formBody: ", formBody);
+      try {
+        await apiClient.post("/guides/register", formBody);
+        addNotification("Register Guide Success", "success");
+        setTimeout(() => {
+          // router.push("/login");
+        }, 2000);
+      } catch (err) {
+        const error = err as Error;
+        addNotification(error.message, "error");
+      } finally {
+        setLoading(false);
+      }
     },
     []
   );

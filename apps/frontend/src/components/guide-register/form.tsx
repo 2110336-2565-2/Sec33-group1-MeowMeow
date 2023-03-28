@@ -133,8 +133,8 @@ export default function GuideRegisterForm() {
       </Stack>
 
       <TextField
-        id="bankAccount"
-        name="bankAccount"
+        id="paymentId"
+        name="paymentId"
         label="Bank Account"
         variant="outlined"
         type="text"

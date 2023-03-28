@@ -8,4 +8,6 @@ export class GetGuideByIdResponse extends PickType(Guide, [
   "lastName",
   "certificateId",
   "averageReviewScore",
+  "locations",
+  "tourStyles",
 ] as const) {}

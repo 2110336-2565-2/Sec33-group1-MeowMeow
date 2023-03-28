@@ -7,13 +7,13 @@ export class GuideRegisterRequest {
     description: "guide location",
     example: ["Bangkok", "Chiang Mai"],
   })
-  location: string[];
+  locations: string[];
   @ApiProperty({
     type: () => String,
     description: "guide tour style",
     example: ["Food", "Culture"],
   })
-  tourStyle: string[];
+  tourStyles: string[];
   @ApiProperty({
     type: () => String,
     format: "binary",

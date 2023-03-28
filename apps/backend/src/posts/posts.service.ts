@@ -42,7 +42,10 @@ export class PostsServiceImpl {
       title: post.title,
       content: post.content,
       tags: post.tags,
+      locations: post.PostLocation.map((e) => e.location.locationName),
       fee: post.fee.toNumber(),
+      contactInfo: post.contactInfo,
+      maxParticipant: post.maxParticipant,
     };
   }
 
@@ -55,6 +58,9 @@ export class PostsServiceImpl {
       content: createPostDto.content,
       fee: createPostDto.fee,
       tags: createPostDto.tags,
+      contactInfo: createPostDto.contactInfo,
+      maxParticipant: createPostDto.maxParticipant,
+      locations: createPostDto.locations,
     });
 
     return {
@@ -66,6 +72,9 @@ export class PostsServiceImpl {
       authorId: post.authorId,
       fee: post.fee.toNumber(),
       tags: post.tags,
+      contactInfo: post.contactInfo,
+      maxParticipant: post.maxParticipant,
+      locations: post.PostLocation.map((e) => e.location.locationName),
     };
   }
 
@@ -93,6 +102,9 @@ export class PostsServiceImpl {
       content: post.content,
       tags: post.tags,
       fee: post.fee.toNumber(),
+      contactInfo: post.contactInfo,
+      maxParticipant: post.maxParticipant,
+      locations: post.PostLocation.map((e) => e.location.locationName),
     };
   }
 
@@ -115,6 +127,9 @@ export class PostsServiceImpl {
       content: post.content,
       tags: post.tags,
       fee: post.fee.toNumber(),
+      contactInfo: post.contactInfo,
+      maxParticipant: post.maxParticipant,
+      locations: post.PostLocation.map((e) => e.location.locationName),
     };
   }
 }

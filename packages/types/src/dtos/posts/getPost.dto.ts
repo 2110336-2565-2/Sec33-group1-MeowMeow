@@ -8,7 +8,10 @@ export class GetPostResponse extends PickType(Post, [
   "title",
   "content",
   "tags",
+  "locations",
   "fee",
+  "maxParticipant",
+  "contactInfo",
   "createdAt",
   "updatedAt",
 ] as const) {}

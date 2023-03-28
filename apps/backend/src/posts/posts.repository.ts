@@ -1,15 +1,30 @@
 import { Injectable } from '@nestjs/common';
-import { Post, Prisma } from 'database';
+import { Prisma } from 'database';
+import { GuidesRepository } from 'src/guides/guides.repository';
 import { CreatePostRequest, UpdatePostRequest } from 'types';
 import { PrismaService } from '../prisma/prisma.service';
-import { FailedRelationConstraintError } from './posts.common';
+import {
+  AccessDeniedError,
+  FailedRelationConstraintError,
+  NotFoundError,
+} from './posts.common';
 @Injectable()
 export class PostsRepository {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly guidesRepo: GuidesRepository,
+  ) {}
 
   async getPost(id: number) {
     const post = await this.prismaService.post.findUnique({
       where: { id },
+      include: {
+        PostLocation: {
+          select: {
+            location: true,
+          },
+        },
+      },
     });
     return post;
   }
@@ -23,6 +38,22 @@ export class PostsRepository {
           authorId: userId,
           fee: data.fee,
           tags: data.tags,
+          maxParticipant: data.maxParticipant,
+          contactInfo: data.contactInfo,
+          PostLocation: {
+            createMany: {
+              data: (
+                await this.guidesRepo.getOrCreateLocationsID(data.locations)
+              ).map((e) => ({ locationId: e })),
+            },
+          },
+        },
+        include: {
+          PostLocation: {
+            select: {
+              location: true,
+            },
+          },
         },
       });
     } catch (e) {
@@ -39,29 +70,72 @@ export class PostsRepository {
     postId: number,
     userId: number,
     data: UpdatePostRequest,
-  ): Promise<Post> {
+  ) {
     try {
-      const post = await this.prismaService.post.updateMany({
-        where: { id: postId, authorId: userId },
+      const post = await this.prismaService.post.findUnique({
+        where: { id: postId },
+      });
+
+      if (!post) throw new NotFoundError('post not found');
+      if (post.authorId !== userId)
+        throw new AccessDeniedError('access denied');
+      if (data.locations) {
+        await this.prismaService.$transaction([
+          this.prismaService.postLocation.deleteMany({
+            where: { postId },
+          }),
+          this.prismaService.postLocation.createMany({
+            data: (
+              await this.guidesRepo.getOrCreateLocationsID(data.locations)
+            ).map((e) => ({ locationId: e, postId })),
+          }),
+        ]);
+      }
+      const updatePost = await this.prismaService.post.update({
+        where: { id: postId },
         data: {
           title: data.title,
           content: data.content,
           fee: data.fee,
           tags: data.tags,
+          maxParticipant: data.maxParticipant,
+          contactInfo: data.contactInfo,
+        },
+        include: {
+          PostLocation: {
+            select: {
+              location: true,
+            },
+          },
         },
       });
-      return post.count === 1 ? post[0] : null;
+      return updatePost;
     } catch (e) {
       throw e;
     }
   }
 
-  async deleteUserPost(postId: number, userId: number): Promise<Post> {
+  async deleteUserPost(postId: number, userId: number) {
     try {
-      const post = await this.prismaService.post.deleteMany({
+      const post = await this.prismaService.post.findUnique({
+        where: { id: postId },
+        include: {
+          PostLocation: {
+            select: {
+              location: true,
+            },
+          },
+        },
+      });
+
+      if (!post) throw new NotFoundError('post not found');
+      if (post.authorId !== userId)
+        throw new AccessDeniedError('access denied');
+      const deletePost = await this.prismaService.post.deleteMany({
         where: { id: postId, authorId: userId },
       });
-      return post.count === 1 ? post[0] : null;
+      if (deletePost.count !== 1) throw new NotFoundError('post not found');
+      return post;
     } catch (e) {
       throw e;
     }

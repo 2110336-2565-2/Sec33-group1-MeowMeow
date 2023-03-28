@@ -55,6 +55,8 @@ export class GuidesServiceImpl {
       userId: userId,
       certificateId: certFileId,
       paymentId: guideRegisterData.paymentId,
+      locations: guideRegisterData.locations,
+      tourStyles: guideRegisterData.tourStyles,
     });
     this.usersRepo.addUserRole(userId, Role.GUIDE);
     return {

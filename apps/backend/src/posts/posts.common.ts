@@ -13,3 +13,11 @@ export class NotFoundError extends Error {
     Object.setPrototypeOf(this, NotFoundError.prototype);
   }
 }
+
+export class AccessDeniedError extends Error {
+  constructor(msg: string) {
+    super(msg);
+
+    Object.setPrototypeOf(this, AccessDeniedError.prototype);
+  }
+}

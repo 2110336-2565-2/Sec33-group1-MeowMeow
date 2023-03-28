@@ -13,5 +13,8 @@ export class UpdatePostResponse extends PickType(Post, [
   "title",
   "content",
   "tags",
+  "locations",
   "fee",
+  "maxParticipant",
+  "contactInfo",
 ] as const) {}

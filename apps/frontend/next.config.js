@@ -1,4 +1,4 @@
-const config = require("config");
+require("dotenv").config({ path: "../../.env" });
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -7,7 +7,7 @@ const nextConfig = {
     appDir: false,
   },
   env: {
-    backendBaseURL: config.frontendConfig.BACKEND_BASE_URL,
+    backendBaseURL: process.env.BACKEND_BASE_URL,
   },
 };
 

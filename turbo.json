@@ -5,7 +5,6 @@
       "dependsOn": ["^build", "^db:generate"],
       "outputs": ["dist/**", ".next/**"]
     },
-
     "lint": {
       "outputs": []
     },
@@ -27,9 +26,6 @@
     },
     "db:migrate:deploy": {
       "cache": false
-    },
-    "test": {
-      "cache": true
     }
   }
 }

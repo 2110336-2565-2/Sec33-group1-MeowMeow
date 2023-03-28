@@ -37,7 +37,7 @@ import {
 } from '@nestjs/swagger';
 import { ReviewsService } from '../reviews/reviews.service';
 import { FileIsDefinedValidator } from '../common/file.validator';
-import { RecordAlreadyExist } from './guides.common';
+import { PropertyAlreadyUsedError, RecordAlreadyExist } from './guides.common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from '../auth/auth.guard';
 import { InvalidRequestError } from '../auth/auth.commons';
@@ -56,6 +56,8 @@ export class GuidesController {
       throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
     if (e instanceof NotFoundException)
       throw new HttpException(e.message, HttpStatus.NOT_FOUND);
+    if (e instanceof PropertyAlreadyUsedError)
+      throw new HttpException(e.message, HttpStatus.CONFLICT);
     throw new HttpException(
       'internal server error',
       HttpStatus.INTERNAL_SERVER_ERROR,
@@ -167,6 +169,12 @@ export class GuidesController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'internal server error',
   })
+  @UsePipes(
+    new ValidationPipe({
+      transform: true,
+      transformOptions: { enableImplicitConversion: true },
+    }),
+  )
   @UseInterceptors(FileInterceptor('certificate'))
   @UseGuards(AuthGuard)
   @Post('register')

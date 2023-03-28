@@ -13,3 +13,11 @@ export class RecordAlreadyExist extends Error {
     Object.setPrototypeOf(this, RecordAlreadyExist.prototype);
   }
 }
+
+export class PropertyAlreadyUsedError extends Error {
+  constructor(msg: string) {
+    super(msg);
+
+    Object.setPrototypeOf(this, PropertyAlreadyUsedError.prototype);
+  }
+}

@@ -1,5 +1,13 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsNumber, IsOptional, Max, Min } from "class-validator";
+import {
+  IsArray,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  Max,
+  Min,
+} from "class-validator";
 
 export class Post {
   @ApiProperty({
@@ -57,6 +65,8 @@ export class Post {
     example: ["tag1", "tag2"],
   })
   @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
   tags: string[];
 
   @ApiProperty({
@@ -65,6 +75,8 @@ export class Post {
     example: ["Bangkok", "Chiang Mai"],
   })
   @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
   locations: string[];
 
   @ApiProperty({

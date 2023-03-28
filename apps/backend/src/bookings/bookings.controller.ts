@@ -50,6 +50,26 @@ export class BookingsController {
     private readonly bookingsService: IBookingsService,
   ) {}
 
+  handleException(e: Error) {
+    console.log(e);
+    if (e instanceof RecordNotFound) {
+      throw new HttpException(e.message, HttpStatus.NOT_FOUND);
+    }
+    if (e instanceof InvalidDateFormat) {
+      throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
+    }
+    if (e instanceof FailedRelationConstraintError) {
+      throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
+    }
+    if (e instanceof RecordAlreadyExist) {
+      throw new HttpException(e.message, HttpStatus.CONFLICT);
+    }
+    throw new HttpException(
+      'internal server error',
+      HttpStatus.INTERNAL_SERVER_ERROR,
+    );
+  }
+
   @ApiCookieAuth('access_token')
   @ApiOperation({
     summary: 'get bookings by user ID in the session',
@@ -72,19 +92,11 @@ export class BookingsController {
   async getBookings(@Req() req, @Res({ passthrough: true }) res) {
     try {
       const account: AccountMetadata = req.account;
-      const resBody = await this.bookingsService.getBookingsByUserId({
+      return await this.bookingsService.getBookingsByUserId({
         userId: account.userId,
       });
-      res.status(HttpStatus.OK).send(resBody);
     } catch (e) {
-      console.log(e);
-      if (e instanceof RecordNotFound) {
-        throw new HttpException({ message: e.message }, HttpStatus.NOT_FOUND);
-      }
-      throw new HttpException(
-        { message: 'internal server error' },
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      this.handleException(e);
     }
   }
 
@@ -116,33 +128,19 @@ export class BookingsController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'internal server error',
   })
+  @HttpCode(HttpStatus.CREATED)
   @UseGuards(AuthGuard)
   @Post()
   async createBooking(
     @Req() req,
     @Body() reqBody: CreateBookingRequest,
-    @Res() res,
-  ) {
+  ): Promise<CreateBookingResponse> {
     try {
       const account: AccountMetadata = req.account;
       reqBody.userId = account.userId;
-      const booking = await this.bookingsService.createBooking(reqBody);
-      res.status(HttpStatus.CREATED).send(booking);
+      return await this.bookingsService.createBooking(reqBody);
     } catch (e) {
-      console.log(e);
-      if (e instanceof InvalidDateFormat) {
-        throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
-      }
-      if (e instanceof FailedRelationConstraintError) {
-        throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
-      }
-      if (e instanceof RecordAlreadyExist) {
-        throw new HttpException(e.message, HttpStatus.CONFLICT);
-      }
-      throw new HttpException(
-        'internal server error',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      this.handleException(e);
     }
   }
 
@@ -170,6 +168,7 @@ export class BookingsController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'internal server error',
   })
+  @HttpCode(HttpStatus.CREATED)
   @UseGuards(AuthGuard)
   @Put(':id')
   async updateBooking() {
@@ -202,7 +201,7 @@ export class BookingsController {
   })
   @UseGuards(AuthGuard)
   @Post(':id/accept')
-  @HttpCode(201)
+  @HttpCode(HttpStatus.CREATED)
   async acceptBooking(
     @Req() req,
     @Param('id', ParseIntPipe) id: number,
@@ -211,13 +210,7 @@ export class BookingsController {
       const account: AccountMetadata = req.account;
       return this.bookingsService.acceptBookingByGuide(id, account.userId);
     } catch (e) {
-      if (e instanceof RecordNotFound) {
-        throw new HttpException(e.message, HttpStatus.NOT_FOUND);
-      }
-      throw new HttpException(
-        'internal server error',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      this.handleException(e);
     }
   }
 
@@ -245,6 +238,7 @@ export class BookingsController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'internal server error',
   })
+  @HttpCode(HttpStatus.CREATED)
   @UseGuards(AuthGuard)
   @Post(':id/decline')
   async declineBooking(
@@ -255,13 +249,7 @@ export class BookingsController {
       const account: AccountMetadata = req.account;
       return this.bookingsService.declineBookingByGuide(id, account.userId);
     } catch (e) {
-      if (e instanceof RecordNotFound) {
-        throw new HttpException(e.message, HttpStatus.NOT_FOUND);
-      }
-      throw new HttpException(
-        'internal server error',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      this.handleException(e);
     }
   }
 }

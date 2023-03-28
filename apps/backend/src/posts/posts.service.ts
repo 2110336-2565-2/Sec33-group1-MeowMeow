@@ -17,11 +17,11 @@ export interface PostsService {
     createPostDto: CreatePostRequest,
   ): Promise<CreatePostResponse>;
   updatePost(
-    updatePostDto: UpdatePostRequest,
     postId: number,
-    authorId: number,
+    userId: number,
+    updatePostDto: UpdatePostRequest,
   ): Promise<UpdatePostResponse>;
-  deletePost(postId: number, authorId: number): Promise<DeletePostResponse>;
+  deletePost(postId: number, userId: number): Promise<DeletePostResponse>;
 }
 @Injectable()
 export class PostsServiceImpl {

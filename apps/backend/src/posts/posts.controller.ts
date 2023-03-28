@@ -120,7 +120,7 @@ export class PostsController {
     try {
       const account: AccountMetadata = req.account;
 
-      return await this.postsService.updatePost(postData, id, account.userId);
+      return await this.postsService.updatePost(id, account.userId, postData);
     } catch (e) {
       this.handleException(e);
     }
@@ -144,7 +144,7 @@ export class PostsController {
   @UseGuards(AuthGuard)
   async deletePost(
     @Req() req,
-    @Param('id') postId: number,
+    @Param('id', ParseIntPipe) postId: number,
   ): Promise<DeletePostResponse> {
     try {
       const account: AccountMetadata = req.account;

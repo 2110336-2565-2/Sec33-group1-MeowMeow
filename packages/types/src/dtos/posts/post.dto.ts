@@ -1,6 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import {
   IsArray,
+  IsDateString,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -22,6 +23,7 @@ export class Post {
     description: "id of the post",
     example: 1,
   })
+  @IsNumber()
   id: number;
 
   @ApiProperty({
@@ -29,6 +31,7 @@ export class Post {
     description: "post's author id",
     example: 1,
   })
+  @IsNumber()
   authorId: number;
 
   @ApiProperty({
@@ -37,6 +40,7 @@ export class Post {
     example: "post's title",
   })
   @IsNotEmpty()
+  @IsString()
   title: string;
 
   @ApiProperty({
@@ -46,6 +50,7 @@ export class Post {
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   })
   @IsNotEmpty()
+  @IsString()
   content: string;
 
   @ApiProperty({
@@ -84,6 +89,7 @@ export class Post {
     description: "maximum number of participants",
     example: 1,
   })
+  @IsNumber()
   maxParticipant: number;
 
   @ApiProperty({
@@ -92,6 +98,7 @@ export class Post {
     example:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   })
+  @IsString()
   contactInfo: string;
 
   @ApiProperty({
@@ -99,6 +106,7 @@ export class Post {
     description: "post created timestamp",
     example: new Date("2022-03-27"),
   })
+  @IsDateString()
   createdAt: Date;
 
   @ApiProperty({
@@ -106,5 +114,6 @@ export class Post {
     description: "post updated timestamp",
     example: new Date("2022-03-27"),
   })
+  @IsDateString()
   updatedAt: Date;
 }

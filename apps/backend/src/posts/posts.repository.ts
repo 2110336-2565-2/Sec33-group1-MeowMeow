@@ -119,6 +119,13 @@ export class PostsRepository {
     try {
       const post = await this.prismaService.post.findUnique({
         where: { id: postId },
+      });
+
+      if (!post) throw new NotFoundError('post not found');
+      if (post.authorId !== userId)
+        throw new AccessDeniedError('access denied');
+      const deletePost = await this.prismaService.post.delete({
+        where: { id: postId },
         include: {
           PostLocation: {
             select: {
@@ -127,15 +134,8 @@ export class PostsRepository {
           },
         },
       });
-
-      if (!post) throw new NotFoundError('post not found');
-      if (post.authorId !== userId)
-        throw new AccessDeniedError('access denied');
-      const deletePost = await this.prismaService.post.deleteMany({
-        where: { id: postId, authorId: userId },
-      });
-      if (deletePost.count !== 1) throw new NotFoundError('post not found');
-      return post;
+      if (!deletePost) throw new NotFoundError('post not found');
+      return deletePost;
     } catch (e) {
       throw e;
     }

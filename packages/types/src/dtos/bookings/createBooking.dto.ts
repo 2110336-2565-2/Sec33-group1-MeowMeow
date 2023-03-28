@@ -26,6 +26,11 @@ export class CreateBookingRequest {
   @IsInt()
   guideId: number;
 
+  @ApiProperty({
+    type: () => Number,
+    minimum: 1,
+  })
+  @IsInt()
   userId: number;
 }
 

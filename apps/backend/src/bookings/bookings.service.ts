@@ -37,21 +37,14 @@ export class BookingsService implements IBookingsService {
       limit: 100000,
       userId: req.userId,
     });
-
-    const results = [];
-    for (let i = 0; i < bookings.length; i++) {
-      const booking = bookings[i];
-      results.push({
-        id: booking.id,
-        startDate: booking.startDate,
-        endDate: booking.endDate,
-        bookingStatus: booking.bookingStatus,
-        postId: booking.postId,
-      });
-    }
-    return {
-      results: results,
-    };
+    const results = bookings.map((booking) => ({
+      id: booking.id,
+      startDate: booking.startDate.toString(),
+      endDate: booking.endDate.toString(),
+      bookingStatus: booking.bookingStatus,
+      postId: booking.postId,
+    }));
+    return results;
   }
 
   async createBooking(
@@ -87,7 +80,11 @@ export class BookingsService implements IBookingsService {
     id: number,
     guideUserId: number,
   ): Promise<AcceptBookingResponse> {
-    const booking = await this.bookingsRepo.updateBookingStatus(id, 'hello');
+    // when the guide accepts the booking, booking status is changed to 'waitingForPayment'
+    const booking = await this.bookingsRepo.updateBookingStatus(
+      id,
+      'waitingForPayment',
+    );
     return {
       id: booking.id,
       bookingStatus: booking.bookingStatus,
@@ -98,7 +95,11 @@ export class BookingsService implements IBookingsService {
     id: number,
     guideUserId: number,
   ): Promise<DeclineBookingResponse> {
-    const booking = await this.bookingsRepo.updateBookingStatus(id, 'hello');
+    // when the guide declines the booking, booking status is changed to 'guideCancelled'
+    const booking = await this.bookingsRepo.updateBookingStatus(
+      id,
+      'guideCancelled',
+    );
     return {
       id: booking.id,
       bookingStatus: booking.bookingStatus,

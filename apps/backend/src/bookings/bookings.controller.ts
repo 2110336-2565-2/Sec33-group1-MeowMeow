@@ -22,6 +22,7 @@ import {
   CreateBookingResponse,
   DeclineBookingRequest,
   DeclineBookingResponse,
+  GetBooking,
   GetBookingsByUserIdResponse,
 } from 'types';
 import {
@@ -75,7 +76,7 @@ export class BookingsController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'successfully get the bookings',
-    type: GetBookingsByUserIdResponse,
+    type: [GetBooking],
   })
   @ApiResponse({
     status: HttpStatus.UNAUTHORIZED,

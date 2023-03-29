@@ -1,19 +1,21 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty, PickType } from "@nestjs/swagger";
+import { Booking } from "./booking.dto";
 
 export class GetBookingsByUserIdRequest {
   @ApiProperty({
     type: () => Number,
     minimum: 1,
+    example: 1,
   })
   userId: number;
 }
 
-export class GetBookingsByUserIdResponseMember {
-  id: number;
-  startDate: string;
-  endDate: string;
-  bookingStatus: string;
-  postId: number;
-}
+export class GetBookingsByUserIdResponseMember extends PickType(Booking, [
+  "id",
+  "startDate",
+  "endDate",
+  "bookingStatus",
+  "postId",
+] as const) {}
 
 export type GetBookingsByUserIdResponse = GetBookingsByUserIdResponseMember[];

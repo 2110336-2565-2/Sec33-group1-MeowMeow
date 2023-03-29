@@ -5,9 +5,12 @@ import StarAndBar from "./StarAndBar";
 import ReviewDialog from "../review/dialog";
 interface IReviewHeadProps {
   reviewCount: number[];
+  averageReviewScore: number;
 }
-export default function ReviewHead({ reviewCount }: IReviewHeadProps) {
-  const total = reviewCount.reduce((total, p) => total + p);
+export default function ReviewHead({
+  reviewCount,
+  averageReviewScore,
+}: IReviewHeadProps) {
   return (
     <Grid
       container
@@ -46,7 +49,7 @@ export default function ReviewHead({ reviewCount }: IReviewHeadProps) {
         >
           <Grid item fontSize={{ xs: 32, sm: 40 }} textAlign="center">
             {" "}
-            {total / 5}
+            {averageReviewScore}
           </Grid>
           <Grid item fontSize={16} textAlign="center">
             {" "}
@@ -60,7 +63,7 @@ export default function ReviewHead({ reviewCount }: IReviewHeadProps) {
                 key={5 - i}
                 star={5 - i}
                 count={reviewCount[i]}
-                total={total}
+                total={reviewCount.reduce((total, value) => total + value, 0)}
               />
             ))}
           </Grid>

@@ -3,9 +3,13 @@ import React from "react";
 interface IProfileProps {
   name: string;
   imageurl: string;
-  desc: string;
+  certificateId: string;
 }
-export default function Profile({ name, imageurl, desc }: IProfileProps) {
+export default function Profile({
+  name,
+  imageurl,
+  certificateId,
+}: IProfileProps) {
   return (
     <Grid
       container
@@ -54,7 +58,7 @@ export default function Profile({ name, imageurl, desc }: IProfileProps) {
             fontSize={{ xs: 14, sm: 16, lg: 18 }}
             paddingTop={{ xs: "1vh", sm: "2vh" }}
           >
-            {desc}
+            {"Certificate ID: " + certificateId}
           </Box>
         </Grid>
       </Grid>

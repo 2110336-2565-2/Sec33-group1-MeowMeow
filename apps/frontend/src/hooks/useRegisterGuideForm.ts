@@ -1,53 +1,27 @@
-import { ChipData } from "@/components/guide-register/form";
 import { REGISTER_GUIDE_INPUT_IDs } from "@/constants/RegisterGuidePage";
 import { NotificationContext } from "@/context/NotificationContext";
 import apiClient from "@/utils/apiClient";
 import { useRouter } from "next/router";
 import { FormEventHandler, useCallback, useContext, useState } from "react";
 
-var locationForm: string[] = [];
-var tourStyleForm: string[] = [];
-var imageUpload: File | undefined;
-
-export const setLocationAndTourStyle = (
-  location: readonly ChipData[],
-  tourStyle: readonly ChipData[],
-  image: File | undefined
-) => {
-  locationForm = location.map((data) => {
-    return data.label;
-  });
-  tourStyleForm = tourStyle.map((data) => {
-    return data.label;
-  });
-  imageUpload = image;
-};
-
-// function fileToString(file: File): Promise<string> {
-//   return new Promise<string>((resolve, reject) => {
-//     const reader = new FileReader();
-
-//     reader.onload = () => {
-//       const binaryString = reader.result as string;
-//       resolve(binaryString);
-//     };
-
-//     reader.onerror = () => {
-//       reject(reader.error);
-//     };
-
-//     reader.readAsBinaryString(file);
-//   });
-// }
-
-interface IUseRegisterGuideForm {
+interface IInputGuideRegister {
   location: string[];
   tourStyle: string[];
+  certificate: File | undefined;
+}
+
+interface IUseRegisterGuideForm {
+  locations: string[];
+  tourStyles: string[];
   certificate: BinaryData;
   paymentId: string;
 }
 
-const useRegisterGuideForm = () => {
+const useRegisterGuideForm = ({
+  location,
+  tourStyle,
+  certificate,
+}: IInputGuideRegister) => {
   const { addNotification } = useContext(NotificationContext);
   const [isLoading, setLoading] = useState<boolean>(false);
   const router = useRouter();
@@ -61,28 +35,18 @@ const useRegisterGuideForm = () => {
         };
       }, {} as { [key: string]: any });
 
-      // const fileInput = document.querySelector('#certificate')!
-      // const formData = new FormData();
+      formBody["location"] = location;
+      formBody["tourStyle"] = tourStyle;
+      formBody["certificate"] = certificate;
 
-      // formData.append('file', fileInput.files[0]);
-
-      // console.log("locationForm: ", locationForm);
-      // console.log("tourStyleForm: ", tourStyleForm);
-      formBody["location"] = locationForm;
-      formBody["tourStyle"] = tourStyleForm;
-      // formBody["tourStyle"] = tourStyleForm.join(", ");
-      // console.log("formBody: ", formBody);
+      console.log("===> ", formBody);
 
       const hasMissingValue = !!REGISTER_GUIDE_INPUT_IDs.find(
         (inputId: string) => {
           return !formBody[inputId];
         }
       );
-      if (
-        hasMissingValue ||
-        locationForm.length === 0 ||
-        tourStyleForm.length === 0
-      ) {
+      if (hasMissingValue || location.length === 0 || tourStyle.length === 0) {
         addNotification(
           "You must fill in every input field before submit the form.",
           "error"
@@ -117,15 +81,19 @@ const useRegisterGuideForm = () => {
       //       const buffer = reader.result as BinaryData;
 
       //       sending = {
-      //         location: locationForm,
-      //         tourStyle: tourStyleForm,
+      //         locations: formBody["location"],
+      //         tourStyles: formBody["tourStyle"],
       //         certificate: buffer,
-      //         paymentId: formBody["bankAccount"],
+      //         paymentId: formBody["paymentId"],
       //       };
 
       //       console.log("sending: ", sending);
       //       apiClient
-      //         .post("/guides/register", sending)
+      //         .post("/guides/register", sending, {
+      //           headers: {
+      //             "Content-Type": "multipart/form-data",
+      //           }}
+      //         )
       //         .then((res) => {
       //           addNotification("Register Guide Success", "success");
       //           setTimeout(() => {
@@ -148,7 +116,7 @@ const useRegisterGuideForm = () => {
       //   });
       // }
 
-      // fileToString(imageUpload!)
+      // fileToString(certificate!)
       //   .then(() => {
       //     setLoading(false);
       //   })
@@ -159,8 +127,18 @@ const useRegisterGuideForm = () => {
       //     setLoading(false);
       //   });
       console.log("formBody: ", formBody);
+      var formData = new FormData();
+      formData.append("certificate", certificate!);
+      formData.append("locations", formBody["location"]);
+      formData.append("tourStyles", formBody["tourStyle"]);
+      formData.append("paymentId", formBody["paymentId"]);
+
       try {
-        await apiClient.post("/guides/register", formBody);
+        await apiClient.post("/guides/register", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
         addNotification("Register Guide Success", "success");
         setTimeout(() => {
           // router.push("/login");
@@ -172,7 +150,7 @@ const useRegisterGuideForm = () => {
         setLoading(false);
       }
     },
-    []
+    [location, tourStyle, certificate]
   );
 
   return { isLoading, onSubmit };

@@ -1,7 +1,5 @@
 import useCustomSnackbar from "@/hooks/useCustomSnackbar";
-import useRegisterGuideForm, {
-  setLocationAndTourStyle,
-} from "@/hooks/useRegisterGuideForm";
+import useRegisterGuideForm from "@/hooks/useRegisterGuideForm";
 import {
   Stack,
   TextField,
@@ -10,7 +8,7 @@ import {
   Alert,
   Typography,
 } from "@mui/material";
-import React, { ChangeEventHandler, useEffect, useState } from "react";
+import React, { ChangeEventHandler, useState } from "react";
 import ChipsArray from "./chipArray";
 
 export interface ChipData {
@@ -29,14 +27,7 @@ export default function GuideRegisterForm() {
     const fileUploaded = event.target.files[0];
     setImage(fileUploaded);
   };
-  // function handleEmailBlur() {
-  //   const bankAccountRegex = /^[0-9]{9,17}$/;
-  //   if (!bankAccountRegex.test(email)) {
-  //     setEmailError('Please enter a valid email address');
-  //   } else {
-  //     setEmailError('');
-  //   }
-  // }
+
   const [location, setLocation] = React.useState<readonly ChipData[]>([
     { key: 0, label: "Bangkok" },
     { key: 1, label: "Thailand" },
@@ -46,15 +37,11 @@ export default function GuideRegisterForm() {
     { key: 1, label: "Knowledge" },
   ]);
 
-  useEffect(() => {
-    setLocationAndTourStyle(location, tourStyle, image);
-  }, [location, tourStyle, image]);
-
-  useEffect(() => {
-    setImage(undefined);
-  }, []);
-
-  const { onSubmit, isLoading } = useRegisterGuideForm();
+  const { onSubmit, isLoading } = useRegisterGuideForm({
+    certificate: image,
+    location: location.map((item) => item.label),
+    tourStyle: tourStyle.map((item) => item.label),
+  });
 
   if (isLoading) {
     return <div>Loading...</div>;

@@ -212,4 +212,27 @@ export class GuidesRepository {
       throw e;
     }
   }
+
+  async getGuideIDByReviewScore(
+    minScore?: number,
+    maxScore?: number,
+  ): Promise<number[]> {
+    const options = {};
+
+    if (minScore) options['gte'] = minScore;
+    if (maxScore) options['lte'] = maxScore;
+    const guides = await this.prismaService.review.groupBy({
+      by: ['guideId'],
+      _avg: {
+        score: true,
+      },
+      having: {
+        score: {
+          _avg: options,
+        },
+      },
+    });
+
+    return guides.map((e) => e.guideId);
+  }
 }

@@ -15,15 +15,12 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import {
-  AcceptBookingRequest,
   AcceptBookingResponse,
   AccountMetadata,
   CreateBookingRequest,
   CreateBookingResponse,
-  DeclineBookingRequest,
   DeclineBookingResponse,
-  GetBooking,
-  GetBookingsByUserIdResponse,
+  GetBookingsByUserIdResponseMember,
 } from 'types';
 import {
   FailedRelationConstraintError,
@@ -76,7 +73,7 @@ export class BookingsController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'successfully get the bookings',
-    type: [GetBooking],
+    type: [GetBookingsByUserIdResponseMember],
   })
   @ApiResponse({
     status: HttpStatus.UNAUTHORIZED,
@@ -144,9 +141,6 @@ export class BookingsController {
   }
 
   @ApiCookieAuth('access_token')
-  @ApiBody({
-    type: AcceptBookingRequest,
-  })
   @ApiOperation({
     summary: 'accept booking by ID',
   })
@@ -185,9 +179,6 @@ export class BookingsController {
   @ApiCookieAuth('access_token')
   @ApiOperation({
     summary: 'decline booking by ID',
-  })
-  @ApiBody({
-    type: DeclineBookingRequest,
   })
   @ApiResponse({
     status: HttpStatus.CREATED,

@@ -36,6 +36,7 @@
     "database": "workspace:*",
     "jsonwebtoken": "^9.0.0",
     "media-storage": "workspace:*",
+    "moment": "^2.29.4",
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
     "reflect-metadata": "^0.1.13",

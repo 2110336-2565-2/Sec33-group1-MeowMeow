@@ -9,9 +9,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
-  Put,
   Req,
-  Res,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -20,6 +18,7 @@ import {
   CreateBookingRequest,
   CreateBookingResponse,
   DeclineBookingResponse,
+  GetBookingsByUserIdResponse,
   GetBookingsByUserIdResponseMember,
 } from 'types';
 import {
@@ -85,7 +84,7 @@ export class BookingsController {
   })
   @UseGuards(AuthGuard)
   @Get('/self')
-  async getBookings(@Req() req, @Res({ passthrough: true }) res) {
+  async getBookings(@Req() req): Promise<GetBookingsByUserIdResponse> {
     try {
       const account: AccountMetadata = req.account;
       return await this.bookingsService.getBookingsByUserId({
@@ -105,7 +104,7 @@ export class BookingsController {
   })
   @ApiResponse({
     status: HttpStatus.CREATED,
-    description: 'successfully craete a booking',
+    description: 'successfully create a booking',
     type: CreateBookingResponse,
   })
   @ApiResponse({

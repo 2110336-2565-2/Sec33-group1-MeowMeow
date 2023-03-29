@@ -5,11 +5,18 @@ import {
   Alert,
   Snackbar,
   Typography,
+  StyledEngineProvider,
 } from "@mui/material";
-import React from "react";
-import usePostForm from "@/hooks/usePostForm";
+import React, { useEffect } from "react";
+import usePostForm, { setLocationAndTourStylePost } from "@/hooks/usePostForm";
 import useCustomSnackbar from "@/hooks/useCustomSnackbar";
 import useEditPostForm from "@/hooks/useEditForm";
+import ChipsArray from "./chipArray";
+
+export interface ChipPostData {
+  key: number;
+  label: string;
+}
 
 export interface IPostForm {
   methodType: "POST" | "PUT";
@@ -23,9 +30,51 @@ export default function PostForm({ methodType }: IPostForm) {
 
   const { formBody, onChange } = useEditPostForm({ methodType: methodType });
 
+  const [location, setLocation] = React.useState<readonly ChipPostData[]>(
+    formBody.locations.map((location, index) => {
+      return {
+        key: index,
+        label: location,
+      };
+    })
+  );
+  const [tourStyle, setTourStyle] = React.useState<readonly ChipPostData[]>(
+    formBody.tags.map((location, index) => {
+      return {
+        key: index,
+        label: location,
+      };
+    })
+  );
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
+
+  useEffect(() => {
+    if (methodType === "PUT") {
+      setLocation(
+        formBody.locations.map((location, index) => {
+          return {
+            key: index,
+            label: location,
+          };
+        })
+      );
+      setTourStyle(
+        formBody.tags.map((tourStyle, index) => {
+          return {
+            key: index,
+            label: tourStyle,
+          };
+        })
+      );
+    }
+  }, [formBody.locations, formBody.tags, methodType]);
+
+  useEffect(() => {
+    setLocationAndTourStylePost(location, tourStyle);
+  }, [location, tourStyle]);
 
   return (
     <Stack
@@ -38,67 +87,42 @@ export default function PostForm({ methodType }: IPostForm) {
       onSubmit={onSubmit}
     >
       <TextField
-        name="tripName"
-        id="tripName"
+        name="title"
+        id="title"
         label="Trip Name"
         variant="outlined"
-        value={formBody.tripName}
+        value={formBody.title}
         onChange={onChange}
       />
       <TextField
-        name="location"
-        id="location"
-        label="Location"
+        name="content"
+        id="content"
+        label="content"
         variant="outlined"
-        value={formBody.location}
+        value={formBody.content}
         onChange={onChange}
+      />
+      <ChipsArray
+        id="locations"
+        label="Your Location"
+        chipData={location}
+        setChipData={setLocation}
+      />
+      <ChipsArray
+        id="tourStyle"
+        label="Your TourStyle"
+        chipData={tourStyle}
+        setChipData={setTourStyle}
       />
       <Stack direction="row" spacing="20px">
         <TextField
-          id="startDate"
-          name="startDate"
-          label="Start Date"
-          type="datetime-local"
-          value={formBody.startDate}
-          sx={{ width: "100%" }}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          onChange={onChange}
-        />
-        <TextField
-          id="endDate"
-          name="endDate"
-          label="End Date"
-          type="datetime-local"
-          value={formBody.endDate}
-          sx={{ width: "100%" }}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          onChange={onChange}
-        />
-      </Stack>
-      <TextField
-        name="description"
-        id="description"
-        label="Description"
-        variant="outlined"
-        value={formBody.description}
-        onChange={onChange}
-      />
-      <Stack direction="row" spacing="20px">
-        <TextField
-          name="price"
-          id="price"
-          label="Price"
+          name="fee"
+          id="fee"
+          label="fee"
           variant="outlined"
           type="float"
           sx={{ width: "100%" }}
-          value={formBody.price}
-          InputProps={{
-            readOnly: methodType === "PUT",
-          }}
+          value={formBody.fee}
           onChange={onChange}
         />
         <TextField
@@ -113,12 +137,12 @@ export default function PostForm({ methodType }: IPostForm) {
         />
       </Stack>
       <TextField
-        name="lineid"
-        id="lineid"
-        label="Line ID"
+        name="contactInfo"
+        id="contactInfo"
+        label="Contact Information"
         variant="outlined"
         sx={{ width: "100%" }}
-        value={formBody.lineid}
+        value={formBody.contactInfo}
         onChange={onChange}
       />
       <Button

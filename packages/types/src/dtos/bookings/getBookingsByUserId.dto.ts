@@ -8,7 +8,7 @@ export class GetBookingsByUserIdRequest {
   userId: number;
 }
 
-export class GetBooking {
+export class GetBookingsByUserIdResponseMember {
   id: number;
   startDate: string;
   endDate: string;
@@ -16,4 +16,4 @@ export class GetBooking {
   postId: number;
 }
 
-export type GetBookingsByUserIdResponse = GetBooking[];
+export type GetBookingsByUserIdResponse = GetBookingsByUserIdResponseMember[];

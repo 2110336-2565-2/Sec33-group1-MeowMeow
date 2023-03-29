@@ -1,7 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
 
-export class AcceptBookingRequest {}
-
 export class AcceptBookingResponse {
   @ApiProperty({
     type: () => Number,

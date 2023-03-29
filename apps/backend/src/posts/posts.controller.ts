@@ -11,6 +11,7 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  Query,
   Req,
   UseGuards,
   UsePipes,
@@ -22,6 +23,8 @@ import {
   CreatePostResponse,
   DeletePostResponse,
   GetPostResponse,
+  SearchPostsRequest,
+  SearchPostsResponse,
   UpdatePostRequest,
   UpdatePostResponse,
 } from 'types';
@@ -54,6 +57,29 @@ export class PostsController {
       'internal server error',
       HttpStatus.INTERNAL_SERVER_ERROR,
     );
+  }
+
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'get post successfully',
+    type: [GetPostResponse],
+  })
+  @Get('search')
+  @HttpCode(HttpStatus.OK)
+  @UsePipes(
+    new ValidationPipe({
+      transform: true,
+      transformOptions: { enableImplicitConversion: true },
+    }),
+  )
+  async searchPosts(
+    @Query() searchData: SearchPostsRequest,
+  ): Promise<SearchPostsResponse> {
+    try {
+      return await this.postsService.searchPosts(searchData);
+    } catch (e) {
+      this.handleException(e);
+    }
   }
 
   @ApiResponse({

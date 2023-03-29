@@ -1,7 +1,5 @@
 import useCustomSnackbar from "@/hooks/useCustomSnackbar";
-import useRegisterGuideForm, {
-  setLocationAndTourStyle,
-} from "@/hooks/useRegisterGuideForm";
+import useRegisterGuideForm from "@/hooks/useRegisterGuideForm";
 import {
   Stack,
   TextField,
@@ -10,7 +8,7 @@ import {
   Alert,
   Typography,
 } from "@mui/material";
-import React, { ChangeEventHandler, useEffect, useState } from "react";
+import React, { ChangeEventHandler, useState } from "react";
 import ChipsArray from "./chipArray";
 
 export interface ChipData {
@@ -29,6 +27,7 @@ export default function GuideRegisterForm() {
     const fileUploaded = event.target.files[0];
     setImage(fileUploaded);
   };
+
   const [location, setLocation] = React.useState<readonly ChipData[]>([
     { key: 0, label: "Bangkok" },
     { key: 1, label: "Thailand" },
@@ -38,11 +37,11 @@ export default function GuideRegisterForm() {
     { key: 1, label: "Knowledge" },
   ]);
 
-  useEffect(() => {
-    setLocationAndTourStyle(location, tourStyle);
-  }, [location, tourStyle]);
-
-  const { onSubmit, isLoading } = useRegisterGuideForm();
+  const { onSubmit, isLoading } = useRegisterGuideForm({
+    certificate: image,
+    location: location.map((item) => item.label),
+    tourStyle: tourStyle.map((item) => item.label),
+  });
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -115,10 +114,18 @@ export default function GuideRegisterForm() {
               window.open(objectURL);
             }}
           >
-            {image && image?.name.toString()}
+            {image && image?.name.toString().slice(0, 15) + "..."}
           </Typography>
         </Stack>
       </Stack>
+
+      <TextField
+        id="paymentId"
+        name="paymentId"
+        label="Bank Account"
+        variant="outlined"
+        type="text"
+      />
 
       <Button type="submit" variant="contained">
         <Typography

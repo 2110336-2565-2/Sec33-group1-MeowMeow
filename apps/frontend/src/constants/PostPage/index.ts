@@ -4,4 +4,7 @@ export const POST_INPUT_IDs = [
   "fee",
   "maxParticipant",
   "contactInfo",
+
+  "locations",
+  "tags",
 ];

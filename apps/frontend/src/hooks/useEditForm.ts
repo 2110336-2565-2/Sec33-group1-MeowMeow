@@ -28,8 +28,8 @@ const useEditPostForm = ({ methodType }: IUseEditPostForm) => {
   // Get Data Post from API Here
   //
   // Mock Data
-  if (methodType === "PUT") {
-    useEffect(() => {
+  useEffect(() => {
+    if (methodType === "PUT") {
       setFormBody({
         title: "Trip to Phuket",
         locations: ["Phuket"],
@@ -39,8 +39,8 @@ const useEditPostForm = ({ methodType }: IUseEditPostForm) => {
         maxParticipant: 10,
         contactInfo: "contactInfo",
       });
-    }, []);
-  }
+    }
+  }, []);
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;

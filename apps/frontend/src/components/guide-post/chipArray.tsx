@@ -8,8 +8,14 @@ import { ChipPostData } from "./postForm";
 interface ILocationChipProps {
   id: string;
   label: string;
-  chipData: readonly ChipPostData[];
-  setChipData: React.Dispatch<React.SetStateAction<readonly ChipPostData[]>>;
+  data: readonly string[];
+  onArray: (name: string, value: string[]) => void;
+  value: string[];
+}
+
+interface IChip {
+  key: number;
+  label: string;
 }
 
 const ListItem = styled("li")(({ theme }) => ({
@@ -19,14 +25,28 @@ const ListItem = styled("li")(({ theme }) => ({
 export default function ChipsArray({
   id,
   label,
-  chipData,
-  setChipData,
+  data,
+  onArray,
 }: ILocationChipProps) {
   const [customTag, setCustomTag] = React.useState("");
+  const [chipData, setChipData] = React.useState<readonly IChip[]>(
+    data.map((location, index) => {
+      return {
+        key: index,
+        label: location,
+      };
+    })
+  );
 
-  const handleDelete = (chipToDelete: ChipPostData) => () => {
+  const handleDelete = (chipToDelete: IChip) => () => {
     setChipData((chips) =>
       chips.filter((chip) => chip.key !== chipToDelete.key)
+    );
+    onArray(
+      id,
+      chipData
+        .filter((chip) => chip.key !== chipToDelete.key)
+        .map((chip) => chip.label)
     );
   };
 
@@ -41,6 +61,7 @@ export default function ChipsArray({
         label: customTag.trim()!,
       },
     ]);
+    onArray(id, [...chipData.map((chip) => chip.label), customTag.trim()]);
     setCustomTag("");
   };
 

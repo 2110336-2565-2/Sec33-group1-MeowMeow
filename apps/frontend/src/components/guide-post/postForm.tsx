@@ -5,13 +5,13 @@ import {
   Alert,
   Snackbar,
   Typography,
-  StyledEngineProvider,
+  InputAdornment,
 } from "@mui/material";
-import React, { useEffect } from "react";
-import usePostForm, { setLocationAndTourStylePost } from "@/hooks/usePostForm";
+import React from "react";
+import { usePostForm } from "@/hooks/usePostForm";
 import useCustomSnackbar from "@/hooks/useCustomSnackbar";
-import useEditPostForm from "@/hooks/useEditForm";
 import ChipsArray from "./chipArray";
+import { editViewModel, IEditForm } from "./editViewModel";
 
 export interface ChipPostData {
   key: number;
@@ -24,57 +24,27 @@ export interface IPostForm {
 
 export default function PostForm({ methodType }: IPostForm) {
   const { onClose, onExit, isOpen, messageInfo } = useCustomSnackbar();
+  const data = editViewModel(methodType);
+  const [formBody, setFormBody] = React.useState<IEditForm>(data);
+  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setFormBody({ ...formBody, [name]: value });
+  };
+
+  const onArray = (name: string, value: string[]) => {
+    setFormBody({ ...formBody, [name]: value });
+  };
+
   const { onSubmit, isLoading } = usePostForm({
     methodType: methodType,
+    formData: formBody,
   });
 
-  const { formBody, onChange } = useEditPostForm({ methodType: methodType });
-
-  const [location, setLocation] = React.useState<readonly ChipPostData[]>(
-    formBody.locations.map((location, index) => {
-      return {
-        key: index,
-        label: location,
-      };
-    })
-  );
-  const [tourStyle, setTourStyle] = React.useState<readonly ChipPostData[]>(
-    formBody.tags.map((location, index) => {
-      return {
-        key: index,
-        label: location,
-      };
-    })
-  );
+  // console.log("formBody: ", formBody);
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
-
-  useEffect(() => {
-    if (methodType === "PUT") {
-      setLocation(
-        formBody.locations.map((location, index) => {
-          return {
-            key: index,
-            label: location,
-          };
-        })
-      );
-      setTourStyle(
-        formBody.tags.map((tourStyle, index) => {
-          return {
-            key: index,
-            label: tourStyle,
-          };
-        })
-      );
-    }
-  }, [formBody.locations, formBody.tags, methodType]);
-
-  useEffect(() => {
-    setLocationAndTourStylePost(location, tourStyle);
-  }, [location, tourStyle]);
 
   return (
     <Stack
@@ -105,14 +75,16 @@ export default function PostForm({ methodType }: IPostForm) {
       <ChipsArray
         id="locations"
         label="Your Location"
-        chipData={location}
-        setChipData={setLocation}
+        data={formBody.locations}
+        onArray={onArray}
+        value={formBody.locations}
       />
       <ChipsArray
-        id="tourStyle"
+        id="tags"
         label="Your TourStyle"
-        chipData={tourStyle}
-        setChipData={setTourStyle}
+        data={formBody.tags}
+        onArray={onArray}
+        value={formBody.tags}
       />
       <Stack direction="row" spacing="20px">
         <TextField
@@ -120,8 +92,12 @@ export default function PostForm({ methodType }: IPostForm) {
           id="fee"
           label="fee"
           variant="outlined"
-          type="float"
+          type="number"
           sx={{ width: "100%" }}
+          inputProps={{ inputMode: "decimal" }}
+          InputProps={{
+            startAdornment: <InputAdornment position="start">฿</InputAdornment>,
+          }}
           value={formBody.fee}
           onChange={onChange}
         />
@@ -132,6 +108,7 @@ export default function PostForm({ methodType }: IPostForm) {
           variant="outlined"
           type="number"
           sx={{ width: "100%" }}
+          inputProps={{ inputMode: "numeric", pattern: "[0-9]*", min: 0 }}
           value={formBody.maxParticipant}
           onChange={onChange}
         />

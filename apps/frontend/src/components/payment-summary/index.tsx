@@ -1,5 +1,6 @@
+import apiClient from "@/utils/apiClient";
 import { Container, LinearProgress, Stack, Typography } from "@mui/material";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Navbar from "../common/Navbar";
 import PaymentOption from "./PaymentOption";
 import Summary from "./Summary";
@@ -15,8 +16,17 @@ interface IPaymentSummaryProps {
   trip_id: string;
 }
 
+const fetchPost = async (trip_id: string) => {
+  const post = await apiClient.post(`/posts/${trip_id}`, {});
+  return post;
+};
+
 const PaymentSummary = (props: IPaymentSummaryProps) => {
   const { trip_id } = props;
+
+  useEffect(() => {
+    fetchPost(trip_id);
+  }, []);
 
   const fetchedTrip = useMemo(() => {
     return {

@@ -100,4 +100,23 @@ export class BookingsRepository {
       throw e;
     }
   }
+
+  async getBookingAndPostById(id: number) {
+    try {
+      const booking = await this.prismaService.booking.findUnique({
+        where: { id },
+        include: {
+          post: true,
+        },
+      });
+      return booking;
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code === 'P2001') {
+          throw new RecordNotFound(`Booking id ${id} doesn't exist`);
+        }
+      }
+      throw e;
+    }
+  }
 }

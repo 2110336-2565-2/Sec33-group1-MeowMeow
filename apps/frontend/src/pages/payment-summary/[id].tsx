@@ -4,7 +4,12 @@ import { useRouter } from "next/router";
 
 const PaymentSummaryPage = () => {
   const router = useRouter();
-  const { id } = router.query;
+  const id = router.query?.id;
+
+  if (!id) {
+    return null;
+  }
+
   return (
     <>
       <Head>

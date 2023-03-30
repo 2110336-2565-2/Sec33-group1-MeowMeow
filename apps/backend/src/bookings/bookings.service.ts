@@ -4,7 +4,7 @@ import {
   AccountMetadata,
   CreateBookingRequest,
   CreateBookingResponse,
-  DeclineBookingResponse,
+  CancelBookingResponse,
   GetBookingsByGuideIdRequest,
   GetBookingsByGuideIdResponse,
   GetBookingsByUserIdRequest,
@@ -21,6 +21,7 @@ import {
 import { GuidesService } from 'src/guides/guides.service';
 import { GuideNotFound } from 'src/guides/guides.common';
 import * as moment from 'moment';
+import { BookingStatus } from 'database';
 
 export interface IBookingsService {
   acceptBookingByGuide(

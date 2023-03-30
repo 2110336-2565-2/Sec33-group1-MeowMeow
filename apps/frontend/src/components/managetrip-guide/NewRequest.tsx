@@ -16,9 +16,9 @@ const NewRequest = ({
   handleConfirm,
   handleCancel,
 }: INewRequestProps) => {
-  const renderRequest = (request: Request, index: number) => {
+  const renderRequest = (request: Request) => {
     return (
-      <Card sx={{ marginBottom: "3vh" }} key={index}>
+      <Card sx={{ marginBottom: "3vh" }}>
         <CardContent>
           <Grid
             container
@@ -77,7 +77,7 @@ const NewRequest = ({
   return (
     <div>
       <List>
-        {requests.map((request, index) => {
+        {requests.map((request) => {
           if (
             confirmedRequests.some((confirmed) => confirmed.id === request.id)
           ) {
@@ -88,7 +88,7 @@ const NewRequest = ({
           ) {
             return null;
           }
-          return renderRequest(request, index);
+          return renderRequest(request);
         })}
       </List>
     </div>

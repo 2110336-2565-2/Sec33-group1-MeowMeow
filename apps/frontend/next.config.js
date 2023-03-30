@@ -7,7 +7,7 @@ const nextConfig = {
     appDir: false,
   },
   env: {
-    backendBaseURL: process.env.backendBaseURL,
+    backendBaseURL: process.env.BACKEND_BASE_URL,
   },
 };
 

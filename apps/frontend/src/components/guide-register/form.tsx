@@ -27,6 +27,7 @@ export default function GuideRegisterForm() {
     const fileUploaded = event.target.files[0];
     setImage(fileUploaded);
   };
+
   const [location, setLocation] = React.useState<readonly ChipData[]>([
     { key: 0, label: "Bangkok" },
     { key: 1, label: "Thailand" },

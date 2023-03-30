@@ -39,7 +39,7 @@ const useRegisterGuideForm = ({
       formBody["tourStyle"] = tourStyle;
       formBody["certificate"] = certificate;
 
-      // console.log("===> ", formBody);
+      console.log("===> ", formBody);
 
       const hasMissingValue = !!REGISTER_GUIDE_INPUT_IDs.find(
         (inputId: string) => {

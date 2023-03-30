@@ -61,10 +61,16 @@ model TourStyle {
 }
 
 model Guide {
-  id             Int              @id @default(autoincrement())
-  userId         Int              @unique
-  certificateId  String
-  paymentId      String
+  id            Int    @id @default(autoincrement())
+  userId        Int    @unique
+  certificateId String
+
+  paymentId         String
+  taxId             String?
+  brandBankAccount  String
+  numberBankAccount String
+  nameBankAccount   String
+
   user           User             @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   reviews        Review[]
   Bookings       Booking[]

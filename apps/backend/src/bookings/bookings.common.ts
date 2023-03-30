@@ -6,6 +6,14 @@ export class InvalidDateFormat extends Error {
   }
 }
 
+export class AccessNotGranted extends Error {
+  constructor(msg: string) {
+    super(msg);
+
+    Object.setPrototypeOf(this, AccessNotGranted.prototype);
+  }
+}
+
 export class RecordNotFound extends Error {
   constructor(msg: string) {
     super(msg);
@@ -27,5 +35,13 @@ export class FailedRelationConstraintError extends Error {
     super(msg);
 
     Object.setPrototypeOf(this, FailedRelationConstraintError.prototype);
+  }
+}
+
+export class UnprocessableEntity extends Error {
+  constructor(msg: string) {
+    super(msg);
+
+    Object.setPrototypeOf(this, UnprocessableEntity);
   }
 }

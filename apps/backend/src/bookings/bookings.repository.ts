@@ -7,14 +7,14 @@ import {
 } from './bookings.common';
 
 const bookingStatusEnumMapper = {
-  waitingForGuideConfirmation: BookingStatus.WAITING_FOR_GUIDE_CONFIRMATION,
-  guideCancelled: BookingStatus.GUIDE_CANCELLED,
-  waitingForPayment: BookingStatus.WAITING_FOR_PAYMENT,
-  waitingForRefund: BookingStatus.WAITING_FOR_REFUND,
-  waitingForTraveling: BookingStatus.WAITING_FOR_TRAVELING,
-  traveling: BookingStatus.TRAVELING,
-  finished: BookingStatus.FINISHED,
-  userCancelled: BookingStatus.USER_CANCELLED,
+  WAITING_FOR_GUIDE_CONFIRMATION: BookingStatus.WAITING_FOR_GUIDE_CONFIRMATION,
+  GUIDE_CANCELLED: BookingStatus.GUIDE_CANCELLED,
+  WAITING_FOR_PAYMENT: BookingStatus.WAITING_FOR_PAYMENT,
+  WAITING_FOR_REFUND: BookingStatus.WAITING_FOR_REFUND,
+  WAITING_FOR_TRAVELING: BookingStatus.WAITING_FOR_TRAVELING,
+  TRAVELING: BookingStatus.TRAVELING,
+  FINISHED: BookingStatus.FINISHED,
+  USER_CANCELLED: BookingStatus.USER_CANCELLED,
 };
 
 @Injectable()
@@ -42,6 +42,33 @@ export class BookingsRepository {
       ],
     });
     return results;
+  }
+
+  async getBookingById(id: number): Promise<{
+    id: number;
+    updatedAt: Date;
+    startDate: Date;
+    endDate: Date;
+    postId: number;
+    userId: number;
+    guideId: number;
+    bookingStatus: string;
+  }> {
+    const booking = await this.prismaService.booking.findFirst();
+    if (!booking) {
+      throw new RecordNotFound(`booking with id ${id} no found`);
+    }
+
+    return {
+      id: booking.id,
+      updatedAt: booking.updatedAt,
+      startDate: booking.startDate,
+      endDate: booking.endDate,
+      postId: booking.postId,
+      userId: booking.userId,
+      guideId: booking.guideId,
+      bookingStatus: booking.bookingStatus.toString(),
+    };
   }
 
   async createBooking(data: {

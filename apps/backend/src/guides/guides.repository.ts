@@ -4,6 +4,7 @@ import { GetGuideByIdResponse, SearchGuidesResponse } from 'types';
 import { PrismaService } from '../prisma/prisma.service';
 import {
   FailedRelationConstraintError,
+  GuideNotFound,
   RecordAlreadyExist,
 } from './guides.common';
 
@@ -65,45 +66,38 @@ export class GuidesRepository {
     }
   }
 
-  async getGuideById(guideId: number): Promise<GetGuideByIdResponse> {
+  async getGuide(filter: {
+    id?: number;
+    userId?: number;
+  }): Promise<GetGuideByIdResponse> {
+    const guide = await this.prismaService.guide.findUnique({
+      include: {
+        user: true,
+      },
+      where: {
+        id: filter.id,
+        userId: filter.userId,
+      },
+    });
+    if (!guide) {
+      throw new GuideNotFound('guide with given condition not found');
+    }
+
     try {
-      const guideResult = await this.prismaService.guide.findUnique({
-        where: {
-          id: guideId,
-        },
-        include: {
-          GuideLocation: {
-            select: {
-              location: true,
-            },
-          },
-          GuideTourStyle: {
-            select: {
-              tourStyle: true,
-            },
-          },
-        },
-      });
-      if (!guideResult) return null;
-      const userResult = await this.prismaService.user.findUnique({
-        where: {
-          id: guideResult.userId,
-        },
-      });
       const scoreResult = await this.prismaService.review.aggregate({
         _avg: {
           score: true,
         },
         where: {
-          guideId: guideResult.id,
+          guideId: guide.id,
         },
       });
       return {
-        guideId: guideResult.id,
-        userId: guideResult.userId,
-        firstName: userResult.firstName,
-        lastName: userResult.lastName,
-        certificateId: guideResult.certificateId,
+        guideId: guide.id,
+        userId: guide.user.id,
+        firstName: guide.user.firstName,
+        lastName: guide.user.lastName,
+        certificateId: guide.certificateId,
         averageReviewScore: scoreResult._avg.score?.toNumber() | 0,
         locations: guideResult.GuideLocation.map(
           (e) => e.location.locationName,

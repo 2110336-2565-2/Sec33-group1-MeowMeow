@@ -73,6 +73,8 @@ export class GuidesRepository {
     const guide = await this.prismaService.guide.findUnique({
       include: {
         user: true,
+        locations: true,
+        tourStyles: true,
       },
       where: {
         id: filter.id,
@@ -99,12 +101,8 @@ export class GuidesRepository {
         lastName: guide.user.lastName,
         certificateId: guide.certificateId,
         averageReviewScore: scoreResult._avg.score?.toNumber() | 0,
-        locations: guideResult.GuideLocation.map(
-          (e) => e.location.locationName,
-        ),
-        tourStyles: guideResult.GuideTourStyle.map(
-          (e) => e.tourStyle.tourStyleName,
-        ),
+        locations: guide.locations.map((e) => e.locationName),
+        tourStyles: guide.tourStyles.map((e) => e.tourStyleName),
       };
     } catch (e) {
       console.log(e);

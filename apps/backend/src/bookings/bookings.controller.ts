@@ -17,14 +17,9 @@ import {
   AccountMetadata,
   CancelBookingByTravellerRequest,
   CancelBookingByTravellerResponse,
-  CancelBookingRequest,
-  CancelBookingResponse,
   CreateBookingRequest,
   CreateBookingResponse,
-<<<<<<< HEAD
   DeclineBookingResponse,
-=======
->>>>>>> e11904f... feat: finish booking
   GetBookingsByUserIdResponse,
   GetBookingsByUserIdResponseMember,
 } from 'types';
@@ -174,15 +169,9 @@ export class BookingsController {
     description: 'internal server error',
   })
   @UseGuards(AuthGuard)
-<<<<<<< HEAD
-  @Post(':id/accept')
-  @HttpCode(HttpStatus.CREATED)
-  async acceptBooking(
-=======
   @Post(':id/guide/self/accept')
   @HttpCode(HttpStatus.CREATED)
   async acceptBookingByGuide(
->>>>>>> e11904f... feat: finish booking
     @Req() req,
     @Param('id', ParseIntPipe) id: number,
   ): Promise<AcceptBookingResponse> {
@@ -190,9 +179,6 @@ export class BookingsController {
       const account: AccountMetadata = req.account;
       return this.bookingsService.acceptBookingByGuide(id, account);
     } catch (e) {
-<<<<<<< HEAD
-      this.handleException(e);
-=======
       console.log(e);
       if (e instanceof AccessNotGranted) {
         throw new HttpException(e.message, HttpStatus.FORBIDDEN);
@@ -207,7 +193,6 @@ export class BookingsController {
         'internal server error',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
->>>>>>> e11904f... feat: finish booking
     }
   }
 
@@ -215,16 +200,13 @@ export class BookingsController {
   @ApiOperation({
     summary: 'guide decline booking by ID',
   })
-<<<<<<< HEAD
-=======
   @ApiBody({
-    type: CancelBookingRequest,
+    type: CancelBookingByTravellerRequest,
   })
->>>>>>> e11904f... feat: finish booking
   @ApiResponse({
     status: HttpStatus.CREATED,
     description: 'successfully decline bookings',
-    type: CancelBookingResponse,
+    type: CancelBookingByTravellerResponse,
   })
   @ApiResponse({
     status: HttpStatus.UNAUTHORIZED,
@@ -253,7 +235,7 @@ export class BookingsController {
   async declineBookingbyGuide(
     @Req() req,
     @Param('id', ParseIntPipe) id: number,
-  ): Promise<CancelBookingResponse> {
+  ): Promise<DeclineBookingResponse> {
     try {
       const account: AccountMetadata = req.account;
       return this.bookingsService.cancelBookingByGuide(id, account);
@@ -285,7 +267,7 @@ export class BookingsController {
   @ApiResponse({
     status: HttpStatus.CREATED,
     description: 'successfully decline bookings',
-    type: CancelBookingResponse,
+    type: CancelBookingByTravellerResponse,
   })
   @ApiResponse({
     status: HttpStatus.UNAUTHORIZED,

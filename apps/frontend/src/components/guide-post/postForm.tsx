@@ -63,31 +63,6 @@ export default function PostForm({ methodType }: IPostForm) {
     return <div>Loading...</div>;
   }
 
-  useEffect(() => {
-    if (methodType === "PUT") {
-      setLocation(
-        formBody.locations.map((location, index) => {
-          return {
-            key: index,
-            label: location,
-          };
-        })
-      );
-      setTourStyle(
-        formBody.tags.map((tourStyle, index) => {
-          return {
-            key: index,
-            label: tourStyle,
-          };
-        })
-      );
-    }
-  }, [formBody.locations, formBody.tags, methodType]);
-
-  useEffect(() => {
-    setLocationAndTourStylePost(location, tourStyle);
-  }, [location, tourStyle]);
-
   return (
     <Stack
       component="form"

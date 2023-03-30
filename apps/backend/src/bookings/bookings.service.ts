@@ -91,7 +91,7 @@ export class BookingsService implements IBookingsService {
       guideId: req.guideId,
       startDate: new Date(req.startDate),
       endDate: new Date(req.endDate),
-      bookingStatus: BookingStatus.WAITING_FOR_GUIDE_CONFIRMATION,
+      bookingStatus: 'waitingForGuideConfirmation',
     });
 
     return {

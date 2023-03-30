@@ -169,7 +169,7 @@ export class BookingsController {
     description: 'internal server error',
   })
   @UseGuards(AuthGuard)
-  @Post(':id/guide/self/accept')
+  @Post(':id/accept')
   @HttpCode(HttpStatus.CREATED)
   async acceptBookingByGuide(
     @Req() req,
@@ -231,7 +231,7 @@ export class BookingsController {
   @HttpCode(HttpStatus.CREATED)
   @UseGuards(AuthGuard)
   @HttpCode(HttpStatus.CREATED)
-  @Post(':id/guide/self/decline')
+  @Post(':id/decline')
   async declineBookingbyGuide(
     @Req() req,
     @Param('id', ParseIntPipe) id: number,
@@ -290,7 +290,7 @@ export class BookingsController {
     description: 'internal server error',
   })
   @HttpCode(HttpStatus.CREATED)
-  @Post(':id/traveller/self/cancel')
+  @Post(':id/cancel')
   async cancelBookingByTraveller(
     @Req() req,
     @Param(':id', ParseIntPipe) id: number,

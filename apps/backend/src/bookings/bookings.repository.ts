@@ -5,6 +5,7 @@ import {
   FailedRelationConstraintError,
   RecordNotFound,
 } from './bookings.common';
+import { Guide } from 'types/src/dtos/guide/guide.dto';
 
 const bookingStatusEnumMapper = {
   WAITING_FOR_GUIDE_CONFIRMATION: BookingStatus.WAITING_FOR_GUIDE_CONFIRMATION,
@@ -55,6 +56,17 @@ export class BookingsRepository {
     bookingStatus: string;
   }> {
     const booking = await this.prismaService.booking.findFirst({
+      include: {
+        post: {
+          include: {
+            author: {
+              include: {
+                guide: true,
+              },
+            },
+          },
+        },
+      },
       where: {
         id: id,
       },
@@ -70,7 +82,7 @@ export class BookingsRepository {
       endDate: booking.endDate,
       postId: booking.postId,
       userId: booking.userId,
-      guideId: booking.guideId,
+      guideId: booking.post.author.guide.id,
       bookingStatus: booking.bookingStatus.toString(),
     };
   }
@@ -94,7 +106,6 @@ export class BookingsRepository {
           endDate: data.endDate,
           postId: data.postId,
           userId: data.userId,
-          guideId: data.guideId,
           bookingStatus: bookingStatusEnum,
         },
       });

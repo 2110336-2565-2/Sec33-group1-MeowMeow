@@ -8,3 +8,10 @@ export const POST_INPUT_IDs = [
   "locations",
   "tags",
 ];
+
+export const POST_INPUT_IDs_Array = ["locations", "tags"];
+
+export enum METHOD_TYPE {
+  POST = 1,
+  PUT,
+}

@@ -1,13 +1,13 @@
-import { IEditForm } from "@/components/guide-post/editViewModel";
-import { POST_INPUT_IDs } from "@/constants/PostPage";
+import { IGetPost } from "@/components/guide-post/editViewModel";
+import { POST_INPUT_IDs, METHOD_TYPE } from "@/constants/PostPage";
 import { NotificationContext } from "@/context/NotificationContext";
 import apiClient from "@/utils/apiClient";
 import { useRouter } from "next/router";
 import { FormEventHandler, useCallback, useContext, useState } from "react";
 
 interface IUsePostForm {
-  methodType: "POST" | "PUT";
-  formData: IEditForm;
+  methodType: METHOD_TYPE;
+  formData: IGetPost;
 }
 
 export const usePostForm = ({ methodType, formData }: IUsePostForm) => {
@@ -21,11 +21,11 @@ export const usePostForm = ({ methodType, formData }: IUsePostForm) => {
       event.preventDefault();
       const formBody = POST_INPUT_IDs.reduce((prev, formId) => {
         if (formId === "locations") {
-          prev[formId] = formData.locations;
+          prev[formId] = formData.locations as string[];
         } else if (formId === "tags") {
-          prev[formId] = formData.tags;
+          prev[formId] = formData.tags as string[];
         } else {
-          prev[formId] = event.currentTarget[formId].value;
+          prev[formId] = event.currentTarget[formId].value.toString();
         }
         return prev;
       }, {} as { [key: string]: string | number | string[] });
@@ -33,7 +33,8 @@ export const usePostForm = ({ methodType, formData }: IUsePostForm) => {
       formBody["fee"] = Number(formBody["fee"]);
       formBody["maxParticipant"] = Number(formBody["maxParticipant"]);
 
-      console.log("===> ", formBody);
+      console.log("==Form Data==> ", formData);
+      console.log("==Form Body==> ", formBody);
 
       const hasMissingValue = !!POST_INPUT_IDs.find((inputId: string) => {
         return !formBody[inputId];
@@ -41,8 +42,8 @@ export const usePostForm = ({ methodType, formData }: IUsePostForm) => {
 
       if (
         hasMissingValue ||
-        formBody.location === 0 ||
-        formBody.tourStyle === 0
+        formData.locations.length === 0 ||
+        formData.tags.length === 0
       ) {
         addNotification(
           "You must fill in every input field before submit the form and select at least one location and tour style.",
@@ -60,13 +61,12 @@ export const usePostForm = ({ methodType, formData }: IUsePostForm) => {
 
       setLoading(true);
       try {
-        if (methodType === "PUT") {
+        if (methodType === METHOD_TYPE.PUT && postID !== "undefined") {
           await apiClient.put("/posts/" + postID, formBody);
-          addNotification("Post update success", "success");
-          return;
+          addNotification("Your Post is updated successfully", "success");
         } else {
           await apiClient.post("/posts", formBody);
-          addNotification("Post create success", "success");
+          addNotification("Your Post is created successfully", "success");
         }
         setTimeout(() => {
           router.push("/guide-post/success");

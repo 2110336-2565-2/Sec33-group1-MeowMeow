@@ -21,10 +21,8 @@ export const usePostForm = ({ methodType, formData }: IUsePostForm) => {
       event.preventDefault();
       const formBody = POST_INPUT_IDs.reduce((prev, formId) => {
         if (formId === "locations") {
-          console.log("location: ", formData.locations);
           prev[formId] = formData.locations;
         } else if (formId === "tags") {
-          console.log("tags: ", formData.tags);
           prev[formId] = formData.tags;
         } else {
           prev[formId] = event.currentTarget[formId].value;
@@ -71,7 +69,7 @@ export const usePostForm = ({ methodType, formData }: IUsePostForm) => {
           addNotification("Post create success", "success");
         }
         setTimeout(() => {
-          router.push("/guide-post/sucess");
+          router.push("/guide-post/success");
         }, 2000);
       } catch (err) {
         const error = err as Error;

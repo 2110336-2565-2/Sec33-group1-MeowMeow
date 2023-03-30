@@ -54,7 +54,11 @@ export class BookingsRepository {
     guideId: number;
     bookingStatus: string;
   }> {
-    const booking = await this.prismaService.booking.findFirst();
+    const booking = await this.prismaService.booking.findFirst({
+      where: {
+        id: id,
+      },
+    });
     if (!booking) {
       throw new RecordNotFound(`booking with id ${id} no found`);
     }

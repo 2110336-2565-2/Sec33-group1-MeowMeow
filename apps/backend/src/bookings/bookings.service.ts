@@ -18,7 +18,7 @@ import {
 } from './bookings.common';
 import { GuidesService } from 'src/guides/guides.service';
 import { GuideNotFound } from 'src/guides/guides.common';
-import moment from 'moment';
+import * as moment from 'moment';
 
 export interface IBookingsService {
   acceptBookingByGuide(
@@ -84,7 +84,7 @@ export class BookingsService implements IBookingsService {
       guideId: req.guideId,
       startDate: new Date(req.startDate),
       endDate: new Date(req.endDate),
-      bookingStatus: 'waitingForGuideConfirmation',
+      bookingStatus: 'WAITING_FOR_GUIDE_CONFIRMATION',
     });
 
     return {
@@ -107,6 +107,7 @@ export class BookingsService implements IBookingsService {
       if (booking.guideId !== guide.guideId) {
         throw new AccessNotGranted('permissing denied');
       }
+      console.log(booking.id);
       if (booking.bookingStatus !== 'WAITING_FOR_GUIDE_CONFIRMATION') {
         throw new UnprocessableEntity(
           'this booking has been accepted or cancelled',

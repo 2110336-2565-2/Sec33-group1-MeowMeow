@@ -42,6 +42,6 @@ export class UnprocessableEntity extends Error {
   constructor(msg: string) {
     super(msg);
 
-    Object.setPrototypeOf(this, UnprocessableEntity);
+    Object.setPrototypeOf(this, UnprocessableEntity.prototype);
   }
 }

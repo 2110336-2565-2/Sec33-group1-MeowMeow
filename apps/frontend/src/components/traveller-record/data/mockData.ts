@@ -38,7 +38,7 @@ export const rows = [
     2,
     50.55,
     "lineid 1",
-    statusType.WAITING_FOR_GUIDE
+    statusType.WAITING_FOR_GUIDE_CONFIRMATION
   ),
   createData(
     "2",
@@ -50,7 +50,7 @@ export const rows = [
     2,
     44.22,
     "lineid 2",
-    statusType.GUIDE_REJECTED
+    statusType.GUIDE_CANCELLED
   ),
   createData(
     "3",
@@ -62,7 +62,7 @@ export const rows = [
     2,
     99.12,
     "lineid 3",
-    statusType.WAITING_FOR_PAYMENT
+    statusType.USER_CANCELLED
   ),
   createData(
     "4",
@@ -74,7 +74,7 @@ export const rows = [
     2,
     509.1,
     "lineid 4",
-    statusType.CANCEL_BOOKING
+    statusType.WAITING_FOR_PAYMENT
   ),
   createData(
     "5",
@@ -86,7 +86,7 @@ export const rows = [
     2,
     235,
     "lineid 5",
-    statusType.WAITING
+    statusType.WAITING_FOR_REFUND_USER
   ),
   createData(
     "6",
@@ -98,7 +98,7 @@ export const rows = [
     2,
     100.4,
     "lineid 6",
-    statusType.WAITING_FOR_REFUND
+    statusType.WAITING_FOR_REFUND_GUIDE
   ),
   createData(
     "7",
@@ -110,7 +110,7 @@ export const rows = [
     2,
     88.88,
     "lineid 7",
-    statusType.CANCEL_TRAVEL
+    statusType.WAITING_FOR_TRAVELING
   ),
   createData(
     "8",
@@ -122,7 +122,7 @@ export const rows = [
     2,
     100.44,
     "lineid 8",
-    statusType.TEAVELLING
+    statusType.TRAVELING
   ),
   createData(
     "9",
@@ -135,53 +135,5 @@ export const rows = [
     22.67,
     "lineid 9",
     statusType.FINISHED
-  ),
-  createData(
-    "10",
-    "Camping 10",
-    "Phuket",
-    "Camping in Phuket",
-    "2020-01-01T10:30",
-    "2020-01-02T10:30",
-    2,
-    44.98,
-    "lineid 10",
-    statusType.FINISHED
-  ),
-  createData(
-    "11",
-    "Camping 11",
-    "Chiang Mai",
-    "Camping in Chiang Mai",
-    "2020-01-01T10:30",
-    "2020-01-02T10:30",
-    2,
-    50.55,
-    "lineid 11",
-    statusType.WAITING_FOR_GUIDE
-  ),
-  createData(
-    "12",
-    "Camping 12",
-    "Bangkok",
-    "Camping in Bangkok",
-    "2020-01-01T10:30",
-    "2020-01-02T10:30",
-    2,
-    44.22,
-    "lineid 12",
-    statusType.GUIDE_REJECTED
-  ),
-  createData(
-    "13",
-    "Camping 13",
-    "Pathumthani",
-    "Camping in Pathumthani",
-    "2020-01-01T10:30",
-    "2020-01-02T10:30",
-    2,
-    99.12,
-    "lineid 13",
-    statusType.WAITING_FOR_PAYMENT
   ),
 ];

@@ -19,7 +19,7 @@ import {
   CancelBookingByTravellerResponse,
   CreateBookingRequest,
   CreateBookingResponse,
-  DeclineBookingResponse,
+  CancelBookingResponse,
   GetBookingsByUserIdResponse,
   GetBookingsByUserIdResponseMember,
 } from 'types';
@@ -235,7 +235,7 @@ export class BookingsController {
   async declineBookingbyGuide(
     @Req() req,
     @Param('id', ParseIntPipe) id: number,
-  ): Promise<DeclineBookingResponse> {
+  ): Promise<CancelBookingResponse> {
     try {
       const account: AccountMetadata = req.account;
       return this.bookingsService.cancelBookingByGuide(id, account);

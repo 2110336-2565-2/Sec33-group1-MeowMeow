@@ -1,13 +1,27 @@
 import { ApiProperty, PickType } from "@nestjs/swagger";
 import { Booking } from "./booking.dto";
-
+import { IsInt, Min } from "class-validator";
+import { Type } from "class-transformer";
 export class GetBookingsByUserIdRequest {
   @ApiProperty({
     type: () => Number,
-    minimum: 1,
+    description: "search offset",
+    example: 0,
+  })
+  @Type(() => Number)
+  @Min(0)
+  @IsInt()
+  offset: number;
+
+  @ApiProperty({
+    type: () => Number,
+    description: "search limit",
     example: 1,
   })
-  userId: number;
+  @Type(() => Number)
+  @Min(1)
+  @IsInt()
+  limit: number;
 }
 
 export class GetBookingsByUserIdResponseMember extends PickType(Booking, [

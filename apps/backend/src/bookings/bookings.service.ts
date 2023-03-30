@@ -4,12 +4,14 @@ import {
   CreateBookingRequest,
   CreateBookingResponse,
   DeclineBookingResponse,
+  GetBookingsByGuideIdRequest,
   GetBookingsByGuideIdResponse,
   GetBookingsByUserIdRequest,
   GetBookingsByUserIdResponse,
 } from 'types';
 import { BookingsRepository } from './bookings.repository';
 import { InvalidDateFormat } from './bookings.common';
+import { BookingStatus } from 'database';
 
 export interface IBookingsService {
   acceptBookingByGuide(
@@ -21,9 +23,13 @@ export interface IBookingsService {
     guideUserId: number,
   ): Promise<DeclineBookingResponse>;
   getBookingsByUserId(
+    userId: number,
     req: GetBookingsByUserIdRequest,
   ): Promise<GetBookingsByUserIdResponse>;
-  getBookingsByGuideId(guideId: number): Promise<GetBookingsByGuideIdResponse>;
+  getBookingsByGuideId(
+    guideId: number,
+    req: GetBookingsByGuideIdRequest,
+  ): Promise<GetBookingsByGuideIdResponse>;
   createBooking(req: CreateBookingRequest): Promise<CreateBookingResponse>;
 }
 
@@ -32,12 +38,13 @@ export class BookingsService implements IBookingsService {
   constructor(private readonly bookingsRepo: BookingsRepository) {}
 
   async getBookingsByUserId(
-    req: GetBookingsByUserIdRequest,
+    userId: number,
+    queryParams: GetBookingsByUserIdRequest,
   ): Promise<GetBookingsByUserIdResponse> {
     const bookings = await this.bookingsRepo.paginateBookings({
-      offset: 0,
-      limit: 100000,
-      userId: req.userId,
+      offset: queryParams.offset,
+      limit: queryParams.limit,
+      userId: userId,
     });
     const results = bookings.map((booking) => ({
       id: booking.id,
@@ -51,10 +58,11 @@ export class BookingsService implements IBookingsService {
 
   async getBookingsByGuideId(
     guideId: number,
+    queryParams: GetBookingsByGuideIdRequest,
   ): Promise<GetBookingsByGuideIdResponse> {
     const bookings = await this.bookingsRepo.paginateBookings({
-      offset: 0,
-      limit: 100000,
+      offset: queryParams.offset,
+      limit: queryParams.limit,
       guideId: guideId,
     });
     const results = bookings.map((booking) => ({
@@ -83,7 +91,7 @@ export class BookingsService implements IBookingsService {
       guideId: req.guideId,
       startDate: new Date(req.startDate),
       endDate: new Date(req.endDate),
-      bookingStatus: 'pending',
+      bookingStatus: BookingStatus.WAITING_FOR_GUIDE_CONFIRMATION,
     });
 
     return {

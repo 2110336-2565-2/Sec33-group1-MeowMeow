@@ -9,6 +9,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -18,8 +19,10 @@ import {
   CreateBookingRequest,
   CreateBookingResponse,
   DeclineBookingResponse,
+  GetBookingsByGuideIdRequest,
   GetBookingsByGuideIdResponse,
   GetBookingsByGuideIdResponseMember,
+  GetBookingsByUserIdRequest,
   GetBookingsByUserIdResponse,
   GetBookingsByUserIdResponseMember,
 } from 'types';
@@ -86,12 +89,16 @@ export class BookingsController {
   })
   @UseGuards(AuthGuard)
   @Get('/self')
-  async getBookingsByUserId(@Req() req): Promise<GetBookingsByUserIdResponse> {
+  async getBookingsByUserId(
+    @Req() req,
+    @Query() queryParams: GetBookingsByUserIdRequest,
+  ): Promise<GetBookingsByUserIdResponse> {
     try {
       const account: AccountMetadata = req.account;
-      return await this.bookingsService.getBookingsByUserId({
-        userId: account.userId,
-      });
+      return await this.bookingsService.getBookingsByUserId(
+        account.userId,
+        queryParams,
+      );
     } catch (e) {
       this.handleException(e);
     }
@@ -118,9 +125,13 @@ export class BookingsController {
   @Get('guide/:id')
   async getBookingsByGuideId(
     @Param('id', ParseIntPipe) guideId: number,
+    @Query() queryParams: GetBookingsByGuideIdRequest,
   ): Promise<GetBookingsByGuideIdResponse> {
     try {
-      return await this.bookingsService.getBookingsByGuideId(guideId);
+      return await this.bookingsService.getBookingsByGuideId(
+        guideId,
+        queryParams,
+      );
     } catch (e) {
       this.handleException(e);
     }

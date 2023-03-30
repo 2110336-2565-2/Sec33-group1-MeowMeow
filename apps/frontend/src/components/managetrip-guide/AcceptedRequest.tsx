@@ -41,9 +41,9 @@ const AcceptedRequest = ({
   const handleNo = () => {
     setOpen(false);
   };
-  const renderRequest = (request: Request) => {
+  const renderRequest = (request: Request, index: number) => {
     return (
-      <Card sx={{ marginBottom: "3vh" }}>
+      <Card sx={{ marginBottom: "3vh" }} key={index}>
         <CardContent>
           <Grid
             container
@@ -91,13 +91,13 @@ const AcceptedRequest = ({
   return (
     <div>
       <List>
-        {confirmedRequests.map((request) => {
+        {confirmedRequests.map((request, index) => {
           if (
             cancelledRequests.some((cancelled) => cancelled.id === request.id)
           ) {
             return null;
           }
-          return renderRequest(request);
+          return renderRequest(request, index);
         })}
       </List>
       <Dialog open={open} onClose={handleNo}>

@@ -24,11 +24,13 @@ export class BookingsRepository {
   async paginateBookings(filter: {
     offset: number;
     limit: number;
-    userId: number;
+    userId?: number;
+    guideId?: number;
   }): Promise<Booking[]> {
     const results = await this.prismaService.booking.findMany({
       where: {
         userId: filter.userId,
+        guideId: filter.guideId,
       },
       skip: filter.offset,
       take: filter.limit,

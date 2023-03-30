@@ -4,6 +4,7 @@ import {
   CreateBookingRequest,
   CreateBookingResponse,
   DeclineBookingResponse,
+  GetBookingsByGuideIdResponse,
   GetBookingsByUserIdRequest,
   GetBookingsByUserIdResponse,
 } from 'types';
@@ -22,6 +23,7 @@ export interface IBookingsService {
   getBookingsByUserId(
     req: GetBookingsByUserIdRequest,
   ): Promise<GetBookingsByUserIdResponse>;
+  getBookingsByGuideId(guideId: number): Promise<GetBookingsByGuideIdResponse>;
   createBooking(req: CreateBookingRequest): Promise<CreateBookingResponse>;
 }
 
@@ -36,6 +38,24 @@ export class BookingsService implements IBookingsService {
       offset: 0,
       limit: 100000,
       userId: req.userId,
+    });
+    const results = bookings.map((booking) => ({
+      id: booking.id,
+      startDate: booking.startDate.toString(),
+      endDate: booking.endDate.toString(),
+      bookingStatus: booking.bookingStatus,
+      postId: booking.postId,
+    }));
+    return results;
+  }
+
+  async getBookingsByGuideId(
+    guideId: number,
+  ): Promise<GetBookingsByGuideIdResponse> {
+    const bookings = await this.bookingsRepo.paginateBookings({
+      offset: 0,
+      limit: 100000,
+      guideId: guideId,
     });
     const results = bookings.map((booking) => ({
       id: booking.id,
@@ -63,7 +83,7 @@ export class BookingsService implements IBookingsService {
       guideId: req.guideId,
       startDate: new Date(req.startDate),
       endDate: new Date(req.endDate),
-      bookingStatus: 'waitingForGuideConfirmation',
+      bookingStatus: 'pending',
     });
 
     return {

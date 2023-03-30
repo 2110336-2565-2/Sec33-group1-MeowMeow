@@ -24,11 +24,11 @@ export interface IBookingsService {
   ): Promise<DeclineBookingResponse>;
   getBookingsByUserId(
     userId: number,
-    req: GetBookingsByUserIdRequest,
+    queryParams: GetBookingsByUserIdRequest,
   ): Promise<GetBookingsByUserIdResponse>;
   getBookingsByGuideId(
     guideId: number,
-    req: GetBookingsByGuideIdRequest,
+    queryParams: GetBookingsByGuideIdRequest,
   ): Promise<GetBookingsByGuideIdResponse>;
   createBooking(req: CreateBookingRequest): Promise<CreateBookingResponse>;
 }

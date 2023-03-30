@@ -42,9 +42,51 @@ export default function PostForm({ methodType }: IPostForm) {
 
   // console.log("formBody: ", formBody);
 
+  const [location, setLocation] = React.useState<readonly ChipPostData[]>(
+    formBody.locations.map((location, index) => {
+      return {
+        key: index,
+        label: location,
+      };
+    })
+  );
+  const [tourStyle, setTourStyle] = React.useState<readonly ChipPostData[]>(
+    formBody.tags.map((location, index) => {
+      return {
+        key: index,
+        label: location,
+      };
+    })
+  );
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
+
+  useEffect(() => {
+    if (methodType === "PUT") {
+      setLocation(
+        formBody.locations.map((location, index) => {
+          return {
+            key: index,
+            label: location,
+          };
+        })
+      );
+      setTourStyle(
+        formBody.tags.map((tourStyle, index) => {
+          return {
+            key: index,
+            label: tourStyle,
+          };
+        })
+      );
+    }
+  }, [formBody.locations, formBody.tags, methodType]);
+
+  useEffect(() => {
+    setLocationAndTourStylePost(location, tourStyle);
+  }, [location, tourStyle]);
 
   return (
     <Stack

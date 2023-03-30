@@ -26,10 +26,10 @@ export default function PostSuccess() {
             }}
           />
           <Typography variant="h4" component="div">
-            Post Success
+            Success
           </Typography>
           <Typography variant="body2" sx={{ marginTop: "20px" }}>
-            Your post has been successfully create.
+            Your post has been successfully create or update.
           </Typography>
         </CardContent>
         <CardActions>

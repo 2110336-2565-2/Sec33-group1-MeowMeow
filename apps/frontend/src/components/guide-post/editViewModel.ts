@@ -10,13 +10,13 @@ export interface IEditForm {
 
 export function editViewModel(methodType: string) {
   const formBody: IEditForm = {
-    title: "demo title",
+    title: "",
     locations: ["Thailand"],
-    tags: ["Happy"],
-    content: "demo content",
-    fee: 9.5,
-    maxParticipant: 3,
-    contactInfo: "demo contact info",
+    tags: ["Playful"],
+    content: "",
+    fee: 0,
+    maxParticipant: 0,
+    contactInfo: "",
   };
   // Get Data Post from API Here
   if (methodType === "PUT") {

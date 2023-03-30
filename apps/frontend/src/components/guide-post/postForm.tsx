@@ -40,8 +40,6 @@ export default function PostForm({ methodType }: IPostForm) {
     formData: formBody,
   });
 
-  // console.log("formBody: ", formBody);
-
   const [location, setLocation] = React.useState<readonly ChipPostData[]>(
     formBody.locations.map((location, index) => {
       return {

@@ -39,8 +39,6 @@ const useRegisterGuideForm = ({
       formBody["tourStyle"] = tourStyle;
       formBody["certificate"] = certificate;
 
-      // console.log("===> ", formBody);
-
       const hasMissingValue = !!REGISTER_GUIDE_INPUT_IDs.find(
         (inputId: string) => {
           return !formBody[inputId];
@@ -71,61 +69,6 @@ const useRegisterGuideForm = ({
 
       setLoading(true);
 
-      var sending: IUseRegisterGuideForm = {} as IUseRegisterGuideForm;
-
-      // function fileToString(file: File): Promise<void> {
-      //   return new Promise<void>((resolve, reject) => {
-      //     const reader = new FileReader();
-
-      //     reader.onload = () => {
-      //       const buffer = reader.result as BinaryData;
-
-      //       sending = {
-      //         locations: formBody["location"],
-      //         tourStyles: formBody["tourStyle"],
-      //         certificate: buffer,
-      //         paymentId: formBody["paymentId"],
-      //       };
-
-      //       console.log("sending: ", sending);
-      //       apiClient
-      //         .post("/guides/register", sending, {
-      //           headers: {
-      //             "Content-Type": "multipart/form-data",
-      //           }}
-      //         )
-      //         .then((res) => {
-      //           addNotification("Register Guide Success", "success");
-      //           setTimeout(() => {
-      //             // router.push("/login");
-      //           }, 2000);
-      //           console.log("res: ", res);
-      //           resolve();
-      //         })
-      //         .catch((err) => {
-      //           const error = err as Error;
-      //           addNotification(error.message, "error");
-      //           reject();
-      //         });
-      //     };
-      //     reader.onerror = () => {
-      //       reject(reader.error);
-      //     };
-
-      //     reader.readAsDataURL(file)
-      //   });
-      // }
-
-      // fileToString(certificate!)
-      //   .then(() => {
-      //     setLoading(false);
-      //   })
-      //   .catch(() => {
-      //     setLoading(false);
-      //   })
-      //   .finally(() => {
-      //     setLoading(false);
-      //   });
       console.log("formBody: ", formBody);
       var formData = new FormData();
       formData.append("certificate", certificate!);
@@ -141,7 +84,7 @@ const useRegisterGuideForm = ({
         });
         addNotification("Register Guide Success", "success");
         setTimeout(() => {
-          // router.push("/login");
+          router.push("/dashboard");
         }, 2000);
       } catch (err) {
         const error = err as Error;

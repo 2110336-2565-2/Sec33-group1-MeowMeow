@@ -8,4 +8,4 @@
 CREATE TYPE "TransactionType" AS ENUM ('CHARGES', 'TRANSFERS', 'REFUNDS');
 
 -- AlterTable
-ALTER TABLE "Transaction" ADD COLUMN     "transactionType" "TransactionType" NOT NULL;
+ALTER TABLE "Transaction" ADD COLUMN     "transactionType" "TransactionType" NOT NULL DEFAULT 'CHARGES';

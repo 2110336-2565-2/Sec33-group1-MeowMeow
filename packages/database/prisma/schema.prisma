@@ -165,7 +165,7 @@ model Transaction {
   paymentID       String
   bookingId       Int
   userId          Int
-  transactionType TransactionType
+  transactionType TransactionType @default(CHARGES)
 
   booking Booking @relation(fields: [bookingId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   user    User    @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)

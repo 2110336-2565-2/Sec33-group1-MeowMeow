@@ -6,3 +6,6 @@ export * from "./getBookingsByUserId.dto";
 export * from "./getBookingsByGuideId.dto";
 export * from "./payBookingFee.dto";
 export * from "./getBookingsByGuideId.dto";
+
+export * from "./payBookingFee.dto";
+

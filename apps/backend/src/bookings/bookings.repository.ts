@@ -5,6 +5,7 @@ import {
   FailedRelationConstraintError,
   RecordNotFound,
 } from './bookings.common';
+import { Guide } from 'types/src/dtos/guide/guide.dto';
 
 const bookingStatusEnumMapper = {
   WAITING_FOR_GUIDE_CONFIRMATION: BookingStatus.WAITING_FOR_GUIDE_CONFIRMATION,

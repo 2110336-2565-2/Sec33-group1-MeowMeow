@@ -6,44 +6,45 @@ import {
   styled,
   tableCellClasses,
 } from "@mui/material";
-import { IPaymentData, Order } from "../data/recordType";
+import { Order } from "../data/sorting";
+import { IGetRecord } from "./viewModel";
 
 interface HeadCell {
-  id: keyof IPaymentData;
+  id: keyof IGetRecord;
   label: string;
   numeric: boolean;
 }
 
 const headCells: readonly HeadCell[] = [
   {
-    id: "id",
+    id: "transactionId",
+    label: "Transaction ID",
     numeric: false,
-    label: "ID",
   },
   {
-    id: "userID",
-    numeric: false,
+    id: "userId",
     label: "User ID",
-  },
-  {
-    id: "guideID",
-    numeric: false,
-    label: "Guide ID",
-  },
-  {
-    id: "timeStamp",
-    numeric: false,
-    label: "TimeStamp",
-  },
-  {
-    id: "price",
     numeric: true,
-    label: "Price",
   },
   {
-    id: "paymentStatus",
+    id: "username",
+    label: "Username",
+    numeric: false,
+  },
+  {
+    id: "bookingId",
+    label: "Booking ID",
     numeric: true,
-    label: "Payment Status",
+  },
+  {
+    id: "postId",
+    label: "Post ID",
+    numeric: true,
+  },
+  {
+    id: "transactionType",
+    label: "Transaction Type",
+    numeric: false,
   },
 ];
 
@@ -59,7 +60,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 interface EnhancedTableProps {
   onRequestSort: (
     event: React.MouseEvent<unknown>,
-    property: keyof IPaymentData
+    property: keyof IGetRecord
   ) => void;
   order: Order;
   orderBy: string;
@@ -68,14 +69,13 @@ interface EnhancedTableProps {
 export default function TableHeader(props: EnhancedTableProps) {
   const { order, orderBy, onRequestSort } = props;
   const createSortHandler =
-    (property: keyof IPaymentData) => (event: React.MouseEvent<unknown>) => {
+    (property: keyof IGetRecord) => (event: React.MouseEvent<unknown>) => {
       onRequestSort(event, property);
     };
 
   return (
     <TableHead>
       <TableRow>
-        <StyledTableCell align="center"></StyledTableCell>
         {headCells.map((headCell) => (
           <StyledTableCell
             key={headCell.id}

@@ -33,12 +33,19 @@ export class PaymentController {
     return this.paymentService.getAllTransaction();
   }
 
-  @Get()
+  @HttpCode(HttpStatus.OK)
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'successfully pay the booking',
   })
-  async get() {
-    return this.paymentService.transfer(12);
+  @ApiCookieAuth()
+  @UseGuards(AuthGuard)
+  @Get()
+  async getTransaction(@Req() req) {
+    if (!req.account.roles.includes(Role.ADMIN)) {
+      throw new UnauthorizedException(
+        'You are not authorized to access this resource',
+      );
+    }
+    return this.paymentService.getAllTransaction();
   }
 }

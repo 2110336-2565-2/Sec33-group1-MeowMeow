@@ -1,41 +1,51 @@
 import apiClient from "@/utils/apiClient";
-import { Container, LinearProgress, Stack, Typography } from "@mui/material";
-import { useEffect, useMemo, useState } from "react";
+import {
+  FailedDisplay,
+  PendingDisplay,
+  SuccessDisplay,
+} from "./StatusDisplayView";
+import { CircularProgress, Container } from "@mui/material";
+import { useEffect, useState } from "react";
 import Navbar from "../common/Navbar";
 import PaymentOption from "./PaymentOption";
 import Summary from "./Summary";
-import { Trip } from "./types";
-
-const mockTrip: Trip = {
-  id: "12faf3",
-  name: "Tokyo Trip",
-  price: 1200,
-};
+import { PaymentStatus, Trip } from "./types";
+import useOmiseFrontend from "./useOmiseFrontend";
 
 interface IPaymentSummaryProps {
   trip_id: string;
 }
 
-const fetchPost = async (trip_id: string) => {
-  const post = await apiClient.post(`/posts/${trip_id}`, {});
-  return post;
-};
+const testCreditCard = 4111111111111111;
 
 const PaymentSummary = (props: IPaymentSummaryProps) => {
   const { trip_id } = props;
+  const [trip, setTrip] = useState<Trip>({} as Trip);
+
+  const { handleScriptLoad, openPayModal, status } = useOmiseFrontend({ trip });
 
   useEffect(() => {
-    fetchPost(trip_id);
+    const fetchPost = async () => {
+      const resp = await apiClient.get(`/posts/${trip_id}`, {});
+      console.log(resp);
+      const post: Trip = {
+        id: resp.data.id,
+        name: resp.data.title,
+        price: resp.data.fee,
+      };
+      setTrip(post);
+    };
+    fetchPost();
   }, []);
 
-  const fetchedTrip = useMemo(() => {
-    return {
-      ...mockTrip,
-      id: trip_id,
-    };
-  }, [trip_id]);
+  if (!trip) {
+    return (
+      <Container maxWidth="md" sx={{ mt: 8 }}>
+        <CircularProgress />
+      </Container>
+    );
+  }
 
-  const [isGenerateToken, setIsGenerateToken] = useState<boolean>(false);
   return (
     <>
       <Navbar />
@@ -45,23 +55,18 @@ const PaymentSummary = (props: IPaymentSummaryProps) => {
           mt: 8,
         }}
       >
-        {!isGenerateToken ? (
+        {status === PaymentStatus.INITIAL && (
           <>
-            <Summary trip={fetchedTrip} />
+            <Summary trip={trip} />
             <PaymentOption
-              trip={fetchedTrip}
-              isGenerateToken={isGenerateToken}
-              setIsGenerateToken={setIsGenerateToken}
+              handleScriptLoad={handleScriptLoad}
+              openPayModal={openPayModal}
             />
           </>
-        ) : (
-          <Stack gap={8} p={8}>
-            <LinearProgress />
-            <Typography variant="h4" textAlign={"center"}>
-              Payment Pending
-            </Typography>
-          </Stack>
         )}
+        {status === PaymentStatus.PENDING && <PendingDisplay />}
+        {status === PaymentStatus.FAILED && <FailedDisplay />}
+        {status === PaymentStatus.SUCCESS && <SuccessDisplay />}
       </Container>
     </>
   );

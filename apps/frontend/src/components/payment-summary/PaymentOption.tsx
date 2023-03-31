@@ -1,20 +1,13 @@
 import { Typography, Button } from "@mui/material";
 import Script from "next/script";
-import { Trip } from "./types";
-import useOmiseFrontend from "./useOmiseFrontend";
 
 interface IPaymentOptionProps {
-  trip: Trip;
-  isGenerateToken: boolean;
-  setIsGenerateToken: (isGenerateToken: boolean) => void;
+  handleScriptLoad: () => void;
+  openPayModal: () => void;
 }
 
 const PaymentOption = (props: IPaymentOptionProps) => {
-  const { trip, isGenerateToken, setIsGenerateToken } = props;
-  const { handleScriptLoad, openPayModal } = useOmiseFrontend({
-    trip,
-    setIsGenerateToken,
-  });
+  const { handleScriptLoad, openPayModal } = props;
 
   return (
     <>

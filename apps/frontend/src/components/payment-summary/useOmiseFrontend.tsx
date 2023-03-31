@@ -1,16 +1,19 @@
 import { useEffect, useState } from "react";
 import type { OmiseCard as OmiseCardType } from "omise-js-typed";
-import { Trip } from "./types";
+import { PaymentStatus, Trip } from "./types";
+
+if (!process.env.BACKEND_OMISE_PUBLIC_KEY) {
+  throw new Error("BACKEND_OMISE_PUBLIC_KEY is not defined");
+}
 
 interface IOmiseFrontend {
   trip: Trip;
-  setIsGenerateToken: (isGenerateToken: boolean) => void;
 }
 
 const useOmiseFrontend = (props: IOmiseFrontend) => {
-  const { trip, setIsGenerateToken } = props;
-
+  const { trip } = props;
   const [omiseCard, setOmiseCard] = useState<OmiseCardType | null>(null);
+  const [status, setStatus] = useState<PaymentStatus>(PaymentStatus.INITIAL);
 
   const handleScriptLoad = () => {
     console.log("Script loaded");
@@ -19,7 +22,7 @@ const useOmiseFrontend = (props: IOmiseFrontend) => {
 
   useEffect(() => {
     omiseCard?.configure({
-      publicKey: process.env.NEXT_PUBLIC_OMISE_PUBLIC_KEY || "",
+      publicKey: process.env.BACKEND_OMISE_PUBLIC_KEY || "",
     });
   }, [omiseCard]);
 
@@ -30,8 +33,7 @@ const useOmiseFrontend = (props: IOmiseFrontend) => {
       frameLabel: "GuideKai Co.",
       frameDescription: `Trip #${trip.id}`,
       onCreateTokenSuccess: (nonce: string) => {
-        console.log("nonce", nonce);
-        setIsGenerateToken(true);
+        setStatus(PaymentStatus.PENDING);
         // TODO: send token to backend
       },
     });
@@ -39,6 +41,7 @@ const useOmiseFrontend = (props: IOmiseFrontend) => {
   return {
     handleScriptLoad,
     openPayModal,
+    status,
   };
 };
 export default useOmiseFrontend;

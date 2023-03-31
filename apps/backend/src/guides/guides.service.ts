@@ -46,7 +46,16 @@ export class GuidesServiceImpl {
   }
 
   async getGuideByUserId(userId: number): Promise<GetGuideByUserIdResponse> {
-    return await this.guidesRepo.getGuide({ userId: userId });
+    const guide: GetGuideByIdResponse = await this.guidesRepo.getGuide({
+      userId: userId,
+    });
+    const user = await this.usersRepo.getUserById(userId);
+    return {
+      ...guide,
+      email: user.email,
+      username: user.username,
+      roles: user.roles,
+    };
   }
 
   async registerUserForGuide(

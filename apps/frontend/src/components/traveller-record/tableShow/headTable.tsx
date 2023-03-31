@@ -6,24 +6,22 @@ import {
   styled,
   tableCellClasses,
 } from "@mui/material";
-import { ITravellerData, Order } from "../data/recordType";
+import { Order } from "../data/recordType";
+import { IGetRecord } from "./viewModel/booking";
+
+// Not use now
 
 interface HeadCell {
-  id: keyof ITravellerData;
+  id: keyof IGetRecord;
   label: string;
   numeric: boolean;
 }
 
 const headCells: readonly HeadCell[] = [
   {
-    id: "name",
-    numeric: false,
-    label: "Trip Name",
-  },
-  {
-    id: "location",
-    numeric: false,
-    label: "Location",
+    id: "id",
+    numeric: true,
+    label: "Booking ID",
   },
   {
     id: "startDate",
@@ -36,17 +34,12 @@ const headCells: readonly HeadCell[] = [
     label: "End Date",
   },
   {
-    id: "participant",
+    id: "postId",
     numeric: true,
-    label: "Participant",
+    label: "Status",
   },
   {
-    id: "price",
-    numeric: true,
-    label: "Price",
-  },
-  {
-    id: "status",
+    id: "bookingStatus",
     numeric: false,
     label: "Status",
   },
@@ -62,40 +55,13 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
-interface EnhancedTableProps {
-  onRequestSort: (
-    event: React.MouseEvent<unknown>,
-    property: keyof ITravellerData
-  ) => void;
-  order: Order;
-  orderBy: string;
-}
-
-export default function TableHeader(props: EnhancedTableProps) {
-  const { order, orderBy, onRequestSort } = props;
-  const createSortHandler =
-    (property: keyof ITravellerData) => (event: React.MouseEvent<unknown>) => {
-      onRequestSort(event, property);
-    };
-
+export default function TableHeader() {
   return (
     <TableHead>
       <TableRow>
         <StyledTableCell align="center"></StyledTableCell>
         {headCells.map((headCell) => (
-          <StyledTableCell
-            key={headCell.id}
-            align="center"
-            sortDirection={orderBy === headCell.id ? order : false}
-          >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : "asc"}
-              onClick={createSortHandler(headCell.id)}
-            >
-              {headCell.label}
-            </TableSortLabel>
-          </StyledTableCell>
+          <StyledTableCell key={headCell.id} align="center"></StyledTableCell>
         ))}
       </TableRow>
     </TableHead>

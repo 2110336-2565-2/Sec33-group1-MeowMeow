@@ -13,6 +13,7 @@ import {
 import React from "react";
 import CancelIcon from "@mui/icons-material/Cancel";
 import {
+  buttonDisplayNames,
   buttonMapLink,
   buttonMapStatus,
   statusDetail,
@@ -21,7 +22,7 @@ import {
 import { useRouter } from "next/router";
 
 export interface IStatusDialog {
-  tripId: string;
+  tripId: number;
   nameButton: string;
 }
 
@@ -63,7 +64,7 @@ export default function StatusDialog({ tripId, nameButton }: IStatusDialog) {
         onClick={handleClickOpen("paper")}
       >
         {" "}
-        {nameButton}
+        {buttonDisplayNames.get(nameButton)}
       </Button>
       <Dialog
         open={open}

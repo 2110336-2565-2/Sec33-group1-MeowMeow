@@ -1,7 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from 'database';
 import { GuidesRepository } from 'src/guides/guides.repository';
-import { CreatePostRequest, UpdatePostRequest } from 'types';
+import {
+  CreatePostRequest,
+  SearchPostsRequest,
+  UpdatePostRequest,
+} from 'types';
 import { PrismaService } from '../prisma/prisma.service';
 import {
   AccessDeniedError,
@@ -136,6 +140,103 @@ export class PostsRepository {
       });
       if (!deletePost) throw new NotFoundError('post not found');
       return deletePost;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  async searchPosts(searchData: SearchPostsRequest) {
+    try {
+      const extraSearchOptions = [];
+
+      if (searchData.reviewScore) {
+        const guidesID = await this.guidesRepo.getGuideIDByReviewScore(
+          searchData.reviewScore,
+        );
+        if (guidesID.length > 0)
+          extraSearchOptions.push({
+            authorId: {
+              in: guidesID,
+            },
+          });
+      }
+      if (searchData.locations && searchData.locations.length > 0) {
+        const locationsID = (
+          await this.prismaService.location.findMany({
+            where: {
+              locationName: {
+                in: searchData.locations,
+              },
+            },
+          })
+        ).map((e) => e.id);
+        extraSearchOptions.push({
+          PostLocation: {
+            some: {
+              locationId: {
+                in: locationsID,
+              },
+            },
+          },
+        });
+      }
+      if (searchData.tags && searchData.tags.length > 0) {
+        extraSearchOptions.push({
+          tags: {
+            hasSome: searchData.tags ?? [],
+          },
+        });
+      }
+      if (searchData.participant && searchData.participant > 0) {
+        extraSearchOptions.push({
+          maxParticipant: {
+            gte: searchData.participant,
+          },
+        });
+      }
+      if (searchData.fee) {
+        extraSearchOptions.push({
+          fee: {
+            lte: searchData.fee,
+          },
+        });
+      }
+      const posts = await this.prismaService.post.findMany({
+        skip: searchData.offset,
+        take: searchData.limit,
+        where: {
+          AND: [
+            {
+              OR: [
+                {
+                  content: {
+                    contains: searchData.text ?? '',
+                  },
+                },
+                {
+                  title: {
+                    contains: searchData.text ?? '',
+                  },
+                },
+                {
+                  contactInfo: {
+                    contains: searchData.text ?? '',
+                  },
+                },
+              ],
+            },
+            ...extraSearchOptions,
+          ],
+        },
+        include: {
+          PostLocation: {
+            select: {
+              location: true,
+            },
+          },
+        },
+      });
+      return posts;
     } catch (e) {
       throw e;
     }

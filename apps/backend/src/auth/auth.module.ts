@@ -22,7 +22,6 @@ import { AuthGuard } from '../auth/auth.guard';
       provide: 'AuthService',
       useClass: AuthServiceImpl,
     },
-    UsersRepository,
   ],
 })
 export class AuthModule {}

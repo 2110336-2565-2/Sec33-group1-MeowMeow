@@ -1,3 +1,11 @@
+export class GuideNotFound extends Error {
+  constructor(msg: string) {
+    super(msg);
+
+    Object.setPrototypeOf(this, GuideNotFound);
+  }
+}
+
 export class FailedRelationConstraintError extends Error {
   constructor(msg: string) {
     super(msg);

@@ -1,14 +1,13 @@
 import React, { useEffect } from "react";
 
 export interface IEditPostForm {
-  tripName: string;
-  location: string;
-  startDate: string;
-  endDate: string;
-  description: string;
-  price: number;
+  title: string;
+  locations: string[];
+  tags: string[];
+  content: string;
+  fee: number;
   maxParticipant: number;
-  lineid: string;
+  contactInfo: string;
 }
 
 export interface IUseEditPostForm {
@@ -17,33 +16,31 @@ export interface IUseEditPostForm {
 
 const useEditPostForm = ({ methodType }: IUseEditPostForm) => {
   const [formBody, setFormBody] = React.useState<IEditPostForm>({
-    tripName: "",
-    location: "",
-    startDate: "",
-    endDate: "",
-    description: "",
-    price: 0.0,
+    title: "",
+    locations: [],
+    tags: [],
+    content: "",
+    fee: 0.0,
     maxParticipant: 0,
-    lineid: "",
+    contactInfo: "",
   });
 
   // Get Data Post from API Here
   //
   // Mock Data
-  if (methodType === "PUT") {
-    useEffect(() => {
+  useEffect(() => {
+    if (methodType === "PUT") {
       setFormBody({
-        tripName: "Trip to Phuket",
-        location: "Phuket",
-        startDate: "2017-05-24T10:30",
-        endDate: "2021-10-20T10:30",
-        description: "Trip to Phuket",
-        price: 100.56,
+        title: "Trip to Phuket",
+        locations: ["Phuket"],
+        tags: ["Fun-trip", "Amazing"],
+        content: "Trip to Phuket",
+        fee: 100.56,
         maxParticipant: 10,
-        lineid: "lineid",
+        contactInfo: "contactInfo",
       });
-    }, []);
-  }
+    }
+  }, []);
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;

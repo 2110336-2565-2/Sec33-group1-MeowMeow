@@ -4,6 +4,7 @@ import { GetGuideByIdResponse, SearchGuidesResponse } from 'types';
 import { PrismaService } from '../prisma/prisma.service';
 import {
   FailedRelationConstraintError,
+  GuideNotFound,
   RecordAlreadyExist,
 } from './guides.common';
 
@@ -65,34 +66,51 @@ export class GuidesRepository {
     }
   }
 
-  async getGuideById(guideId: number): Promise<GetGuideByIdResponse> {
+  async getGuide(filter: {
+    id?: number;
+    userId?: number;
+  }): Promise<GetGuideByIdResponse> {
+    const guide = await this.prismaService.guide.findUnique({
+      include: {
+        user: true,
+        GuideLocation: {
+          include: {
+            location: true,
+          },
+        },
+        GuideTourStyle: {
+          include: {
+            tourStyle: true,
+          },
+        },
+      },
+      where: {
+        id: filter.id,
+        userId: filter.userId,
+      },
+    });
+    if (!guide) {
+      throw new GuideNotFound('guide with given condition not found');
+    }
+
     try {
-      const guideResult = await this.prismaService.guide.findUnique({
-        where: {
-          id: guideId,
-        },
-      });
-      if (!guideResult) return null;
-      const userResult = await this.prismaService.user.findUnique({
-        where: {
-          id: guideResult.userId,
-        },
-      });
       const scoreResult = await this.prismaService.review.aggregate({
         _avg: {
           score: true,
         },
         where: {
-          guideId: guideResult.id,
+          guideId: guide.id,
         },
       });
       return {
-        guideId: guideResult.id,
-        userId: guideResult.userId,
-        firstName: userResult.firstName,
-        lastName: userResult.lastName,
-        certificateId: guideResult.certificateId,
+        guideId: guide.id,
+        userId: guide.user.id,
+        firstName: guide.user.firstName,
+        lastName: guide.user.lastName,
+        certificateId: guide.certificateId,
         averageReviewScore: scoreResult._avg.score?.toNumber() | 0,
+        locations: guide.GuideLocation.map((e) => e.location.locationName),
+        tourStyles: guide.GuideTourStyle.map((e) => e.tourStyle.tourStyleName),
       };
     } catch (e) {
       console.log(e);
@@ -193,5 +211,28 @@ export class GuidesRepository {
       }
       throw e;
     }
+  }
+
+  async getGuideIDByReviewScore(
+    minScore?: number,
+    maxScore?: number,
+  ): Promise<number[]> {
+    const options = {};
+
+    if (minScore) options['gte'] = minScore;
+    if (maxScore) options['lte'] = maxScore;
+    const guides = await this.prismaService.review.groupBy({
+      by: ['guideId'],
+      _avg: {
+        score: true,
+      },
+      having: {
+        score: {
+          _avg: options,
+        },
+      },
+    });
+
+    return guides.map((e) => e.guideId);
   }
 }

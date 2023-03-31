@@ -1,4 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { Transform } from "class-transformer";
 import {
   IsArray,
   IsDateString,
@@ -58,6 +59,7 @@ export class Post {
     description: "service's fee",
     example: 1.23,
   })
+  @Transform((e) => parseFloat(e.value))
   @IsNotEmpty()
   @IsNumber({ maxDecimalPlaces: 2 })
   @Max(99999999.99)

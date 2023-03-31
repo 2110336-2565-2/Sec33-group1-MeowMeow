@@ -6,6 +6,8 @@ import {
   GetPostResponse,
   UpdatePostRequest,
   UpdatePostResponse,
+  SearchPostsRequest,
+  SearchPostsResponse,
 } from 'types';
 import { NotFoundError } from './posts.common';
 
@@ -22,6 +24,7 @@ export interface PostsService {
     updatePostDto: UpdatePostRequest,
   ): Promise<UpdatePostResponse>;
   deletePost(postId: number, userId: number): Promise<DeletePostResponse>;
+  searchPosts(searchData: SearchPostsRequest): Promise<SearchPostsResponse>;
 }
 @Injectable()
 export class PostsServiceImpl {
@@ -131,5 +134,24 @@ export class PostsServiceImpl {
       maxParticipant: post.maxParticipant,
       locations: post.PostLocation.map((e) => e.location.locationName),
     };
+  }
+
+  async searchPosts(
+    searchData: SearchPostsRequest,
+  ): Promise<SearchPostsResponse> {
+    const posts = await this.postsRepo.searchPosts(searchData);
+    return posts.map((e) => ({
+      id: e.id,
+      authorId: e.authorId,
+      title: e.title,
+      content: e.content,
+      tags: e.tags,
+      locations: e.PostLocation.map((e) => e.location.locationName),
+      fee: e.fee.toNumber(),
+      maxParticipant: e.maxParticipant,
+      contactInfo: e.contactInfo,
+      createdAt: e.createdAt,
+      updatedAt: e.updatedAt,
+    }));
   }
 }

@@ -63,14 +63,14 @@ const useRegisterGuideForm = ({
       console.log("formData: ", formData);
 
       try {
-        // await apiClient.post("/guides/register", formData, {
-        //   headers: {
-        //     "Content-Type": "multipart/form-data",
-        //   },
-        // });
+        await apiClient.post("/guides/register", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
         addNotification("Register Guide Success", "success");
         setTimeout(() => {
-          // router.push("/dashboard");
+          router.push("/dashboard");
         }, 2000);
       } catch (err) {
         const error = err as Error;

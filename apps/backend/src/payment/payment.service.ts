@@ -273,4 +273,9 @@ export class PaymentService {
 
     return transaction;
   }
+
+  async getAllTransaction() {
+    const transactions = await this.paymentRepository.getAllTransactions();
+    return transactions;
+  }
 }

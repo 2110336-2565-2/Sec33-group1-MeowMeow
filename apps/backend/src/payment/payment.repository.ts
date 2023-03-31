@@ -63,6 +63,22 @@ export class PaymentRepository {
   }
 
   async getAllTransactions() {
-    return await this.prisma.transaction.findMany();
+    const res = await this.prisma.transaction.findMany({
+      include: {
+        user: true,
+        booking: true,
+      },
+    });
+
+    return res.map((e) => {
+      return {
+        transactionId: e.id,
+        transactionType: e.transactionType,
+        userId: e.userId,
+        username: e.user.username,
+        bookingId: e.bookingId,
+        postId: e.booking.postId,
+      };
+    });
   }
 }

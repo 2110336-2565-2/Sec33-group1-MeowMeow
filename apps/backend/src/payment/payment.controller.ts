@@ -6,15 +6,17 @@ import {
   HttpStatus,
   Post,
   Req,
+  UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
 import { ApiCookieAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Role } from 'database';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { AccountMetadata, PayBooking } from 'types';
 import { PaymentService } from './payment.service';
 
 @ApiTags('Payment')
-@Controller('payment')
+@Controller('payments')
 export class PaymentController {
   constructor(private readonly paymentService: PaymentService) {}
 
@@ -44,12 +46,19 @@ export class PaymentController {
     });
   }
 
-  @Get()
+  @HttpCode(HttpStatus.OK)
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'successfully pay the booking',
   })
-  async get() {
-    return this.paymentService.transfer(12);
+  @ApiCookieAuth()
+  @UseGuards(AuthGuard)
+  @Get()
+  async getTransaction(@Req() req) {
+    if (!req.account.roles.includes(Role.ADMIN)) {
+      throw new UnauthorizedException(
+        'You are not authorized to access this resource',
+      );
+    }
+    return this.paymentService.getAllTransaction();
   }
 }

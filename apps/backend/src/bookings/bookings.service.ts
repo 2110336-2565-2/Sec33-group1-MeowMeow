@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import {
   AcceptBookingResponse,
+  AccountMetadata,
   CreateBookingRequest,
   CreateBookingResponse,
   DeclineBookingResponse,
@@ -8,20 +9,36 @@ import {
   GetBookingsByGuideIdResponse,
   GetBookingsByUserIdRequest,
   GetBookingsByUserIdResponse,
+  PayBookingFeeResponse,
+  CancelBookingByTravellerResponse,
 } from 'types';
 import { BookingsRepository } from './bookings.repository';
-import { InvalidDateFormat } from './bookings.common';
-import { BookingStatus } from 'database';
+import {
+  AccessNotGranted,
+  InvalidDateFormat,
+  UnprocessableEntity,
+} from './bookings.common';
+import { GuidesService } from 'src/guides/guides.service';
+import { GuideNotFound } from 'src/guides/guides.common';
+import * as moment from 'moment';
 
 export interface IBookingsService {
   acceptBookingByGuide(
-    id: number,
-    guideUserId: number,
+    bookingId: number,
+    account: AccountMetadata,
   ): Promise<AcceptBookingResponse>;
-  declineBookingByGuide(
-    id: number,
-    guideUserId: number,
-  ): Promise<DeclineBookingResponse>;
+  cancelBookingByGuide(
+    bookingId: number,
+    account: AccountMetadata,
+  ): Promise<CancelBookingResponse>;
+  payBookingFee(
+    bookingId: number,
+    account: AccountMetadata,
+  ): Promise<PayBookingFeeResponse>;
+  cancelBookingByTraveller(
+    bookingId: number,
+    account: AccountMetadata,
+  ): Promise<CancelBookingByTravellerResponse>;
   getBookingsByUserId(
     userId: number,
     queryParams: GetBookingsByUserIdRequest,
@@ -35,7 +52,10 @@ export interface IBookingsService {
 
 @Injectable()
 export class BookingsService implements IBookingsService {
-  constructor(private readonly bookingsRepo: BookingsRepository) {}
+  constructor(
+    private readonly bookingsRepo: BookingsRepository,
+    @Inject('GuidesService') private readonly guideService: GuidesService,
+  ) {}
 
   async getBookingsByUserId(
     userId: number,
@@ -91,7 +111,7 @@ export class BookingsService implements IBookingsService {
       guideId: req.guideId,
       startDate: new Date(req.startDate),
       endDate: new Date(req.endDate),
-      bookingStatus: 'waitingForGuideConfirmation',
+      bookingStatus: 'WAITING_FOR_GUIDE_CONFIRMATION',
     });
 
     return {
@@ -105,32 +125,172 @@ export class BookingsService implements IBookingsService {
   }
 
   async acceptBookingByGuide(
-    id: number,
-    guideUserId: number,
+    bookingId: number,
+    account: AccountMetadata,
   ): Promise<AcceptBookingResponse> {
-    // when the guide accepts the booking, booking status is changed to 'waitingForPayment'
-    const booking = await this.bookingsRepo.updateBookingStatus(
-      id,
-      'waitingForPayment',
-    );
-    return {
-      id: booking.id,
-      bookingStatus: booking.bookingStatus,
-    };
+    try {
+      const guide = await this.guideService.getGuideByUserId(account.userId);
+      const booking = await this.bookingsRepo.getBookingById(bookingId);
+      if (booking.guideId !== guide.guideId) {
+        throw new AccessNotGranted('permissing denied');
+      }
+      console.log(booking.id);
+      if (booking.bookingStatus !== 'WAITING_FOR_GUIDE_CONFIRMATION') {
+        throw new UnprocessableEntity(
+          'this booking has been accepted or cancelled',
+        );
+      }
+
+      const acceptedBooking = await this.bookingsRepo.updateBookingStatus(
+        bookingId,
+        'WAITING_FOR_PAYMENT',
+      );
+      return {
+        id: acceptedBooking.id,
+        bookingStatus: acceptedBooking.bookingStatus,
+      };
+    } catch (e) {
+      if (e instanceof GuideNotFound) {
+        throw new AccessNotGranted('permission denied');
+      }
+      throw e;
+    }
   }
 
-  async declineBookingByGuide(
-    id: number,
-    guideUserId: number,
-  ): Promise<DeclineBookingResponse> {
-    // when the guide declines the booking, booking status is changed to 'guideCancelled'
-    const booking = await this.bookingsRepo.updateBookingStatus(
-      id,
-      'guideCancelled',
-    );
-    return {
-      id: booking.id,
-      bookingStatus: booking.bookingStatus,
-    };
+  async cancelBookingByGuide(
+    bookingId: number,
+    account: AccountMetadata,
+  ): Promise<CancelBookingResponse> {
+    try {
+      const guide = await this.guideService.getGuideByUserId(account.userId);
+      const booking = await this.bookingsRepo.getBookingById(bookingId);
+      if (booking.guideId !== guide.guideId) {
+        throw new AccessNotGranted('permissing denied');
+      }
+      if (
+        booking.bookingStatus !== 'WAITING_FOR_GUIDE_CONFIRMATION' &&
+        booking.bookingStatus !== 'WAITING_FOR_PAYMENT'
+      ) {
+        throw new UnprocessableEntity(
+          'this booking has been accepted or cancelled',
+        );
+      }
+
+      const cancelledBooking = await this.bookingsRepo.updateBookingStatus(
+        bookingId,
+        'GUIDE_CANCELLED',
+      );
+      return {
+        id: cancelledBooking.id,
+        bookingStatus: cancelledBooking.bookingStatus.toString(),
+      };
+    } catch (e) {
+      if (e instanceof GuideNotFound) {
+        throw new AccessNotGranted('permission denied');
+      }
+      throw e;
+    }
+  }
+
+  async payBookingFee(
+    bookingId: number,
+    account: AccountMetadata,
+  ): Promise<PayBookingFeeResponse> {
+    try {
+      const booking = await this.bookingsRepo.getBookingById(bookingId);
+      if (booking.userId !== account.userId) {
+        throw new AccessNotGranted('permissing denied');
+      }
+      if (booking.bookingStatus !== 'WAITING_FOR_PAYMENT') {
+        throw new UnprocessableEntity(
+          'this booking has not beed waiting for payment',
+        );
+      }
+
+      const now = new Date();
+      const paymentDeadline = moment(booking.updatedAt).add(1, 'days').toDate();
+      if (now > paymentDeadline) {
+        const cancelledBooking = await this.bookingsRepo.updateBookingStatus(
+          bookingId,
+          'USER_CANCELLED',
+        );
+        return {
+          message: 'booking payment exceeds the deadline',
+          bookingId: cancelledBooking.id,
+          bookingStatus: cancelledBooking.bookingStatus.toString(),
+        };
+      }
+
+      // TODO call payment api
+
+      const paidBooking = await this.bookingsRepo.updateBookingStatus(
+        bookingId,
+        'TRAVELING',
+      );
+      return {
+        message: 'success',
+        bookingId: paidBooking.id,
+        bookingStatus: paidBooking.bookingStatus.toString(),
+      };
+    } catch (e) {
+      if (e instanceof GuideNotFound) {
+        throw new AccessNotGranted('permission denied');
+      }
+      throw e;
+    }
+  }
+
+  // TRAVELING = PAID
+  async cancelBookingByTraveller(
+    bookingId: number,
+    account: AccountMetadata,
+  ): Promise<CancelBookingByTravellerResponse> {
+    try {
+      const booking = await this.bookingsRepo.getBookingById(bookingId);
+      if (booking.userId !== account.userId) {
+        throw new AccessNotGranted('permissing denied');
+      }
+      if (booking.bookingStatus !== 'TRAVELING') {
+        throw new UnprocessableEntity(
+          'this booking has not beed available for user cancelation',
+        );
+      }
+
+      const now = new Date();
+      const refundDeadline = moment(booking.startDate)
+        .subtract(5, 'days')
+        .toDate();
+      if (now > booking.startDate) {
+        throw new UnprocessableEntity('this trip has already started');
+      }
+
+      if (now > refundDeadline) {
+        const cancelledBooking = await this.bookingsRepo.updateBookingStatus(
+          bookingId,
+          'USER_CANCELLED',
+        );
+        return {
+          message: 'cancelled without refund',
+          refunded: false,
+          bookingId: cancelledBooking.id,
+          bookingStatus: cancelledBooking.bookingStatus.toString(),
+        };
+      }
+
+      // call refund payment
+
+      const refundedBooking = await this.bookingsRepo.updateBookingStatus(
+        bookingId,
+        'USER_CANCELLED',
+      );
+      return {
+        message: 'cancelled with refund',
+        refunded: true,
+        bookingId: refundedBooking.id,
+        bookingStatus: refundedBooking.bookingStatus.toString(),
+      };
+    } catch (e) {
+      throw e;
+    }
   }
 }

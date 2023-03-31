@@ -67,7 +67,6 @@ model Guide {
   paymentId      String
   user           User             @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   reviews        Review[]
-  Bookings       Booking[]
   GuideLocation  GuideLocation[]
   GuideTourStyle GuideTourStyle[]
 }
@@ -140,11 +139,9 @@ model Booking {
   bookingStatus BookingStatus @default(WAITING_FOR_GUIDE_CONFIRMATION)
   postId        Int
   userId        Int
-  guideId       Int
 
   post         Post          @relation(fields: [postId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   user         User          @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  guide        Guide         @relation(fields: [guideId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   transactions Transaction[]
 }
 

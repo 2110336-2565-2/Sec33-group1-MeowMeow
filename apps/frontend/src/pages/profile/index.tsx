@@ -1,3 +1,4 @@
+import DashBoard from "@/components/Dashboard/DashBoard";
 import ProfilePage from "@/components/ProfilePage";
 import { IProfileData } from "@/components/ProfilePage/types/profilePage";
 import { GetServerSideProps } from "next";
@@ -7,7 +8,11 @@ interface IProfileProps {
 }
 
 const Profile = ({ profileData }: IProfileProps) => {
-  return <ProfilePage profileData={profileData} />;
+  return (
+    <DashBoard>
+      <ProfilePage profileData={profileData} />;
+    </DashBoard>
+  );
 };
 
 export const getServerSideProps: GetServerSideProps = async () => {

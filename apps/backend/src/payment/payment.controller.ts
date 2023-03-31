@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Post,
@@ -41,5 +42,14 @@ export class PaymentController {
       bookingId: body.bookingId,
       token: body.token,
     });
+  }
+
+  @Get()
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'successfully pay the booking',
+  })
+  async get() {
+    return this.paymentService.refund(4, 12);
   }
 }

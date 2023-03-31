@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { BookingStatus } from 'database';
 import {
   AcceptBookingResponse,
   CreateBookingRequest,
@@ -8,8 +7,8 @@ import {
   GetBookingsByUserIdRequest,
   GetBookingsByUserIdResponse,
 } from 'types';
-import { InvalidDateFormat } from './bookings.common';
 import { BookingsRepository } from './bookings.repository';
+import { InvalidDateFormat } from './bookings.common';
 
 export interface IBookingsService {
   acceptBookingByGuide(
@@ -64,7 +63,7 @@ export class BookingsService implements IBookingsService {
       guideId: req.guideId,
       startDate: new Date(req.startDate),
       endDate: new Date(req.endDate),
-      bookingStatus: BookingStatus.WAITING_FOR_GUIDE_CONFIRMATION,
+      bookingStatus: 'waitingForGuideConfirmation',
     });
 
     return {
@@ -84,7 +83,7 @@ export class BookingsService implements IBookingsService {
     // when the guide accepts the booking, booking status is changed to 'waitingForPayment'
     const booking = await this.bookingsRepo.updateBookingStatus(
       id,
-      BookingStatus.WAITING_FOR_PAYMENT,
+      'waitingForPayment',
     );
     return {
       id: booking.id,
@@ -99,7 +98,7 @@ export class BookingsService implements IBookingsService {
     // when the guide declines the booking, booking status is changed to 'guideCancelled'
     const booking = await this.bookingsRepo.updateBookingStatus(
       id,
-      BookingStatus.GUIDE_CANCELLED,
+      'guideCancelled',
     );
     return {
       id: booking.id,

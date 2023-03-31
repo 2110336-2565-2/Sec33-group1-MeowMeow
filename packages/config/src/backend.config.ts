@@ -30,8 +30,6 @@ export type BackendConfig = {
   omise: {
     publicKey: string;
     secretKey: string;
-    createRecipientUrl: string;
-    chargesUrl: string;
   };
 };
 
@@ -41,12 +39,6 @@ export const loadBackendConfig = (): BackendConfig => {
   }
   if (!process.env.BACKEND_OMISE_SECRET_KEY) {
     throw new Error("BACKEND_OMISE_SECRET_KEY is not set");
-  }
-  if (!process.env.BACKEND_OMISE_CREATE_RECIPIENT_URL) {
-    throw new Error("BACKEND_OMISE_CREATE_RECIPIENT_URL is not set");
-  }
-  if (!process.env.BACKEND_OMISE_CHARGES_URL) {
-    throw new Error("BACKEND_OMISE_CHARGES_URL is not set");
   }
 
   return {
@@ -79,8 +71,6 @@ export const loadBackendConfig = (): BackendConfig => {
     omise: {
       publicKey: process.env.BACKEND_OMISE_PUBLIC_KEY,
       secretKey: process.env.BACKEND_OMISE_SECRET_KEY,
-      createRecipientUrl: process.env.BACKEND_OMISE_CREATE_RECIPIENT_URL,
-      chargesUrl: process.env.BACKEND_OMISE_CHARGES_URL,
     },
   };
 };

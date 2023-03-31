@@ -154,13 +154,21 @@ model Booking {
   transactions Transaction[]
 }
 
+enum TransactionType {
+  CHARGES
+  TRANSFERS
+  REFUNDS
+}
+
 model Transaction {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  paymentID String
-  bookingId Int
-  userId    Int
+
+  paymentID       String
+  bookingId       Int
+  userId          Int
+  transactionType TransactionType
 
   booking Booking @relation(fields: [bookingId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   user    User    @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)

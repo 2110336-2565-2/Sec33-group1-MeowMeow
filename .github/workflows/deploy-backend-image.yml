@@ -7,9 +7,11 @@ on:
       - beta
       - dev
     paths:
-      - 'apps/backend/**'
-      - 'packages/config/**'
-      - 'packages/database/**'
+      - "apps/backend/**"
+      - "packages/config/**"
+      - "packages/database/**"
+      - "packages/media-storage/**"
+      - "packages/types/**"
   workflow_dispatch:
 
 jobs:

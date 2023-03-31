@@ -7,6 +7,7 @@ import {
   Inject,
   HttpException,
   Req,
+  UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginRequest, LoginResponse, LogoutRequest } from 'types';
@@ -14,9 +15,16 @@ import {
   InvalidAuthenticationError,
   InvalidRequestError,
 } from './auth.commons';
-import { UserNotFoundError } from 'src/users/users.common';
-import { ApiCookieAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { UserNotFoundError } from '../users/users.common';
+import {
+  ApiCookieAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { AuthGuard } from './auth.guard';
 
+@ApiTags('Authentication')
 @Controller({ path: 'auth', version: '1' })
 export class AuthController {
   constructor(
@@ -99,6 +107,7 @@ export class AuthController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'internal server error',
   })
+  @UseGuards(AuthGuard)
   @Post('refresh')
   async refresh(@Req() req, @Res({ passthrough: true }) res) {
     try {
@@ -149,6 +158,7 @@ export class AuthController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'internal server error',
   })
+  @UseGuards(AuthGuard)
   @Post('sign-out')
   async signOut(@Body() req: LogoutRequest, @Res({ passthrough: true }) res) {
     try {

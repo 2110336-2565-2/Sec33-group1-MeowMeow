@@ -12,6 +12,9 @@
       "dependsOn": ["^db:generate"],
       "cache": false
     },
+    "test": {
+      "cache": true
+    },
     "db:generate": {
       "cache": false
     },

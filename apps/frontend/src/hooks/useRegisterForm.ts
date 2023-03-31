@@ -1,7 +1,6 @@
 import { REGISTER_INPUT_IDs } from "@/constants/RegisterPage";
 import { NotificationContext } from "@/context/NotificationContext";
 import apiClient from "@/utils/apiClient";
-import { AlertColor } from "@mui/material";
 import { useRouter } from "next/router";
 import { FormEventHandler, useCallback, useContext, useState } from "react";
 
@@ -16,11 +15,15 @@ const useRegisterForm = () => {
       event.preventDefault();
       const formBody = REGISTER_INPUT_IDs.reduce((prev, formId) => {
         if (formId === "email") {
-          prev[formId] = event.currentTarget[formId].value.toLowerCase();
-          return prev;
+          return {
+            ...prev,
+            [formId]: event.currentTarget[formId].value.toLowerCase(),
+          };
         }
-        prev[formId] = event.currentTarget[formId].value;
-        return prev;
+        return {
+          ...prev,
+          [formId]: event.currentTarget[formId].value,
+        };
       }, {} as { [key: string]: string });
       formBody["hashPassword"] = formBody["password"];
       const hasMissingValue = !!REGISTER_INPUT_IDs.find((inputId: string) => {
@@ -34,6 +37,7 @@ const useRegisterForm = () => {
         );
         return;
       }
+
       if (formBody["password"] !== formBody["confirmPassword"]) {
         addNotification(
           "Confirm password doesn't match with password",

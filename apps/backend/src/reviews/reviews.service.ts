@@ -1,10 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { CreateReviewRequest, CreateReviewResponse } from 'types';
-import { InvalidRequestError } from 'src/auth/auth.commons';
+import {
+  CreateReviewRequest,
+  CreateReviewResponse,
+  GetGuideReviewsResponse,
+} from 'types';
+import { InvalidRequestError } from '../auth/auth.commons';
 import { ReviewsRepository } from './reviews.repository';
 
 export interface ReviewsService {
   createReview(req: CreateReviewRequest);
+  getGuideReviews(id: number, page: number): Promise<GetGuideReviewsResponse>;
 }
 
 @Injectable()
@@ -12,8 +17,8 @@ export class ReviewsServiceImpl {
   constructor(private readonly reviewsRepo: ReviewsRepository) {}
 
   async createReview(req: CreateReviewRequest): Promise<CreateReviewResponse> {
-    if ((req.score % 1).toFixed(1) !== '0.5') {
-      throw new InvalidRequestError('review score must ends with .5');
+    if (!Number.isInteger(req.score) && (req.score % 1).toFixed(1) !== '0.5') {
+      throw new InvalidRequestError('review score must be divisible with .5');
     }
 
     const review = await this.reviewsRepo.createReview({
@@ -32,5 +37,12 @@ export class ReviewsServiceImpl {
       score: review.score.toNumber(),
       text: review.text,
     };
+  }
+
+  async getGuideReviews(
+    id: number,
+    page: number,
+  ): Promise<GetGuideReviewsResponse> {
+    return await this.reviewsRepo.getGuideReviews(id, page);
   }
 }

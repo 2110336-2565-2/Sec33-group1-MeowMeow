@@ -4,8 +4,8 @@ import { InvalidAuthenticationError } from './auth.commons';
 import { LoginRequest, LoginResponse, AccountMetadata } from 'types';
 
 import { Injectable } from '@nestjs/common';
-import { UserNotFoundError } from 'src/users/users.common';
-import { UsersRepository } from 'src/users/users.repository';
+import { UserNotFoundError } from '../users/users.common';
+import { UsersRepository } from '../users/users.repository';
 import { backendConfig } from 'config';
 
 export interface AuthService {
@@ -43,7 +43,7 @@ export class AuthServiceImpl {
     const account: AccountMetadata = {
       userId: user.id,
       username: user.username,
-      role: user.role,
+      roles: user.roles,
     };
 
     const accessToken = await this.issueAccessToken(account);
@@ -52,13 +52,13 @@ export class AuthServiceImpl {
       message: 'success',
       userId: user.id,
       username: user.username,
-      role: user.role,
+      roles: user.roles,
     };
     return [resp, accessToken, refreshToken];
   }
 
   async validate(credential: string): Promise<AccountMetadata> {
-    const account = this.decodeToken(credential);
+    const account = await this.decodeToken(credential);
     return account;
   }
 
@@ -69,7 +69,7 @@ export class AuthServiceImpl {
     const newAccount: AccountMetadata = {
       userId: user.id,
       username: user.username,
-      role: user.role,
+      roles: user.roles,
     };
     const newAccessToken = await this.issueAccessToken(newAccount);
     const newRefreshToken = await this.issueRefreshToken(newAccount);
@@ -83,7 +83,7 @@ export class AuthServiceImpl {
       const account: AccountMetadata = {
         userId: decoded.userId,
         username: decoded.username,
-        role: decoded.role,
+        roles: decoded.roles,
       };
 
       return account;

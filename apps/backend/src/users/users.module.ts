@@ -1,19 +1,14 @@
-import { Module, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { AuthMiddleware } from '../common/middleware/auth.middleware';
 import { UsersController } from './users.controller';
 import { UsersServiceImpl } from './users.service';
-import { AuthServiceImpl } from 'src/auth/auth.service';
 import { UsersRepository } from './users.repository';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
-  imports: [],
+  imports: [AuthModule],
   controllers: [UsersController],
   providers: [
-    {
-      provide: 'AuthService',
-      useClass: AuthServiceImpl,
-    },
     {
       provide: 'UsersService',
       useClass: UsersServiceImpl,
@@ -22,11 +17,4 @@ import { UsersRepository } from './users.repository';
     PrismaService,
   ],
 })
-export class UsersModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(AuthMiddleware)
-      .exclude({ path: '/users/register', method: RequestMethod.POST })
-      .forRoutes({ path: '/users/**', method: RequestMethod.ALL });
-  }
-}
+export class UsersModule {}

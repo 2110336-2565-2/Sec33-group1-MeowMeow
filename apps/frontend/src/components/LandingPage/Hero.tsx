@@ -24,7 +24,6 @@ export default function Hero() {
           background: "linear-gradient(to right bottom, #FFFFFF, #fff3e0)",
         }}
       >
-        <Navbar />
         <Container maxWidth={"xl"}>
           <Grid container spacing={2}>
             <Grid item md={12} lg={6}>

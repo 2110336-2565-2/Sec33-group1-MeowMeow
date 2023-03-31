@@ -5,6 +5,11 @@ export type BackendConfig = {
   bcrypt: {
     hashRound: number;
   };
+  mediaStorage: {
+    local: {
+      rootDir: string;
+    };
+  };
   jwt: {
     secret: string;
     expire: number;
@@ -16,6 +21,7 @@ export type BackendConfig = {
   };
   cors: {
     enable: boolean;
+    allowOrigin: string[];
   };
   //   graphql: {
   //     debug: boolean;
@@ -27,6 +33,11 @@ export const loadBackendConfig = (): BackendConfig => ({
   port: parseInt(process.env.BACKEND_PORT ?? "", 10) || 3000,
   bcrypt: {
     hashRound: parseInt(process.env.BACKEND_BCRYPT_HASH_ROUND ?? "", 10) || 10,
+  },
+  mediaStorage: {
+    local: {
+      rootDir: process.env.BACKEND_MEDIASTORAGE_LOCAL_ROOTDIR ?? "",
+    },
   },
   jwt: {
     secret: process.env.BACKEND_JWT_SECRET ?? "xxxx-9ababe0jge9j",
@@ -40,5 +51,8 @@ export const loadBackendConfig = (): BackendConfig => ({
   },
   cors: {
     enable: process.env.BACKEND_CORS_ENABLE === "true",
+    allowOrigin: (
+      process.env.BACKEND_CORS_ALLOW_ORIGIN ?? "http://localhost:3000"
+    ).split(","),
   },
 });

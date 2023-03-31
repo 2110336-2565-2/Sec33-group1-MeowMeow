@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma, Review } from 'database';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { GetGuideReviewsResponse } from 'types';
+import { PrismaService } from '../prisma/prisma.service';
 import { FailedRelationConstraintError } from './reviews.common';
 
 @Injectable()
@@ -32,6 +33,34 @@ export class ReviewsRepository {
         }
       }
       throw e;
+    }
+  }
+
+  async getGuideReviews(
+    id: number,
+    page: number,
+  ): Promise<GetGuideReviewsResponse> {
+    try {
+      const maxPage = 10;
+      const results = await this.prismaService.review.findMany({
+        where: {
+          guideId: id,
+        },
+        skip: maxPage * (page - 1),
+        take: maxPage,
+      });
+      return results.map((e) => {
+        return {
+          guideId: e.guideId,
+          reviewId: e.id,
+          reviewerId: e.reviewerId,
+          score: e.score.toNumber(),
+          text: e.text,
+          publishDate: e.publishDate,
+        };
+      });
+    } catch (e) {
+      console.log(e);
     }
   }
 }

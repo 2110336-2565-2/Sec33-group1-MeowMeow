@@ -139,7 +139,7 @@ export class PaymentService {
     return transaction;
   }
   // refund booking based on post fee it will not set booking status
-  async refund(userId: number, bookingId: number) {
+  async refund(bookingId: number) {
     const booking = await this.bookingRepository.getBookingAndPostById(
       bookingId,
     );
@@ -198,8 +198,12 @@ export class PaymentService {
       throw new InternalServerErrorException('cannot refund');
     }
 
+    if (!res.id) {
+      throw new InternalServerErrorException('cannot refund');
+    }
+
     const transaction = await this.paymentRepository.createTransaction({
-      userId: userId,
+      userId: payment.booking.userId,
       bookingId: bookingId,
       paymentId: res.id,
       type: TransactionType.REFUNDS,
@@ -208,5 +212,65 @@ export class PaymentService {
     return transaction;
   }
 
-  async transfer(bookingId: number) {}
+  async transfer(bookingId: number) {
+    const booking = await this.bookingRepository.getGuideByBookingId(bookingId);
+
+    if (booking.bookingStatus !== BookingStatus.FINISHED) {
+      throw new MethodNotAllowedException(
+        `cannot transfer booking should be in status (${BookingStatus.FINISHED}) but is (${booking.bookingStatus})`,
+      );
+    }
+
+    const transactions =
+      await this.paymentRepository.getTransactionWithUserBookingPostByBookingId(
+        bookingId,
+      );
+    let payment;
+    transactions.forEach((transaction) => {
+      if (transaction.transactionType === TransactionType.TRANSFERS) {
+        payment = transaction;
+      }
+    });
+    if (payment) {
+      throw new InternalServerErrorException('already transfer');
+    }
+
+    const body = qs.stringify({
+      amount: Math.ceil(Decimal.mul(booking.post.fee, 100).toNumber()),
+      recipient: booking.guide.paymentId,
+    });
+
+    const config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      headers: {
+        Authorization: `Basic ${this.secretKey}`,
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    };
+
+    let res;
+    try {
+      res = await firstValueFrom(
+        this.httpService
+          .post(`https://api.omise.co/transfers`, body, config)
+          .pipe(map((res) => res.data)),
+      );
+    } catch (e) {
+      throw new InternalServerErrorException('cannot refund');
+    }
+
+    if (!res.id) {
+      throw new InternalServerErrorException('cannot refund');
+    }
+
+    const transaction = await this.paymentRepository.createTransaction({
+      userId: booking.guide.userId,
+      bookingId: bookingId,
+      paymentId: res.id,
+      type: TransactionType.TRANSFERS,
+    });
+
+    return transaction;
+  }
 }

@@ -19,6 +19,7 @@ import {
 import { GuidesService } from 'src/guides/guides.service';
 import { GuideNotFound } from 'src/guides/guides.common';
 import * as moment from 'moment';
+import { Cron } from '@nestjs/schedule';
 
 export interface IBookingsService {
   acceptBookingByGuide(
@@ -265,5 +266,10 @@ export class BookingsService implements IBookingsService {
     } catch (e) {
       throw e;
     }
+  }
+
+  @Cron('0 0 * * * *')
+  async payGuideForFinishedJob() {
+    console.log('functin "payGuideForFinishedJob" was run by CronJob');
   }
 }

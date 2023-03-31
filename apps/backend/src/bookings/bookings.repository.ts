@@ -5,7 +5,6 @@ import {
   FailedRelationConstraintError,
   RecordNotFound,
 } from './bookings.common';
-import { Guide } from 'types/src/dtos/guide/guide.dto';
 
 const bookingStatusEnumMapper = {
   WAITING_FOR_GUIDE_CONFIRMATION: BookingStatus.WAITING_FOR_GUIDE_CONFIRMATION,
@@ -167,8 +166,15 @@ export class BookingsRepository {
       const booking = await this.prismaService.booking.findUnique({
         where: { id },
         include: {
-          guide: true,
-          post: true,
+          post: {
+            include: {
+              author: {
+                include: {
+                  guide: true,
+                },
+              },
+            },
+          },
         },
       });
       return booking;

@@ -1,19 +1,8 @@
 import { HttpService } from '@nestjs/axios';
-import {
-  Injectable,
-  InternalServerErrorException,
-  MethodNotAllowedException,
-} from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { Decimal } from '@prisma/client/runtime';
 import { backendConfig } from 'config';
-import {
-  Booking,
-  BookingStatus,
-  Post,
-  Transaction,
-  TransactionType,
-  User,
-} from 'database';
+import { Booking, Post, Transaction, TransactionType, User } from 'database';
 import * as qs from 'qs';
 import { firstValueFrom, map } from 'rxjs';
 import { BookingsRepository } from 'src/bookings/bookings.repository';
@@ -83,11 +72,6 @@ export class PaymentService {
       data.bookingId,
     );
 
-    if (booking.bookingStatus !== BookingStatus.WAITING_FOR_PAYMENT) {
-      throw new MethodNotAllowedException(`
-        cannot pay booking should be in status (${BookingStatus.WAITING_FOR_PAYMENT}) but is (${booking.bookingStatus})`);
-    }
-
     const transactions = await this.paymentRepository.getTransactionByBookingId(
       data.bookingId,
     );
@@ -121,7 +105,8 @@ export class PaymentService {
           .pipe(map((res) => res.data)),
       );
     } catch (e) {
-      throw new InternalServerErrorException('cannot create recipient');
+      console.log(e);
+      throw new InternalServerErrorException(e);
     }
 
     const transaction = await this.paymentRepository.createTransaction({
@@ -140,16 +125,6 @@ export class PaymentService {
   }
   // refund booking based on post fee it will not set booking status
   async refund(bookingId: number) {
-    const booking = await this.bookingRepository.getBookingAndPostById(
-      bookingId,
-    );
-
-    if (booking.bookingStatus !== BookingStatus.WAITING_FOR_TRAVELING) {
-      throw new MethodNotAllowedException(
-        `cannot refund booking should be in status (${BookingStatus.WAITING_FOR_TRAVELING}) but is (${booking.bookingStatus})`,
-      );
-    }
-
     const transactions =
       await this.paymentRepository.getTransactionWithUserBookingPostByBookingId(
         bookingId,
@@ -215,12 +190,6 @@ export class PaymentService {
   async transfer(bookingId: number) {
     const booking = await this.bookingRepository.getGuideByBookingId(bookingId);
 
-    if (booking.bookingStatus !== BookingStatus.FINISHED) {
-      throw new MethodNotAllowedException(
-        `cannot transfer booking should be in status (${BookingStatus.FINISHED}) but is (${booking.bookingStatus})`,
-      );
-    }
-
     const transactions =
       await this.paymentRepository.getTransactionWithUserBookingPostByBookingId(
         bookingId,
@@ -237,7 +206,7 @@ export class PaymentService {
 
     const body = qs.stringify({
       amount: Math.ceil(Decimal.mul(booking.post.fee, 100).toNumber()),
-      recipient: booking.guide.paymentId,
+      recipient: booking.post.author.guide.paymentId,
     });
 
     const config = {
@@ -265,7 +234,7 @@ export class PaymentService {
     }
 
     const transaction = await this.paymentRepository.createTransaction({
-      userId: booking.guide.userId,
+      userId: booking.post.author.guide.userId,
       bookingId: bookingId,
       paymentId: res.id,
       type: TransactionType.TRANSFERS,

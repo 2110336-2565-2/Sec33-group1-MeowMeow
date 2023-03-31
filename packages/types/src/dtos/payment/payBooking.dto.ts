@@ -1,22 +1,14 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { IsNotEmpty, IsString } from "class-validator";
 
 export class PayBooking {
   @ApiProperty({
     type: () => String,
     required: true,
     description: "token for payment from omise",
+    example: "tokn_test_5jx9z2z5q0q7q2z6x0z",
   })
   @IsString()
   @IsNotEmpty()
   token: string;
-
-  @ApiProperty({
-    type: () => Number,
-    required: true,
-    description: "booking id to pay",
-  })
-  @IsNumber()
-  @IsNotEmpty()
-  bookingId: number;
 }

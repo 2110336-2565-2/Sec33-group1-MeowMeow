@@ -1,13 +1,17 @@
+import apiClient from "@/utils/apiClient";
 import { Delete, Edit, MoreHoriz, Report } from "@mui/icons-material";
 import { Box, IconButton, Menu, MenuItem, Stack } from "@mui/material";
 import { useState } from "react";
+import { deletePost } from "./OptionsMethods";
+import Router from "next/router";
 
 interface IOptionMenu {
+  post_id: number;
   isOwner: boolean;
 }
 
 const OptionMenu = (props: IOptionMenu) => {
-  const { isOwner } = props;
+  const { isOwner, post_id } = props;
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -19,9 +23,14 @@ const OptionMenu = (props: IOptionMenu) => {
   };
 
   const handleDelete = () => {
-    alert("Delete post");
-    // TODO : delete post
-    handleClose();
+    deletePost(post_id)
+      .then(() => {
+        handleClose();
+        Router.reload();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (

@@ -1,10 +1,10 @@
 import { useCallback } from "react";
 import { useEffect } from "react";
-import { mockPost } from "@/components/SearchPage/PostCard";
 import { IFilterOptions, IPost } from "@/components/SearchPage/types";
 import { useState } from "react";
 import { FeedStatus } from "./types/FeedStatus";
 import useFilterForm from "./useFilterForm";
+import apiClient from "@/utils/apiClient";
 
 interface IFetchPosts {
   pageNo: number;
@@ -12,23 +12,49 @@ interface IFetchPosts {
   filterOptions: IFilterOptions;
 }
 
+export const templatePost: Partial<IPost> = {
+  author: {
+    id: 1,
+    name: "John Doe",
+    profile: "/images/searchPage/profile.jpeg", // webp is better
+  },
+  image: "/landing/travel1.png",
+};
+const POST_PER_PAGE = 5;
+
 const fetchPosts = async (props: IFetchPosts): Promise<IPost[]> => {
   const { pageNo, search, filterOptions } = props;
-  // TODO: fetch posts here with search and filter options
 
-  console.log("fetching posts with page number\t\t: ", pageNo);
-  console.log("fetching posts with search \t\t\t: ", search);
-  console.log("fetching posts with filter options\t: ", filterOptions);
-
-  // but now, mocking result
-  return new Promise((resolve, _) => {
-    setTimeout(() => {
-      resolve(mockFeed);
-    }, 1000);
+  const resp = await apiClient.get("/posts/search", {
+    params: {
+      offset: (pageNo - 1) * POST_PER_PAGE,
+      limit: POST_PER_PAGE,
+      fee: filterOptions.price[0],
+      reviewScore: filterOptions.rating[0],
+      locations: filterOptions.location ? [filterOptions.location] : [],
+      text: search,
+    },
   });
-};
 
-const mockFeed: IPost[] = [mockPost, mockPost, mockPost];
+  const fetchPost = resp.data;
+
+  const editedPosts = Promise.all(
+    fetchPost.map(async (post: any) => {
+      const authorId = post.authorId;
+      const resp = await apiClient.get(`/users/${authorId}`);
+      return {
+        ...templatePost,
+        ...post,
+        author: {
+          id: authorId,
+          name: resp.data.username,
+        },
+      };
+    })
+  );
+
+  return editedPosts;
+};
 
 export const useSearchPosts = () => {
   const [pageNo, setPageNo] = useState<number>(1); // start with first page
@@ -42,19 +68,17 @@ export const useSearchPosts = () => {
   useEffect(() => {
     if (feedStatus !== FeedStatus.INITIAL) {
       setFeedStatus(FeedStatus.LOADING);
-      const postLoading: Promise<IPost[]> = fetchPosts({
+      fetchPosts({
         pageNo,
         search,
         filterOptions: filterStuff.options,
-      });
-      postLoading
-        .then((post: IPost[]) => {
-          setFeed(post);
+      })
+        .then((posts: IPost[]) => {
+          setFeed(posts);
           setFeedStatus(FeedStatus.SHOWING);
         })
         .catch((err) => {
           console.log("error fetching : ", err.stack);
-          // TODO: Show error message via notification
         });
     }
   }, [search, pageNo, filterStuff.options]); // refetch feed when page number changes : pagination
@@ -65,13 +89,13 @@ export const useSearchPosts = () => {
       setFeedStatus(FeedStatus.LOADING);
       setSearch(tempSearch); // update global search
 
-      const post: IPost[] = await fetchPosts({
+      const posts: IPost[] = await fetchPosts({
         pageNo,
         search,
         filterOptions: filterStuff.options,
       });
 
-      setFeed(post);
+      setFeed(posts);
       setFeedStatus(FeedStatus.SHOWING);
     },
     [tempSearch, search, filterStuff.options]

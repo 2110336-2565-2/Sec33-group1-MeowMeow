@@ -3,25 +3,14 @@ import Image from "next/image";
 import { IPost } from "../types";
 import CardContent from "./CardContent";
 import CardHeader from "./CardHeader";
-
-const myName = "John Doe";
-
-export const mockPost: IPost = {
-  id: 1,
-  title: "Trip 3 days 2 nights to Bali",
-  author: {
-    name: "John Doe",
-    profile: "/images/searchPage/profile.jpeg", // webp is better
-  },
-  body: "lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod. ",
-  price: 10000,
-  image: "/landing/travel1.png",
-  location: "Bali, Indonesia",
-  amount: 3,
-};
+import { useContext, useEffect, useMemo } from "react";
+import { AuthContext } from "@/context/AuthContext";
 
 export default function PostCard(props: IPost) {
-  const { title, author, image } = props;
+  const { title, author, image, id } = props;
+
+  const { user } = useContext(AuthContext);
+
   return (
     <Grid
       container
@@ -40,7 +29,11 @@ export default function PostCard(props: IPost) {
         px={2}
         xs={12}
       >
-        <CardHeader {...author} isOwner={myName === author.name} />
+        <CardHeader
+          {...author}
+          post_id={id}
+          isOwner={user?.username === author.name}
+        />
       </Grid>
       <Grid
         item

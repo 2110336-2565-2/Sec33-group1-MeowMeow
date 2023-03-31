@@ -3,26 +3,29 @@ import { Box, Button, Stack, Typography } from "@mui/material";
 
 interface ICardContent {
   title: string;
-  body: string;
-  price: number;
-  location: string;
-  amount: number;
+  content: string;
+  fee: number;
+  locations: string[];
+  maxParticipant: number;
 }
 
 export default function CardContent(props: ICardContent) {
-  const { title, body, price, location, amount } = props;
+  const { title, content, fee, locations, maxParticipant } = props;
   return (
     <Box p={2} flexGrow={1}>
       <Box mb={2}>
         <Typography variant="h6">{title}</Typography>
         <Typography variant="subtitle2">
           <LocationOn fontSize="inherit" />
-          {location}
+          {locations.join(", ")}
         </Typography>
       </Box>
-      <Typography variant="body2">Amount : {amount} people</Typography>
-      <Typography variant="body2">Rate : {price} ฿</Typography>
-      <Typography variant="body2">{body}</Typography>
+      <Typography variant="body2">
+        {" "}
+        Max Participant :{maxParticipant} people
+      </Typography>
+      <Typography variant="body2">Fee : {fee} ฿</Typography>
+      <Typography variant="body2">{content}</Typography>
       <Button
         variant="contained"
         sx={{

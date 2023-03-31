@@ -7,22 +7,20 @@ import { AuthServiceImpl } from '../auth/auth.service';
 import { UsersRepository } from '../users/users.repository';
 import { ReviewsModule } from '../reviews/reviews.module';
 import { MediaModule } from '../media/media.module';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
+  imports: [AuthModule, ReviewsModule, MediaModule],
   controllers: [GuidesController],
   providers: [
     {
       provide: 'GuidesService',
       useClass: GuidesServiceImpl,
     },
-    {
-      provide: 'AuthService',
-      useClass: AuthServiceImpl,
-    },
-    UsersRepository,
     GuidesRepository,
+    UsersRepository,
     PrismaService,
   ],
-  imports: [ReviewsModule, MediaModule],
+  exports: ['GuidesService'],
 })
 export class GuidesModule {}

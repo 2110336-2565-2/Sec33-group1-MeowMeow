@@ -8,7 +8,7 @@ import { InvalidRequestError } from '../auth/auth.commons';
 import { ReviewsRepository } from './reviews.repository';
 
 export interface ReviewsService {
-  createReview(req: CreateReviewRequest);
+  createReview(userId: number, req: CreateReviewRequest);
   getGuideReviews(id: number, page: number): Promise<GetGuideReviewsResponse>;
 }
 
@@ -16,14 +16,14 @@ export interface ReviewsService {
 export class ReviewsServiceImpl {
   constructor(private readonly reviewsRepo: ReviewsRepository) {}
 
-  async createReview(req: CreateReviewRequest): Promise<CreateReviewResponse> {
+  async createReview(
+    userId: number,
+    req: CreateReviewRequest,
+  ): Promise<CreateReviewResponse> {
     if (!Number.isInteger(req.score) && (req.score % 1).toFixed(1) !== '0.5') {
       throw new InvalidRequestError('review score must be divisible with .5');
     }
-
-    const review = await this.reviewsRepo.createReview({
-      publishDate: new Date(),
-      reviewerId: req.reviewerId,
+    const review = await this.reviewsRepo.createReview(userId, {
       guideId: req.guideId,
       score: req.score,
       text: req.text,
@@ -31,6 +31,7 @@ export class ReviewsServiceImpl {
 
     return {
       message: 'success',
+      publishDate: review.publishDate,
       id: review.id,
       guideId: review.guideId,
       reviewerId: review.reviewerId,

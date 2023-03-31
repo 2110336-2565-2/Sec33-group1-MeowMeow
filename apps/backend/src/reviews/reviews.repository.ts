@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma, Review } from 'database';
-import { GetGuideReviewsResponse } from 'types';
+import { CreateReviewRequest, GetGuideReviewsResponse } from 'types';
 import { PrismaService } from '../prisma/prisma.service';
 import { FailedRelationConstraintError } from './reviews.common';
 
@@ -8,24 +8,19 @@ import { FailedRelationConstraintError } from './reviews.common';
 export class ReviewsRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async createReview(data: {
-    publishDate: Date;
-    guideId: number;
-    reviewerId: number;
-    score: number;
-    text: string;
-  }): Promise<Review> {
+  async createReview(
+    userId: number,
+    data: CreateReviewRequest,
+  ): Promise<Review> {
     try {
-      const review = await this.prismaService.review.create({
+      return await this.prismaService.review.create({
         data: {
-          publishDate: data.publishDate,
           guideId: data.guideId,
-          reviewerId: data.reviewerId,
+          reviewerId: userId,
           score: data.score,
           text: data.text,
         },
       });
-      return review;
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
         if (e.code === 'P2003') {

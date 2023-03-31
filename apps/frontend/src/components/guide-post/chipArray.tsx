@@ -3,7 +3,7 @@ import { styled } from "@mui/material/styles";
 import Chip from "@mui/material/Chip";
 import Paper from "@mui/material/Paper";
 import { Button, Grid, TextField, Typography } from "@mui/material";
-import { ChipPostData } from "./postForm";
+import { ChipPostData } from "./formEdit";
 
 interface ILocationChipProps {
   id: string;

@@ -5,6 +5,7 @@ import { PaymentService } from 'src/payment/payment.service';
 import { UsersRepository } from 'src/users/users.repository';
 import {
   GetGuideByIdResponse,
+  GetGuideByUserIdResponse,
   GuideRegisterRequest,
   GuideRegisterResponse,
   SearchGuidesRequest,
@@ -17,6 +18,7 @@ import { GuidesRepository } from './guides.repository';
 export interface GuidesService {
   searchGuides(searchInfo: SearchGuidesRequest): Promise<SearchGuidesResponse>;
   getGuideById(id: number): Promise<GetGuideByIdResponse>;
+  getGuideByUserId(userId: number): Promise<GetGuideByUserIdResponse>;
   registerUserForGuide(
     userId: number,
     guideRegisterData: GuideRegisterRequest,
@@ -42,7 +44,11 @@ export class GuidesServiceImpl {
   }
 
   async getGuideById(id: number): Promise<GetGuideByIdResponse> {
-    return await this.guidesRepo.getGuideById(id);
+    return await this.guidesRepo.getGuide({ id: id });
+  }
+
+  async getGuideByUserId(userId: number): Promise<GetGuideByUserIdResponse> {
+    return await this.guidesRepo.getGuide({ userId: userId });
   }
 
   async registerUserForGuide(

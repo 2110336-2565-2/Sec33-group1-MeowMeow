@@ -169,13 +169,9 @@ export class GuidesController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'internal server error',
   })
-  @UsePipes(
-    new ValidationPipe({
-      transform: true,
-      transformOptions: { enableImplicitConversion: true },
-    }),
+  @UseInterceptors(
+    FileInterceptor('certificate', { limits: { fieldSize: 1000000000 } }),
   )
-  @UseInterceptors(FileInterceptor('certificate'))
   @UseGuards(AuthGuard)
   @Post('register')
   async registerForGuide(

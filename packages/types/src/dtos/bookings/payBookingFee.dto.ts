@@ -1,15 +1,20 @@
 import { ApiProperty } from "@nestjs/swagger";
 
-export class DeclineBookingResponse {
+export class PayBookingFeeRequest {}
+
+export class PayBookingFeeResponse {
+  @ApiProperty({
+    type: () => String,
+  })
+  message: string;
+
   @ApiProperty({
     type: () => Number,
-    example: 1,
   })
-  id: number;
+  bookingId: number;
 
   @ApiProperty({
     type: () => String,
-    example: "GUIDE_CANCELLED",
   })
   bookingStatus: string;
 }

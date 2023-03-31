@@ -7,25 +7,20 @@ import {
   Typography,
   InputAdornment,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import { usePostForm } from "@/hooks/usePostForm";
 import useCustomSnackbar from "@/hooks/useCustomSnackbar";
 import ChipsArray from "./chipArray";
-import { editViewModel, IEditForm } from "./editViewModel";
+import editViewModel, { IGetPost } from "./editViewModel";
+import { METHOD_TYPE } from "@/constants/PostPage";
 
 export interface ChipPostData {
   key: number;
   label: string;
 }
 
-export interface IPostForm {
-  methodType: "POST" | "PUT";
-}
-
-export default function PostForm({ methodType }: IPostForm) {
+export default function PostForm() {
   const { onClose, onExit, isOpen, messageInfo } = useCustomSnackbar();
-  const data = editViewModel(methodType);
-  const [formBody, setFormBody] = React.useState<IEditForm>(data);
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setFormBody({ ...formBody, [name]: value });
@@ -35,14 +30,20 @@ export default function PostForm({ methodType }: IPostForm) {
     setFormBody({ ...formBody, [name]: value });
   };
 
+  const data: IGetPost = editViewModel();
+  const prev = React.useRef(data);
+  const [formBody, setFormBody] = React.useState<IGetPost>(data);
+
+  useEffect(() => {
+    setFormBody({ ...data });
+  }, [prev.current !== data]);
+
   const { onSubmit, isLoading } = usePostForm({
-    methodType: methodType,
+    methodType: METHOD_TYPE.PUT,
     formData: formBody,
   });
 
-  // console.log("formBody: ", formBody);
-
-  if (isLoading) {
+  if (isLoading || formBody.title === undefined) {
     return <div>Loading...</div>;
   }
 
@@ -61,7 +62,7 @@ export default function PostForm({ methodType }: IPostForm) {
         id="title"
         label="Trip Name"
         variant="outlined"
-        value={formBody.title}
+        defaultValue={formBody.title}
         onChange={onChange}
       />
       <TextField
@@ -69,20 +70,20 @@ export default function PostForm({ methodType }: IPostForm) {
         id="content"
         label="content"
         variant="outlined"
-        value={formBody.content}
+        defaultValue={formBody.content}
         onChange={onChange}
       />
       <ChipsArray
         id="locations"
         label="Your Location"
-        data={formBody.locations}
+        data={formBody.locations || []}
         onArray={onArray}
         value={formBody.locations}
       />
       <ChipsArray
         id="tags"
         label="Your TourStyle"
-        data={formBody.tags}
+        data={formBody.tags || []}
         onArray={onArray}
         value={formBody.tags}
       />
@@ -92,13 +93,13 @@ export default function PostForm({ methodType }: IPostForm) {
           id="fee"
           label="fee"
           variant="outlined"
-          type="number"
+          type="text"
           sx={{ width: "100%" }}
-          inputProps={{ inputMode: "decimal" }}
           InputProps={{
             startAdornment: <InputAdornment position="start">฿</InputAdornment>,
+            inputMode: "decimal",
           }}
-          value={formBody.fee}
+          defaultValue={formBody.fee}
           onChange={onChange}
         />
         <TextField
@@ -109,7 +110,7 @@ export default function PostForm({ methodType }: IPostForm) {
           type="number"
           sx={{ width: "100%" }}
           inputProps={{ inputMode: "numeric", pattern: "[0-9]*", min: 0 }}
-          value={formBody.maxParticipant}
+          defaultValue={formBody.maxParticipant}
           onChange={onChange}
         />
       </Stack>
@@ -119,7 +120,7 @@ export default function PostForm({ methodType }: IPostForm) {
         label="Contact Information"
         variant="outlined"
         sx={{ width: "100%" }}
-        value={formBody.contactInfo}
+        defaultValue={formBody.contactInfo}
         onChange={onChange}
       />
       <Button

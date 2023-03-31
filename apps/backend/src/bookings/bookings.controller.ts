@@ -15,17 +15,22 @@ import {
 import {
   AcceptBookingResponse,
   AccountMetadata,
+  CancelBookingByTravellerRequest,
+  CancelBookingByTravellerResponse,
   CreateBookingRequest,
   CreateBookingResponse,
-  DeclineBookingResponse,
+  CancelBookingResponse,
   GetBookingsByUserIdResponse,
   GetBookingsByUserIdResponseMember,
+  PayBookingFeeResponse,
 } from 'types';
 import {
+  AccessNotGranted,
   FailedRelationConstraintError,
   InvalidDateFormat,
   RecordAlreadyExist,
   RecordNotFound,
+  UnprocessableEntity,
 } from './bookings.common';
 import { IBookingsService } from './bookings.service';
 import {
@@ -117,7 +122,7 @@ export class BookingsController {
   })
   @ApiResponse({
     status: HttpStatus.CONFLICT,
-    description: 'record ',
+    description: 'record with unique constraint already exist',
   })
   @ApiResponse({
     status: HttpStatus.INTERNAL_SERVER_ERROR,
@@ -141,7 +146,7 @@ export class BookingsController {
 
   @ApiCookieAuth('access_token')
   @ApiOperation({
-    summary: 'accept booking by ID',
+    summary: 'guide accept booking by ID',
   })
   @ApiResponse({
     status: HttpStatus.CREATED,
@@ -151,6 +156,10 @@ export class BookingsController {
   @ApiResponse({
     status: HttpStatus.UNAUTHORIZED,
     description: 'valid session is not provided',
+  })
+  @ApiResponse({
+    status: HttpStatus.FORBIDDEN,
+    description: 'you are not a guide or not the guide in booking',
   })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
@@ -163,34 +172,58 @@ export class BookingsController {
   @UseGuards(AuthGuard)
   @Post(':id/accept')
   @HttpCode(HttpStatus.CREATED)
-  async acceptBooking(
+  async acceptBookingByGuide(
     @Req() req,
     @Param('id', ParseIntPipe) id: number,
   ): Promise<AcceptBookingResponse> {
     try {
       const account: AccountMetadata = req.account;
-      return this.bookingsService.acceptBookingByGuide(id, account.userId);
+      return await this.bookingsService.acceptBookingByGuide(id, account);
     } catch (e) {
-      this.handleException(e);
+      console.log(e);
+      if (e instanceof AccessNotGranted) {
+        throw new HttpException(e.message, HttpStatus.FORBIDDEN);
+      }
+      if (e instanceof RecordNotFound) {
+        throw new HttpException(e.message, HttpStatus.NOT_FOUND);
+      }
+      if (e instanceof UnprocessableEntity) {
+        throw new HttpException(e.message, HttpStatus.UNPROCESSABLE_ENTITY);
+      }
+      throw new HttpException(
+        'internal server error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 
   @ApiCookieAuth('access_token')
   @ApiOperation({
-    summary: 'decline booking by ID',
+    summary: 'guide decline booking by ID',
+  })
+  @ApiBody({
+    type: CancelBookingByTravellerRequest,
   })
   @ApiResponse({
     status: HttpStatus.CREATED,
     description: 'successfully decline bookings',
-    type: DeclineBookingResponse,
+    type: CancelBookingByTravellerResponse,
   })
   @ApiResponse({
     status: HttpStatus.UNAUTHORIZED,
     description: 'valid session is not provided',
   })
   @ApiResponse({
+    status: HttpStatus.FORBIDDEN,
+    description: 'you are not a guide or the guide in booking',
+  })
+  @ApiResponse({
     status: HttpStatus.NOT_FOUND,
     description: 'booking with given ID was not found',
+  })
+  @ApiResponse({
+    status: HttpStatus.UNPROCESSABLE_ENTITY,
+    description: 'booking has already been accepted or cancelled',
   })
   @ApiResponse({
     status: HttpStatus.INTERNAL_SERVER_ERROR,
@@ -198,16 +231,150 @@ export class BookingsController {
   })
   @HttpCode(HttpStatus.CREATED)
   @UseGuards(AuthGuard)
+  @HttpCode(HttpStatus.CREATED)
   @Post(':id/decline')
-  async declineBooking(
+  async declineBookingbyGuide(
     @Req() req,
     @Param('id', ParseIntPipe) id: number,
-  ): Promise<DeclineBookingResponse> {
+  ): Promise<CancelBookingResponse> {
     try {
       const account: AccountMetadata = req.account;
-      return this.bookingsService.declineBookingByGuide(id, account.userId);
+      return await this.bookingsService.cancelBookingByGuide(id, account);
     } catch (e) {
-      this.handleException(e);
+      console.log(e);
+      if (e instanceof AccessNotGranted) {
+        throw new HttpException(e.message, HttpStatus.FORBIDDEN);
+      }
+      if (e instanceof RecordNotFound) {
+        throw new HttpException(e.message, HttpStatus.NOT_FOUND);
+      }
+      if (e instanceof UnprocessableEntity) {
+        throw new HttpException(e.message, HttpStatus.UNPROCESSABLE_ENTITY);
+      }
+      throw new HttpException(
+        'internal server error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  @ApiCookieAuth('access_token')
+  @ApiOperation({
+    summary: 'traveller pay booking fee',
+  })
+  @ApiBody({
+    type: CancelBookingByTravellerRequest,
+  })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'successfully pay',
+    type: CancelBookingByTravellerResponse,
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'valid session is not provided',
+  })
+  @ApiResponse({
+    status: HttpStatus.FORBIDDEN,
+    description: 'you are not the owner of a booking',
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'booking with given ID was not found',
+  })
+  @ApiResponse({
+    status: HttpStatus.UNPROCESSABLE_ENTITY,
+    description:
+      'booking is not in status available for payment or payment failed',
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'internal server error',
+  })
+  @UseGuards(AuthGuard)
+  @HttpCode(HttpStatus.CREATED)
+  @Post(':id/payment')
+  async payBookingFee(
+    @Req() req,
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<PayBookingFeeResponse> {
+    try {
+      const account: AccountMetadata = req.account;
+      return await this.bookingsService.payBookingFee(id, account);
+    } catch (e) {
+      console.log(e);
+      if (e instanceof AccessNotGranted) {
+        throw new HttpException(e.message, HttpStatus.FORBIDDEN);
+      }
+      if (e instanceof RecordNotFound) {
+        throw new HttpException(e.message, HttpStatus.NOT_FOUND);
+      }
+      if (e instanceof UnprocessableEntity) {
+        throw new HttpException(e.message, HttpStatus.UNPROCESSABLE_ENTITY);
+      }
+      throw new HttpException(
+        'internal server error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  @ApiCookieAuth('access_token')
+  @ApiOperation({
+    summary: 'traveller decline booking by ID',
+  })
+  @ApiBody({
+    type: CancelBookingByTravellerRequest,
+  })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'successfully decline bookings',
+    type: CancelBookingByTravellerResponse,
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'valid session is not provided',
+  })
+  @ApiResponse({
+    status: HttpStatus.FORBIDDEN,
+    description: 'you are not the owner of a booking',
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'booking with given ID was not found',
+  })
+  @ApiResponse({
+    status: HttpStatus.UNPROCESSABLE_ENTITY,
+    description: 'trip in a booking has been finished',
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'internal server error',
+  })
+  @HttpCode(HttpStatus.CREATED)
+  @Post(':id/cancel')
+  async cancelBookingByTraveller(
+    @Req() req,
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<CancelBookingByTravellerResponse> {
+    try {
+      const account: AccountMetadata = req.account;
+      return await this.bookingsService.cancelBookingByTraveller(id, account);
+    } catch (e) {
+      console.log(e);
+      if (e instanceof AccessNotGranted) {
+        throw new HttpException(e.message, HttpStatus.FORBIDDEN);
+      }
+      if (e instanceof RecordNotFound) {
+        throw new HttpException(e.message, HttpStatus.NOT_FOUND);
+      }
+      if (e instanceof UnprocessableEntity) {
+        throw new HttpException(e.message, HttpStatus.UNPROCESSABLE_ENTITY);
+      }
+      throw new HttpException(
+        'internal server error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 }

@@ -3,27 +3,26 @@ import { ReactNode } from "react";
 import Image from "next/image";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
-import Tabs from "@mui/material/Tabs";
-import StyledTab from "./StyledTab";
 import useDashBoard from "@/hooks/useDashBoard";
-import { DASHBOARD_STATES } from "@/hooks/types/dashBoardState";
 import AuthProvider from "@/context/AuthContext";
+import StateLists from "./StateLists";
+import { Roles_Types } from "@/context/type/authContext";
 
 interface IDashBoardProps {
   children?: ReactNode;
+  roleAllowed?: Roles_Types[];
 }
 
-const a11yProps = (index: number) => {
+export const a11yProps = (index: number) => {
   return {
     id: `simple-tab-${index}`,
     "aria-controls": `simple-tabpanel-${index}`,
   };
 };
 
-const DashBoard = ({ children }: IDashBoardProps) => {
-  const { selectTab, onChange } = useDashBoard();
+const DashBoard = ({ children, roleAllowed = ["USER"] }: IDashBoardProps) => {
   return (
-    <AuthProvider>
+    <AuthProvider roleAllowed={roleAllowed}>
       <Stack
         direction="row"
         justifyContent="start"
@@ -60,40 +59,9 @@ const DashBoard = ({ children }: IDashBoardProps) => {
             </Typography>
           </Stack>
           <Divider color="#E0E0E0" />
-          <Tabs
-            orientation="vertical"
-            aria-label="basic tabs example"
-            onChange={onChange}
-            value={selectTab}
-          >
-            <StyledTab
-              value={DASHBOARD_STATES.CREATE_POST}
-              label="Create Post"
-              {...a11yProps(0)}
-            />
-            <StyledTab
-              value={DASHBOARD_STATES.VIEW_POST}
-              label="View Posts"
-              {...a11yProps(1)}
-            />
-            <StyledTab
-              value={DASHBOARD_STATES.VIEW_USER_PROFILE}
-              label="View User Profile"
-              {...a11yProps(2)}
-            />
-            <StyledTab
-              value={DASHBOARD_STATES.SHOW_TOURS}
-              label="Show Tours"
-              {...a11yProps(3)}
-            />
-            <StyledTab
-              value={DASHBOARD_STATES.SHOW_CONFIRMATION}
-              label="Show Confirmation"
-              {...a11yProps(4)}
-            />
-          </Tabs>
+          <StateLists />
         </Stack>
-        {children}
+        <Stack sx={{ width: "100%" }}>{children}</Stack>
       </Stack>
     </AuthProvider>
   );

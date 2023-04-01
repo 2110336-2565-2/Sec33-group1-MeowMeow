@@ -10,10 +10,6 @@ import apiClient from "@/utils/apiClient";
 const imageUrl =
   "https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80";
 
-interface IProfilePageProps {
-  profileData: IProfileData;
-}
-
 const mockFetchUserProfile = async () => {
   //const response = await apiClient.get<IGetProfileResponse>("/users/profiles");
   return {

@@ -36,7 +36,6 @@ export default function StatusDialog({ tripId, nameButton }: IStatusDialog) {
   const [open, setOpen] = React.useState(false);
   const [scroll, setScroll] = React.useState<DialogProps["scroll"]>("paper");
   const statusValue = { ...statusDetail.get(nameButton) };
-  const { isLoading, onSubmit } = useCancelTrip(tripId);
 
   const handleClickOpen = (scrollType: DialogProps["scroll"]) => () => {
     setOpen(true);

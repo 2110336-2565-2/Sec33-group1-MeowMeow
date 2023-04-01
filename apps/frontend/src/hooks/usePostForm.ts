@@ -51,9 +51,9 @@ export const usePostForm = ({ methodType, formData }: IUsePostForm) => {
         );
         return;
       }
-      if (formBody.fee <= 0 || formBody.maxParticipant <= 0) {
+      if (formBody.fee < 30 || formBody.maxParticipant <= 0) {
         addNotification(
-          "Fee and max participant must be greater than 0",
+          "max participant must be greater than 0 and fee must be greater than 30",
           "error"
         );
         return;

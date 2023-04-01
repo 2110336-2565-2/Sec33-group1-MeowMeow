@@ -39,6 +39,6 @@ export class PaymentController {
     description: 'successfully pay the booking',
   })
   async get() {
-    return this.paymentService.refund(4, 12);
+    return this.paymentService.transfer(12);
   }
 }

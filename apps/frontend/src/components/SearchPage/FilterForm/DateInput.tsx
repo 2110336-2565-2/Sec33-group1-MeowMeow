@@ -33,6 +33,7 @@ export default function DateInput(props: DateInputProps) {
         <DatePicker
           disablePast
           label="End date"
+          minDate={startDate ? startDate : undefined}
           value={endDate}
           onChange={handleChangeEndDate}
           renderInput={(params) => <TextField {...params} />}

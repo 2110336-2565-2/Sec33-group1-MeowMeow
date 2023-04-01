@@ -4,6 +4,8 @@ import { Box, Container, Pagination, Skeleton, Stack } from "@mui/material";
 import Navbar from "../common/Navbar";
 import PostFeed from "./PostFeed";
 import SearchBox from "./SearchBox";
+import useCustomSnackbar from "@/hooks/useCustomSnackbar";
+import AppSnackbar from "../common/AppSnackbar";
 
 export default function SearchPage() {
   const {
@@ -16,6 +18,8 @@ export default function SearchPage() {
     setPageNo,
     handleSearch,
   } = useSearchPosts();
+
+  const { onClose, onExit, isOpen, messageInfo } = useCustomSnackbar();
 
   return (
     <>
@@ -56,6 +60,12 @@ export default function SearchPage() {
           <></>
         )}
       </Container>
+      <AppSnackbar
+        messageInfo={messageInfo}
+        isOpen={isOpen}
+        onClose={onClose}
+        onExit={onExit}
+      />
     </>
   );
 }

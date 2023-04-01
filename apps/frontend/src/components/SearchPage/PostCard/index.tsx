@@ -57,7 +57,12 @@ export default function PostCard(props: IPost) {
         />
       </Grid>
       <Grid item xs={12} md={8}>
-        <CardContent {...props} />
+        <CardContent
+          {...props}
+          authorId={author.id}
+          postId={id}
+          travellerId={user!.id}
+        />
       </Grid>
     </Grid>
   );

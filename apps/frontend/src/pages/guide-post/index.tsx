@@ -1,3 +1,4 @@
+import DashBoard from "@/components/Dashboard/DashBoard";
 import { Button, ButtonGroup } from "@mui/material";
 import { Router, useRouter } from "next/router";
 import React from "react";
@@ -27,10 +28,10 @@ export default function GuidePost() {
     </Button>,
   ];
   return (
-    <>
+    <DashBoard>
       <ButtonGroup size="large" aria-label="large button group">
         {buttons}
       </ButtonGroup>
-    </>
+    </DashBoard>
   );
 }

@@ -1,6 +1,7 @@
 import { ILoginForm } from "@/components/LoginPage/types/loginForm";
 import { NotificationContext } from "@/context/NotificationContext";
 import apiClient from "@/utils/apiClient";
+import { useRouter } from "next/router";
 import { useState, FormEventHandler, useCallback, useContext } from "react";
 
 interface IUseLoginForm {}
@@ -8,6 +9,7 @@ interface IUseLoginForm {}
 const useLoginForm = () => {
   const { addNotification } = useContext(NotificationContext);
   const [isLoading, setLoading] = useState<boolean>(false);
+  const router = useRouter();
 
   const onSubmit: FormEventHandler<HTMLFormElement> = useCallback(
     async (event) => {
@@ -28,6 +30,7 @@ const useLoginForm = () => {
           password,
         });
         addNotification("Login success.", "success");
+        router.push("/dashboard");
       } catch (err) {
         const error = err as Error;
         addNotification(error.message, "error");

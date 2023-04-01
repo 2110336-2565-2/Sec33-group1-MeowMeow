@@ -58,16 +58,10 @@ export class ReviewsController {
   @Post()
   @UseGuards(AuthGuard)
   @UsePipes(new ValidationPipe({ transform: true }))
-  async addReview(
-    @Req() req,
-    @Body() reqBody: CreateReviewRequest,
-    @Res({ passthrough: true }) res,
-  ) {
+  async addReview(@Req() req, @Body() reqBody: CreateReviewRequest) {
     try {
       const account: AccountMetadata = req.account;
-      reqBody.reviewerId = account.userId;
-      const resBody = await this.reviewsService.createReview(reqBody);
-      res.status(HttpStatus.CREATED).send(resBody);
+      return await this.reviewsService.createReview(account.userId, reqBody);
     } catch (e) {
       console.log(e);
       if (e instanceof InvalidRequestError) {

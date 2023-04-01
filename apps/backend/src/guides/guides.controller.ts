@@ -22,6 +22,7 @@ import {
 import {
   AccountMetadata,
   GetGuideByIdResponse,
+  GetGuideByUserIdResponse,
   GuideRegisterRequest,
   SearchGuidesGuideResponse,
   SearchGuidesRequest,
@@ -62,6 +63,34 @@ export class GuidesController {
       'internal server error',
       HttpStatus.INTERNAL_SERVER_ERROR,
     );
+  }
+
+  @ApiOperation({
+    summary: "get guide's profile along with its user attributes",
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: "successfully get guide's profile",
+    type: GetGuideByIdResponse,
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'guide with given id not found',
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'internal server error',
+  })
+  @Get('profile')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthGuard)
+  async getGuideProfileByUserId(@Req() req): Promise<GetGuideByUserIdResponse> {
+    try {
+      const account: AccountMetadata = req.account;
+      return await this.guidesService.getGuideByUserId(account.userId);
+    } catch (e) {
+      this.handleException(e);
+    }
   }
 
   @ApiOperation({ summary: 'paginate guides with filter' })

@@ -10,6 +10,8 @@ import {
   CancelBookingResponse,
   CreateBookingRequest,
   CreateBookingResponse,
+  GetBookingsByGuideIdRequest,
+  GetBookingsByGuideIdResponse,
   GetBookingsByUserIdRequest,
   GetBookingsByUserIdResponse,
   PayBookingFeeResponse,
@@ -20,6 +22,8 @@ import {
   UnprocessableEntity,
 } from './bookings.common';
 import { BookingsRepository } from './bookings.repository';
+
+import { BookingStatus } from 'database';
 
 export interface IBookingsService {
   acceptBookingByGuide(
@@ -40,8 +44,13 @@ export interface IBookingsService {
     account: AccountMetadata,
   ): Promise<CancelBookingByTravellerResponse>;
   getBookingsByUserId(
-    req: GetBookingsByUserIdRequest,
+    userId: number,
+    queryParams: GetBookingsByUserIdRequest,
   ): Promise<GetBookingsByUserIdResponse>;
+  getBookingsByGuideId(
+    guideId: number,
+    queryParams: GetBookingsByGuideIdRequest,
+  ): Promise<GetBookingsByGuideIdResponse>;
   createBooking(req: CreateBookingRequest): Promise<CreateBookingResponse>;
 }
 
@@ -54,12 +63,32 @@ export class BookingsService implements IBookingsService {
   ) {}
 
   async getBookingsByUserId(
-    req: GetBookingsByUserIdRequest,
+    userId: number,
+    queryParams: GetBookingsByUserIdRequest,
   ): Promise<GetBookingsByUserIdResponse> {
     const bookings = await this.bookingsRepo.paginateBookings({
-      offset: 0,
-      limit: 100000,
-      userId: req.userId,
+      offset: queryParams.offset,
+      limit: queryParams.limit,
+      userId: userId,
+    });
+    const results = bookings.map((booking) => ({
+      id: booking.id,
+      startDate: booking.startDate.toString(),
+      endDate: booking.endDate.toString(),
+      bookingStatus: booking.bookingStatus,
+      postId: booking.postId,
+    }));
+    return results;
+  }
+
+  async getBookingsByGuideId(
+    guideId: number,
+    queryParams: GetBookingsByGuideIdRequest,
+  ): Promise<GetBookingsByGuideIdResponse> {
+    const bookings = await this.bookingsRepo.paginateBookings({
+      offset: queryParams.offset,
+      limit: queryParams.limit,
+      guideId: guideId,
     });
     const results = bookings.map((booking) => ({
       id: booking.id,

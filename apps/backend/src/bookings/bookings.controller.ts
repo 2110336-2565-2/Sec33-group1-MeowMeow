@@ -9,6 +9,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -24,9 +25,13 @@ import {
   AccountMetadata,
   CancelBookingByTravellerRequest,
   CancelBookingByTravellerResponse,
-  CancelBookingResponse,
   CreateBookingRequest,
   CreateBookingResponse,
+  GetBookingsByGuideIdRequest,
+  GetBookingsByGuideIdResponse,
+  GetBookingsByGuideIdResponseMember,
+  CancelBookingResponse,
+  GetBookingsByUserIdRequest,
   GetBookingsByUserIdResponse,
   GetBookingsByUserIdResponseMember,
   PayBooking,
@@ -90,12 +95,49 @@ export class BookingsController {
   })
   @UseGuards(AuthGuard)
   @Get('/self')
-  async getBookings(@Req() req): Promise<GetBookingsByUserIdResponse> {
+  async getBookingsByUserId(
+    @Req() req,
+    @Query() queryParams: GetBookingsByUserIdRequest,
+  ): Promise<GetBookingsByUserIdResponse> {
     try {
       const account: AccountMetadata = req.account;
-      return await this.bookingsService.getBookingsByUserId({
-        userId: account.userId,
-      });
+      return await this.bookingsService.getBookingsByUserId(
+        account.userId,
+        queryParams,
+      );
+    } catch (e) {
+      this.handleException(e);
+    }
+  }
+
+  @ApiCookieAuth('access_token')
+  @ApiOperation({
+    summary: 'get bookings by guide ID',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'successfully get the bookings',
+    type: [GetBookingsByGuideIdResponseMember],
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'valid session is not provided',
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'internal server error',
+  })
+  @UseGuards(AuthGuard)
+  @Get('guide/:id')
+  async getBookingsByGuideId(
+    @Param('id', ParseIntPipe) guideId: number,
+    @Query() queryParams: GetBookingsByGuideIdRequest,
+  ): Promise<GetBookingsByGuideIdResponse> {
+    try {
+      return await this.bookingsService.getBookingsByGuideId(
+        guideId,
+        queryParams,
+      );
     } catch (e) {
       this.handleException(e);
     }

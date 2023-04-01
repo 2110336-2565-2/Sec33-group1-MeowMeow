@@ -26,6 +26,7 @@ const ProfilePage = ({ profileData }: IProfilePageProps) => {
 
   return (
     <Fragment>
+      <Navbar />
       <Box
         sx={{
           display: "flex",

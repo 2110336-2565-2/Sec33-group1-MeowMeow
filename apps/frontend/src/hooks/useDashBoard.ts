@@ -1,18 +1,19 @@
-import dashboardUrlMapper from "@/utils/dashboardUrlMapper";
 import { useState } from "react";
-import { AVAILABLE_DASHBOARD_STATE } from "./types/dashBoardState";
-import { useRouter } from "next/router";
+import {
+  DASHBOARD_STATES,
+  DASHBOARD_STATES_TYPES,
+} from "./types/dashBoardState";
 
 const useDashBoard = () => {
-  const router = useRouter();
-  const [selectTab, setSelectTab] = useState<AVAILABLE_DASHBOARD_STATE>(
-    dashboardUrlMapper(router.asPath)
+  const [selectTab, setSelectTab] = useState<DASHBOARD_STATES_TYPES>(
+    DASHBOARD_STATES.CREATE_POST
   );
 
   const onChange = (
     _: React.SyntheticEvent,
-    newValue: AVAILABLE_DASHBOARD_STATE
+    newValue: DASHBOARD_STATES_TYPES
   ) => {
+    console.log("pass-this2");
     setSelectTab(newValue);
   };
 

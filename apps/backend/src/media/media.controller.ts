@@ -5,23 +5,22 @@ import {
   HttpStatus,
   Inject,
   Param,
+  ParseFilePipe,
   Post,
-  Req,
   Res,
   UploadedFile,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import {
-  AccountMetadata,
   DownloadRequest,
   DownloadResponse,
   UploadRequest,
   UploadResponse,
 } from 'types';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthGuard } from '../auth/auth.guard';
 import { MediaService } from './media.service';
-import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor } from '@nestjs/platform-express';
 import {
   ApiBody,
   ApiConsumes,
@@ -30,8 +29,9 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { FileIsDefinedValidator } from '../common/file.validator';
 
-@ApiTags('media')
+@ApiTags('Media')
 @Controller('media')
 export class MediaController {
   constructor(
@@ -63,7 +63,10 @@ export class MediaController {
   @UseInterceptors(FileInterceptor('file'))
   @Post()
   async upload(
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile(
+      new ParseFilePipe({ validators: [new FileIsDefinedValidator()] }),
+    )
+    file: Express.Multer.File,
     @Res({ passthrough: true }) res,
   ) {
     try {

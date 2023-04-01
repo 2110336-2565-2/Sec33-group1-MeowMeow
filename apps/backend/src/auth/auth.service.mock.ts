@@ -16,7 +16,7 @@ export class AuthServiceMock {
       message: 'success',
       userId: 100,
       username: 'david',
-      role: 'admin',
+      roles: ['admin'],
     };
     return [resp, 'xxxx', 'rrrr'];
   }
@@ -33,7 +33,7 @@ export class AuthServiceMock {
     return {
       userId: 100,
       username: 'david',
-      role: 'admin',
+      roles: ['admin'],
     };
   }
 

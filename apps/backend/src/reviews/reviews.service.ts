@@ -2,32 +2,28 @@ import { Injectable } from '@nestjs/common';
 import {
   CreateReviewRequest,
   CreateReviewResponse,
-  GetGuideReviewsRequest,
   GetGuideReviewsResponse,
 } from 'types';
-import { InvalidRequestError } from 'src/auth/auth.commons';
+import { InvalidRequestError } from '../auth/auth.commons';
 import { ReviewsRepository } from './reviews.repository';
-import { validate } from 'class-validator';
 
 export interface ReviewsService {
-  createReview(req: CreateReviewRequest);
-  getGuideReviews(
-    req: GetGuideReviewsRequest,
-  ): Promise<GetGuideReviewsResponse>;
+  createReview(userId: number, req: CreateReviewRequest);
+  getGuideReviews(id: number, page: number): Promise<GetGuideReviewsResponse>;
 }
 
 @Injectable()
 export class ReviewsServiceImpl {
   constructor(private readonly reviewsRepo: ReviewsRepository) {}
 
-  async createReview(req: CreateReviewRequest): Promise<CreateReviewResponse> {
+  async createReview(
+    userId: number,
+    req: CreateReviewRequest,
+  ): Promise<CreateReviewResponse> {
     if (!Number.isInteger(req.score) && (req.score % 1).toFixed(1) !== '0.5') {
       throw new InvalidRequestError('review score must be divisible with .5');
     }
-
-    const review = await this.reviewsRepo.createReview({
-      publishDate: new Date(),
-      reviewerId: req.reviewerId,
+    const review = await this.reviewsRepo.createReview(userId, {
       guideId: req.guideId,
       score: req.score,
       text: req.text,
@@ -35,6 +31,7 @@ export class ReviewsServiceImpl {
 
     return {
       message: 'success',
+      publishDate: review.publishDate,
       id: review.id,
       guideId: review.guideId,
       reviewerId: review.reviewerId,
@@ -44,13 +41,9 @@ export class ReviewsServiceImpl {
   }
 
   async getGuideReviews(
-    req: GetGuideReviewsRequest,
+    id: number,
+    page: number,
   ): Promise<GetGuideReviewsResponse> {
-    const err = await validate(req);
-    if (err.length > 0) {
-      throw new InvalidRequestError(err.toString());
-    }
-    const guideReviews = await this.reviewsRepo.getGuideReviews(req);
-    return { reviews: guideReviews };
+    return await this.reviewsRepo.getGuideReviews(id, page);
   }
 }

@@ -1,5 +1,11 @@
-export * from "./acceptBooking.dto";
+export * from "./acceptBookingByGuide.dto";
 export * from "./createBooking.dto";
-export * from "./declineBooking.dto";
+export * from "./cancelBookingByGuide.dto";
+export * from "./cancelBookingByTraveller.dto";
 export * from "./getBookingsByUserId.dto";
-export * from "./updateBooking.dto";
+export * from "./getBookingsByGuideId.dto";
+export * from "./payBookingFee.dto";
+export * from "./getBookingsByGuideId.dto";
+
+export * from "./payBookingFee.dto";
+

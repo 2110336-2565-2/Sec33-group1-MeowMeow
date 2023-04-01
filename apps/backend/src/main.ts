@@ -3,9 +3,8 @@ import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { PrismaService } from './prisma/prisma.service';
-import { backendConfig as config, frontendConfig } from 'config';
+import { backendConfig, backendConfig as config } from 'config';
 import { ValidationPipe } from '@nestjs/common';
-import { Role } from 'database';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -21,6 +20,7 @@ async function bootstrap() {
       .setTitle('API Document')
       .setDescription('API Document Description')
       .setVersion('1.0')
+      .addCookieAuth('access_token')
       .build();
     const swaggerDocument = SwaggerModule.createDocument(app, swaggerConfig);
     SwaggerModule.setup(config.swagger.prefixPath, app, swaggerDocument);
@@ -29,7 +29,7 @@ async function bootstrap() {
   app.use(cookieParser());
   if (config.cors.enable) {
     app.enableCors({
-      origin: frontendConfig.FRONTEND_BASE_URL,
+      origin: backendConfig.cors.allowOrigin,
       credentials: true,
     });
   }

@@ -1,4 +1,4 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty, PickType } from "@nestjs/swagger";
 import {
   IsInt,
   IsNotEmpty,
@@ -8,44 +8,20 @@ import {
   Max,
   IsEmpty,
 } from "class-validator";
+import { Review } from "./review.dto";
 
-export class CreateReviewRequest {
-  @ApiProperty({ type: () => Number })
-  @IsInt()
-  @IsNotEmpty()
-  guideId: number;
+export class CreateReviewRequest extends PickType(Review, [
+  "guideId",
+  "score",
+  "text",
+] as const) {}
 
-  @ApiProperty({ type: () => Number })
-  @Max(5)
-  @Min(0)
-  @IsNumber(
-    { maxDecimalPlaces: 1 },
-    {
-      message: "score must have one decimal place",
-    }
-  )
-  @IsNotEmpty()
-  score: number;
-
-  @ApiProperty({ type: () => String })
-  @MaxLength(200)
-  text: string;
-
-  @IsEmpty()
-  reviewerId: number;
-}
-
-export class CreateReviewResponse {
-  @ApiProperty({ type: () => String })
-  message: string;
-  @ApiProperty({ type: () => Number })
-  id: number;
-  @ApiProperty({ type: () => Number })
-  guideId: number;
-  @ApiProperty({ type: () => Number })
-  reviewerId: number;
-  @ApiProperty({ type: () => Number })
-  score: number;
-  @ApiProperty({ type: () => String })
-  text: string;
-}
+export class CreateReviewResponse extends PickType(Review, [
+  "guideId",
+  "score",
+  "text",
+  "reviewerId",
+  "id",
+  "publishDate",
+  "message",
+] as const) {}

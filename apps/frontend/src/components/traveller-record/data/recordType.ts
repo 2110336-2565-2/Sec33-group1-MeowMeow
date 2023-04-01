@@ -1,6 +1,7 @@
 import { statusType } from "./statusHandle";
 
-export interface IData {
+export interface ITravellerData {
+  id: string;
   name: string;
   location: string;
   description: string;

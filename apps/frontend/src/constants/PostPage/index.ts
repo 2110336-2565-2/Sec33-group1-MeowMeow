@@ -1,10 +1,17 @@
 export const POST_INPUT_IDs = [
-  "tripName",
-  "location",
-  "startDate",
-  "endDate",
-  "description",
-  "price",
+  "title",
+  "content",
+  "fee",
   "maxParticipant",
-  "lineid",
+  "contactInfo",
+
+  "locations",
+  "tags",
 ];
+
+export const POST_INPUT_IDs_Array = ["locations", "tags"];
+
+export enum METHOD_TYPE {
+  POST = 1,
+  PUT,
+}

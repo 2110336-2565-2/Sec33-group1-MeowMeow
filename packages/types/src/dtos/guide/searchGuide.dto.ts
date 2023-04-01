@@ -1,4 +1,4 @@
-import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
+import { ApiProperty, ApiPropertyOptional, PickType } from "@nestjs/swagger";
 import {
   IsDateString,
   IsInt,
@@ -8,6 +8,7 @@ import {
   Min,
 } from "class-validator";
 import { Type } from "class-transformer";
+import { Guide } from "./guide.dto";
 
 export class SearchGuidesRequest {
   @Type(() => Number)
@@ -42,20 +43,12 @@ export class SearchGuidesRequest {
   datetime?: string;
 }
 
-export class SearchGuidesGuideResponse {
-  @ApiProperty({ type: () => Number })
-  id: number;
-  @ApiProperty({ type: () => String })
-  firstName: string;
-  @ApiProperty({ type: () => String })
-  lastName: string;
-  @ApiProperty({ type: () => String })
-  certificate: string;
-  @ApiProperty({ type: () => Number })
-  averageReviewScore: number;
-}
+export class SearchGuidesGuideResponse extends PickType(Guide, [
+  "guideId",
+  "firstName",
+  "lastName",
+  "certificateId",
+  "averageReviewScore",
+] as const) {}
 
-export class SearchGuidesResponse {
-  @ApiProperty({ isArray: true, type: () => SearchGuidesGuideResponse })
-  results: SearchGuidesGuideResponse[];
-}
+export type SearchGuidesResponse = SearchGuidesGuideResponse[];

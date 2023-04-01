@@ -17,16 +17,18 @@ import {
   CreateReviewResponse,
 } from 'types';
 import { ReviewsService } from './reviews.service';
-import { InvalidRequestError } from 'src/auth/auth.commons';
+import { InvalidRequestError } from '../auth/auth.commons';
 import { FailedRelationConstraintError } from './reviews.common';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthGuard } from '../auth/auth.guard';
 import {
   ApiBody,
   ApiCookieAuth,
   ApiOperation,
   ApiResponse,
+  ApiTags,
 } from '@nestjs/swagger';
 
+@ApiTags('Reviews')
 @Controller('reviews')
 export class ReviewsController {
   constructor(
@@ -56,16 +58,10 @@ export class ReviewsController {
   @Post()
   @UseGuards(AuthGuard)
   @UsePipes(new ValidationPipe({ transform: true }))
-  async addReview(
-    @Req() req,
-    @Body() reqBody: CreateReviewRequest,
-    @Res({ passthrough: true }) res,
-  ) {
+  async addReview(@Req() req, @Body() reqBody: CreateReviewRequest) {
     try {
       const account: AccountMetadata = req.account;
-      reqBody.reviewerId = account.userId;
-      const resBody = await this.reviewsService.createReview(reqBody);
-      res.status(HttpStatus.CREATED).send(resBody);
+      return await this.reviewsService.createReview(account.userId, reqBody);
     } catch (e) {
       console.log(e);
       if (e instanceof InvalidRequestError) {

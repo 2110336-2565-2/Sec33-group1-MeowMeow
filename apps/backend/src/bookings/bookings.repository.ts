@@ -1,15 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { Booking, BookingStatus, Prisma } from 'database';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import {
   FailedRelationConstraintError,
   RecordNotFound,
 } from './bookings.common';
 
 const bookingStatusEnumMapper = {
-  pending: BookingStatus.PENDING,
-  accepted: BookingStatus.ACCEPTED,
-  rejected: BookingStatus.REJECTED,
+  WAITING_FOR_GUIDE_CONFIRMATION: BookingStatus.WAITING_FOR_GUIDE_CONFIRMATION,
+  GUIDE_CANCELLED: BookingStatus.GUIDE_CANCELLED,
+  WAITING_FOR_PAYMENT: BookingStatus.WAITING_FOR_PAYMENT,
+  WAITING_FOR_REFUND: BookingStatus.WAITING_FOR_REFUND,
+  WAITING_FOR_TRAVELING: BookingStatus.WAITING_FOR_TRAVELING,
+  TRAVELING: BookingStatus.TRAVELING,
+  FINISHED: BookingStatus.FINISHED,
+  USER_CANCELLED: BookingStatus.USER_CANCELLED,
 };
 
 @Injectable()
@@ -19,11 +24,15 @@ export class BookingsRepository {
   async paginateBookings(filter: {
     offset: number;
     limit: number;
-    userId: number;
+    userId?: number;
+    guideId?: number;
   }): Promise<Booking[]> {
     const results = await this.prismaService.booking.findMany({
       where: {
         userId: filter.userId,
+        post: {
+          authorId: filter.guideId,
+        },
       },
       skip: filter.offset,
       take: filter.limit,
@@ -37,6 +46,48 @@ export class BookingsRepository {
       ],
     });
     return results;
+  }
+
+  async getBookingById(id: number): Promise<{
+    id: number;
+    updatedAt: Date;
+    startDate: Date;
+    endDate: Date;
+    postId: number;
+    userId: number;
+    guideId: number;
+    bookingStatus: string;
+  }> {
+    const booking = await this.prismaService.booking.findFirst({
+      include: {
+        post: {
+          include: {
+            author: {
+              include: {
+                guide: true,
+              },
+            },
+          },
+        },
+      },
+      where: {
+        id: id,
+      },
+    });
+    if (!booking) {
+      throw new RecordNotFound(`booking with id ${id} no found`);
+    }
+
+    return {
+      id: booking.id,
+      updatedAt: booking.updatedAt,
+      startDate: booking.startDate,
+      endDate: booking.endDate,
+      postId: booking.postId,
+      userId: booking.userId,
+      guideId: booking.post.author.guide.id,
+      bookingStatus: booking.bookingStatus.toString(),
+    };
   }
 
   async createBooking(data: {
@@ -58,7 +109,6 @@ export class BookingsRepository {
           endDate: data.endDate,
           postId: data.postId,
           userId: data.userId,
-          guideId: data.guideId,
           bookingStatus: bookingStatusEnum,
         },
       });
@@ -73,17 +123,65 @@ export class BookingsRepository {
     }
   }
 
-  async updateBookingStatus(id: number, bookingStatus: BookingStatus) {
+  async updateBookingStatus(id: number, bookingStatus: string) {
     try {
+      const bookingStatusEnum: BookingStatus =
+        bookingStatusEnumMapper[bookingStatus];
       const result = await this.prismaService.booking.update({
         where: { id },
-        data: { bookingStatus },
+        data: { bookingStatus: bookingStatusEnum },
         select: {
           id: true,
           bookingStatus: true,
         },
       });
       return result;
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code === 'P2001') {
+          throw new RecordNotFound(`Booking id ${id} doesn't exist`);
+        }
+      }
+      throw e;
+    }
+  }
+
+  async getBookingAndPostById(id: number) {
+    try {
+      const booking = await this.prismaService.booking.findUnique({
+        where: { id },
+        include: {
+          post: true,
+        },
+      });
+      return booking;
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code === 'P2001') {
+          throw new RecordNotFound(`Booking id ${id} doesn't exist`);
+        }
+      }
+      throw e;
+    }
+  }
+
+  async getGuideByBookingId(id: number) {
+    try {
+      const booking = await this.prismaService.booking.findUnique({
+        where: { id },
+        include: {
+          post: {
+            include: {
+              author: {
+                include: {
+                  guide: true,
+                },
+              },
+            },
+          },
+        },
+      });
+      return booking;
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
         if (e.code === 'P2001') {

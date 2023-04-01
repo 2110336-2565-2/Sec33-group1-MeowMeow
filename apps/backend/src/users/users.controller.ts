@@ -10,100 +10,137 @@ import {
   Post,
   Put,
   Req,
-  Res,
   UseGuards,
+  HttpCode,
 } from '@nestjs/common';
-import { CreateUserRequest, AccountMetadata } from 'types';
+import {
+  CreateUserRequest,
+  AccountMetadata,
+  GetUserByIdResponse,
+  CreateUserResponse,
+  UpdateUserResponse,
+  UpdateUserRequest,
+} from 'types';
 import { PropertyAlreadyUsedError, UserNotFoundError } from './users.common';
 import { UsersService } from './users.service';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthGuard } from '../auth/auth.guard';
+import { ApiCookieAuth, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Users')
 @Controller('users')
 export class UsersController {
   constructor(
     @Inject('UsersService') private readonly usersService: UsersService,
   ) {}
 
+  handleException(e: Error) {
+    console.log(e);
+    if (e instanceof PropertyAlreadyUsedError)
+      throw new HttpException(e.message, HttpStatus.CONFLICT);
+    if (e instanceof UserNotFoundError)
+      throw new HttpException(
+        'user with given id not found',
+        HttpStatus.NOT_FOUND,
+      );
+    throw new HttpException(
+      'internal server error',
+      HttpStatus.INTERNAL_SERVER_ERROR,
+    );
+  }
+
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'successfully get current user profile',
+    type: GetUserByIdResponse,
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'user with given id not found',
+  })
+  @ApiCookieAuth()
   @UseGuards(AuthGuard)
-  @Get('/profiles')
-  async getUserProfile(@Req() req, @Res({ passthrough: true }) res) {
+  @Get('profile')
+  @HttpCode(HttpStatus.OK)
+  async getUserProfile(@Req() req): Promise<GetUserByIdResponse> {
     try {
       const account: AccountMetadata = req.account;
-      const resBody = await this.usersService.getUserById({
-        id: account.userId,
-      });
-      res.status(HttpStatus.OK).send(resBody);
+      return await this.usersService.getUserById(account.userId);
     } catch (e) {
-      throw new HttpException(
-        'internal server error',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      this.handleException(e);
     }
   }
 
-  @Get('/:id')
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'successfully get the user profile by id',
+    type: GetUserByIdResponse,
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'user with given id not found',
+  })
+  @ApiParam({
+    name: 'id',
+    type: 'number',
+    required: true,
+    description: 'user id',
+    example: 1,
+  })
+  @Get(':id')
+  @HttpCode(HttpStatus.OK)
   async getUserById(
     @Param('id', ParseIntPipe) userId: number,
-    @Res({ passthrough: true }) res,
-  ) {
+  ): Promise<GetUserByIdResponse> {
     try {
-      const resBody = await this.usersService.getUserById({ id: userId });
-      res.status(HttpStatus.OK).send(resBody);
+      return await this.usersService.getUserById(userId);
     } catch (e) {
-      console.log(e);
-      if (e instanceof UserNotFoundError) {
-        throw new HttpException(
-          'user with given id not found',
-          HttpStatus.NOT_FOUND,
-        );
-      }
-      throw new HttpException(
-        'internal server error',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      this.handleException(e);
     }
   }
 
-  @Post('/register')
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'successfully register a new user',
+    type: CreateUserResponse,
+  })
+  @ApiResponse({
+    status: HttpStatus.CONFLICT,
+    description: 'email or username already used',
+  })
+  @Post('register')
+  @HttpCode(HttpStatus.CREATED)
   async createUser(
-    @Body() data: CreateUserRequest,
-    @Res({ passthrough: true }) res,
-  ) {
+    @Body() userData: CreateUserRequest,
+  ): Promise<CreateUserResponse> {
     try {
-      const resBody = await this.usersService.create(data);
-      res.status(HttpStatus.CREATED).send(resBody);
+      return await this.usersService.create(userData);
     } catch (e) {
-      console.log(e);
-      if (e instanceof PropertyAlreadyUsedError) {
-        throw new HttpException(e.message, HttpStatus.CONFLICT);
-      }
-      throw new HttpException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
+      this.handleException(e);
     }
   }
 
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'successfully edit current user profile',
+    type: UpdateUserResponse,
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'user with given id not found',
+  })
+  @ApiCookieAuth()
   @UseGuards(AuthGuard)
-  @Put('/users')
+  @Put()
+  @HttpCode(HttpStatus.CREATED)
   async editUserProfile(
     @Req() req,
-    @Body() reqBody,
-    @Res({ passthrough: true }) res,
-  ) {
+    @Body() userData: UpdateUserRequest,
+  ): Promise<UpdateUserResponse> {
     try {
       const account: AccountMetadata = req.account;
-      const resBody = await this.usersService.updateUser(
-        account.userId,
-        reqBody,
-      );
-      res.status(HttpStatus.CREATED).send(resBody);
+      return await this.usersService.updateUser(account.userId, userData);
     } catch (e) {
-      console.log(e);
-      if (e instanceof PropertyAlreadyUsedError) {
-        throw new HttpException(e.message, HttpStatus.CONFLICT);
-      }
-      throw new HttpException(
-        'internal server error',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      this.handleException(e);
     }
   }
 }

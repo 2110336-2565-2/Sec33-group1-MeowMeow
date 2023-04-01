@@ -1,26 +1,13 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { Type } from "class-transformer";
-import { IsInt } from "class-validator";
+import { ApiProperty, PickType } from "@nestjs/swagger";
+import { Guide } from "./guide.dto";
 
-export class GetGuideByIdRequest {
-  @Type(() => Number)
-  @IsInt()
-  id: number;
-}
-
-export class GetGuideByIdResponse {
-  @ApiProperty()
-  id: number;
-  @ApiProperty()
-  userId: number;
-  @ApiProperty()
-  firstName: string;
-  @ApiProperty()
-  lastName: string;
-  //   @ApiProperty()
-  //   fee: number;
-  @ApiProperty()
-  certificate: string;
-  @ApiProperty()
-  averageReviewScore: number;
-}
+export class GetGuideByIdResponse extends PickType(Guide, [
+  "guideId",
+  "userId",
+  "firstName",
+  "lastName",
+  "certificateId",
+  "averageReviewScore",
+  "locations",
+  "tourStyles",
+] as const) {}

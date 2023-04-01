@@ -1,8 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { Sql } from '@prisma/client/runtime';
-import { Guide, Prisma, User } from 'database';
-import { InvalidRequestError } from 'src/auth/auth.commons';
+import { Prisma } from 'database';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { GetGuideByIdResponse, SearchGuidesResponse } from 'types';
+import {
+  FailedRelationConstraintError,
+  GuideNotFound,
+  RecordAlreadyExist,
+} from './guides.common';
 
 @Injectable()
 export class GuidesRepository {
@@ -15,15 +19,7 @@ export class GuidesRepository {
     minReviewScore?: number;
     startDate?: Date;
     endDate?: Date;
-  }): Promise<
-    {
-      id: number;
-      firstName: string;
-      lastName: string;
-      certificate: string;
-      averageReviewScore: number;
-    }[]
-  > {
+  }): Promise<SearchGuidesResponse> {
     try {
       const minReviewCondition = Prisma.sql`WHERE "avg_review_score" >= ${filter.minReviewScore}`;
       const locationCondition = Prisma.sql`WHERE "Location"."locationName" = ${filter.location}`;
@@ -46,7 +42,7 @@ export class GuidesRepository {
           LEFT JOIN "Location" ON "Guide"."id" = "Location"."guideId"
           ${filter.location ? locationCondition : Prisma.empty}
         )
-        SELECT "Guide"."id", "Guide"."certificate",
+        SELECT "Guide"."id", "Guide"."certificateId",
         "User"."firstName", "User"."lastName",
         c1."avg_review_score" as "averageReviewScore"
         FROM "Guide"
@@ -56,58 +52,195 @@ export class GuidesRepository {
         OFFSET ${filter.offset} LIMIT ${filter.limit}
       `;
 
-      var guides = new Array(results.length);
-      for (let i = 0; i < results.length; i++) {
-        guides[i] = {
-          id: results[i].id,
-          firstName: results[i].firstName ?? null,
-          lastName: results[i].lastName ?? null,
-          certificate: results[i].certificate ?? null,
-          averageReviewScore: results[i].averageReviewScore ?? null,
+      return results.map((e) => {
+        return {
+          guideId: e.id,
+          firstName: e.firstName ?? null,
+          lastName: e.lastName ?? null,
+          certificateId: e.certificate ?? null,
+          averageReviewScore: e.averageReviewScore ?? null,
         };
-      }
-      return guides;
+      });
     } catch (e) {
       throw e;
     }
   }
 
-  async getGuideById(guideId: number): Promise<{
-    id: number;
-    userId: number;
-    firstName: string;
-    lastName: string;
-    certificate: string;
-    averageReviewScore: number;
-  }> {
+  async getGuide(filter: {
+    id?: number;
+    userId?: number;
+  }): Promise<GetGuideByIdResponse> {
+    const guide = await this.prismaService.guide.findUnique({
+      include: {
+        user: true,
+        GuideLocation: {
+          include: {
+            location: true,
+          },
+        },
+        GuideTourStyle: {
+          include: {
+            tourStyle: true,
+          },
+        },
+      },
+      where: {
+        id: filter.id,
+        userId: filter.userId,
+      },
+    });
+    if (!guide) {
+      throw new GuideNotFound('guide with given condition not found');
+    }
+
     try {
-      const guideResult = await this.prismaService.guide.findUnique({
+      const scoreResult = await this.prismaService.review.aggregate({
+        _avg: {
+          score: true,
+        },
         where: {
-          id: guideId,
+          guideId: guide.id,
         },
       });
-      if (!guideResult) return null;
-      const userResult = await this.prismaService.user.findUnique({
-        where: {
-          id: guideResult.userId,
-        },
-      });
-      const scoreResult = await this.prismaService.$queryRaw<any>`
-      SELECT AVG("Review"."score") AS avg_review_score
-        FROM "Review"
-        WHERE "Review"."guideId" = ${guideId}
-        GROUP BY "Review"."guideId"
-      `;
       return {
-        id: guideResult.id,
-        userId: guideResult.userId,
-        firstName: userResult.firstName,
-        lastName: userResult.lastName,
-        certificate: guideResult.certificate,
-        averageReviewScore: scoreResult[0].avg_review_score,
+        guideId: guide.id,
+        userId: guide.user.id,
+        firstName: guide.user.firstName,
+        lastName: guide.user.lastName,
+        certificateId: guide.certificateId,
+        averageReviewScore: scoreResult._avg.score?.toNumber() | 0,
+        locations: guide.GuideLocation.map((e) => e.location.locationName),
+        tourStyles: guide.GuideTourStyle.map((e) => e.tourStyle.tourStyleName),
       };
     } catch (e) {
       console.log(e);
+      throw e;
     }
+  }
+
+  async getOrCreateLocationsID(locations: string[]): Promise<number[]> {
+    await this.prismaService.location.createMany({
+      data: locations.map((e) => ({ locationName: e })),
+      skipDuplicates: true,
+    });
+    return (
+      await this.prismaService.location.findMany({
+        where: {
+          locationName: {
+            in: locations,
+          },
+        },
+        select: {
+          id: true,
+        },
+        orderBy: {
+          id: 'asc',
+        },
+      })
+    ).map((e) => e.id);
+  }
+
+  async getOrCreateTourStylesID(tourStyles: string[]): Promise<number[]> {
+    await this.prismaService.tourStyle.createMany({
+      data: tourStyles.map((e) => ({ tourStyleName: e })),
+      skipDuplicates: true,
+    });
+    return (
+      await this.prismaService.tourStyle.findMany({
+        where: {
+          tourStyleName: {
+            in: tourStyles,
+          },
+        },
+        select: {
+          id: true,
+        },
+        orderBy: {
+          id: 'asc',
+        },
+      })
+    ).map((e) => e.id);
+  }
+
+  async registerUserForGuide(data: {
+    userId: number;
+    certificateId: string;
+    paymentId: string;
+    brandBankAccount: string;
+    nameBankAccount: string;
+    numberBankAccount: string;
+    taxId?: string;
+    locations: string[];
+    tourStyles: string[];
+  }): Promise<{
+    guideId: number;
+    certificateId: string;
+  }> {
+    try {
+      const guide = await this.prismaService.guide.create({
+        data: {
+          userId: data.userId,
+          certificateId: data.certificateId,
+          paymentId: data.paymentId,
+          brandBankAccount: data.brandBankAccount,
+          nameBankAccount: data.nameBankAccount,
+          numberBankAccount: data.numberBankAccount,
+          taxId: data.taxId,
+          GuideLocation: {
+            createMany: {
+              data: (
+                await this.getOrCreateLocationsID(data.locations)
+              ).map((e) => ({ locationId: e })),
+            },
+          },
+          GuideTourStyle: {
+            createMany: {
+              data: (
+                await this.getOrCreateTourStylesID(data.tourStyles)
+              ).map((e) => ({ tourStyleId: e })),
+            },
+          },
+        },
+      });
+      return {
+        guideId: guide.id,
+        certificateId: guide.certificateId,
+      };
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code == 'P2002') {
+          throw new RecordAlreadyExist(
+            'user with given ID has already been a guide',
+          );
+        }
+        if (e.code === 'P2003') {
+          throw new FailedRelationConstraintError('relation constraint failed');
+        }
+      }
+      throw e;
+    }
+  }
+
+  async getGuideIDByReviewScore(
+    minScore?: number,
+    maxScore?: number,
+  ): Promise<number[]> {
+    const options = {};
+
+    if (minScore) options['gte'] = minScore;
+    if (maxScore) options['lte'] = maxScore;
+    const guides = await this.prismaService.review.groupBy({
+      by: ['guideId'],
+      _avg: {
+        score: true,
+      },
+      having: {
+        score: {
+          _avg: options,
+        },
+      },
+    });
+
+    return guides.map((e) => e.guideId);
   }
 }

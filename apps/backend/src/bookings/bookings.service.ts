@@ -1,27 +1,28 @@
 import { Inject, Injectable } from '@nestjs/common';
+import * as moment from 'moment';
+import { GuideNotFound } from 'src/guides/guides.common';
+import { GuidesService } from 'src/guides/guides.service';
+import { PaymentService } from 'src/payment/payment.service';
 import {
   AcceptBookingResponse,
   AccountMetadata,
+  CancelBookingByTravellerResponse,
+  CancelBookingResponse,
   CreateBookingRequest,
   CreateBookingResponse,
   CancelBookingResponse,
   GetBookingsByGuideIdRequest,
   GetBookingsByGuideIdResponse,
-
   GetBookingsByUserIdRequest,
   GetBookingsByUserIdResponse,
   PayBookingFeeResponse,
-  CancelBookingByTravellerResponse,
 } from 'types';
-import { BookingsRepository } from './bookings.repository';
 import {
   AccessNotGranted,
   InvalidDateFormat,
   UnprocessableEntity,
 } from './bookings.common';
-import { GuidesService } from 'src/guides/guides.service';
-import { GuideNotFound } from 'src/guides/guides.common';
-import * as moment from 'moment';
+import { BookingsRepository } from './bookings.repository';
 
 import { BookingStatus } from 'database';
 
@@ -38,6 +39,7 @@ export interface IBookingsService {
   payBookingFee(
     bookingId: number,
     account: AccountMetadata,
+    token: string,
   ): Promise<PayBookingFeeResponse>;
   cancelBookingByTraveller(
     bookingId: number,
@@ -58,6 +60,7 @@ export interface IBookingsService {
 export class BookingsService implements IBookingsService {
   constructor(
     private readonly bookingsRepo: BookingsRepository,
+    private readonly paymentsService: PaymentService,
     @Inject('GuidesService') private readonly guideService: GuidesService,
   ) {}
 
@@ -199,6 +202,7 @@ export class BookingsService implements IBookingsService {
   async payBookingFee(
     bookingId: number,
     account: AccountMetadata,
+    token: string,
   ): Promise<PayBookingFeeResponse> {
     try {
       const booking = await this.bookingsRepo.getBookingById(bookingId);
@@ -226,6 +230,15 @@ export class BookingsService implements IBookingsService {
       }
 
       // TODO call payment api
+      try {
+        await this.paymentsService.charge({
+          userId: account.userId,
+          bookingId: bookingId,
+          token: token,
+        });
+      } catch (e) {
+        throw e;
+      }
 
       const paidBooking = await this.bookingsRepo.updateBookingStatus(
         bookingId,
@@ -251,6 +264,7 @@ export class BookingsService implements IBookingsService {
   ): Promise<CancelBookingByTravellerResponse> {
     try {
       const booking = await this.bookingsRepo.getBookingById(bookingId);
+      console.log({ booking, account });
       if (booking.userId !== account.userId) {
         throw new AccessNotGranted('permissing denied');
       }
@@ -282,6 +296,12 @@ export class BookingsService implements IBookingsService {
       }
 
       // call refund payment
+      console.log('refund2');
+      try {
+        await this.paymentsService.refund(bookingId);
+      } catch (e) {
+        throw e;
+      }
 
       const refundedBooking = await this.bookingsRepo.updateBookingStatus(
         bookingId,

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from 'database';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { GetGuideByIdResponse, SearchGuidesResponse } from 'types';
-import { PrismaService } from '../prisma/prisma.service';
 import {
   FailedRelationConstraintError,
   GuideNotFound,
@@ -166,6 +166,10 @@ export class GuidesRepository {
     userId: number;
     certificateId: string;
     paymentId: string;
+    brandBankAccount: string;
+    nameBankAccount: string;
+    numberBankAccount: string;
+    taxId?: string;
     locations: string[];
     tourStyles: string[];
   }): Promise<{
@@ -178,6 +182,10 @@ export class GuidesRepository {
           userId: data.userId,
           certificateId: data.certificateId,
           paymentId: data.paymentId,
+          brandBankAccount: data.brandBankAccount,
+          nameBankAccount: data.nameBankAccount,
+          numberBankAccount: data.numberBankAccount,
+          taxId: data.taxId,
           GuideLocation: {
             createMany: {
               data: (

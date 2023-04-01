@@ -1,16 +1,16 @@
 import { Module } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
-import { GuidesController } from './guides.controller';
-import { GuidesServiceImpl } from './guides.service';
-import { GuidesRepository } from './guides.repository';
-import { AuthServiceImpl } from '../auth/auth.service';
-import { UsersRepository } from '../users/users.repository';
-import { ReviewsModule } from '../reviews/reviews.module';
-import { MediaModule } from '../media/media.module';
 import { AuthModule } from 'src/auth/auth.module';
+import { PaymentModule } from 'src/payment/payment.module';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { MediaModule } from '../media/media.module';
+import { ReviewsModule } from '../reviews/reviews.module';
+import { UsersRepository } from '../users/users.repository';
+import { GuidesController } from './guides.controller';
+import { GuidesRepository } from './guides.repository';
+import { GuidesServiceImpl } from './guides.service';
 
 @Module({
-  imports: [AuthModule, ReviewsModule, MediaModule],
+  imports: [AuthModule, ReviewsModule, MediaModule, PaymentModule],
   controllers: [GuidesController],
   providers: [
     {

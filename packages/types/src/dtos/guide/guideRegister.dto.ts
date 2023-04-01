@@ -1,6 +1,6 @@
 import { ApiProperty, PickType } from "@nestjs/swagger";
 import { Transform } from "class-transformer";
-import { IsArray, IsString } from "class-validator";
+import { IsArray, IsOptional, IsString } from "class-validator";
 import { Guide } from "./guide.dto";
 
 export class GuideRegisterRequest {
@@ -28,13 +28,39 @@ export class GuideRegisterRequest {
     description: "guide certificate image",
   })
   certificate: Buffer;
+
   @ApiProperty({
     type: () => String,
-    description: "guide payment id",
-    example: "1234567890",
+    description: "tax id for payment",
+    required: false,
   })
   @IsString()
-  paymentId: string;
+  @IsOptional()
+  taxId: string;
+
+  @ApiProperty({
+    type: () => String,
+    description: "brand of bank account for payment",
+    example: "bbl",
+  })
+  @IsString()
+  brandBankAccount: string;
+
+  @ApiProperty({
+    type: () => String,
+    description: " bank account number for payment",
+    example: "acc12345",
+  })
+  @IsString()
+  numberBankAccount: string;
+
+  @ApiProperty({
+    type: () => String,
+    description: "bank account holder name.",
+    example: "John Doe",
+  })
+  @IsString()
+  nameBankAccount: string;
 }
 
 export class GuideRegisterResponse extends PickType(Guide, [

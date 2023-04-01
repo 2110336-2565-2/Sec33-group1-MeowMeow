@@ -1,18 +1,19 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { validate } from 'class-validator';
+import { Role } from 'database';
+import { PaymentService } from 'src/payment/payment.service';
+import { UsersRepository } from 'src/users/users.repository';
 import {
+  GetGuideByIdResponse,
   GetGuideByUserIdResponse,
   GuideRegisterRequest,
   GuideRegisterResponse,
   SearchGuidesRequest,
   SearchGuidesResponse,
 } from 'types';
-import { GuidesRepository } from './guides.repository';
-import { validate } from 'class-validator';
 import { InvalidRequestError } from '../auth/auth.commons';
-import { GetGuideByIdResponse } from 'types';
 import { MediaService } from '../media/media.service';
-import { UsersRepository } from 'src/users/users.repository';
-import { Role } from 'database';
+import { GuidesRepository } from './guides.repository';
 
 export interface GuidesService {
   searchGuides(searchInfo: SearchGuidesRequest): Promise<SearchGuidesResponse>;
@@ -29,6 +30,7 @@ export class GuidesServiceImpl {
   constructor(
     private readonly guidesRepo: GuidesRepository,
     private readonly usersRepo: UsersRepository,
+    private readonly paymentService: PaymentService,
     @Inject('MediaService') private readonly mediaService: MediaService,
   ) {}
 
@@ -65,11 +67,22 @@ export class GuidesServiceImpl {
     const uploadResponse = await this.mediaService.upload({
       file: guideRegisterData.certificate,
     });
+
+    const paymentId = await this.paymentService.createRecipient({
+      userId: userId,
+      brandBankAccount: guideRegisterData.brandBankAccount,
+      nameBankAccount: guideRegisterData.nameBankAccount,
+      numberBankAccount: guideRegisterData.numberBankAccount,
+    });
+
     const certFileId = uploadResponse.id;
     const guide = await this.guidesRepo.registerUserForGuide({
       userId: userId,
       certificateId: certFileId,
-      paymentId: guideRegisterData.paymentId,
+      paymentId: paymentId,
+      brandBankAccount: guideRegisterData.brandBankAccount,
+      nameBankAccount: guideRegisterData.nameBankAccount,
+      numberBankAccount: guideRegisterData.numberBankAccount,
       locations: guideRegisterData.locations,
       tourStyles: guideRegisterData.tourStyles,
     });

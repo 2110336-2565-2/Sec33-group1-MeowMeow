@@ -5,7 +5,6 @@ import {
   FailedRelationConstraintError,
   RecordNotFound,
 } from './bookings.common';
-import { Guide } from 'types/src/dtos/guide/guide.dto';
 
 const bookingStatusEnumMapper = {
   WAITING_FOR_GUIDE_CONFIRMATION: BookingStatus.WAITING_FOR_GUIDE_CONFIRMATION,
@@ -137,6 +136,52 @@ export class BookingsRepository {
         },
       });
       return result;
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code === 'P2001') {
+          throw new RecordNotFound(`Booking id ${id} doesn't exist`);
+        }
+      }
+      throw e;
+    }
+  }
+
+  async getBookingAndPostById(id: number) {
+    try {
+      const booking = await this.prismaService.booking.findUnique({
+        where: { id },
+        include: {
+          post: true,
+        },
+      });
+      return booking;
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code === 'P2001') {
+          throw new RecordNotFound(`Booking id ${id} doesn't exist`);
+        }
+      }
+      throw e;
+    }
+  }
+
+  async getGuideByBookingId(id: number) {
+    try {
+      const booking = await this.prismaService.booking.findUnique({
+        where: { id },
+        include: {
+          post: {
+            include: {
+              author: {
+                include: {
+                  guide: true,
+                },
+              },
+            },
+          },
+        },
+      });
+      return booking;
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
         if (e.code === 'P2001') {

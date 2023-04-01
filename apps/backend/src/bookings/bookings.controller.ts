@@ -14,10 +14,18 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import {
+  ApiBody,
+  ApiCookieAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import {
   AcceptBookingResponse,
   AccountMetadata,
   CancelBookingByTravellerRequest,
   CancelBookingByTravellerResponse,
+  CancelBookingResponse,
   CreateBookingRequest,
   CreateBookingResponse,
   GetBookingsByGuideIdRequest,
@@ -27,8 +35,10 @@ import {
   GetBookingsByUserIdRequest,
   GetBookingsByUserIdResponse,
   GetBookingsByUserIdResponseMember,
+  PayBooking,
   PayBookingFeeResponse,
 } from 'types';
+import { AuthGuard } from '../auth/auth.guard';
 import {
   AccessNotGranted,
   FailedRelationConstraintError,
@@ -38,14 +48,6 @@ import {
   UnprocessableEntity,
 } from './bookings.common';
 import { IBookingsService } from './bookings.service';
-import {
-  ApiBody,
-  ApiCookieAuth,
-  ApiOperation,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
-import { AuthGuard } from '../auth/auth.guard';
 
 @ApiTags('Bookings')
 @Controller('bookings')
@@ -339,10 +341,11 @@ export class BookingsController {
   async payBookingFee(
     @Req() req,
     @Param('id', ParseIntPipe) id: number,
+    @Body() body: PayBooking,
   ): Promise<PayBookingFeeResponse> {
     try {
       const account: AccountMetadata = req.account;
-      return await this.bookingsService.payBookingFee(id, account);
+      return await this.bookingsService.payBookingFee(id, account, body.token);
     } catch (e) {
       console.log(e);
       if (e instanceof AccessNotGranted) {
@@ -393,6 +396,7 @@ export class BookingsController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'internal server error',
   })
+  @UseGuards(AuthGuard)
   @HttpCode(HttpStatus.CREATED)
   @Post(':id/cancel')
   async cancelBookingByTraveller(

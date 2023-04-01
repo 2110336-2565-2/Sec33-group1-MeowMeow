@@ -19,7 +19,6 @@ export default function SearchPage() {
 
   return (
     <>
-      <Navbar />
       <Container
         maxWidth="lg"
         sx={{

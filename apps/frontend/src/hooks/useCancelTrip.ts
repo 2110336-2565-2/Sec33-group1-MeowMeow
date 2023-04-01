@@ -3,7 +3,12 @@ import apiClient from "@/utils/apiClient";
 import { useRouter } from "next/router";
 import { FormEventHandler, useCallback, useContext, useState } from "react";
 
-const useCancelTrip = (tripId: number) => {
+export interface IUseCancelTrip {
+  tripId: number;
+  handleClose: () => void;
+}
+
+const useCancelTrip = ({ tripId, handleClose }: IUseCancelTrip) => {
   const { addNotification } = useContext(NotificationContext);
   const [isLoading, setLoading] = useState<boolean>(false);
   const router = useRouter();
@@ -16,10 +21,13 @@ const useCancelTrip = (tripId: number) => {
         await apiClient.post(`/bookings/${tripId}/cancel`);
         addNotification("Cancel success", "success");
         setTimeout(() => {
+          handleClose();
           router.push("/traveller-record");
         }, 2000);
       } catch (err) {
         const error = err as Error;
+        handleClose();
+        router.push("/traveller-record");
         addNotification(error.message, "error");
       } finally {
         setLoading(false);

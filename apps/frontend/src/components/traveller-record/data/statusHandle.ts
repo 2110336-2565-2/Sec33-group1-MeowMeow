@@ -47,9 +47,7 @@ buttonDisplayNames.set(
 );
 
 export let buttonMapStatus = new Map<string, string[]>();
-buttonMapStatus.set(BookingStatus.WAITING_FOR_GUIDE_CONFIRMATION, [
-  subButtonName.CANCEL,
-]);
+buttonMapStatus.set(BookingStatus.WAITING_FOR_GUIDE_CONFIRMATION, []);
 buttonMapStatus.set(BookingStatus.GUIDE_CANCELLED, []);
 buttonMapStatus.set(BookingStatus.WAITING_FOR_PAYMENT, [
   subButtonName.PAY,
@@ -61,7 +59,7 @@ buttonMapStatus.set(BookingStatus.WAITING_FOR_TRAVELING, [
 ]);
 // buttonMapStatus.set(BookingStatus.WAITING_FOR_REFUND_USER, []);      // Update
 // buttonMapStatus.set(BookingStatus.WAITING_FOR_REFUND_GUIDE, []);
-buttonMapStatus.set(BookingStatus.TRAVELING, []);
+buttonMapStatus.set(BookingStatus.TRAVELING, [subButtonName.CANCEL]); // Mock
 buttonMapStatus.set(BookingStatus.FINISHED, []);
 
 export let buttonMapLink = new Map<string, string>();

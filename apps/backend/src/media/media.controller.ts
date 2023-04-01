@@ -70,7 +70,11 @@ export class MediaController {
     @Res({ passthrough: true }) res,
   ) {
     try {
-      const resBody = await this.mediaService.upload({ file: file.buffer });
+      console.log(file.originalname);
+      const resBody = await this.mediaService.upload({
+        file: file.buffer,
+        fileType: file.originalname.split('.').slice(-1)[0],
+      });
       res.status(HttpStatus.CREATED).send(resBody);
     } catch (e) {
       console.log(e);

@@ -17,7 +17,7 @@ import {
 import DescriptionIcon from "@mui/icons-material/Description";
 import bookingViewModel, { IGetRecord } from "./viewModel/booking";
 import { useEffect, useState } from "react";
-import StatusDialog from "../dialogStatus";
+import StatusDialog from "./dialogStatus";
 import PostDialog from "./dialogPost";
 import TablePaginationActions from "./pagination";
 

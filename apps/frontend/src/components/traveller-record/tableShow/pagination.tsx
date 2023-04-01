@@ -49,7 +49,8 @@ export default function TablePaginationActions(
 
   return (
     <Box sx={{ flexShrink: 0, ml: 2.5 }}>
-      <IconButton
+      {/* Pagination Arrow zone */}
+      {/* <IconButton
         onClick={handleFirstPageButtonClick}
         disabled={page === 0}
         aria-label="first page"
@@ -84,7 +85,7 @@ export default function TablePaginationActions(
         aria-label="last page"
       >
         {theme.direction === "rtl" ? <FirstPageIcon /> : <LastPageIcon />}
-      </IconButton>
+      </IconButton> */}
     </Box>
   );
 }

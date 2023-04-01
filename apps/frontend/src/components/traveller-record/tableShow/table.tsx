@@ -8,15 +8,18 @@ import {
   styled,
   TableCell,
   tableCellClasses,
+  TableFooter,
   TableHead,
+  TablePagination,
   TableRow,
   Typography,
 } from "@mui/material";
 import DescriptionIcon from "@mui/icons-material/Description";
 import bookingViewModel, { IGetRecord } from "./viewModel/booking";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import StatusDialog from "../dialogStatus";
 import PostDialog from "./dialogPost";
+import TablePaginationActions from "./pagination";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -29,23 +32,34 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 export default function TableRecord() {
-  const record = bookingViewModel();
-  const prev = React.useRef(record);
+  const [page, setPage] = useState<number>(0);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(1);
+
   const [rows, setRows] = React.useState<IGetRecord[]>([]);
+
+  let record = bookingViewModel({ offset: page, limit: rowsPerPage, setRows });
+  let prev = React.useRef(record);
 
   useEffect(() => {
     setRows(record);
   }, [prev.current !== record]);
 
-  // console.log("==> ", record);
+  let emptyRows =
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
-  if (rows.length === 0) {
-    return (
-      <Typography variant="h5" component="span" sx={{ fontWeight: "bold" }}>
-        No Record
-      </Typography>
-    );
-  }
+  const handleChangePage = (
+    event: React.MouseEvent<HTMLButtonElement> | null,
+    newPage: number
+  ) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
 
   return (
     <>
@@ -106,7 +120,33 @@ export default function TableRecord() {
                   </TableCell>
                 </TableRow>
               ))}
+              {rows.length === 0 && (
+                <TableRow style={{ height: 53 * emptyRows }}>
+                  <TableCell colSpan={6} />
+                </TableRow>
+              )}
             </TableBody>
+
+            <TableFooter>
+              <TableRow>
+                <TablePagination
+                  rowsPerPageOptions={[1, 2, 3, { label: "All", value: -1 }]}
+                  colSpan={3}
+                  count={2} // total row in database (Mock)
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  SelectProps={{
+                    inputProps: {
+                      "aria-label": "rows per page",
+                    },
+                    native: true,
+                  }}
+                  onPageChange={handleChangePage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                  ActionsComponent={TablePaginationActions}
+                />
+              </TableRow>
+            </TableFooter>
           </Table>
         </TableContainer>
       </Paper>

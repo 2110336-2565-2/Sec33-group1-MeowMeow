@@ -2,6 +2,12 @@ import apiClient from "@/utils/apiClient";
 import React, { useEffect, useState } from "react";
 import { BookingStatus } from "../../../../../../../packages/database/src";
 
+export interface IBookingProps {
+  offset: number;
+  limit: number;
+  setRows: React.Dispatch<React.SetStateAction<IGetRecord[]>>;
+}
+
 export interface IGetRecord {
   id: number;
   startDate: string;
@@ -10,21 +16,27 @@ export interface IGetRecord {
   postId: number;
 }
 
-export default function bookingViewModel() {
+export default function bookingViewModel({
+  offset,
+  limit,
+  setRows,
+}: IBookingProps) {
   const [travellerRecord, setTravellerRecord] = useState<IGetRecord[]>([]);
-  let postIDs: number[] = [];
 
   async function getRecordData() {
     let result: IGetRecord[] = [];
     let message = "Loading.. ";
     await apiClient
-      .get<IGetRecord[]>("/bookings/self")
+      .get<IGetRecord[]>("/bookings/self", {
+        params: { offset: offset, limit: limit },
+      })
       .then((res) => {
         // console.log("Response Record: ", res);
         result = res.data;
         setTravellerRecord(result);
         message = "Success";
-        postIDs = result.map((item) => item.postId);
+
+        setRows(result);
       })
       .catch((err) => {
         console.log("Error: ", err);
@@ -33,33 +45,15 @@ export default function bookingViewModel() {
     return message;
   }
 
-  // async function getPostData(postID: number) {
-  //   let result: IPost = {} as IPost;
-  //   let message = "Loading.. ";
-  //   await apiClient
-  //     .get<IPost>("/posts/"+postID)
-  //     .then((res) => {
-  //       console.log("Response Post: ", res);
-  //       result = res.data;
-  //       setPost(result);
-  //       message = "Success";
-  //     })
-  //     .catch((err) => {
-  //       console.log("Error: ", err);
-  //     });
-
-  //   return message;
-  // }
-
   useEffect(() => {
     const p = new Promise<string>((resolve, reject) => {
       const message = getRecordData();
       resolve(message);
     });
     p.then(() => {
-      // console.log("Post THEN: ", post);
+      // console.log("travellerRecord", travellerRecord);
     });
-  }, []);
+  }, [offset, limit]);
 
   return travellerRecord;
 }

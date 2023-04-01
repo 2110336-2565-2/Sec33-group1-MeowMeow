@@ -25,7 +25,6 @@ import {
   AccountMetadata,
   CancelBookingByTravellerRequest,
   CancelBookingByTravellerResponse,
-  CancelBookingResponse,
   CreateBookingRequest,
   CreateBookingResponse,
   GetBookingsByGuideIdRequest,

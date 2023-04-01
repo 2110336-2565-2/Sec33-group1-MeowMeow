@@ -10,7 +10,6 @@ import {
   CancelBookingResponse,
   CreateBookingRequest,
   CreateBookingResponse,
-  CancelBookingResponse,
   GetBookingsByGuideIdRequest,
   GetBookingsByGuideIdResponse,
   GetBookingsByUserIdRequest,
@@ -25,7 +24,6 @@ import {
 import { BookingsRepository } from './bookings.repository';
 
 import { BookingStatus } from 'database';
-
 
 export interface IBookingsService {
   acceptBookingByGuide(

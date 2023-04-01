@@ -19,7 +19,7 @@ const StateLists = () => {
       return false;
     }
     return !!user.roles.includes("GUIDE");
-  }, []);
+  }, [user]);
   const router = useRouter();
 
   return (

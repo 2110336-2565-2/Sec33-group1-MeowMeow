@@ -28,13 +28,13 @@ const DashBoard = ({ children, roleAllowed = ["USER"] }: IDashBoardProps) => {
         justifyContent="start"
         alignItems="start"
         spacing={4}
-        paddingTop="48px"
+        padding="48px 0px"
       >
         <Stack
           direction="column"
           spacing={3}
           sx={{
-            border: "2px solid blue",
+            border: "2px solid #F0F2F4",
             minWidth: "300px",
             paddingX: "16px",
             paddingY: "24px",

@@ -5,7 +5,9 @@ import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
 import {
   Grid,
+  styled,
   TableCell,
+  tableCellClasses,
   TableHead,
   TableRow,
   Typography,
@@ -15,6 +17,16 @@ import bookingViewModel, { IGetRecord } from "./viewModel/booking";
 import { useEffect } from "react";
 import StatusDialog from "../dialogStatus";
 import PostDialog from "./dialogPost";
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
 
 export default function TableRecord() {
   const record = bookingViewModel();
@@ -57,11 +69,11 @@ export default function TableRecord() {
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell align="center"> Record ID </TableCell>
-                <TableCell align="center">Start Date</TableCell>
-                <TableCell align="center">End Date)</TableCell>
-                <TableCell align="center">Post</TableCell>
-                <TableCell align="center">Record Type</TableCell>
+                <StyledTableCell align="center"> Record ID </StyledTableCell>
+                <StyledTableCell align="center">Start Date</StyledTableCell>
+                <StyledTableCell align="center">End Date)</StyledTableCell>
+                <StyledTableCell align="center">Post</StyledTableCell>
+                <StyledTableCell align="center">Record Type</StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>

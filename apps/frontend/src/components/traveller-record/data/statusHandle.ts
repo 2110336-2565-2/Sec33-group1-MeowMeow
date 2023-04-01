@@ -29,13 +29,22 @@ export const subButtonName = {
 export let buttonDisplayNames = new Map<string, string>();
 buttonDisplayNames.set(BookingStatus.FINISHED, "Finish");
 buttonDisplayNames.set(BookingStatus.TRAVELING, "Traveling");
-buttonDisplayNames.set(BookingStatus.WAITING_FOR_TRAVELING, "Waiting");
-buttonDisplayNames.set(BookingStatus.WAITING_FOR_PAYMENT, "Waiting");
-buttonDisplayNames.set(BookingStatus.GUIDE_CANCELLED, "Cancelled");
-buttonDisplayNames.set(BookingStatus.USER_CANCELLED, "Cancelled");
+buttonDisplayNames.set(
+  BookingStatus.WAITING_FOR_TRAVELING,
+  "Waiting For Traveling"
+);
+buttonDisplayNames.set(
+  BookingStatus.WAITING_FOR_PAYMENT,
+  "Waiting For Payment"
+);
+buttonDisplayNames.set(BookingStatus.GUIDE_CANCELLED, "Cancelled By Guide");
+buttonDisplayNames.set(BookingStatus.USER_CANCELLED, "Cancelled By User");
 // buttonDisplayNames.set(BookingStatus.WAITING_FOR_REFUND_USER, "Waiting");      // Update
 // buttonDisplayNames.set(BookingStatus.WAITING_FOR_REFUND_GUIDE, "Waiting");
-buttonDisplayNames.set(BookingStatus.WAITING_FOR_GUIDE_CONFIRMATION, "Waiting");
+buttonDisplayNames.set(
+  BookingStatus.WAITING_FOR_GUIDE_CONFIRMATION,
+  "Waiting For Confirmation"
+);
 
 export let buttonMapStatus = new Map<string, string[]>();
 buttonMapStatus.set(BookingStatus.WAITING_FOR_GUIDE_CONFIRMATION, [

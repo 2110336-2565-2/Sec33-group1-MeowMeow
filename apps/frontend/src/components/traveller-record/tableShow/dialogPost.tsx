@@ -59,7 +59,7 @@ export default function PostDialog({ postId }: IStatusPost) {
         size="small"
         sx={{
           fontSize: { xs: 10, sm: 12, md: 16 },
-          backgroundColor: theme.palette.primary.main,
+          backgroundColor: "#faefcd",
         }}
         fullWidth
         onClick={handleClickOpen("paper")}

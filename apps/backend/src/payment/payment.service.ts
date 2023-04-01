@@ -82,6 +82,16 @@ export class PaymentService {
       }
     });
 
+    const transactions = await this.paymentRepository.getTransactionByBookingId(
+      data.bookingId,
+    );
+
+    transactions.forEach((transaction) => {
+      if (transaction.transactionType === TransactionType.CHARGES) {
+        throw new InternalServerErrorException('already paid');
+      }
+    });
+
     const body = qs.stringify({
       amount: Math.ceil(Decimal.mul(booking.post.fee, 100).toNumber()),
       currency: 'thb',

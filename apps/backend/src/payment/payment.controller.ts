@@ -32,4 +32,13 @@ export class PaymentController {
     }
     return this.paymentService.getAllTransaction();
   }
+
+  @Get()
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'successfully pay the booking',
+  })
+  async get() {
+    return this.paymentService.refund(4, 12);
+  }
 }

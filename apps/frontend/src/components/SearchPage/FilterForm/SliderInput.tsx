@@ -19,6 +19,7 @@ export default function SliderInput(props: SliderInputProps) {
         value={value}
         min={0}
         max={max}
+        step={1000}
         onChange={onChange}
         valueLabelDisplay="auto"
       />

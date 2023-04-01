@@ -10,6 +10,7 @@ export interface IFilterMethod {
   handleChangeRating: (e: Event, newValue: number | number[]) => void;
   handleChangeStartDate: (newValue: Date | null) => void;
   handleChangeEndDate: (newValue: Date | null) => void;
+  reset: () => void;
 }
 
 const useFilterForm = () => {
@@ -26,10 +27,17 @@ const useFilterForm = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     e.stopPropagation();
-
-    console.log("Submit");
-
     setOptions(tempOptions); // update global options in search module
+  };
+
+  const reset = () => {
+    setTempOptions({
+      location: "",
+      price: [0, 1000],
+      rating: [0, 5],
+      startDate: null,
+      endDate: null,
+    });
   };
 
   const handleChangeLocation = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -76,6 +84,7 @@ const useFilterForm = () => {
     handleChangeRating,
     handleChangeStartDate,
     handleChangeEndDate,
+    reset,
   };
 };
 

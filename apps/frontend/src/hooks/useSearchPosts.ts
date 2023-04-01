@@ -1,10 +1,11 @@
-import { useCallback } from "react";
+import { useCallback, useContext } from "react";
 import { useEffect } from "react";
 import { IFilterOptions, IPost } from "@/components/SearchPage/types";
 import { useState } from "react";
 import { FeedStatus } from "./types/FeedStatus";
 import useFilterForm from "./useFilterForm";
 import apiClient from "@/utils/apiClient";
+import { NotificationContext } from "@/context/NotificationContext";
 
 interface IFetchPosts {
   pageNo: number;
@@ -15,10 +16,10 @@ interface IFetchPosts {
 export const templatePost: Partial<IPost> = {
   author: {
     id: 1,
-    name: "John Doe",
+    name: "Placeholder Name",
     profile: "/images/searchPage/profile.jpeg", // webp is better
   },
-  image: "/landing/travel1.png",
+  image: "/landing/travel1.png", // post
 };
 const POST_PER_PAGE = 5;
 
@@ -35,7 +36,6 @@ const fetchPosts = async (props: IFetchPosts): Promise<IPost[]> => {
       text: search,
     },
   });
-
   const fetchPost = resp.data;
 
   const editedPosts = Promise.all(
@@ -52,7 +52,6 @@ const fetchPosts = async (props: IFetchPosts): Promise<IPost[]> => {
       };
     })
   );
-
   return editedPosts;
 };
 
@@ -62,6 +61,8 @@ export const useSearchPosts = () => {
   const [feedStatus, setFeedStatus] = useState<FeedStatus>(FeedStatus.INITIAL);
   const [search, setSearch] = useState<string>("");
   const [tempSearch, setTempSearch] = useState<string>(""); // temp search for debouncing
+
+  const { addNotification } = useContext(NotificationContext);
 
   const filterStuff = useFilterForm(); // init filter module
 
@@ -78,6 +79,7 @@ export const useSearchPosts = () => {
           setFeedStatus(FeedStatus.SHOWING);
         })
         .catch((err) => {
+          addNotification("Error occurs while fetching", "error");
           console.log("error fetching : ", err.stack);
         });
     }

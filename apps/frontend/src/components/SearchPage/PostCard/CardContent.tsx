@@ -1,5 +1,11 @@
-import { BookRounded, LocationOn } from "@mui/icons-material";
-import { Box, Button, Stack, Typography } from "@mui/material";
+import {
+  BookRounded,
+  Info,
+  LocationOn,
+  MonetizationOn,
+  Person,
+} from "@mui/icons-material";
+import { Box, Button, Chip, Stack, Typography } from "@mui/material";
 import { useState } from "react";
 import BookingModal from "./BookingModal";
 
@@ -12,9 +18,10 @@ interface ICardContent {
   authorId: number;
   postId: number;
   travellerId: number;
+  tags: string[];
 }
 
-export default function CardContent(props: ICardContent) {
+const CardContent = (props: ICardContent) => {
   const {
     title,
     content,
@@ -24,6 +31,7 @@ export default function CardContent(props: ICardContent) {
     travellerId,
     authorId,
     postId,
+    tags,
   } = props;
 
   const [isOpen, setIsOpen] = useState(false);
@@ -37,24 +45,17 @@ export default function CardContent(props: ICardContent) {
   return (
     <>
       <Box p={2} flexGrow={1}>
-        <Box mb={2}>
-          <Typography variant="h6">{title}</Typography>
-          <Typography variant="subtitle2">
-            <LocationOn fontSize="inherit" />
-            {locations.join(", ")}
-          </Typography>
-        </Box>
-        <Typography variant="body2">
-          {" "}
-          Max Participant :{maxParticipant} people
-        </Typography>
-        <Typography variant="body2">Fee : {fee} ฿</Typography>
-        <Typography variant="body2">{content}</Typography>
+        <PostHeader title={title} locations={locations} tags={tags} />
+        <PostContent
+          content={content}
+          fee={fee}
+          maxParticipant={maxParticipant}
+        />
         <Button
           variant="contained"
           onClick={onOpen}
           sx={{
-            mt: 1,
+            mt: 2,
             color: "white",
           }}
         >
@@ -73,4 +74,65 @@ export default function CardContent(props: ICardContent) {
       />
     </>
   );
+};
+
+export default CardContent;
+
+// component of Card
+
+interface IPostContent {
+  content: string;
+  fee: number;
+  maxParticipant: number;
 }
+
+const PostContent = (props: IPostContent) => {
+  const { content, fee, maxParticipant } = props;
+  return (
+    <Stack gap={1}>
+      <Stack direction={"row"} alignItems={"center"}>
+        <Person fontSize="small" sx={{ mr: 1 }} />
+        <Typography variant="subtitle2">
+          Max Participant : {maxParticipant} person
+        </Typography>
+      </Stack>
+      <Stack direction={"row"} alignItems={"center"}>
+        <MonetizationOn fontSize="small" sx={{ mr: 1 }} />
+        <Typography variant="subtitle2">Fee : {fee} ฿</Typography>
+      </Stack>
+      <Stack direction={"row"} alignItems={"center"}>
+        <Info fontSize="small" sx={{ mr: 1 }} />
+        <Typography variant="subtitle2">Detail : </Typography>
+      </Stack>
+      <Typography variant="body2" noWrap>
+        {content}
+      </Typography>
+    </Stack>
+  );
+};
+
+interface IPostHeader {
+  title: string;
+  locations: string[];
+  tags: string[];
+}
+
+const PostHeader = (props: IPostHeader) => {
+  const { title, locations, tags } = props;
+  return (
+    <Box mb={2}>
+      <Stack direction={"row"} alignItems={"center"} gap={1}>
+        <Typography variant="h6">{title}</Typography>
+        <Typography variant="subtitle2">
+          <LocationOn fontSize="inherit" sx={{ mr: 0.5 }} />
+          {locations.join(", ")}
+        </Typography>
+      </Stack>
+      <Stack gap={1} mt={1} direction={"row"}>
+        {tags.map((tag, index) => (
+          <Chip key={index} label={tag} />
+        ))}
+      </Stack>
+    </Box>
+  );
+};

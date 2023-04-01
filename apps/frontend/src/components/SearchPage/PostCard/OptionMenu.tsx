@@ -1,9 +1,9 @@
-import apiClient from "@/utils/apiClient";
-import { Delete, Edit, MoreHoriz, Report } from "@mui/icons-material";
+import { Delete, MoreHoriz, Report } from "@mui/icons-material";
 import { Box, IconButton, Menu, MenuItem, Stack } from "@mui/material";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { deletePost } from "./OptionsMethods";
 import Router from "next/router";
+import { NotificationContext } from "@/context/NotificationContext";
 
 interface IOptionMenu {
   post_id: number;
@@ -14,6 +14,8 @@ const OptionMenu = (props: IOptionMenu) => {
   const { isOwner, post_id } = props;
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const { addNotification } = useContext(NotificationContext);
+
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -25,10 +27,13 @@ const OptionMenu = (props: IOptionMenu) => {
   const handleDelete = () => {
     deletePost(post_id)
       .then(() => {
-        handleClose();
-        Router.reload();
+        addNotification("Post deleted successfully", "success");
+        setTimeout(() => {
+          Router.reload();
+        }, 2000);
       })
       .catch((err) => {
+        addNotification("Cannot delete post", "error");
         console.log(err);
       });
   };
@@ -66,10 +71,10 @@ const OptionMenu = (props: IOptionMenu) => {
         </MenuItem>
         {isOwner && (
           <Box>
-            <MenuItem onClick={handleClose} sx={{ gap: 1 }}>
+            {/* <MenuItem onClick={handleClose} sx={{ gap: 1 }}>
               <Edit />
               Edit
-            </MenuItem>
+            </MenuItem> */}
             <MenuItem
               onClick={handleDelete}
               sx={{ gap: 1, color: "error.main" }}

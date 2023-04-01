@@ -6,7 +6,7 @@ interface FilterFormProps {
   filterStuff: IFilterMethod;
 }
 
-export default function FilterForm({ filterStuff }: FilterFormProps) {
+const FilterForm = ({ filterStuff }: FilterFormProps) => {
   const {
     tempOptions,
     handleChangeLocation,
@@ -71,4 +71,6 @@ export default function FilterForm({ filterStuff }: FilterFormProps) {
       </Stack>
     </Container>
   );
-}
+};
+
+export default FilterForm;

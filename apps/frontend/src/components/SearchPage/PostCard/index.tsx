@@ -3,10 +3,10 @@ import Image from "next/image";
 import { IPost } from "../types";
 import CardContent from "./CardContent";
 import CardHeader from "./CardHeader";
-import { useContext, useEffect, useMemo } from "react";
+import { useContext } from "react";
 import { AuthContext } from "@/context/AuthContext";
 
-export default function PostCard(props: IPost) {
+const PostCard = (props: IPost) => {
   const { title, author, image, id } = props;
 
   const { user } = useContext(AuthContext);
@@ -66,4 +66,6 @@ export default function PostCard(props: IPost) {
       </Grid>
     </Grid>
   );
-}
+};
+
+export default PostCard;

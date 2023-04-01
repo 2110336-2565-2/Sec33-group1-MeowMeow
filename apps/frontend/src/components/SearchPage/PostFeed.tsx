@@ -6,8 +6,7 @@ import { IPost } from "./types";
 interface IPostFeedProps {
   feed: IPost[];
 }
-
-export default function PostFeed({ feed }: IPostFeedProps) {
+const PostFeed = ({ feed }: IPostFeedProps) => {
   return (
     <Box margin={2} display="flex" flexDirection="column" gap={2}>
       {feed.length !== 0 ? (
@@ -27,4 +26,5 @@ export default function PostFeed({ feed }: IPostFeedProps) {
       )}
     </Box>
   );
-}
+};
+export default PostFeed;

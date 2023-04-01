@@ -8,7 +8,7 @@ interface SliderInputProps {
   onChange: (e: Event, newValue: number | number[]) => void;
 }
 
-export default function SliderInput(props: SliderInputProps) {
+const SliderInput = (props: SliderInputProps) => {
   const { name, displayText, value, onChange, max } = props;
   return (
     <Stack gap={2}>
@@ -25,4 +25,5 @@ export default function SliderInput(props: SliderInputProps) {
       />
     </Stack>
   );
-}
+};
+export default SliderInput;

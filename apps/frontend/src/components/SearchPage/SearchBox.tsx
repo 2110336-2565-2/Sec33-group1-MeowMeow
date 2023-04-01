@@ -11,7 +11,7 @@ interface ISearchBoxProps {
   handleSearch: (e: React.FormEvent<HTMLFormElement>) => void;
 }
 
-export default function SearchBox(props: ISearchBoxProps) {
+const SearchBox = (props: ISearchBoxProps) => {
   const { tempSearch, setTempSearch, handleSearch, filterStuff } = props;
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -49,4 +49,6 @@ export default function SearchBox(props: ISearchBoxProps) {
       />
     </Stack>
   );
-}
+};
+
+export default SearchBox;

@@ -11,6 +11,7 @@ export interface IPost {
   image: string;
   locations: string[];
   maxParticipant: number;
+  tags: string[];
 }
 
 export interface IFilterOptions {

@@ -8,7 +8,7 @@ interface ICardHeader {
   isOwner: boolean;
 }
 
-export default function CardHeader(props: ICardHeader) {
+const CardHeader = (props: ICardHeader) => {
   const { profile, name, isOwner, post_id } = props;
 
   return (
@@ -26,4 +26,5 @@ export default function CardHeader(props: ICardHeader) {
       <OptionMenu isOwner={isOwner} post_id={post_id} />
     </>
   );
-}
+};
+export default CardHeader;

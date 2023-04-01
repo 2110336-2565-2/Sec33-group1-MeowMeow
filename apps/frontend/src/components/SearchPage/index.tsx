@@ -7,7 +7,7 @@ import SearchBox from "./SearchBox";
 import useCustomSnackbar from "@/hooks/useCustomSnackbar";
 import AppSnackbar from "../common/AppSnackbar";
 
-export default function SearchPage() {
+const SearchPage = () => {
   const {
     tempSearch,
     pageNo,
@@ -68,4 +68,5 @@ export default function SearchPage() {
       />
     </>
   );
-}
+};
+export default SearchPage;

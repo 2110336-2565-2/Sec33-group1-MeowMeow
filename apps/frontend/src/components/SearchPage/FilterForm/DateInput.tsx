@@ -11,7 +11,7 @@ interface DateInputProps {
   handleChangeEndDate: (newValue: Date | null) => void;
 }
 
-export default function DateInput(props: DateInputProps) {
+const DateInput = (props: DateInputProps) => {
   const {
     displayText,
     endDate,
@@ -41,4 +41,6 @@ export default function DateInput(props: DateInputProps) {
       </Stack>
     </LocalizationProvider>
   );
-}
+};
+
+export default DateInput;

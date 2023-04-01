@@ -212,10 +212,12 @@ export class GuidesController {
     @Body() guideRegisterData: GuideRegisterRequest,
   ) {
     try {
+      console.log(certificate.originalname.split('.'));
       const account: AccountMetadata = req.account;
       return await this.guidesService.registerUserForGuide(account.userId, {
         ...guideRegisterData,
         certificate: certificate.buffer,
+        certificateType: certificate.originalname.split('.').slice(-1)[0],
       });
     } catch (e) {
       if (e instanceof RecordAlreadyExist) {

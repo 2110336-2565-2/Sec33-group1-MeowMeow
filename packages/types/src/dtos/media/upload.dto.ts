@@ -6,6 +6,8 @@ export class UploadRequest {
     format: "binary",
   })
   file: Buffer;
+
+  fileType: string;
 }
 
 export class UploadResponse {
@@ -17,7 +19,7 @@ export class UploadResponse {
 
   @ApiProperty({
     type: () => String,
-    example: "9a5bb8cc-2af9-4057-8153-eaa8d4a2b0d1",
+    example: "9a5bb8cc-2af9-4057-8153-eaa8d4a2b0d1.png",
   })
   id: string;
 }

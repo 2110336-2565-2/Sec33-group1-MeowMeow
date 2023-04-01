@@ -66,6 +66,7 @@ export class GuidesServiceImpl {
   ): Promise<GuideRegisterResponse> {
     const uploadResponse = await this.mediaService.upload({
       file: guideRegisterData.certificate,
+      fileType: guideRegisterData.certificateType,
     });
 
     const paymentId = await this.paymentService.createRecipient({

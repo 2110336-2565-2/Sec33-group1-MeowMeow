@@ -227,16 +227,11 @@ export class BookingsService implements IBookingsService {
         };
       }
 
-      // TODO call payment api
-      try {
-        await this.paymentsService.charge({
-          userId: account.userId,
-          bookingId: bookingId,
-          token: token,
-        });
-      } catch (e) {
-        throw e;
-      }
+      await this.paymentsService.charge({
+        userId: account.userId,
+        bookingId: bookingId,
+        token: token,
+      });
 
       const paidBooking = await this.bookingsRepo.updateBookingStatus(
         bookingId,
@@ -293,13 +288,7 @@ export class BookingsService implements IBookingsService {
         };
       }
 
-      // call refund payment
-      console.log('refund2');
-      try {
-        await this.paymentsService.refund(bookingId);
-      } catch (e) {
-        throw e;
-      }
+      await this.paymentsService.refund(bookingId);
 
       const refundedBooking = await this.bookingsRepo.updateBookingStatus(
         bookingId,

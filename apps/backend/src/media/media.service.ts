@@ -22,17 +22,16 @@ export class MediaServiceImpl {
 
   async upload(req: UploadRequest): Promise<UploadResponse> {
     const fileId = crypto.randomUUID();
-    const path = fileId;
+    const path = fileId + '.' + req.fileType;
     await this.mediaStorage.write(path, req.file);
     return {
       message: 'success',
-      id: fileId,
+      id: path,
     };
   }
 
   async download(req: DownloadRequest): Promise<DownloadResponse> {
     const path = req.id;
-    ``;
     const file = await this.mediaStorage.read(path);
     return {
       message: 'success',

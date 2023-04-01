@@ -28,6 +28,7 @@ export class GuideRegisterRequest {
     description: "guide certificate image",
   })
   certificate: Buffer;
+  certificateType: string;
 
   @ApiProperty({
     type: () => String,

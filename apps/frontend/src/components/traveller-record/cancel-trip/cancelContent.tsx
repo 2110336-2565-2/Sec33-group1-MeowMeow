@@ -10,7 +10,9 @@ import {
 import React from "react";
 
 export default function CancelContent() {
-  const { isLoading, onSubmit } = useCancelTrip();
+  //const { isLoading, onSubmit } = useCancelTrip();
+  const isLoading = false;
+  const onSubmit = () => {};
 
   if (isLoading) {
     return (

@@ -22,6 +22,7 @@ import {
   UnprocessableEntity,
 } from './bookings.common';
 import { BookingsRepository } from './bookings.repository';
+import { InvalidDateFormat } from './bookings.common';
 
 export interface IBookingsService {
   acceptBookingByGuide(

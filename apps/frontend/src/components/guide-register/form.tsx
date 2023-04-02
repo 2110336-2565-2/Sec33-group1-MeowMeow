@@ -1,3 +1,4 @@
+import { NAME_BRAND_BANK_ACCOUNT } from "@/constants/RegisterGuidePage";
 import useCustomSnackbar from "@/hooks/useCustomSnackbar";
 import useRegisterGuideForm from "@/hooks/useRegisterGuideForm";
 import {
@@ -7,6 +8,11 @@ import {
   Snackbar,
   Alert,
   Typography,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
 } from "@mui/material";
 import React, { ChangeEventHandler, useState } from "react";
 import ChipsArray from "./chipArray";
@@ -27,6 +33,13 @@ export default function GuideRegisterForm() {
     const fileUploaded = event.target.files[0];
     setImage(fileUploaded);
   };
+
+  const [brandBank, setbrandBank] = React.useState("");
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setbrandBank(event.target.value as string);
+  };
+
   const [location, setLocation] = React.useState<readonly ChipData[]>([
     { key: 0, label: "Bangkok" },
     { key: 1, label: "Thailand" },
@@ -40,6 +53,7 @@ export default function GuideRegisterForm() {
     certificate: image,
     location: location.map((item) => item.label),
     tourStyle: tourStyle.map((item) => item.label),
+    brandBankAccount: brandBank,
   });
 
   if (isLoading) {
@@ -119,11 +133,50 @@ export default function GuideRegisterForm() {
       </Stack>
 
       <TextField
-        id="paymentId"
-        name="paymentId"
-        label="Bank Account"
+        id="taxId"
+        name="taxId"
+        label="Tax ID"
         variant="outlined"
         type="text"
+      />
+
+      <FormControl fullWidth>
+        <InputLabel>Brand Bank Account *</InputLabel>
+        <Select
+          labelId="brandBankAccount-label"
+          id="brandBankAccount"
+          label="Brand Bank Accountge"
+          value={brandBank}
+          onChange={handleChange}
+          required
+        >
+          {NAME_BRAND_BANK_ACCOUNT.map((item, index) => {
+            return (
+              <MenuItem value={item[1]} key={index}>
+                {" "}
+                {item[0]}{" "}
+              </MenuItem>
+            );
+          })}
+        </Select>
+      </FormControl>
+
+      <TextField
+        id="numberBankAccount"
+        name="numberBankAccount"
+        label="number of Bank Account"
+        variant="outlined"
+        type="text"
+        required
+      />
+
+      <TextField
+        id="nameBankAccount"
+        name="nameBankAccount"
+        label="name of Bank Account"
+        variant="outlined"
+        type="text"
+        required
       />
 
       <Button type="submit" variant="contained">

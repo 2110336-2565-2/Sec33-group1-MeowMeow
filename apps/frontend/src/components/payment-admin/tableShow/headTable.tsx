@@ -6,56 +6,51 @@ import {
   styled,
   tableCellClasses,
 } from "@mui/material";
-import { ITravellerData, Order } from "../data/recordType";
+import { Order } from "../data/sorting";
+import { IGetRecord } from "./viewModel";
 
 interface HeadCell {
-  id: keyof ITravellerData;
+  id: keyof IGetRecord;
   label: string;
   numeric: boolean;
 }
 
 const headCells: readonly HeadCell[] = [
   {
-    id: "name",
+    id: "transactionId",
+    label: "Transaction ID",
     numeric: false,
-    label: "Trip Name",
   },
   {
-    id: "location",
-    numeric: false,
-    label: "Location",
-  },
-  {
-    id: "startDate",
-    numeric: false,
-    label: "Start Date",
-  },
-  {
-    id: "endDate",
-    numeric: false,
-    label: "End Date",
-  },
-  {
-    id: "participant",
+    id: "userId",
+    label: "User ID",
     numeric: true,
-    label: "Participant",
   },
   {
-    id: "price",
-    numeric: true,
-    label: "Price",
-  },
-  {
-    id: "status",
+    id: "username",
+    label: "Username",
     numeric: false,
-    label: "Status",
+  },
+  {
+    id: "bookingId",
+    label: "Booking ID",
+    numeric: true,
+  },
+  {
+    id: "postId",
+    label: "Post ID",
+    numeric: true,
+  },
+  {
+    id: "transactionType",
+    label: "Transaction Type",
+    numeric: false,
   },
 ];
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.primary.main,
-    color: theme.palette.common.white,
+    color: theme.palette.common.black,
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
@@ -65,7 +60,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 interface EnhancedTableProps {
   onRequestSort: (
     event: React.MouseEvent<unknown>,
-    property: keyof ITravellerData
+    property: keyof IGetRecord
   ) => void;
   order: Order;
   orderBy: string;
@@ -74,14 +69,13 @@ interface EnhancedTableProps {
 export default function TableHeader(props: EnhancedTableProps) {
   const { order, orderBy, onRequestSort } = props;
   const createSortHandler =
-    (property: keyof ITravellerData) => (event: React.MouseEvent<unknown>) => {
+    (property: keyof IGetRecord) => (event: React.MouseEvent<unknown>) => {
       onRequestSort(event, property);
     };
 
   return (
     <TableHead>
       <TableRow>
-        <StyledTableCell align="center"></StyledTableCell>
         {headCells.map((headCell) => (
           <StyledTableCell
             key={headCell.id}

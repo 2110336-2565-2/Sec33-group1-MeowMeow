@@ -16,12 +16,14 @@ let theme = createTheme({
   palette: {
     primary: {
       main: "#F46D21",
+      light: "#f5d0ab",
     },
     secondary: {
       main: "#1976D2",
+      light: "#94d8ff",
     },
     error: {
-      main: "#ff8789",
+      main: "#ff8080",
     },
     grey: {
       100: "#F3F4F6",
@@ -35,7 +37,7 @@ let theme = createTheme({
       main: "#b0fff3",
     },
     success: {
-      main: "#05ff48",
+      main: "#9dd49d",
     },
     warning: {
       main: "#ffec8c",

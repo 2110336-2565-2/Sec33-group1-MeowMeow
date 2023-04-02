@@ -8,19 +8,14 @@ interface IInputGuideRegister {
   location: string[];
   tourStyle: string[];
   certificate: File | undefined;
-}
-
-interface IUseRegisterGuideForm {
-  locations: string[];
-  tourStyles: string[];
-  certificate: BinaryData;
-  paymentId: string;
+  brandBankAccount: string;
 }
 
 const useRegisterGuideForm = ({
   location,
   tourStyle,
   certificate,
+  brandBankAccount,
 }: IInputGuideRegister) => {
   const { addNotification } = useContext(NotificationContext);
   const [isLoading, setLoading] = useState<boolean>(false);
@@ -38,30 +33,16 @@ const useRegisterGuideForm = ({
       formBody["location"] = location;
       formBody["tourStyle"] = tourStyle;
       formBody["certificate"] = certificate;
+      formBody["brandBankAccount"] = brandBankAccount;
 
       const hasMissingValue = !!REGISTER_GUIDE_INPUT_IDs.find(
         (inputId: string) => {
-          return !formBody[inputId];
+          return !formBody[inputId] && !(inputId === "taxId");
         }
       );
       if (hasMissingValue || location.length === 0 || tourStyle.length === 0) {
         addNotification(
           "You must fill in every input field before submit the form.",
-          "error"
-        );
-        return;
-      }
-
-      if (formBody["paymentId"].length !== 10) {
-        addNotification("Bank account must be 10 digits.", "error");
-        return;
-      }
-
-      const regX = /^[0-9]{10}$/;
-      if (!regX.test(formBody["paymentId"])) {
-        console.log(formBody["paymentId"]);
-        addNotification(
-          "Bank account must be 10 digits and consists of 0-9.",
           "error"
         );
         return;
@@ -74,7 +55,12 @@ const useRegisterGuideForm = ({
       formData.append("certificate", certificate!);
       formData.append("locations", formBody["location"]);
       formData.append("tourStyles", formBody["tourStyle"]);
-      formData.append("paymentId", formBody["paymentId"]);
+      formData.append("taxId", formBody["taxId"]);
+      formData.append("brandBankAccount", formBody["brandBankAccount"]);
+      formData.append("numberBankAccount", formBody["numberBankAccount"]);
+      formData.append("nameBankAccount", formBody["nameBankAccount"]);
+
+      console.log("formData: ", formData);
 
       try {
         await apiClient.post("/guides/register", formData, {

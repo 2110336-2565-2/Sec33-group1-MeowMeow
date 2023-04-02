@@ -8,6 +8,7 @@ const nextConfig = {
   },
   env: {
     backendBaseURL: process.env.BACKEND_BASE_URL,
+    BACKEND_OMISE_PUBLIC_KEY: process.env.BACKEND_OMISE_PUBLIC_KEY,
   },
 };
 

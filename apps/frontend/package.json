@@ -32,5 +32,8 @@
     "react-dom": "18.2.0",
     "types": "workspace:*",
     "typescript": "4.9.4"
+  },
+  "devDependencies": {
+    "omise-js-typed": "2.5.6-revision.3"
   }
 }

@@ -6,14 +6,16 @@ import ReviewHead from "./ReviewHead";
 import Statistics from "./Statistics";
 import Tags from "./Tags";
 interface IReview {
-  rating: number;
-  timestamp: string;
-  reviewer: string;
-  detail: string;
+  guideId: number;
+  reviewId: number;
+  reviewerId: string;
+  score: number;
+  publishDate: string;
+  text: string;
 }
 interface IContentProps {
   name: string;
-  desc: string;
+  certificateId: string;
   imageurl: string;
   tagsTourStyle: string[];
   tagsLocation: string[];
@@ -21,10 +23,12 @@ interface IContentProps {
   total: number;
   reviewCount: number[];
   reviews: IReview[];
+  averageReviewScore: number;
+  newLimit: () => void;
 }
 export default function Content({
   name,
-  desc,
+  certificateId,
   imageurl,
   tagsTourStyle,
   tagsLocation,
@@ -32,6 +36,8 @@ export default function Content({
   total,
   reviewCount,
   reviews,
+  averageReviewScore,
+  newLimit,
 }: IContentProps) {
   return (
     <Grid
@@ -39,9 +45,14 @@ export default function Content({
       direction="column"
       width={{ xs: "85%", sm: "70%" }}
       rowSpacing={1}
+      paddingTop={{ xs: "2vh", md: "3vh" }}
     >
       <Grid item paddingX={{ xs: 0, md: "5vw" }}>
-        <Profile name={name} imageurl={imageurl} desc={desc} />
+        <Profile
+          name={name}
+          imageurl={imageurl}
+          certificateId={certificateId}
+        />
       </Grid>
       <Grid
         container
@@ -71,20 +82,25 @@ export default function Content({
         paddingX={{ xs: 0, md: "5vw" }}
         paddingBottom={{ xs: "2vh", md: "3.5vh" }}
       >
-        <ReviewHead reviewCount={reviewCount}></ReviewHead>
+        <ReviewHead
+          reviewCount={reviewCount}
+          averageReviewScore={averageReviewScore}
+        ></ReviewHead>
       </Grid>
       <Grid
         item
         justifyContent="center"
         paddingX={{ xs: 0, sm: "3vw", md: "5vw" }}
       >
-        {reviews.map((review) => (
+        {reviews.map((review, index) => (
           <Review
-            rating={review.rating}
-            timestamp={review.timestamp}
-            reviewer={review.reviewer}
-            detail={review.detail}
-            key={review.reviewer}
+            rating={review.score}
+            timestamp={review.publishDate}
+            reviewerId={review.reviewerId}
+            detail={review.text}
+            key={review.reviewId}
+            newLimit={newLimit}
+            isLast={index === reviews.length - 1}
           />
         ))}
       </Grid>

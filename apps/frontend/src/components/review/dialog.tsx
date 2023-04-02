@@ -28,6 +28,7 @@ export default function ReviewDialog() {
       }
     }
   }, [open]);
+
   return (
     <>
       <Button

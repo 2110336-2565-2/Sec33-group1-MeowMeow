@@ -146,8 +146,8 @@ model Booking {
   postId        Int
   userId        Int
 
-  post         Post          @relation(fields: [postId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  user         User          @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  post  Post  @relation(fields: [postId], references: [id])
+  user  User  @relation(fields: [userId], references: [id])
   transactions Transaction[]
 }
 
@@ -165,7 +165,7 @@ model Transaction {
   paymentID       String
   bookingId       Int
   userId          Int
-  transactionType TransactionType @default(CHARGES)
+  transactionType TransactionType
 
   booking Booking @relation(fields: [bookingId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   user    User    @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)

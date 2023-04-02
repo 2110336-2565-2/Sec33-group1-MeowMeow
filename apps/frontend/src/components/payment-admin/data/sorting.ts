@@ -1,4 +1,4 @@
-import { Order } from "./recordType";
+export type Order = "asc" | "desc";
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -22,11 +22,8 @@ export function getComparator<Key extends keyof number | string>(
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-export function stableSort<T>(
-  array: readonly T[],
-  comparator: (a: T, b: T) => number
-) {
-  const stabilizedThis = array.map(
+export function stableSort<T>(array: T[], comparator: (a: T, b: T) => number) {
+  const stabilizedThis = (array as T[]).map(
     (element, index) => [element, index] as [T, number]
   );
   stabilizedThis.sort((a, b) => {

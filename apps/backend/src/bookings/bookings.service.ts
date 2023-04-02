@@ -23,8 +23,6 @@ import {
 } from './bookings.common';
 import { BookingsRepository } from './bookings.repository';
 
-import { BookingStatus } from 'database';
-
 export interface IBookingsService {
   acceptBookingByGuide(
     bookingId: number,

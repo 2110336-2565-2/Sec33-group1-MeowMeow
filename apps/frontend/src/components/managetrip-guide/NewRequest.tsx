@@ -14,15 +14,18 @@ const NewRequest = ({
   return (
     <div>
       <List>
-        {filteredbooking.map((booking, index) => {
-          return (
-            <NewRequestCard
-              key={index}
-              booking={booking}
-              handleConfirm={handleConfirm}
-              handleDecline={handleDecline}
-            />
-          );
+        {requests.map((request) => {
+          if (
+            confirmedRequests.some((confirmed) => confirmed.id === request.id)
+          ) {
+            return null;
+          }
+          if (
+            cancelledRequests.some((cancelled) => cancelled.id === request.id)
+          ) {
+            return null;
+          }
+          return renderRequest(request);
         })}
       </List>
     </div>

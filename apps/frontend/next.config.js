@@ -1,4 +1,4 @@
-require("dotenv").config({ path: "../../.env" });
+require("dotenv-mono").load();
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {

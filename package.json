@@ -43,5 +43,8 @@
     "extends": [
       "@commitlint/config-conventional"
     ]
+  },
+  "dependencies": {
+    "dotenv-mono": "^1.3.10"
   }
 }

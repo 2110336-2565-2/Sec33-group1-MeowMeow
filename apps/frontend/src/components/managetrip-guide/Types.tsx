@@ -1,4 +1,4 @@
-type Request = {
+export type Request = {
   id: number;
   customerName: string;
   tripName: string;
@@ -8,21 +8,32 @@ type Request = {
   numCustomer: number;
   status: number;
 };
-export default Request;
-export interface TabPanelProps {
+export type Booking = {
+  id: number;
+  bookingStatus: string;
+  startDate: string;
+  endDate: string;
+  postId: number;
+};
+export interface IContentProps {
+  bookings: Booking[];
+  update: number;
+  setUpdate: (update: number) => void;
+}
+export interface ITabPanelProps {
   children?: React.ReactNode;
   index: number;
   value: number;
 }
 export interface INewRequestProps {
-  requests: Request[];
-  confirmedRequests: Request[];
-  cancelledRequests: Request[];
-  handleConfirm: (request: Request) => void;
-  handleCancel: (request: Request) => void;
+  bookings: Booking[];
+  handleConfirm: (request: Booking) => void;
+  handleDecline: (request: Booking) => void;
 }
 export interface IAcceptedRequestProps {
-  confirmedRequests: Request[];
-  cancelledRequests: Request[];
-  handleCancel: (request: Request) => void;
+  bookings: Booking[];
+  handleCancel: (request: Booking) => void;
+}
+export interface ICanceledRequestProps {
+  bookings: Booking[];
 }

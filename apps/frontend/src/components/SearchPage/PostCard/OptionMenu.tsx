@@ -1,4 +1,4 @@
-import { Delete, MoreHoriz, Report } from "@mui/icons-material";
+import { Delete, Edit, MoreHoriz, Report } from "@mui/icons-material";
 import { Box, IconButton, Menu, MenuItem, Stack } from "@mui/material";
 import { useContext, useState } from "react";
 import { deletePost } from "./OptionsMethods";
@@ -38,6 +38,10 @@ const OptionMenu = (props: IOptionMenu) => {
       });
   };
 
+  const handleEdit = () => {
+    Router.push(`/guide-post/edit/${post_id}`);
+  };
+
   return (
     <>
       <Stack direction="row" spacing={1}>
@@ -71,10 +75,10 @@ const OptionMenu = (props: IOptionMenu) => {
         </MenuItem>
         {isOwner && (
           <Box>
-            {/* <MenuItem onClick={handleClose} sx={{ gap: 1 }}>
+            <MenuItem onClick={handleEdit} sx={{ gap: 1 }}>
               <Edit />
               Edit
-            </MenuItem> */}
+            </MenuItem>
             <MenuItem
               onClick={handleDelete}
               sx={{ gap: 1, color: "error.main" }}

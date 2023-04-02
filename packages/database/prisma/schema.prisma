@@ -167,6 +167,6 @@ model Transaction {
   userId          Int
   transactionType TransactionType
 
-  booking Booking @ relation(fields: [bookingId], references: [id])
-  user User @ relation(fields: [userId], references: [id])
+  booking Booking @relation(fields: [bookingId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
 }

@@ -36,3 +36,5 @@ postgres
 **/.env
 **/dist
 media-storage
+
+**/packages/database/prisma/migrations

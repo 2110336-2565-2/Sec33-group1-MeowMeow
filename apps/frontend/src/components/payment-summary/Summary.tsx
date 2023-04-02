@@ -1,8 +1,8 @@
 import { Divider, Stack, Typography } from "@mui/material";
-import { Trip } from "./types";
+import { ITrip } from "./types";
 
 interface ISummaryProps {
-  trip: Trip;
+  trip: ITrip;
 }
 
 const Summary = (props: ISummaryProps) => {

@@ -8,21 +8,30 @@ import {
   ChangeEventHandler,
   FormEventHandler,
   useContext,
+  useMemo,
   useState,
 } from "react";
 import StyleTextField from "../LoginPage/StyledTextField";
-import { IProfileData } from "./types/profilePage";
 import useCustomSnackbar from "@/hooks/useCustomSnackbar";
 import AppSnackbar from "../common/AppSnackbar";
+import { IUser } from "@/context/type/authContext";
+import { AuthContext } from "@/context/AuthContext";
+import GuideEditProfile from "./GuideEditProfile";
 
 interface IEditProfileProps {
-  profileData: IProfileData;
+  onEndEdit: () => void;
 }
 
-const EditProfile = ({ profileData }: IEditProfileProps) => {
+const EditProfile = ({ onEndEdit }: IEditProfileProps) => {
+  const { user } = useContext(AuthContext);
+  const isGuide = useMemo(() => {
+    return !!user?.roles?.includes("GUIDE");
+  }, [user]);
+  const { firstName, lastName, username, email, roles } = user || ({} as IUser);
   const [image, setImage] = useState<File | undefined>(undefined);
   const { addNotification } = useContext(NotificationContext);
   const { onClose, onExit, isOpen, messageInfo } = useCustomSnackbar();
+
   const onUploadImage: ChangeEventHandler<HTMLInputElement> = (event) => {
     if (!event.target.files) {
       return;
@@ -38,7 +47,8 @@ const EditProfile = ({ profileData }: IEditProfileProps) => {
     }, {} as { [key: string]: string });
 
     try {
-      await apiClient.put("/users/users", formBody);
+      await apiClient.put("/users", formBody);
+      onEndEdit();
     } catch (err) {
       const error = err as Error;
       addNotification(error.message, "error");
@@ -55,26 +65,26 @@ const EditProfile = ({ profileData }: IEditProfileProps) => {
     >
       <StyleTextField
         label="Firstname"
-        defaultValue={profileData.firstName}
+        defaultValue={firstName}
         placeholder="Firstname"
         id="firstName"
       />
       <StyleTextField
         label="Lastname"
         placeholder="Lastname"
-        defaultValue={profileData.lastName}
+        defaultValue={lastName}
         id="lastName"
       />
       <StyleTextField
         label="Username"
         placeholder="Username"
-        defaultValue={profileData.userName}
-        id="userName"
+        defaultValue={username}
+        id="username"
       />
       <StyleTextField
         label="Email"
         placeholder="Email"
-        defaultValue={profileData.email}
+        defaultValue={email}
         id="email"
       />
       <Stack
@@ -136,6 +146,9 @@ const EditProfile = ({ profileData }: IEditProfileProps) => {
           Save Profile
         </Typography>
       </Button>
+
+      {isGuide && <GuideEditProfile />}
+
       <AppSnackbar
         messageInfo={messageInfo}
         isOpen={isOpen}

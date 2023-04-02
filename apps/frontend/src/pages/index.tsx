@@ -18,8 +18,7 @@ export default function Home() {
           xs: 6,
           sm: 12,
         },
-      }}
-    >
+      }}>
       <Hero />
       <About />
       <Acheivement />

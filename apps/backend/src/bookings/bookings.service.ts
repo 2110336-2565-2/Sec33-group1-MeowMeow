@@ -172,11 +172,16 @@ export class BookingsService implements IBookingsService {
       }
       if (
         booking.bookingStatus !== 'WAITING_FOR_GUIDE_CONFIRMATION' &&
-        booking.bookingStatus !== 'WAITING_FOR_PAYMENT'
+        booking.bookingStatus !== 'WAITING_FOR_PAYMENT' &&
+        booking.bookingStatus !== 'TRAVELING'
       ) {
         throw new UnprocessableEntity(
           'this booking has been accepted or cancelled',
         );
+      }
+
+      if (booking.bookingStatus !== 'TRAVELING') {
+        await this.paymentsService.refund(bookingId);
       }
 
       const cancelledBooking = await this.bookingsRepo.updateBookingStatus(
@@ -185,6 +190,7 @@ export class BookingsService implements IBookingsService {
       );
       return {
         id: cancelledBooking.id,
+        refunded: false,
         bookingStatus: cancelledBooking.bookingStatus.toString(),
       };
     } catch (e) {
@@ -259,7 +265,10 @@ export class BookingsService implements IBookingsService {
       if (booking.userId !== account.userId) {
         throw new AccessNotGranted('permissing denied');
       }
-      if (booking.bookingStatus !== 'TRAVELING') {
+      if (
+        booking.bookingStatus !== 'TRAVELING' &&
+        booking.bookingStatus !== 'WAITING_FOR_PAYMENT'
+      ) {
         throw new UnprocessableEntity(
           'this booking has not beed available for user cancelation',
         );

@@ -148,7 +148,7 @@ model Booking {
 
   post  Post  @relation(fields: [postId], references: [id])
   user  User  @relation(fields: [userId], references: [id])
-  Transaction Transaction[]
+  transactions Transaction[]
 }
 
 enum TransactionType {

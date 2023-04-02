@@ -1,11 +1,8 @@
 import { REVIEW_INPUT_IDs } from "@/constants/ReviewPage";
 import { NotificationContext } from "@/context/NotificationContext";
 import apiClient from "@/utils/apiClient";
-import { AlertColor } from "@mui/material";
 import { useRouter } from "next/router";
 import { FormEventHandler, useCallback, useContext, useState } from "react";
-
-const sleep = (ms: number | undefined) => new Promise((r) => setTimeout(r, ms));
 
 const useReviewForm = () => {
   const { addNotification } = useContext(NotificationContext);
@@ -22,8 +19,7 @@ const useReviewForm = () => {
       }, {} as { [key: string]: string });
 
       formBody["guideId"] = router.query.id as string;
-      formBody["reviewerId"] = ""; // will be filled later
-      // console.log("===> ", formBody);  // debug purpose only
+      // console.log("===> ", formBody); // debug purpose only
 
       if (formBody.score === "" || formBody.text === "") {
         addNotification(
@@ -36,7 +32,12 @@ const useReviewForm = () => {
       setLoading(true);
 
       try {
-        // await apiClient.post("/users/register", formBody);
+        const tmp = await apiClient.post("/reviews", {
+          guideId: +formBody.guideId,
+          score: +formBody.score,
+          text: formBody.text,
+        });
+        // console.log("===> ", tmp); // debug purpose only
         addNotification("Review success", "success");
         setTimeout(() => {
           router.reload();

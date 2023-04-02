@@ -11,12 +11,20 @@ import { stableSort, getComparator } from "../data/sorting";
 import { Grid, Typography } from "@mui/material";
 import DescriptionIcon from "@mui/icons-material/Description";
 import ContentComponent from "./content";
+import viewModel, { IGetRecord } from "./viewModel";
 
 export default function TableRecord() {
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState<keyof ITravellerData>("name");
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+  // const record: IGetRecord = viewModel()
+  // const prev = React.useRef(record);
+  // const [rows, setRows] = React.useState<IGetRecord>(record);    // use rows instrad of rows from mock data
+  // useEffect(() => {
+  //   setRows({ ...record });
+  // }, [prev.current !== record]);
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -37,6 +45,14 @@ export default function TableRecord() {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+
+  if (rows.length === 0) {
+    return (
+      <Typography variant="h5" component="span" sx={{ fontWeight: "bold" }}>
+        No Record
+      </Typography>
+    );
+  }
 
   return (
     <>
@@ -64,7 +80,7 @@ export default function TableRecord() {
               onRequestSort={handleRequestSort}
             />
             <TableBody sx={{ backgroundColor: "#faf7f5" }}>
-              {stableSort(rows, getComparator(order, orderBy))
+              {stableSort(rows, getComparator(order, orderBy)) // rows is mock data
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   return (

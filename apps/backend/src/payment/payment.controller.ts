@@ -32,20 +32,4 @@ export class PaymentController {
     }
     return this.paymentService.getAllTransaction();
   }
-
-  @HttpCode(HttpStatus.OK)
-  @ApiResponse({
-    status: HttpStatus.OK,
-  })
-  @ApiCookieAuth()
-  @UseGuards(AuthGuard)
-  @Get()
-  async getTransaction(@Req() req) {
-    if (!req.account.roles.includes(Role.ADMIN)) {
-      throw new UnauthorizedException(
-        'You are not authorized to access this resource',
-      );
-    }
-    return this.paymentService.getAllTransaction();
-  }
 }

@@ -15,7 +15,7 @@ const PaymentSummaryPage = () => {
       <Head>
         <title>Payment</title>
       </Head>
-      <PaymentSummary trip_id={id as string} />
+      <PaymentSummary booking_id={Number(id)} />
     </>
   );
 };

@@ -1,5 +1,6 @@
 import { ErrorOutline, CheckCircleOutline } from "@mui/icons-material";
-import { LinearProgress, Stack, Typography } from "@mui/material";
+import { Button, LinearProgress, Stack, Typography } from "@mui/material";
+import Router from "next/router";
 
 const PendingDisplay = () => {
   return (
@@ -22,8 +23,11 @@ const FailedDisplay = () => {
         }}
       />
       <Typography variant="h4" textAlign={"center"}>
-        Payment Successful
+        Payment Failed
       </Typography>
+      <Button variant="outlined" onClick={() => Router.reload()}>
+        Try Again
+      </Button>
     </Stack>
   );
 };

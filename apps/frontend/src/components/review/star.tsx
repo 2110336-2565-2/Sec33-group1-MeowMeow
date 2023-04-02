@@ -2,8 +2,6 @@ import * as React from "react";
 import Rating from "@mui/material/Rating";
 import Box from "@mui/material/Box";
 import { Grid, Stack } from "@mui/material";
-import { idText } from "typescript";
-import { useState } from "react";
 
 const labels: { [index: string]: string } = {
   0: "Not Recommended",
@@ -24,18 +22,12 @@ function getLabelText(value: number) {
 }
 
 interface starProps {
-  // star: number | null;
-  // handleStar: (num: number | null) => void;
-  id: string;
+  star: number | null;
+  handleStar: (num: number | null) => void;
 }
 
-export default function Star({ id }: starProps) {
-  const [star, setStar] = useState<number | null>(null);
+export default function Star({ star, handleStar }: starProps) {
   const [hover, setHover] = React.useState(-1);
-
-  const handleStar = (starValue: number | null) => {
-    setStar(starValue);
-  };
 
   return (
     <Grid
@@ -52,7 +44,7 @@ export default function Star({ id }: starProps) {
     >
       <Grid item>
         <Rating
-          name={id}
+          name="hover-feedback"
           value={star}
           precision={0.5}
           getLabelText={getLabelText}
@@ -62,7 +54,6 @@ export default function Star({ id }: starProps) {
           onChangeActive={(event, newHover) => {
             setHover(newHover);
           }}
-          id={id}
         />
       </Grid>
       <Grid item>

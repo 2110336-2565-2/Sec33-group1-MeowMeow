@@ -5,13 +5,12 @@ import Alert from "@mui/material/Alert";
 import LoginUtils from "./LoginUtils";
 import StyleTextField from "./StyledTextField";
 import useLoginForm from "@/hooks/useLoginForm";
-import useCustomSnackbar from "@/hooks/useCustomSnackbar";
+import useSnackbar from "@/hooks/useSnackbar";
 import Typography from "@mui/material/Typography";
 import Snackbar from "@mui/material/Snackbar";
-import AppSnackbar from "../common/AppSnackbar";
 
 const LoginForm = () => {
-  const { onClose, onExit, isOpen, messageInfo } = useCustomSnackbar();
+  const { onClose, onExit, isOpen, messageInfo } = useSnackbar();
   const { isLoading, onSubmit } = useLoginForm();
   return (
     <Stack
@@ -33,12 +32,30 @@ const LoginForm = () => {
       <Button variant="contained" color="secondary" fullWidth type="submit">
         SIGN IN
       </Button>
-      <AppSnackbar
-        messageInfo={messageInfo}
-        isOpen={isOpen}
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        key={messageInfo ? messageInfo.key : undefined}
+        open={isOpen}
+        autoHideDuration={3000}
         onClose={onClose}
-        onExit={onExit}
-      />
+        sx={{ width: "100vw", left: "0px" }}
+        TransitionProps={{ onExited: onExit }}
+        message={messageInfo ? messageInfo.message : undefined}
+      >
+        <Alert
+          severity={messageInfo?.severity ?? "error"}
+          variant="filled"
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Typography fontWeight="500" variant="subtitle1">
+            {messageInfo?.message}
+          </Typography>
+        </Alert>
+      </Snackbar>
     </Stack>
   );
 };

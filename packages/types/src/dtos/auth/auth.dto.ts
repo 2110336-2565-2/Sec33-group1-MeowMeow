@@ -14,13 +14,13 @@ export class LoginResponse {
   message: string;
   userId: number;
   username: string;
-  roles: string[];
+  role: string;
 }
 
 export class AccountMetadata {
   userId: number;
   username: string;
-  roles: string[];
+  role: string;
 }
 
 export class LogoutRequest {}

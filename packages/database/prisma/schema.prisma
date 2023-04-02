@@ -17,117 +17,79 @@ enum Role {
 }
 
 enum BookingStatus {
-  WAITING_FOR_GUIDE_CONFIRMATION
-  GUIDE_CANCELLED
-  WAITING_FOR_PAYMENT
-  WAITING_FOR_REFUND
-  WAITING_FOR_TRAVELING
-  TRAVELING
-  FINISHED
-  USER_CANCELLED
+  PENDING
+  ACCEPTED
+  REJECTED
 }
 
 model User {
-  id             Int      @id @default(autoincrement())
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-  email          String   @unique
-  username       String   @unique
+  id             Int       @id @default(autoincrement())
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  email          String    @unique
+  username       String    @unique
   hashedPassword String
   firstName      String
   lastName       String
+  role           Role      @default(USER)
+  guide          Guide?
+  review         Review[]
+  posts          Post[]
+  Booking        Booking[]
+}
 
-  roles        Role[]        @default([USER])
-  guide        Guide?
-  review       Review[]
-  posts        Post[]
-  bookings     Booking[]
-  transactions Transaction[]
+model Guide {
+  id          Int    @id @default(autoincrement())
+  userId      Int    @unique
+  certificate String
+
+  user      User        @relation(fields: [userId], references: [id])
+  location  Location[]
+  tourStyle TourStyle[]
+  review    Review[]
+  Booking   Booking[]
 }
 
 model Location {
   id           Int    @id @default(autoincrement())
-  locationName String @unique
+  locationName String
+  guideId      Int
 
-  GuideLocation GuideLocation[]
-  PostLocation  PostLocation[]
+  guide Guide @relation(fields: [guideId], references: [id])
 }
 
 model TourStyle {
   id            Int    @id @default(autoincrement())
-  tourStyleName String @unique
+  tourStyleName String
+  guideId       Int
 
-  GuideTourStyle GuideTourStyle[]
-}
-
-model Guide {
-  id             Int              @id @default(autoincrement())
-  userId         Int              @unique
-  certificateId  String
-  paymentId      String
-  user           User             @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  reviews        Review[]
-  GuideLocation  GuideLocation[]
-  GuideTourStyle GuideTourStyle[]
-}
-
-model GuideLocation {
-  guideId    Int
-  locationId Int
-
-  guide    Guide    @relation(fields: [guideId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  location Location @relation(fields: [locationId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-
-  @@id([guideId, locationId])
-}
-
-model GuideTourStyle {
-  guideId     Int
-  tourStyleId Int
-
-  guide     Guide     @relation(fields: [guideId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  tourStyle TourStyle @relation(fields: [tourStyleId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-
-  @@id([guideId, tourStyleId])
+  guide Guide @relation(fields: [guideId], references: [id])
 }
 
 model Review {
   id          Int      @id @default(autoincrement())
-  publishDate DateTime @default(now())
+  publishDate DateTime
   score       Decimal  @db.Decimal(2, 1)
-  text        String
+  text        String?
   reviewerId  Int
   guideId     Int
 
-  reviewer User  @relation(fields: [reviewerId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  guide    Guide @relation(fields: [guideId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  reviewer User  @relation(fields: [reviewerId], references: [id])
+  guide    Guide @relation(fields: [guideId], references: [id])
 }
 
 model Post {
-  id             Int      @id @default(autoincrement())
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-  title          String
-  content        String
-  authorId       Int
-  tags           String[]
-  fee            Decimal  @db.Decimal(10, 2)
-  maxParticipant Int
-  contactInfo    String
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  title     String
+  content   String?
+  authorId  Int
+  tags      String[]
+  fee       Decimal  @db.Decimal(10, 2)
 
-  author       User           @relation(fields: [authorId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  bookings     Booking[]
-  PostLocation PostLocation[]
-}
-
-model PostLocation {
-  postId     Int
-  locationId Int
-
-  post     Post     @relation(fields: [postId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  location Location @relation(fields: [locationId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-
-  @@id([postId, locationId])
+  author  User      @relation(fields: [authorId], references: [id])
+  Booking Booking[]
 }
 
 model Booking {
@@ -136,23 +98,12 @@ model Booking {
   updatedAt     DateTime      @updatedAt
   startDate     DateTime
   endDate       DateTime
-  bookingStatus BookingStatus @default(WAITING_FOR_GUIDE_CONFIRMATION)
+  bookingStatus BookingStatus @default(PENDING)
   postId        Int
   userId        Int
+  guideId       Int
 
-  post         Post          @relation(fields: [postId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  user         User          @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  transactions Transaction[]
-}
-
-model Transaction {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  paymentID String
-  bookingId Int
-  userId    Int
-
-  booking Booking @relation(fields: [bookingId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  user    User    @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  post  Post  @relation(fields: [postId], references: [id])
+  user  User  @relation(fields: [userId], references: [id])
+  guide Guide @relation(fields: [guideId], references: [id])
 }

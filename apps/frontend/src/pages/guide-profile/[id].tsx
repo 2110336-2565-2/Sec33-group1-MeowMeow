@@ -56,6 +56,7 @@ export default function GuideProfile() {
   const { id } = router.query;
   return (
     <>
+      <Navbar />
       <Box sx={{ display: "flex", justifyContent: "center" }}>
         <Content
           name={name}

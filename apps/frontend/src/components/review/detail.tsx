@@ -3,15 +3,17 @@ import { Box, Grid, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
 
 interface IDetailProps {
-  id: string;
+  detail: string;
+  handleDetail: (detailValue: string) => void;
 }
 
-export default function Detail({ id }: IDetailProps) {
-  const [detail, setDetail] = useState<string>("");
+export default function Detail({ detail, handleDetail }: IDetailProps) {
+  const [count, setCount] = React.useState(0);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value.length > 200) {
     } else {
-      setDetail(event.target.value);
+      handleDetail(event.target.value);
+      setCount(event.target.value.length);
     }
   };
 
@@ -31,12 +33,12 @@ export default function Detail({ id }: IDetailProps) {
         sx={{ marginTop: 1 }}
       >
         <TextField
-          id={id}
+          id="outlined-textarea"
           label="Tell us how you feel. Good Services?"
           placeholder="Tell us how you feel. Good Services?"
           multiline
-          sx={{ width: "inherit" }}
           onChange={handleChange}
+          sx={{ width: "inherit" }}
           value={detail}
         />
       </Grid>
@@ -46,7 +48,7 @@ export default function Detail({ id }: IDetailProps) {
         justifyContent="flex-start"
         alignItems="flex-start"
       >
-        {detail.length} / 200 Characters
+        {count} / 200 Characters
       </Grid>
     </Grid>
   );

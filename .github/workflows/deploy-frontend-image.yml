@@ -7,7 +7,7 @@ on:
       - beta
       - dev
     paths:
-      - "apps/frontend/**"
+      - 'apps/frontend/**'
   workflow_dispatch:
 
 jobs:

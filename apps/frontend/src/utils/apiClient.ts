@@ -1,10 +1,11 @@
-import axios, { CreateAxiosDefaults } from "axios";
+import axios from "axios";
+import getConfig from "next/config";
 import { responseReject, responseSuccess } from "./interceptor";
+const { publicRuntimeConfig } = getConfig();
 
-const createAxiosConfig = (): CreateAxiosDefaults<any> => {
+const createAxiosConfig = () => {
   return {
-    baseURL: process.env.backendBaseURL,
-    withCredentials: true,
+    baseURL: publicRuntimeConfig.backendBaseURL,
   };
 };
 

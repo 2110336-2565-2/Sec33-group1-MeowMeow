@@ -148,7 +148,6 @@ model Booking {
 
   post  Post  @relation(fields: [postId], references: [id])
   user  User  @relation(fields: [userId], references: [id])
-  guide Guide @relation(fields: [guideId], references: [id])
   transactions Transaction[]
 }
 

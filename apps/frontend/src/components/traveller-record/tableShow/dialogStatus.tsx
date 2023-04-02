@@ -1,6 +1,8 @@
 import theme from "@/config/theme";
 import {
   Button,
+  Card,
+  CardContent,
   Dialog,
   DialogActions,
   DialogContent,
@@ -9,19 +11,23 @@ import {
   DialogTitle,
   Grid,
   IconButton,
+  Stack,
+  Typography,
 } from "@mui/material";
 import React from "react";
 import CancelIcon from "@mui/icons-material/Cancel";
 import {
+  buttonDisplayNames,
   buttonMapLink,
   buttonMapStatus,
   statusDetail,
   subButtonName,
-} from "./data/statusHandle";
+} from "../data/statusHandle";
 import { useRouter } from "next/router";
+import useCancelTrip from "@/hooks/useCancelTrip";
 
 export interface IStatusDialog {
-  tripId: string;
+  tripId: number;
   nameButton: string;
 }
 
@@ -40,6 +46,8 @@ export default function StatusDialog({ tripId, nameButton }: IStatusDialog) {
     setOpen(false);
   };
 
+  const { isLoading, onSubmit } = useCancelTrip({ tripId, handleClose });
+
   const descriptionElementRef = React.useRef<HTMLElement>(null);
   React.useEffect(() => {
     if (open) {
@@ -49,6 +57,18 @@ export default function StatusDialog({ tripId, nameButton }: IStatusDialog) {
       }
     }
   }, [open]);
+
+  if (isLoading) {
+    return (
+      <Card sx={{ minWidth: 275 }}>
+        <CardContent>
+          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+            Cancel Pending...
+          </Typography>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <>
@@ -63,7 +83,7 @@ export default function StatusDialog({ tripId, nameButton }: IStatusDialog) {
         onClick={handleClickOpen("paper")}
       >
         {" "}
-        {nameButton}
+        {buttonDisplayNames.get(nameButton)}
       </Button>
       <Dialog
         open={open}
@@ -102,20 +122,42 @@ export default function StatusDialog({ tripId, nameButton }: IStatusDialog) {
               .map((item: string, index: number) => {
                 return (
                   <DialogActions key={nameButton + "-" + index}>
-                    <Button
+                    {item == subButtonName.CANCEL ? (
+                      <Stack
+                        component="form"
+                        direction="row"
+                        justifyContent="center"
+                        alignItems="center"
+                        onSubmit={onSubmit}
+                      >
+                        <Button size="large" type="submit" variant="contained">
+                          {item}
+                        </Button>
+                      </Stack>
+                    ) : (
+                      <Button
+                        variant="contained"
+                        onClick={() => {
+                          router.push(buttonMapLink.get(item)!);
+                          handleClose();
+                        }}
+                      >
+                        {item}
+                      </Button>
+                    )}
+
+                    {/* <Button
                       variant="contained"
                       onClick={() => {
                         if (item == subButtonName.CANCEL) {
-                          router.push(
-                            buttonMapLink.get(item)!.concat("/" + tripId)
-                          );
+                          onSubmit
                         } else {
                           router.push(buttonMapLink.get(item)!);
                         }
                       }}
                     >
                       {item}
-                    </Button>
+                    </Button> */}
                   </DialogActions>
                 );
               })}

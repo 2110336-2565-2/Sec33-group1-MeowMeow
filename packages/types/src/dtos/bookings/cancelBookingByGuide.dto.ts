@@ -10,6 +10,12 @@ export class CancelBookingResponse {
   id: number;
 
   @ApiProperty({
+    type: () => Boolean,
+    example: false,
+  })
+  refunded: boolean;
+
+  @ApiProperty({
     type: () => String,
     example: "GUIDE_CANCELLED",
   })

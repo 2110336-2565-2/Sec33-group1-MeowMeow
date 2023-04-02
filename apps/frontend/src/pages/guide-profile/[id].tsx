@@ -20,6 +20,8 @@ interface IGuide {
   lastName: string;
   certificateId: string;
   averageReviewScore: number;
+  locations: string[];
+  tourStyles: string[];
 }
 const imageurl =
   "https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80";
@@ -43,23 +45,6 @@ const tagsLocation = [
 ];
 const accept = 60;
 const total = 100;
-// const reviewCount: number[] = [8, 4, 2, 3, 1]; //5 to 1
-// const reviews: IReview[] = [
-//   {
-//     rating: 4.5,
-//     timestamp: "2023-02-10T:12:00:00",
-//     reviewer: "pasta spaghetti",
-//     detail:
-//       "potato tomato origano cocomo potato tomato origano cocomo potato tomato origano cocomo potato tomato origano cocomo potato tomato origano cocomo potato tomato origano cocomo",
-//   },
-//   {
-//     rating: 2,
-//     timestamp: "2023-01-10T:12:00:00",
-//     reviewer: "Alice Bob",
-//     detail:
-//       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim deleniti velit beatae. Officia reprehenderit sunt fugiat iusto consequuntur! Dolore quia minus, natus incidunt provident laudantium. Ipsum sunt sit libero cumque.",
-//   },
-// ];
 const getData = async (id: string) => {
   const response = await apiClient.get("guides/" + id);
   return response;
@@ -76,6 +61,8 @@ export default function GuideProfile() {
     lastName: "lastname",
     certificateId: "aaaaaaaab",
     averageReviewScore: 3,
+    locations: [""],
+    tourStyles: [""],
   });
   const [reviews, setReviews] = useState<IReview[]>([]);
   const [page, setPage] = useState(1);
@@ -109,8 +96,8 @@ export default function GuideProfile() {
           name={guideData.firstName + " " + guideData.lastName}
           certificateId={guideData.certificateId}
           imageurl={imageurl}
-          tagsTourStyle={tagsTourStyle}
-          tagsLocation={tagsLocation}
+          tagsTourStyle={guideData.tourStyles}
+          tagsLocation={guideData.locations}
           accept={accept}
           total={total}
           reviewCount={[1, 2, 3, 4, 5]}

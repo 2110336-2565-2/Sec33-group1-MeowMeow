@@ -11,26 +11,20 @@ import {
   List,
   Typography,
 } from "@mui/material";
-import Request, { IAcceptedRequestProps } from "./Types";
+import { IAcceptedRequestProps, Booking } from "./Types";
+import { AcceptedRequestCard } from "./AcceptedRequestCard";
 
-const AcceptedRequest = ({
-  confirmedRequests,
-  cancelledRequests,
-  handleCancel,
-}: IAcceptedRequestProps) => {
+const AcceptedRequest = ({ bookings, handleCancel }: IAcceptedRequestProps) => {
   const [open, setOpen] = useState(false);
-  const [curReq, setCurReq] = useState<Request>({
+  const [curReq, setCurReq] = useState<Booking>({
     id: 0,
-    customerName: "",
-    tripName: "",
+    bookingStatus: "",
     startDate: "",
     endDate: "",
-    price: 0,
-    numCustomer: 0,
-    status: 0,
+    postId: 0,
   });
-  const handleClick = (request: Request) => {
-    setCurReq(request);
+  const handleClick = (booking: Booking) => {
+    setCurReq(booking);
     setOpen(true);
   };
   const handleYes = () => {
@@ -41,70 +35,29 @@ const AcceptedRequest = ({
   const handleNo = () => {
     setOpen(false);
   };
-  const renderRequest = (request: Request, index: number) => {
-    return (
-      <Card sx={{ marginBottom: "3vh" }} key={index}>
-        <CardContent>
-          <Grid
-            container
-            direction={{ xs: "column", sm: "row" }}
-            justifyContent={{ xs: "flex-start", sm: "space-between" }}
-          >
-            <Grid item>
-              <Typography variant="h5">{request.tripName}</Typography>
-              <Typography variant="body2" color="textSecondary">
-                Reserver Name: {request.customerName}
-              </Typography>
-              <Typography variant="body2" color="textSecondary">
-                Reserved date: {request.startDate + " to " + request.endDate}
-              </Typography>
-              <Typography variant="body2" color="textSecondary">
-                Price: {request.price}
-              </Typography>
-              <Typography variant="body2" color="textSecondary">
-                Status: {request.status == 0 ? "waiting for payment" : "paid"}
-              </Typography>
-            </Grid>
-            <Grid
-              item
-              container
-              xs="auto"
-              direction={{ xs: "row", sm: "column" }}
-              justifyContent={{ xs: "flex-start", sm: "center" }}
-              alignItems={{ xs: "center", sm: "flex-end" }}
-            >
-              <Button
-                variant="contained"
-                color="warning"
-                onClick={() => handleClick(request)}
-                size="small"
-                sx={{ marginRight: "2vw", marginTop: "1vh" }}
-              >
-                Cancel
-              </Button>
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
-    );
-  };
+  const filteredbooking = bookings.filter(
+    (booking) =>
+      booking.bookingStatus === "WAITING_FOR_PAYMENT" ||
+      booking.bookingStatus === "WAITING_FOR_TRAVELING"
+  );
   return (
     <div>
       <List>
-        {confirmedRequests.map((request, index) => {
-          if (
-            cancelledRequests.some((cancelled) => cancelled.id === request.id)
-          ) {
-            return null;
-          }
-          return renderRequest(request, index);
+        {filteredbooking.map((booking, index) => {
+          return (
+            <AcceptedRequestCard
+              key={index}
+              booking={booking}
+              handleClick={handleClick}
+            />
+          );
         })}
       </List>
       <Dialog open={open} onClose={handleNo}>
         <DialogTitle>Confirmation</DialogTitle>
         <DialogContent>
           <Typography variant="body2" color="textSecondary">
-            Upon cancellation, the client's money we be fully refunded.
+            Upon cancellation, the client's money will be fully refunded.
           </Typography>
           <Typography variant="body2" color="textSecondary">
             However, you may lost some of your credibility.

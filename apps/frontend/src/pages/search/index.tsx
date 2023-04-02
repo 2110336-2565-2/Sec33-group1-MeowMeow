@@ -1,5 +1,6 @@
 import DashBoard from "@/components/Dashboard/DashBoard";
 import SearchPage from "@/components/SearchPage";
+import AuthProvider from "@/context/AuthContext";
 import Head from "next/head";
 import { Fragment } from "react";
 

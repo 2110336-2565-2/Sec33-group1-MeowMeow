@@ -1,21 +1,19 @@
 import { IFilterMethod } from "@/hooks/useFilterForm";
 import { Button, Container, Stack, TextField, Typography } from "@mui/material";
-import DateInput from "./DateInput";
 import SliderInput from "./SliderInput";
 
 interface FilterFormProps {
   filterStuff: IFilterMethod;
 }
 
-export default function FilterForm({ filterStuff }: FilterFormProps) {
+const FilterForm = ({ filterStuff }: FilterFormProps) => {
   const {
     tempOptions,
     handleChangeLocation,
     handleChangePrice,
     handleChangeRating,
-    handleChangeStartDate,
-    handleChangeEndDate,
     handleSubmit,
+    reset,
   } = filterStuff;
 
   return (
@@ -27,7 +25,16 @@ export default function FilterForm({ filterStuff }: FilterFormProps) {
           mx: 2,
         }}
       >
-        <Typography variant="h6">Filter</Typography>
+        <Stack
+          direction={"row"}
+          justifyContent={"space-between"}
+          alignItems={"center"}
+        >
+          <Typography variant="h6">Filter</Typography>
+          <Button variant="outlined" onClick={reset}>
+            clear
+          </Button>
+        </Stack>
         <TextField
           label="Location"
           variant="outlined"
@@ -50,13 +57,13 @@ export default function FilterForm({ filterStuff }: FilterFormProps) {
           onChange={handleChangeRating}
         />
 
-        <DateInput
+        {/* <DateInput
           displayText="Date"
           startDate={tempOptions.startDate}
           endDate={tempOptions.endDate}
           handleChangeStartDate={handleChangeStartDate}
           handleChangeEndDate={handleChangeEndDate}
-        />
+        /> */}
 
         <Button type="submit" variant="contained" sx={{ color: "white" }}>
           Apply
@@ -64,4 +71,6 @@ export default function FilterForm({ filterStuff }: FilterFormProps) {
       </Stack>
     </Container>
   );
-}
+};
+
+export default FilterForm;

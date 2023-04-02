@@ -146,27 +146,20 @@ model Booking {
   postId        Int
   userId        Int
 
-  post         Post          @relation(fields: [postId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  user         User          @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  transactions Transaction[]
-}
-
-enum TransactionType {
-  CHARGES
-  TRANSFERS
-  REFUNDS
+  post  Post  @relation(fields: [postId], references: [id])
+  user  User  @relation(fields: [userId], references: [id])
+  guide Guide @relation(fields: [guideId], references: [id])
+  Transaction Transaction[]
 }
 
 model Transaction {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        Int      @ id @ default(autoincrement())
+  createdAt DateTime @ default(now())
+  updatedAt DateTime @ updatedAt
+  paymentID String
+  bookingId Int
+  userId    Int
 
-  paymentID       String
-  bookingId       Int
-  userId          Int
-  transactionType TransactionType @default(CHARGES)
-
-  booking Booking @relation(fields: [bookingId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  user    User    @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  booking Booking @ relation(fields: [bookingId], references: [id])
+  user User @ relation(fields: [userId], references: [id])
 }

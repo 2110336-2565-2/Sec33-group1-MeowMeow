@@ -9,8 +9,8 @@
   "scripts": {
     "build": "turbo run build",
     "db:generate": "turbo run db:generate --filter database",
-    "db:migrate:dev": "pnpm --filter database db:migrate:dev",
-    "db:migrate:deploy": "pnpm --filter database db:migrate:deploy",
+    "db:migrate:dev": "dotenv -e .env -- pnpm --filter database db:migrate:dev",
+    "db:migrate:deploy": "dotenv -e .env -- pnpm --filter database db:migrate:deploy",
     "db:seed": "pnpm --filter database db:seed",
     "db:seed-dev": "pnpm --filter database db:seed-dev",
     "dev": "turbo run build --filter config --filter database && turbo run dev --parallel",
@@ -45,6 +45,7 @@
     ]
   },
   "dependencies": {
+    "dotenv-cli": "^7.1.0",
     "dotenv-mono": "^1.3.10"
   }
 }

@@ -313,8 +313,8 @@ export class BookingsService implements IBookingsService {
           'USER_CANCELLED',
         );
         return {
-          message: 'cancelled with refund',
-          refunded: true,
+          message: 'cancelled without refund',
+          refunded: false,
           bookingId: refundedBooking.id,
           bookingStatus: refundedBooking.bookingStatus.toString(),
         };
@@ -328,7 +328,7 @@ export class BookingsService implements IBookingsService {
         throw new UnprocessableEntity('this trip has already started');
       }
 
-      if (now > refundDeadline) {
+      if (now > refundDeadline || booking.bookingStatus !== 'TRAVELING') {
         const cancelledBooking = await this.bookingsRepo.updateBookingStatus(
           bookingId,
           'USER_CANCELLED',

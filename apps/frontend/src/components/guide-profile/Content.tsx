@@ -36,11 +36,15 @@ export default function Content({
     <Grid
       container
       direction="column"
-      width={{ xs: "85%", sm: "70%" }}
+      width={{ xs: "85%", sm: "55%" }}
       rowSpacing={1}
       paddingTop={{ xs: "2vh", md: "3vh" }}
     >
-      <Grid item paddingX={{ xs: 0, md: "5vw" }}>
+      <Grid
+        item
+        paddingX={{ xs: 0, md: "5vw" }}
+        paddingBottom={{ xs: "2vh", md: "3.5vh" }}
+      >
         <Profile
           name={name}
           imageurl={imageurl}
@@ -53,7 +57,6 @@ export default function Content({
         rowSpacing={{ xs: 2, md: 1 }}
         justifyContent="space-between"
         paddingX={{ xs: 0, sm: "3vw", md: "5vw" }}
-        paddingY={{ xs: "2vh", md: "3.5vh" }}
       >
         <Grid item md={5}>
           <Tags title={"Tour style"} tags={tagsTourStyle} />
@@ -62,12 +65,7 @@ export default function Content({
           <Tags title={"Location"} tags={tagsLocation} />
         </Grid>
       </Grid>
-      <Grid
-        item
-        justifyContent="center"
-        paddingX={{ xs: 0, md: "5vw" }}
-        paddingBottom={{ xs: "2vh", md: "3.5vh" }}
-      >
+      <Grid item justifyContent="center" paddingX={{ xs: 0, md: "5vw" }}>
         <ReviewHead averageReviewScore={averageReviewScore}></ReviewHead>
       </Grid>
       <Grid

@@ -10,8 +10,6 @@ import {
   CancelBookingResponse,
   CreateBookingRequest,
   CreateBookingResponse,
-  GetBookingsByGuideIdRequest,
-  GetBookingsByGuideIdResponse,
   GetBookingsByUserIdRequest,
   GetBookingsByUserIdResponse,
   PayBookingFeeResponse,

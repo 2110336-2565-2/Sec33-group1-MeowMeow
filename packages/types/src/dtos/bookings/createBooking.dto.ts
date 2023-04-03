@@ -11,6 +11,5 @@ export class CreateBookingResponse extends PickType(Booking, [
   "startDate",
   "endDate",
   "bookingStatus",
-  "userId",
   "postId",
 ] as const) {}

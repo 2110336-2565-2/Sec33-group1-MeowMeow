@@ -6,6 +6,7 @@ import { FeedStatus } from "./types/FeedStatus";
 import useFilterForm from "./useFilterForm";
 import apiClient from "@/utils/apiClient";
 import { NotificationContext } from "@/context/NotificationContext";
+import { SearchPostsResponse } from "types";
 
 interface IFetchPosts {
   pageNo: number;
@@ -36,10 +37,10 @@ const fetchPosts = async (props: IFetchPosts): Promise<IPost[]> => {
       text: search,
     },
   });
-  const fetchPost = resp.data;
+  const fetchPost: SearchPostsResponse = resp.data;
 
   const editedPosts = Promise.all(
-    fetchPost.map(async (post: any) => {
+    fetchPost.posts.map(async (post: any) => {
       const authorId = post.authorId;
       const resp = await apiClient.get(`/users/${authorId}`);
       return {

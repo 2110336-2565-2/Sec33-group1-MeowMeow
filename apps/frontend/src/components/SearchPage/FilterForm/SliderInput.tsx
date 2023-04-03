@@ -2,6 +2,7 @@ import { Slider, Stack, Typography } from "@mui/material";
 
 interface SliderInputProps {
   name: string;
+  step: number;
   displayText?: string;
   value: number[];
   max?: number;
@@ -9,7 +10,7 @@ interface SliderInputProps {
 }
 
 const SliderInput = (props: SliderInputProps) => {
-  const { name, displayText, value, onChange, max } = props;
+  const { name, displayText, value, onChange, max, step } = props;
   return (
     <Stack gap={2}>
       <Typography variant="body1">{displayText ?? name}</Typography>
@@ -19,7 +20,7 @@ const SliderInput = (props: SliderInputProps) => {
         value={value}
         min={0}
         max={max}
-        step={100}
+        step={step}
         onChange={onChange}
         valueLabelDisplay="auto"
       />

@@ -6,11 +6,21 @@ import { AuthContext } from "@/context/AuthContext";
 import Chip from "@mui/material/Chip";
 import TextFieldWithButton from "../TextFieldWithButton";
 import Button from "@mui/material/Button";
+import apiClient from "@/utils/apiClient";
+import { useRouter } from "next/router";
+
+const updateGuideData = async (locations: string[], tourStyles: string[]) => {
+  await apiClient.post("/guides/update", {
+    locations,
+    tourStyles,
+  });
+};
 
 const GuideEditProfile = () => {
   const { user } = useContext(AuthContext);
   const [editLocations, setEditLocations] = useState<string[]>([]);
   const [editTourStyles, setEditTourStyles] = useState<string[]>([]);
+  const router = useRouter();
   const onAddLocation = useCallback(
     (text: string) => {
       const isFind = editLocations.find((location) => location === text);
@@ -38,7 +48,6 @@ const GuideEditProfile = () => {
       if (!user?.roles?.includes("GUIDE")) {
         return;
       }
-
       const { data } = await getGuideProfile();
       const { locations, tourStyles } = data;
       setEditLocations(locations);
@@ -121,8 +130,11 @@ const GuideEditProfile = () => {
         onClick={onAddTourStyles}
       />
       <Button
-        onClick={() => {
-          console.log("Wait for Pong's API.");
+        onClick={async () => {
+          try {
+            await updateGuideData(editLocations, editTourStyles);
+            router.reload();
+          } catch (err) {}
         }}
         variant="contained"
         fullWidth

@@ -26,26 +26,36 @@ export class BookingsRepository {
     limit: number;
     userId?: number;
     guideId?: number;
-  }): Promise<Booking[]> {
-    const results = await this.prismaService.booking.findMany({
-      where: {
-        userId: filter.userId,
-        post: {
-          authorId: filter.guideId,
+  }): Promise<[number, Booking[]]> {
+    const [count, results] = await this.prismaService.$transaction([
+      this.prismaService.booking.count({
+        where: {
+          userId: filter.userId,
+          post: {
+            authorId: filter.guideId,
+          },
         },
-      },
-      skip: filter.offset,
-      take: filter.limit,
-      orderBy: [
-        {
-          createdAt: 'desc',
+      }),
+      this.prismaService.booking.findMany({
+        where: {
+          userId: filter.userId,
+          post: {
+            authorId: filter.guideId,
+          },
         },
-        {
-          bookingStatus: 'asc', // this is a hack, needed to be fixed in the future
-        },
-      ],
-    });
-    return results;
+        skip: filter.offset,
+        take: filter.limit,
+        orderBy: [
+          {
+            createdAt: 'desc',
+          },
+          {
+            bookingStatus: 'asc', // this is a hack, needed to be fixed in the future
+          },
+        ],
+      }),
+    ]);
+    return [count, results];
   }
 
   async getBookingById(id: number): Promise<{

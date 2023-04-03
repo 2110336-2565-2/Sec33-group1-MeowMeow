@@ -132,7 +132,6 @@ export class BookingsService implements IBookingsService {
 
     return {
       id: booking.id,
-      userId: booking.userId,
       postId: booking.postId,
       startDate: booking.startDate.toString(),
       endDate: booking.endDate.toString(),

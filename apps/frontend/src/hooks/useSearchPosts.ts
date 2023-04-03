@@ -6,11 +6,7 @@ import { FeedStatus } from "./types/FeedStatus";
 import useFilterForm from "./useFilterForm";
 import apiClient from "@/utils/apiClient";
 import { NotificationContext } from "@/context/NotificationContext";
-import {
-  GetPostResponse,
-  SearchPostsRequest,
-  SearchPostsResponse,
-} from "types";
+import { SearchPostsResponse } from "types";
 
 interface IFetchPosts {
   pageNo: number;

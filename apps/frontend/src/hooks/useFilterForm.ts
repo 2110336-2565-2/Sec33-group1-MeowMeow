@@ -33,7 +33,7 @@ const useFilterForm = () => {
   const reset = () => {
     setTempOptions({
       location: "",
-      price: [0, 1000],
+      price: [0, 9999],
       rating: [0, 5],
       startDate: null,
       endDate: null,

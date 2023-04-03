@@ -21,3 +21,8 @@ export interface IFilterOptions {
   startDate: Date | null;
   endDate: Date | null;
 }
+
+export interface ISearchPosts {
+  posts: IPost[];
+  count: number;
+}

@@ -22,6 +22,7 @@ import {
   UnprocessableEntity,
 } from './bookings.common';
 import { BookingsRepository } from './bookings.repository';
+import { PostsService } from 'src/posts/posts.service';
 
 export interface IBookingsService {
   acceptBookingByGuide(
@@ -59,6 +60,7 @@ export interface IBookingsService {
 export class BookingsService implements IBookingsService {
   constructor(
     private readonly bookingsRepo: BookingsRepository,
+    @Inject('PostsService') private readonly postsService: PostsService,
     private readonly paymentsService: PaymentService,
     @Inject('GuidesService') private readonly guideService: GuidesService,
   ) {}
@@ -127,7 +129,9 @@ export class BookingsService implements IBookingsService {
     if (isNaN(Date.parse(req.endDate))) {
       throw new InvalidDateFormat("invalid 'endDate' format");
     }
-    if (userId == req.guideId) {
+
+    const post = await this.postsService.getPostById(req.postId);
+    if (userId == post.authorId) {
       throw new UnprocessableEntity('cannot book your own post');
     }
 

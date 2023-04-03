@@ -6,9 +6,10 @@ import { PrismaService } from '../prisma/prisma.service';
 import { BookingsController } from './bookings.controller';
 import { BookingsRepository } from './bookings.repository';
 import { BookingsService } from './bookings.service';
+import { PostsModule } from 'src/posts/posts.module';
 
 @Module({
-  imports: [AuthModule, GuidesModule, PaymentModule],
+  imports: [AuthModule, GuidesModule, PaymentModule, PostsModule],
   controllers: [BookingsController],
   providers: [
     {

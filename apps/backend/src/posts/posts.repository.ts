@@ -235,6 +235,11 @@ export class PostsRepository {
           take: searchData.limit,
           where: searchConditions,
           include: {
+            author: {
+              include: {
+                guide: true,
+              },
+            },
             PostLocation: {
               select: {
                 location: true,

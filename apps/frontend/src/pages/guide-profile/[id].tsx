@@ -24,8 +24,6 @@ interface IGuide {
   tourStyles: string[];
   imageId: string;
 }
-const imageurl =
-  "https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80";
 const getData = async (id: string) => {
   const response = await apiClient.get("guides/" + id);
   return response;

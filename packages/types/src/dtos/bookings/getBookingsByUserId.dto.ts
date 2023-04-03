@@ -32,4 +32,18 @@ export class GetBookingsByUserIdResponseMember extends PickType(Booking, [
   "postId",
 ] as const) {}
 
-export type GetBookingsByUserIdResponse = GetBookingsByUserIdResponseMember[];
+export class GetBookingsByUserIdResponse {
+  @ApiProperty({
+    type: () => [GetBookingsByUserIdResponseMember],
+    description: "user's bookings",
+  })
+  bookings: GetBookingsByUserIdResponseMember[];
+
+  @ApiProperty({
+    type: () => Number,
+    description: "number of user's bookings",
+    example: 100,
+  })
+  @Type(() => Number)
+  bookingsCount: number;
+}

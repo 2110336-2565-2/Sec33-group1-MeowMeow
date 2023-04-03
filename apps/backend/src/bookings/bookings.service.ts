@@ -67,7 +67,7 @@ export class BookingsService implements IBookingsService {
     userId: number,
     queryParams: GetBookingsByUserIdRequest,
   ): Promise<GetBookingsByUserIdResponse> {
-    const bookings = await this.bookingsRepo.paginateBookings({
+    const [bookingsCount, bookings] = await this.bookingsRepo.paginateBookings({
       offset: queryParams.offset,
       limit: queryParams.limit,
       userId: userId,
@@ -79,14 +79,17 @@ export class BookingsService implements IBookingsService {
       bookingStatus: booking.bookingStatus,
       postId: booking.postId,
     }));
-    return results;
+    return {
+      bookings: results,
+      bookingsCount: bookingsCount,
+    };
   }
 
   async getBookingsByGuideId(
     guideId: number,
     queryParams: GetBookingsByGuideIdRequest,
   ): Promise<GetBookingsByGuideIdResponse> {
-    const bookings = await this.bookingsRepo.paginateBookings({
+    const [bookingsCount, bookings] = await this.bookingsRepo.paginateBookings({
       offset: queryParams.offset,
       limit: queryParams.limit,
       guideId: guideId,
@@ -98,7 +101,10 @@ export class BookingsService implements IBookingsService {
       bookingStatus: booking.bookingStatus,
       postId: booking.postId,
     }));
-    return results;
+    return {
+      bookings: results,
+      bookingsCount: bookingsCount,
+    };
   }
 
   async createBooking(

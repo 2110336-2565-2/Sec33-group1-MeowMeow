@@ -22,7 +22,6 @@ const ManageTripGuide = () => {
     const fetchBookings = async () => {
       const id = await getGuideId();
       const data = await getData(id);
-      if (data.data.bookings == bookings) return;
       setBookings(data.data.bookings);
     };
     fetchBookings();

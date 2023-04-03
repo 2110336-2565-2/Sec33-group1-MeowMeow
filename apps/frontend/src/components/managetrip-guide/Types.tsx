@@ -14,6 +14,8 @@ export type Booking = {
   startDate: string;
   endDate: string;
   postId: number;
+  firstName: string;
+  lastName: string;
 };
 export interface IContentProps {
   bookings: Booking[];

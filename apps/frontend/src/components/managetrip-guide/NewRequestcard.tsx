@@ -9,10 +9,6 @@ const getTripInfo = async (id: string) => {
   return response.data;
 };
 
-const getCustomerName = async (id: string) => {
-  const response = await apiClient.get("users/" + id);
-  return response.data.firstName + " " + response.data.lastName;
-};
 export const NewRequestCard = ({
   booking,
   handleConfirm,
@@ -22,7 +18,6 @@ export const NewRequestCard = ({
   handleConfirm: (booking: Booking) => void;
   handleDecline: (booking: Booking) => void;
 }) => {
-  const [customerName, setCustomerName] = useState("");
   const [fee, setFee] = useState(0);
   const [title, setTitle] = useState("");
   useEffect(() => {
@@ -30,8 +25,6 @@ export const NewRequestCard = ({
       const data = await getTripInfo(booking.postId.toString());
       setFee(data.fee);
       setTitle(data.title);
-      const name = await getCustomerName(data.authorId.toString());
-      setCustomerName(name);
     };
     fetchInfo();
   }, []);
@@ -46,7 +39,7 @@ export const NewRequestCard = ({
           <Grid item>
             <Typography variant="h5">{title}</Typography>
             <Typography variant="body2" color="textSecondary">
-              Reserver Name: {customerName}
+              Reserver Name: {booking.firstName + " " + booking.lastName}
             </Typography>
             <Typography variant="body2" color="textSecondary">
               Reserved date:{" "}

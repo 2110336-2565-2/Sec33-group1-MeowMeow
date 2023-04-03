@@ -14,10 +14,10 @@ const NewRequest = ({
   return (
     <div>
       <List>
-        {filteredbooking.map((booking, index) => {
+        {filteredbooking.map((booking) => {
           return (
             <NewRequestCard
-              key={index}
+              key={booking.id}
               booking={booking}
               handleConfirm={handleConfirm}
               handleDecline={handleDecline}

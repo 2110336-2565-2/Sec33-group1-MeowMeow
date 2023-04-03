@@ -221,6 +221,70 @@ export class GuidesRepository {
     }
   }
 
+  async updateGuide(data: {
+    userId: number;
+    locations: string[];
+    tourStyles: string[];
+  }): Promise<{ guideId: number }> {
+    try {
+      const locationsID = await this.getOrCreateLocationsID(data.locations);
+      const tourStylesID = await this.getOrCreateTourStylesID(data.tourStyles);
+      const guide = await this.prismaService.$transaction([
+        this.prismaService.guide.update({
+          where: {
+            userId: data.userId,
+          },
+          data: {
+            GuideLocation: {
+              deleteMany: {
+                locationId: {
+                  notIn: locationsID,
+                },
+              },
+            },
+            GuideTourStyle: {
+              deleteMany: {
+                tourStyleId: {
+                  notIn: tourStylesID,
+                },
+              },
+            },
+          },
+        }),
+        this.prismaService.guide.update({
+          where: {
+            userId: data.userId,
+          },
+          data: {
+            GuideLocation: {
+              createMany: {
+                data: locationsID.map((e) => ({ locationId: e })),
+                skipDuplicates: true,
+              },
+            },
+            GuideTourStyle: {
+              createMany: {
+                data: tourStylesID.map((e) => ({ tourStyleId: e })),
+                skipDuplicates: true,
+              },
+            },
+          },
+        }),
+      ])[1];
+
+      return {
+        guideId: guide.id,
+      };
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code === 'P2003') {
+          throw new FailedRelationConstraintError('relation constraint failed');
+        }
+      }
+      throw e;
+    }
+  }
+
   async getGuideIDByReviewScore(
     minScore?: number,
     maxScore?: number,

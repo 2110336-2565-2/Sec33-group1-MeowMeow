@@ -6,7 +6,6 @@ interface ITagsProps {
   tags: Array<string>;
 }
 export default function Tags({ title, tags }: ITagsProps) {
-  console.log(tags);
   return (
     <Grid container direction="column" rowSpacing={1}>
       <Grid item>

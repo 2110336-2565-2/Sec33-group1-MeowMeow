@@ -71,6 +71,7 @@ export class BookingsService implements IBookingsService {
       offset: queryParams.offset,
       limit: queryParams.limit,
       userId: userId,
+      bookingStatusFilter: queryParams.bookingStatusFilter,
     });
     const results = bookings.map((booking) => ({
       id: booking.id,
@@ -97,6 +98,7 @@ export class BookingsService implements IBookingsService {
       offset: queryParams.offset,
       limit: queryParams.limit,
       guideId: guideId,
+      bookingStatusFilter: queryParams.bookingStatusFilter,
     });
     const results = bookings.map((booking) => ({
       id: booking.id,

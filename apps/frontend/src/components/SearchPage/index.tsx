@@ -10,6 +10,7 @@ import AppSnackbar from "../common/AppSnackbar";
 const SearchPage = () => {
   const {
     tempSearch,
+    allPage,
     pageNo,
     feed,
     feedStatus,
@@ -50,7 +51,7 @@ const SearchPage = () => {
             <Box my={4} display="flex" justifyContent="center">
               <Pagination
                 page={pageNo}
-                count={10}
+                count={allPage}
                 onChange={(e, page) => setPageNo(page)}
                 shape="rounded"
               />

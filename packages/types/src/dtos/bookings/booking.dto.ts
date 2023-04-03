@@ -1,5 +1,14 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsDateString, IsInt, IsNotEmpty } from "class-validator";
+import { Type } from "class-transformer";
+import {
+  IsArray,
+  IsDateString,
+  IsInt,
+  IsNotEmpty,
+  IsString,
+  Min,
+} from "class-validator";
+import { BookingStatus } from "database";
 
 export class Booking {
   @ApiProperty({
@@ -71,4 +80,36 @@ export class Booking {
     example: "Morgan",
   })
   lastName: string;
+
+  @ApiProperty({
+    type: () => Number,
+    description: "search offset",
+    example: 0,
+  })
+  @Type(() => Number)
+  @Min(0)
+  @IsInt()
+  offset: number;
+
+  @ApiProperty({
+    type: () => Number,
+    description: "search limit",
+    example: 1,
+  })
+  @Type(() => Number)
+  @Min(1)
+  @IsInt()
+  limit: number;
+
+  @ApiProperty({
+    type: () => [String],
+    description: "booking status filter list",
+    example: [
+      BookingStatus.WAITING_FOR_GUIDE_CONFIRMATION,
+      BookingStatus.WAITING_FOR_PAYMENT,
+    ],
+  })
+  @IsArray()
+  @IsString({ each: true })
+  bookingStatusFilter: BookingStatus[];
 }

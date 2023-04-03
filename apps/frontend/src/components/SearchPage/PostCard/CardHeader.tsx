@@ -5,12 +5,13 @@ interface ICardHeader {
   postId: number;
   profile: string;
   name: string;
-  authorId: number;
+  userId: number;
+  guideId: number;
   currentUserId: number;
 }
 
 const CardHeader = (props: ICardHeader) => {
-  const { profile, name, authorId, postId, currentUserId } = props;
+  const { profile, name, userId, postId, currentUserId, guideId } = props;
 
   const imageUrl = process.env.backendBaseURL + "/media/" + profile;
 
@@ -25,7 +26,7 @@ const CardHeader = (props: ICardHeader) => {
           }}
         />
         <NextLink
-          href={`/guide-profile/${authorId}`}
+          href={`/guide-profile/${guideId}`}
           style={{
             textDecoration: "none",
             color: "black",
@@ -34,7 +35,7 @@ const CardHeader = (props: ICardHeader) => {
           {name}
         </NextLink>
       </Box>
-      <OptionMenu isOwner={currentUserId === authorId} postId={postId} />
+      <OptionMenu isOwner={currentUserId === userId} postId={postId} />
     </>
   );
 };

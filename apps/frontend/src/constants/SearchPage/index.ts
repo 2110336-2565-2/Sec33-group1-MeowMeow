@@ -5,6 +5,7 @@ export const POST_PER_PAGE = 5;
 export const templatePost: Partial<IPost> = {
   author: {
     id: 1,
+    guideId: 1,
     name: "Placeholder Name",
     profile: "",
   },

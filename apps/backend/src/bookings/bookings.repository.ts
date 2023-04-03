@@ -19,26 +19,30 @@ const bookingStatusEnumMapper = {
 
 @Injectable()
 export class BookingsRepository {
-  constructor(private readonly prismaService: PrismaService) { }
+  constructor(private readonly prismaService: PrismaService) {}
 
   async paginateBookings(filter: {
     offset: number;
     limit: number;
     userId?: number;
     guideId?: number;
-  }): Promise<[number,
-    {
-      id: number;
-      bookingStatus: BookingStatus;
-      updatedAt: Date;
-      startDate: Date;
-      endDate: Date;
-      userId: number;
-      username: string;
-      firstName: string;
-      lastName: string;
-      postId: number;
-    }[]]
+    bookingStatusFilter?: BookingStatus[];
+  }): Promise<
+    [
+      number,
+      {
+        id: number;
+        bookingStatus: BookingStatus;
+        updatedAt: Date;
+        startDate: Date;
+        endDate: Date;
+        userId: number;
+        username: string;
+        firstName: string;
+        lastName: string;
+        postId: number;
+      }[],
+    ]
   > {
     const [count, results] = await this.prismaService.$transaction([
       this.prismaService.booking.count({
@@ -47,13 +51,19 @@ export class BookingsRepository {
           post: {
             authorId: filter.guideId,
           },
-        }
+          bookingStatus: {
+            in: filter.bookingStatusFilter,
+          },
+        },
       }),
       this.prismaService.booking.findMany({
         where: {
           userId: filter.userId,
           post: {
             authorId: filter.guideId,
+          },
+          bookingStatus: {
+            in: filter.bookingStatusFilter,
           },
         },
         include: {
@@ -65,25 +75,28 @@ export class BookingsRepository {
           {
             createdAt: 'desc',
           },
-        ]
-      })
-    ])
+        ],
+      }),
+    ]);
 
-    return [count, results.map((e) => {
-      return {
-        id: e.id,
-        bookingStatus: e.bookingStatus,
-        updatedAt: e.updatedAt,
-        startDate: e.startDate,
-        endDate: e.endDate,
-        userId: e.userId,
-        username: e.user.username,
-        firstName: e.user.firstName,
-        lastName: e.user.lastName,
-        userName: e.user.username,
-        postId: e.postId,
-      };
-    })];
+    return [
+      count,
+      results.map((e) => {
+        return {
+          id: e.id,
+          bookingStatus: e.bookingStatus,
+          updatedAt: e.updatedAt,
+          startDate: e.startDate,
+          endDate: e.endDate,
+          userId: e.userId,
+          username: e.user.username,
+          firstName: e.user.firstName,
+          lastName: e.user.lastName,
+          userName: e.user.username,
+          postId: e.postId,
+        };
+      }),
+    ];
   }
 
   async getBookingById(id: number): Promise<{

@@ -17,5 +17,6 @@ import { GuidesRepository } from 'src/guides/guides.repository';
     GuidesRepository,
     PrismaService,
   ],
+  exports: ['PostsService'],
 })
 export class PostsModule {}

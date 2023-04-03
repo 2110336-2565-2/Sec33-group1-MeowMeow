@@ -11,7 +11,6 @@ import { PaymentRepository } from './payment.repository';
 
 @Injectable()
 export class PaymentService {
-  private readonly publicKey: string;
   private readonly secretKey: string;
 
   constructor(
@@ -20,9 +19,6 @@ export class PaymentService {
     private readonly paymentRepository: PaymentRepository,
     private readonly bookingRepository: BookingsRepository,
   ) {
-    this.publicKey = Buffer.from(backendConfig.omise.publicKey).toString(
-      'base64',
-    );
     this.secretKey = Buffer.from(backendConfig.omise.secretKey).toString(
       'base64',
     );

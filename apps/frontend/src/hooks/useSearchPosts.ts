@@ -25,8 +25,7 @@ const fetchPosts = async (props: IFetchPosts) => {
   const params = {
     offset: (pageNo - 1) * POST_PER_PAGE,
     limit: POST_PER_PAGE,
-    // fee: filterOptions.price[1],
-    fee: 12,
+    fee: filterOptions.price[1],
     reviewScore: filterOptions.rating[0],
     locations: filterOptions.location ? [filterOptions.location] : [],
     text: search,
@@ -76,57 +75,43 @@ export const useSearchPosts = () => {
 
   const filterStuff = useFilterForm(); // init filter module
 
+  const fetchAndSetFeed = useCallback(() => {
+    fetchPosts({
+      pageNo,
+      search,
+      filterOptions: filterStuff.options,
+    })
+      .then((resp: ISearchPosts) => {
+        setFeed(resp.posts);
+        setAllPage(Math.ceil(resp.count / POST_PER_PAGE));
+        setFeedStatus(FeedStatus.SHOWING);
+      })
+      .catch((err) => {
+        if (err instanceof Error) {
+          if (err.message[0] === "fee must not be less than 30") {
+            setFeed([]);
+            setFeedStatus(FeedStatus.SHOWING);
+          }
+          addNotification(err.message, "error");
+        }
+      });
+  }, [pageNo, search, filterStuff.options, addNotification]);
+
   const handleSearch = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       setFeedStatus(FeedStatus.LOADING);
       setSearch(tempSearch); // update global search
 
-      fetchPosts({
-        pageNo,
-        search,
-        filterOptions: filterStuff.options,
-      })
-        .then((resp: ISearchPosts) => {
-          setFeed(resp.posts);
-          setAllPage(Math.ceil(resp.count / POST_PER_PAGE));
-          setFeedStatus(FeedStatus.SHOWING);
-        })
-        .catch((err) => {
-          if (err instanceof Error) {
-            if (err.message[0] === "fee must not be less than 30") {
-              setFeed([]);
-              setFeedStatus(FeedStatus.SHOWING);
-            }
-            addNotification(err.message, "error");
-          }
-        });
+      fetchAndSetFeed();
     },
-    [tempSearch, search, filterStuff.options]
+    [tempSearch, fetchAndSetFeed]
   );
 
   useEffect(() => {
     if (feedStatus !== FeedStatus.INITIAL) {
       setFeedStatus(FeedStatus.LOADING);
-      fetchPosts({
-        pageNo,
-        search,
-        filterOptions: filterStuff.options,
-      })
-        .then((resp: ISearchPosts) => {
-          setFeed(resp.posts);
-          setAllPage(Math.ceil(resp.count / POST_PER_PAGE));
-          setFeedStatus(FeedStatus.SHOWING);
-        })
-        .catch((err) => {
-          if (err instanceof Error) {
-            if (err.message[0] === "fee must not be less than 30") {
-              setFeed([]);
-              setFeedStatus(FeedStatus.SHOWING);
-            }
-            addNotification(err.message, "error");
-          }
-        });
+      fetchAndSetFeed();
     }
   }, [search, pageNo, filterStuff.options]); // refetch feed when page number changes : pagination
 

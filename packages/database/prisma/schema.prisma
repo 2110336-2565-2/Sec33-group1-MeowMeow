@@ -36,7 +36,7 @@ model User {
   hashedPassword String
   firstName      String
   lastName       String
-  imageId   String?
+  imageId        String?
 
   roles        Role[]        @default([USER])
   guide        Guide?

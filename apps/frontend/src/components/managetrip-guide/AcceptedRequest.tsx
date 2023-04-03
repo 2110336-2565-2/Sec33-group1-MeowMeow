@@ -40,7 +40,7 @@ const AcceptedRequest = ({ bookings, handleCancel }: IAcceptedRequestProps) => {
   const filteredbooking = bookings.filter(
     (booking) =>
       booking.bookingStatus === "WAITING_FOR_PAYMENT" ||
-      booking.bookingStatus === "WAITING_FOR_TRAVELING"
+      booking.bookingStatus === "TRAVELING"
   );
   return (
     <div>

@@ -1,28 +1,18 @@
-import { ApiProperty, PickType } from "@nestjs/swagger";
+import {
+  ApiProperty,
+  IntersectionType,
+  PartialType,
+  PickType,
+} from "@nestjs/swagger";
 import { Booking } from "./booking.dto";
-import { IsInt, Min } from "class-validator";
+import { IsArray, IsInt, IsString, Min } from "class-validator";
 import { Type } from "class-transformer";
-export class GetBookingsByGuideIdRequest {
-  @ApiProperty({
-    type: () => Number,
-    description: "search offset",
-    example: 0,
-  })
-  @Type(() => Number)
-  @Min(0)
-  @IsInt()
-  offset: number;
+import { BookingStatus } from "database";
+export class GetBookingsByGuideIdRequest extends IntersectionType(
+  PickType(Booking, ["limit", "offset"] as const),
+  PartialType(PickType(Booking, ["bookingStatusFilter"] as const))
+) {}
 
-  @ApiProperty({
-    type: () => Number,
-    description: "search limit",
-    example: 1,
-  })
-  @Type(() => Number)
-  @Min(1)
-  @IsInt()
-  limit: number;
-}
 export class GetBookingsByGuideIdResponseMember extends PickType(Booking, [
   "id",
   "startDate",

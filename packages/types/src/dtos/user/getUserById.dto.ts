@@ -12,4 +12,5 @@ export class GetUserByIdResponse extends PickType(User, [
   "firstName",
   "lastName",
   "roles",
+  "imageId",
 ] as const) {}

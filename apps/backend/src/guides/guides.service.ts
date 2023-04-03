@@ -8,6 +8,8 @@ import {
   GetGuideByUserIdResponse,
   GuideRegisterRequest,
   GuideRegisterResponse,
+  GuideUpdateRequest,
+  GuideUpdateResponse,
   SearchGuidesRequest,
   SearchGuidesResponse,
 } from 'types';
@@ -23,6 +25,10 @@ export interface GuidesService {
     userId: number,
     guideRegisterData: GuideRegisterRequest,
   ): Promise<GuideRegisterResponse>;
+  updateGuide(
+    userId: number,
+    guideUpdateData: GuideUpdateRequest,
+  ): Promise<GuideUpdateResponse>;
 }
 
 @Injectable()
@@ -68,7 +74,6 @@ export class GuidesServiceImpl {
       file: guideRegisterData.certificate,
       fileType: guideRegisterData.certificateType,
     });
-
     const paymentId = await this.paymentService.createRecipient({
       userId: userId,
       brandBankAccount: guideRegisterData.brandBankAccount,
@@ -87,11 +92,26 @@ export class GuidesServiceImpl {
       locations: guideRegisterData.locations,
       tourStyles: guideRegisterData.tourStyles,
     });
-    this.usersRepo.addUserRole(userId, Role.GUIDE);
+    await this.usersRepo.addUserRole(userId, Role.GUIDE);
     return {
       message: 'success',
       guideId: guide.guideId,
       certificateId: guide.certificateId,
+    };
+  }
+
+  async updateGuide(
+    userId: number,
+    guideUpdateData: GuideUpdateRequest,
+  ): Promise<GuideUpdateResponse> {
+    const guide = await this.guidesRepo.updateGuide({
+      userId: userId,
+      locations: guideUpdateData.locations,
+      tourStyles: guideUpdateData.tourStyles,
+    });
+    return {
+      message: 'success',
+      guideId: guide.guideId,
     };
   }
 }

@@ -13,6 +13,7 @@ export class GuideRegisterRequest {
   @IsArray()
   @IsString({ each: true })
   locations: string[];
+
   @ApiProperty({
     type: () => [String],
     description: "guide tour style",
@@ -22,6 +23,7 @@ export class GuideRegisterRequest {
   @IsArray()
   @IsString({ each: true })
   tourStyles: string[];
+
   @ApiProperty({
     type: () => String,
     format: "binary",

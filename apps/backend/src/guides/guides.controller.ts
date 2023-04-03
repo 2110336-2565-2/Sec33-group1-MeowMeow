@@ -24,11 +24,15 @@ import {
   GetGuideByIdResponse,
   GetGuideByUserIdResponse,
   GuideRegisterRequest,
+  GuideRegisterResponse,
+  GuideUpdateRequest,
+  GuideUpdateResponse,
   SearchGuidesGuideResponse,
   SearchGuidesRequest,
 } from 'types';
 import { GuidesService } from './guides.service';
 import {
+  ApiBody,
   ApiConsumes,
   ApiCookieAuth,
   ApiOperation,
@@ -184,7 +188,7 @@ export class GuidesController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'successfully registered for a guide',
-    type: [SearchGuidesGuideResponse],
+    type: GuideRegisterResponse,
   })
   @ApiResponse({
     status: HttpStatus.UNAUTHORIZED,
@@ -210,9 +214,8 @@ export class GuidesController {
     )
     certificate: Express.Multer.File,
     @Body() guideRegisterData: GuideRegisterRequest,
-  ) {
+  ): Promise<GuideRegisterResponse> {
     try {
-      console.log(certificate.originalname.split('.'));
       const account: AccountMetadata = req.account;
       return await this.guidesService.registerUserForGuide(account.userId, {
         ...guideRegisterData,
@@ -226,6 +229,41 @@ export class GuidesController {
           HttpStatus.CONFLICT,
         );
       }
+      this.handleException(e);
+    }
+  }
+
+  @ApiCookieAuth('access_token')
+  @ApiOperation({ summary: 'update guide data' })
+  @ApiBody({
+    type: GuideUpdateRequest,
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'successfully updated for a guide',
+    type: GuideUpdateResponse,
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'access token not provided',
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'internal server error',
+  })
+  @UseGuards(AuthGuard)
+  @Post('update')
+  async updateGuide(
+    @Req() req,
+    @Body() guideUpdateData: GuideUpdateRequest,
+  ): Promise<GuideUpdateResponse> {
+    try {
+      const account: AccountMetadata = req.account;
+      return await this.guidesService.updateGuide(
+        account.userId,
+        guideUpdateData,
+      );
+    } catch (e) {
       this.handleException(e);
     }
   }

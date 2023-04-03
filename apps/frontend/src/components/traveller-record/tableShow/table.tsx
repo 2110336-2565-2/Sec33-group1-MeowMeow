@@ -33,7 +33,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 export default function TableRecord() {
   const [page, setPage] = useState<number>(0);
-  const [rowsPerPage, setRowsPerPage] = useState<number>(1);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(3);
 
   const [rows, setRows] = React.useState<IGetRecord[]>([]);
   const [rowsCount, setRowsCount] = React.useState<number>(0);
@@ -42,7 +42,7 @@ export default function TableRecord() {
   // console.log("Rows Count: ", rowsCount);
 
   let record = bookingViewModel({
-    offset: page,
+    offset: page * rowsPerPage,
     limit: rowsPerPage,
     setRows,
     setRowsCount,
@@ -137,7 +137,7 @@ export default function TableRecord() {
             <TableFooter>
               <TableRow>
                 <TablePagination
-                  rowsPerPageOptions={[1, 2, 3, { label: "All", value: -1 }]}
+                  rowsPerPageOptions={[3, 6, 9, { label: "All", value: -1 }]}
                   colSpan={5}
                   count={rowsCount}
                   rowsPerPage={rowsPerPage}

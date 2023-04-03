@@ -138,7 +138,14 @@ export default function StatusDialog({ tripId, nameButton }: IStatusDialog) {
                       <Button
                         variant="contained"
                         onClick={() => {
-                          router.push(buttonMapLink.get(item)!);
+                          if (
+                            item == subButtonName.PAY ||
+                            item == subButtonName.REFUND
+                          ) {
+                            router.push(buttonMapLink.get(item)! + tripId);
+                          } else {
+                            router.push(buttonMapLink.get(item)!);
+                          }
                           handleClose();
                         }}
                       >

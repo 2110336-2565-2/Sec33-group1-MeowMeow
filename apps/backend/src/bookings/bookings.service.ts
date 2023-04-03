@@ -49,7 +49,10 @@ export interface IBookingsService {
     guideId: number,
     queryParams: GetBookingsByGuideIdRequest,
   ): Promise<GetBookingsByGuideIdResponse>;
-  createBooking(req: CreateBookingRequest): Promise<CreateBookingResponse>;
+  createBooking(
+    userId: number,
+    req: CreateBookingRequest,
+  ): Promise<CreateBookingResponse>;
 }
 
 @Injectable()
@@ -99,6 +102,7 @@ export class BookingsService implements IBookingsService {
   }
 
   async createBooking(
+    userId: number,
     req: CreateBookingRequest,
   ): Promise<CreateBookingResponse> {
     if (isNaN(Date.parse(req.startDate))) {
@@ -107,9 +111,12 @@ export class BookingsService implements IBookingsService {
     if (isNaN(Date.parse(req.endDate))) {
       throw new InvalidDateFormat("invalid 'endDate' format");
     }
+    if (userId == req.guideId) {
+      throw new UnprocessableEntity('cannot book your own post');
+    }
 
     const booking = await this.bookingsRepo.createBooking({
-      userId: req.userId,
+      userId: userId,
       postId: req.postId,
       guideId: req.guideId,
       startDate: new Date(req.startDate),

@@ -69,4 +69,11 @@ export class User {
     example: [Role.USER],
   })
   roles: string[];
+
+  @ApiProperty({
+    type: () => String,
+    description: "image ID",
+    example: "hello.jpg",
+  })
+  imageId: string;
 }

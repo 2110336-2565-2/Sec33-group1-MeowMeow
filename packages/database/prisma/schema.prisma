@@ -36,6 +36,7 @@ model User {
   hashedPassword String
   firstName      String
   lastName       String
+  imageId   String?
 
   roles        Role[]        @default([USER])
   guide        Guide?
@@ -146,8 +147,8 @@ model Booking {
   postId        Int
   userId        Int
 
-  post  Post  @relation(fields: [postId], references: [id])
-  user  User  @relation(fields: [userId], references: [id])
+  post         Post          @relation(fields: [postId], references: [id])
+  user         User          @relation(fields: [userId], references: [id])
   transactions Transaction[]
 }
 

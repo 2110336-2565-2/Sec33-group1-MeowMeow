@@ -69,6 +69,7 @@ export class UsersRepository {
       firstName?: string;
       lastName?: string;
       hashedPassword?: string;
+      imageId?: string;
     },
   ): Promise<User> {
     try {
@@ -80,6 +81,7 @@ export class UsersRepository {
           firstName: update.firstName,
           lastName: update.lastName,
           hashedPassword: update.hashedPassword,
+          imageId: update.imageId,
         },
       });
 

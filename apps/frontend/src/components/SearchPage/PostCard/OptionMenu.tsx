@@ -6,12 +6,12 @@ import Router from "next/router";
 import { NotificationContext } from "@/context/NotificationContext";
 
 interface IOptionMenu {
-  post_id: number;
+  postId: number;
   isOwner: boolean;
 }
 
 const OptionMenu = (props: IOptionMenu) => {
-  const { isOwner, post_id } = props;
+  const { isOwner, postId } = props;
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const { addNotification } = useContext(NotificationContext);
@@ -25,7 +25,7 @@ const OptionMenu = (props: IOptionMenu) => {
   };
 
   const handleDelete = () => {
-    deletePost(post_id)
+    deletePost(postId)
       .then(() => {
         addNotification("Post deleted successfully", "success");
         setTimeout(() => {
@@ -39,7 +39,7 @@ const OptionMenu = (props: IOptionMenu) => {
   };
 
   const handleEdit = () => {
-    Router.push(`/guide-post/edit/${post_id}`);
+    Router.push(`/guide-post/edit/${postId}`);
   };
 
   return (

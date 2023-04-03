@@ -191,7 +191,6 @@ export class BookingsService implements IBookingsService {
     bookingId: number,
   ): Promise<CancelBookingResponse> {
     try {
-      console.log({ bookingId, account });
       const booking = await this.bookingsRepo.getBookingById(bookingId);
       const guide = await this.guideService.getGuideByUserId(booking.guideId);
       if (booking.guideId !== guide.guideId) {

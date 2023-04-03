@@ -28,15 +28,11 @@ export type BackendConfig = {
   //     playground: boolean;
   //   };
   omise: {
-    publicKey: string;
     secretKey: string;
   };
 };
 
 export const loadBackendConfig = (): BackendConfig => {
-  if (!process.env.BACKEND_OMISE_PUBLIC_KEY) {
-    throw new Error("BACKEND_OMISE_PUBLIC_KEY is not set");
-  }
   if (!process.env.BACKEND_OMISE_SECRET_KEY) {
     throw new Error("BACKEND_OMISE_SECRET_KEY is not set");
   }
@@ -69,7 +65,6 @@ export const loadBackendConfig = (): BackendConfig => {
       ).split(","),
     },
     omise: {
-      publicKey: process.env.BACKEND_OMISE_PUBLIC_KEY,
       secretKey: process.env.BACKEND_OMISE_SECRET_KEY,
     },
   };

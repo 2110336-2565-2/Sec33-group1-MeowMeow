@@ -15,7 +15,7 @@ import {
   SearchPostsPost,
   SearchPostsResponse,
 } from "types";
-import { POST_PER_PAGE, templatePost } from "@/constants/SearchPage";
+import { POST_PER_PAGE } from "@/constants/SearchPage";
 
 interface IFetchPosts {
   pageNo: number;
@@ -39,7 +39,7 @@ const fetchPosts = async (props: IFetchPosts) => {
   const respData: SearchPostsResponse = resp.data;
 
   const myPostsLoading: Promise<IPost[]> = Promise.all(
-    respData.posts.map(async (post: any) => {
+    respData.posts.map(async (post: SearchPostsPost) => {
       const userId = post.authorId;
       const guideId = post.guideId;
       const plainRespUser = await apiClient.get(`/users/${userId}`);
@@ -47,7 +47,6 @@ const fetchPosts = async (props: IFetchPosts) => {
       const respUser: GetUserByIdResponse = plainRespUser.data;
 
       const result: IPost = {
-        ...templatePost,
         ...post,
         author: {
           id: userId,
@@ -55,7 +54,11 @@ const fetchPosts = async (props: IFetchPosts) => {
           profile: respUser.imageId,
           guideId: guideId,
         },
+        image: "/landing/travel1.png", // template image
       };
+
+      console.log(result);
+
       return result;
     })
   );

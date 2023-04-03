@@ -31,10 +31,24 @@ jobs:
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_TOKEN }}
 
+      - name: Set env
+        id: setenv
+        run: |
+          if [ "${{ github.ref_name }}" = "main" ]; then
+            echo "::set-output name=backend_base_url::${{ secrets.MAIN_BACKEND_BASE_URL }}"
+          elif [ "${{ github.ref_name }}" = "beta" ]; then
+            echo "::set-output name=backend_base_url::${{ secrets.BETA_BACKEND_BASE_URL }}"
+          elif [ "${{ github.ref_name }}" = "dev" ]; then
+            echo "::set-output name=backend_base_url::${{ secrets.DEV_BACKEND_BASE_URL }}"
+          fi
+
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
           context: .
+          build-args: |
+            BACKEND_BASE_URL=${{ steps.setenv.outputs.backend_base_url }}
+            FRONTEND_OMISE_PUBLIC_KEY=${{ secrets.FRONTEND_OMISE_PUBLIC_KEY }}
           file: Dockerfile.frontend
           push: true
           tags: ${{ secrets.IMAGE_REPO }}/${{ secrets.REGISTRY_USERNAME }}/app-frontend-${{ github.ref_name }}:latest

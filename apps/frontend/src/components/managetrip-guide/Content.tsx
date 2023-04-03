@@ -35,7 +35,7 @@ const postDecline = async (booking: Booking) => {
   await apiClient.post("/bookings/" + booking.id + "/decline");
 };
 const postCancel = async (booking: Booking) => {
-  await apiClient.post("/bookings/" + booking.id + "/decline");
+  await apiClient.post("/bookings/" + booking.id + "/cancel");
 };
 const Content = ({ bookings, update, setUpdate }: IContentProps) => {
   const [value, setValue] = useState(0);

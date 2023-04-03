@@ -17,7 +17,7 @@ export const responseReject = async (error: Error) => {
         return await apiClient(config);
       }
       if (config && config.url !== "/auth/sign-in") {
-        window.location.href = "/login";
+        window.location.href = "";
       }
     }
     if (response?.data?.message) {

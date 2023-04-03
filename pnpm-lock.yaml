@@ -286,6 +286,12 @@ importers:
       '@prisma/client':
         specifier: ^4.9.0
         version: 4.9.0(prisma@4.9.0)
+      bcrypt:
+        specifier: ^5.1.0
+        version: 5.1.0
+      config:
+        specifier: workspace:*
+        version: link:../config
     devDependencies:
       '@types/node':
         specifier: 18.11.18

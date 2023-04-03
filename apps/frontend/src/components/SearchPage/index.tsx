@@ -1,7 +1,6 @@
 import { FeedStatus } from "@/hooks/types/FeedStatus";
 import { useSearchPosts } from "@/hooks/useSearchPosts";
 import { Box, Container, Pagination, Skeleton, Stack } from "@mui/material";
-import Navbar from "../common/Navbar";
 import PostFeed from "./PostFeed";
 import SearchBox from "./SearchBox";
 import useCustomSnackbar from "@/hooks/useCustomSnackbar";

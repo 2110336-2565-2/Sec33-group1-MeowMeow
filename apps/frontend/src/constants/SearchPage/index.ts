@@ -6,9 +6,9 @@ export const templatePost: Partial<IPost> = {
   author: {
     id: 1,
     name: "Placeholder Name",
-    profile: "/images/searchPage/profile.jpeg", // webp is better
+    profile: "",
   },
-  image: "/landing/travel1.png", // post
+  image: "/landing/travel1.png", // template image
 };
 
 export const maxFee: number = 10000;

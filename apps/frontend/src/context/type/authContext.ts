@@ -8,6 +8,7 @@ export interface IUser {
   firstName: string;
   lastName: string;
   roles: Roles_Types[];
+  imageId?: string;
 }
 
 export interface ILoginForm {
@@ -23,4 +24,5 @@ export interface IProfileResponse {
   firstName: IUser["firstName"];
   lastName: IUser["lastName"];
   roles: IUser["roles"];
+  imageId?: IUser["imageId"];
 }

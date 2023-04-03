@@ -10,7 +10,11 @@ import { FeedStatus } from "./types/FeedStatus";
 import useFilterForm from "./useFilterForm";
 import apiClient from "@/utils/apiClient";
 import { NotificationContext } from "@/context/NotificationContext";
-import { SearchPostsResponse } from "types";
+import {
+  GetGuideByUserIdResponse,
+  GetUserByIdResponse,
+  SearchPostsResponse,
+} from "types";
 import { POST_PER_PAGE, templatePost } from "@/constants/SearchPage";
 
 interface IFetchPosts {
@@ -37,13 +41,18 @@ const fetchPosts = async (props: IFetchPosts) => {
   const myPostsLoading: Promise<IPost[]> = Promise.all(
     respData.posts.map(async (post: any) => {
       const authorId = post.authorId;
-      const resp = await apiClient.get(`/users/${authorId}`);
+      const plainRespUser = await apiClient.get(`/users/${authorId}`);
+      const plainRespGuide = await apiClient.get(`/guides/${authorId}`);
+
+      const respUser: GetUserByIdResponse = plainRespUser.data;
+      const respGuide: GetGuideByUserIdResponse = plainRespGuide.data;
       return {
         ...templatePost,
         ...post,
         author: {
           id: authorId,
-          name: resp.data.username,
+          name: respUser.username,
+          profile: respGuide.imageId,
         },
       };
     })

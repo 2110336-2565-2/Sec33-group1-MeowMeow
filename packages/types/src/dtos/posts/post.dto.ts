@@ -63,7 +63,7 @@ export class Post {
   @IsNotEmpty()
   @IsNumber({ maxDecimalPlaces: 2 })
   @Max(99999999.99)
-  @Min(0)
+  @Min(30)
   fee: number;
 
   @ApiProperty({

@@ -6,7 +6,6 @@ import {
 } from "./StatusDisplayView";
 import { CircularProgress, Container, Stack } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
-import Navbar from "../common/Navbar";
 import PaymentOption from "./PaymentOption";
 import Summary from "./Summary";
 import { IBooking, PaymentStatus, ITrip } from "./types";
@@ -102,7 +101,6 @@ const PaymentSummary = (props: IPaymentSummaryProps) => {
 
   return (
     <>
-      <Navbar />
       <Container
         maxWidth="md"
         sx={{

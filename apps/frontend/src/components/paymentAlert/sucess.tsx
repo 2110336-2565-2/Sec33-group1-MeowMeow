@@ -14,7 +14,9 @@ import theme from "@/config/theme";
 export default function PaymentSuccess() {
   return (
     <ContainerPaymentAlert>
-      <Card sx={{ textAlign: "center", width: "fit-content" }}>
+      <Card
+        sx={{ textAlign: "center", alignItems: "center", width: "fit-content" }}
+      >
         <CardContent>
           <CheckCircleIcon
             sx={{

@@ -59,14 +59,6 @@ const AcceptedRequest = ({ bookings, handleCancel }: IAcceptedRequestProps) => {
         <DialogTitle>Confirmation</DialogTitle>
         <DialogContent>
           <Typography variant="body2" color="textSecondary">
-            Upon cancellation, the client's money will be fully refunded.
-          </Typography>
-          <Typography variant="body2" color="textSecondary">
-            However, you may lost some of your credibility.
-          </Typography>
-          <br />
-          <Typography variant="body2" color="textSecondary">
-            {" "}
             This process cannot be undone, are you sure you want to cancel this
             appointment?
           </Typography>

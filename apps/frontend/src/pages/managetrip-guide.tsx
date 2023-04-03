@@ -11,7 +11,7 @@ const getGuideId = async () => {
 };
 const getData = async (id: string) => {
   const response = await apiClient.get(
-    "bookings/guide/" + id + "?offset=0&limit=20"
+    "bookings/guide/" + id + "?offset=0&limit=1000000"
   );
   return response;
 };

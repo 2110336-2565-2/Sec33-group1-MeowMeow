@@ -18,6 +18,10 @@ RUN pnpm install --frozen-lockfile
 
 COPY --from=pruner /app/prune/frontend/full/ .
 RUN pnpm install --frozen-lockfile
+
+ARG BACKEND_BASE_URL
+ARG FRONTEND_OMISE_PUBLIC_KEY
+
 RUN pnpm run build
 RUN pnpm pkg set scripts.prepare="echo no-prepare"
 RUN pnpm prune --prod

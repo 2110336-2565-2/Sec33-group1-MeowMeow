@@ -324,11 +324,8 @@ export class BookingsService implements IBookingsService {
       const refundDeadline = moment(booking.startDate)
         .subtract(5, 'days')
         .toDate();
-      if (now > booking.startDate) {
-        throw new UnprocessableEntity('this trip has already started');
-      }
-
-      if (now > refundDeadline || booking.bookingStatus !== 'TRAVELING') {
+      const tripPaid = booking.bookingStatus !== 'TRAVELING';
+      if (now > refundDeadline || tripPaid || now > refundDeadline) {
         const cancelledBooking = await this.bookingsRepo.updateBookingStatus(
           bookingId,
           'USER_CANCELLED',

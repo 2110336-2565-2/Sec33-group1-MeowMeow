@@ -83,7 +83,7 @@ export const useSearchPosts = () => {
     })
       .then((resp: ISearchPosts) => {
         setFeed(resp.posts);
-        setAllPage(Math.ceil(resp.count / POST_PER_PAGE));
+        setAllPage(Math.ceil(resp.count / POST_PER_PAGE) || 1);
         setFeedStatus(FeedStatus.SHOWING);
       })
       .catch((err) => {

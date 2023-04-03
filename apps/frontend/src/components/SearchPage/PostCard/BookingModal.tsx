@@ -54,7 +54,6 @@ const BookingModal = (props: IBookingModal) => {
     createBooking({
       startDate: startDate!.toISOString(),
       endDate: endDate!.toISOString(),
-      userId: travellerId,
       guideId: authorId,
       postId: postId,
     })

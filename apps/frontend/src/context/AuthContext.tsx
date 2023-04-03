@@ -54,7 +54,7 @@ const AuthProvider = ({
           window.location.href = "/not-allowed";
         }
       } catch (err) {
-        window.location.href = "/login";
+        window.location.href = "";
       }
     };
     fetchProfile();

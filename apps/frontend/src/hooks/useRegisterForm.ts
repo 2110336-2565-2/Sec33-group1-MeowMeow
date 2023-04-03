@@ -50,7 +50,7 @@ const useRegisterForm = () => {
         await apiClient.post("/users/register", formBody);
         addNotification("Register success", "success");
         setTimeout(() => {
-          router.push("/login");
+          router.push("");
         }, 2000);
       } catch (err) {
         const error = err as Error;

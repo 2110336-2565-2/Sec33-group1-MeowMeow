@@ -16,7 +16,7 @@ const RegisterPage = () => {
       <PrivacyPolicy />
       <Typography variant="body2" component="span" marginTop="20px">
         Already have an account?{" "}
-        <StyledLink href="/login">
+        <StyledLink href="/">
           <Typography variant="body2" color="secondary" component="span">
             Sign in
           </Typography>

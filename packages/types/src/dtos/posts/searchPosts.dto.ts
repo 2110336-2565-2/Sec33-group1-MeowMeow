@@ -84,4 +84,18 @@ export class SearchPostsPost extends PickType(Post, [
   "updatedAt",
 ] as const) {}
 
-export type SearchPostsResponse = SearchPostsPost[];
+export class SearchPostsResponse {
+  @ApiProperty({
+    type: () => [SearchPostsPost],
+    description: "posts that match criteria",
+  })
+  posts: SearchPostsPost[];
+
+  @ApiProperty({
+    type: () => Number,
+    description: "number of posts that match criteria",
+    example: 100,
+  })
+  @Type(() => Number)
+  postsCount: number;
+}

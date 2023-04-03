@@ -49,7 +49,10 @@ export interface IBookingsService {
     guideId: number,
     queryParams: GetBookingsByGuideIdRequest,
   ): Promise<GetBookingsByGuideIdResponse>;
-  createBooking(req: CreateBookingRequest): Promise<CreateBookingResponse>;
+  createBooking(
+    userId: number,
+    req: CreateBookingRequest,
+  ): Promise<CreateBookingResponse>;
 }
 
 @Injectable()
@@ -64,7 +67,7 @@ export class BookingsService implements IBookingsService {
     userId: number,
     queryParams: GetBookingsByUserIdRequest,
   ): Promise<GetBookingsByUserIdResponse> {
-    const bookings = await this.bookingsRepo.paginateBookings({
+    const [bookingsCount, bookings] = await this.bookingsRepo.paginateBookings({
       offset: queryParams.offset,
       limit: queryParams.limit,
       userId: userId,
@@ -76,14 +79,17 @@ export class BookingsService implements IBookingsService {
       bookingStatus: booking.bookingStatus,
       postId: booking.postId,
     }));
-    return results;
+    return {
+      bookings: results,
+      bookingsCount: bookingsCount,
+    };
   }
 
   async getBookingsByGuideId(
     guideId: number,
     queryParams: GetBookingsByGuideIdRequest,
   ): Promise<GetBookingsByGuideIdResponse> {
-    const bookings = await this.bookingsRepo.paginateBookings({
+    const [bookingsCount, bookings] = await this.bookingsRepo.paginateBookings({
       offset: queryParams.offset,
       limit: queryParams.limit,
       guideId: guideId,
@@ -95,10 +101,14 @@ export class BookingsService implements IBookingsService {
       bookingStatus: booking.bookingStatus,
       postId: booking.postId,
     }));
-    return results;
+    return {
+      bookings: results,
+      bookingsCount: bookingsCount,
+    };
   }
 
   async createBooking(
+    userId: number,
     req: CreateBookingRequest,
   ): Promise<CreateBookingResponse> {
     if (isNaN(Date.parse(req.startDate))) {
@@ -107,9 +117,12 @@ export class BookingsService implements IBookingsService {
     if (isNaN(Date.parse(req.endDate))) {
       throw new InvalidDateFormat("invalid 'endDate' format");
     }
+    if (userId == req.guideId) {
+      throw new UnprocessableEntity('cannot book your own post');
+    }
 
     const booking = await this.bookingsRepo.createBooking({
-      userId: req.userId,
+      userId: userId,
       postId: req.postId,
       guideId: req.guideId,
       startDate: new Date(req.startDate),

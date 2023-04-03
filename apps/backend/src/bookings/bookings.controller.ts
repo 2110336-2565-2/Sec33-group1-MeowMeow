@@ -70,6 +70,12 @@ export class BookingsController {
     if (e instanceof RecordAlreadyExist) {
       throw new HttpException(e.message, HttpStatus.CONFLICT);
     }
+    if (e instanceof AccessNotGranted) {
+      throw new HttpException(e.message, HttpStatus.FORBIDDEN);
+    }
+    if (e instanceof UnprocessableEntity) {
+      throw new HttpException(e.message, HttpStatus.UNPROCESSABLE_ENTITY);
+    }
     throw new HttpException(
       'internal server error',
       HttpStatus.INTERNAL_SERVER_ERROR,
@@ -180,8 +186,7 @@ export class BookingsController {
   ): Promise<CreateBookingResponse> {
     try {
       const account: AccountMetadata = req.account;
-      reqBody.userId = account.userId;
-      return await this.bookingsService.createBooking(reqBody);
+      return await this.bookingsService.createBooking(account.userId, reqBody);
     } catch (e) {
       this.handleException(e);
     }
@@ -223,20 +228,7 @@ export class BookingsController {
       const account: AccountMetadata = req.account;
       return await this.bookingsService.acceptBookingByGuide(id, account);
     } catch (e) {
-      console.log(e);
-      if (e instanceof AccessNotGranted) {
-        throw new HttpException(e.message, HttpStatus.FORBIDDEN);
-      }
-      if (e instanceof RecordNotFound) {
-        throw new HttpException(e.message, HttpStatus.NOT_FOUND);
-      }
-      if (e instanceof UnprocessableEntity) {
-        throw new HttpException(e.message, HttpStatus.UNPROCESSABLE_ENTITY);
-      }
-      throw new HttpException(
-        'internal server error',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      this.handleException(e);
     }
   }
 
@@ -284,20 +276,7 @@ export class BookingsController {
       const account: AccountMetadata = req.account;
       return await this.bookingsService.cancelBookingByGuide(id, account);
     } catch (e) {
-      console.log(e);
-      if (e instanceof AccessNotGranted) {
-        throw new HttpException(e.message, HttpStatus.FORBIDDEN);
-      }
-      if (e instanceof RecordNotFound) {
-        throw new HttpException(e.message, HttpStatus.NOT_FOUND);
-      }
-      if (e instanceof UnprocessableEntity) {
-        throw new HttpException(e.message, HttpStatus.UNPROCESSABLE_ENTITY);
-      }
-      throw new HttpException(
-        'internal server error',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      this.handleException(e);
     }
   }
 
@@ -346,20 +325,7 @@ export class BookingsController {
       const account: AccountMetadata = req.account;
       return await this.bookingsService.payBookingFee(id, account, body.token);
     } catch (e) {
-      console.log(e);
-      if (e instanceof AccessNotGranted) {
-        throw new HttpException(e.message, HttpStatus.FORBIDDEN);
-      }
-      if (e instanceof RecordNotFound) {
-        throw new HttpException(e.message, HttpStatus.NOT_FOUND);
-      }
-      if (e instanceof UnprocessableEntity) {
-        throw new HttpException(e.message, HttpStatus.UNPROCESSABLE_ENTITY);
-      }
-      throw new HttpException(
-        'internal server error',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      this.handleException(e);
     }
   }
 
@@ -406,20 +372,7 @@ export class BookingsController {
       const account: AccountMetadata = req.account;
       return await this.bookingsService.cancelBookingByTraveller(id, account);
     } catch (e) {
-      console.log(e);
-      if (e instanceof AccessNotGranted) {
-        throw new HttpException(e.message, HttpStatus.FORBIDDEN);
-      }
-      if (e instanceof RecordNotFound) {
-        throw new HttpException(e.message, HttpStatus.NOT_FOUND);
-      }
-      if (e instanceof UnprocessableEntity) {
-        throw new HttpException(e.message, HttpStatus.UNPROCESSABLE_ENTITY);
-      }
-      throw new HttpException(
-        'internal server error',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      this.handleException(e);
     }
   }
 }

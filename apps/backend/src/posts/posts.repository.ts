@@ -201,42 +201,49 @@ export class PostsRepository {
           },
         });
       }
-      const posts = await this.prismaService.post.findMany({
-        skip: searchData.offset,
-        take: searchData.limit,
-        where: {
-          AND: [
-            {
-              OR: [
-                {
-                  content: {
-                    contains: searchData.text ?? '',
-                  },
+
+      const searchConditions = {
+        AND: [
+          {
+            OR: [
+              {
+                content: {
+                  contains: searchData.text ?? '',
                 },
-                {
-                  title: {
-                    contains: searchData.text ?? '',
-                  },
+              },
+              {
+                title: {
+                  contains: searchData.text ?? '',
                 },
-                {
-                  contactInfo: {
-                    contains: searchData.text ?? '',
-                  },
+              },
+              {
+                contactInfo: {
+                  contains: searchData.text ?? '',
                 },
-              ],
-            },
-            ...extraSearchOptions,
-          ],
-        },
-        include: {
-          PostLocation: {
-            select: {
-              location: true,
+              },
+            ],
+          },
+          ...extraSearchOptions,
+        ],
+      };
+      const [postsCount, posts] = await this.prismaService.$transaction([
+        this.prismaService.post.count({
+          where: searchConditions,
+        }),
+        this.prismaService.post.findMany({
+          skip: searchData.offset,
+          take: searchData.limit,
+          where: searchConditions,
+          include: {
+            PostLocation: {
+              select: {
+                location: true,
+              },
             },
           },
-        },
-      });
-      return posts;
+        }),
+      ]);
+      return { posts, postsCount };
     } catch (e) {
       throw e;
     }

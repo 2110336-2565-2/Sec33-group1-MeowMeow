@@ -15,6 +15,7 @@ import AppSnackbar from "../common/AppSnackbar";
 import useCustomSnackbar from "@/hooks/useCustomSnackbar";
 import { GetBookingsByGuideIdResponse } from "types";
 import { NotificationContext } from "@/context/NotificationContext";
+import { BookingStatus } from "../../../../../packages/database/src";
 
 const fetchPost = async (postId: number) => {
   const resp = await apiClient.get(`/posts/${postId}`, {});
@@ -40,8 +41,12 @@ const fetchBooking = async (bookingId: number) => {
   );
 
   if (!booking) {
-    throw new Error("Booking not found");
+    throw new Error(`Booking with id ${bookingId} is not found`);
   }
+  if (booking.bookingStatus !== BookingStatus.WAITING_FOR_PAYMENT) {
+    throw new Error("You can't pay for this booking due to its booking status");
+  }
+
   const post = await fetchPost(booking.postId);
   const formattedBooking: IBooking = {
     ...booking,

@@ -107,6 +107,7 @@ export class GuidesRepository {
         userId: guide.user.id,
         firstName: guide.user.firstName,
         lastName: guide.user.lastName,
+        imageId: guide.user.imageId,
         certificateId: guide.certificateId,
         averageReviewScore: scoreResult._avg.score?.toNumber() | 0,
         locations: guide.GuideLocation.map((e) => e.location.locationName),

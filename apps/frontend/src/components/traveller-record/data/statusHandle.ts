@@ -64,8 +64,8 @@ buttonMapStatus.set(BookingStatus.FINISHED, []);
 
 export let buttonMapLink = new Map<string, string>();
 buttonMapLink.set(subButtonName.CANCEL, "/cancel-trip");
-buttonMapLink.set(subButtonName.PAY, "/");
-buttonMapLink.set(subButtonName.REFUND, "/");
+buttonMapLink.set(subButtonName.PAY, "/payment-summary/");
+buttonMapLink.set(subButtonName.REFUND, "/payment-summary/");
 buttonMapLink.set(subButtonName.REVIEW, "/guide-profile/1");
 
 export let statusDetail = new Map<string, IStatus>();

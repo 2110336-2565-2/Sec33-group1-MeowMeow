@@ -2,6 +2,7 @@ import {
   AVAILABLE_DASHBOARD_STATE,
   DASHBOARD_STATE_GUIDE,
   DASHBOARD_STATE_USER,
+  GUIDE_STATE_LIST,
 } from "@/hooks/types/dashBoardState";
 
 const pathToDashboardMapper = Object.values({
@@ -12,7 +13,10 @@ const pathToDashboardMapper = Object.values({
   return { ...prev, [path]: name };
 }, {} as { [key: string]: AVAILABLE_DASHBOARD_STATE });
 
-const dashboardUrlMapper = (url: string) => {
+const dashboardUrlMapper = (url: string, isGuide: boolean) => {
+  if (!isGuide && !!GUIDE_STATE_LIST.find((data) => data === url)) {
+    return undefined;
+  }
   return pathToDashboardMapper[url];
 };
 

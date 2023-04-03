@@ -30,15 +30,15 @@ export const DASHBOARD_STATE_GUIDE = {
     name: "CREATE_POST",
     path: "/guide-post/create",
   },
-  GUIDE_POST: {
-    name: "GUIDE_POST",
-    path: "/guide-post",
-  },
   MANAGE_TRIP_GUIDE: {
     name: "MANAGE_TRIP_GUIDE",
     path: "/managetrip-guide",
   },
 } as const;
+
+export const GUIDE_STATE_LIST = Object.values(DASHBOARD_STATE_GUIDE).map(
+  (data) => data.path
+);
 
 export type DASHBOARD_STATE_USER_TYPE = keyof typeof DASHBOARD_STATE_USER;
 export type DASHBOARD_STATE_GUIDE_TYPE = keyof typeof DASHBOARD_STATE_GUIDE;

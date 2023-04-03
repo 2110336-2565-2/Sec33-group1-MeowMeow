@@ -1,15 +1,9 @@
 import { useContext, useEffect, useState } from "react";
 import type { OmiseCard as OmiseCardType } from "omise-js-typed";
-import { PaymentStatus, ITrip, IBooking } from "./types";
+import { PaymentStatus, IBooking } from "./types";
 import apiClient from "@/utils/apiClient";
 import { NotificationContext } from "@/context/NotificationContext";
 import { AxiosError } from "axios";
-
-const testCreditCard = 4111111111111111;
-
-if (!process.env.BACKEND_OMISE_PUBLIC_KEY) {
-  throw new Error("BACKEND_OMISE_PUBLIC_KEY is not defined");
-}
 
 const payTrip = async (bookingId: number, nonce: string) => {
   const resp = await apiClient.post(`/bookings/${bookingId}/payment`, {
@@ -40,7 +34,7 @@ const useOmiseFrontend = (props: IOmiseFrontend) => {
 
   useEffect(() => {
     omiseCard?.configure({
-      publicKey: process.env.BACKEND_OMISE_PUBLIC_KEY || "",
+      publicKey: process.env.FRONTEND_OMISE_PUBLIC_KEY || "",
     });
   }, [omiseCard]);
 

@@ -1,5 +1,6 @@
 import apiClient from "@/utils/apiClient";
 import React, { useEffect, useState } from "react";
+import { GetBookingsByUserIdResponse } from "types";
 import { BookingStatus } from "../../../../../../../packages/database/src";
 
 export interface IBookingProps {
@@ -8,11 +9,16 @@ export interface IBookingProps {
   setRows: React.Dispatch<React.SetStateAction<IGetRecord[]>>;
 }
 
+export interface IResultRecord {
+  count: number;
+  rows: IGetRecord[];
+}
+
 export interface IGetRecord {
   id: number;
   startDate: string;
   endDate: string;
-  bookingStatus: BookingStatus;
+  bookingStatus: string;
   postId: number;
 }
 
@@ -22,21 +28,23 @@ export default function bookingViewModel({
   setRows,
 }: IBookingProps) {
   const [travellerRecord, setTravellerRecord] = useState<IGetRecord[]>([]);
+  const [countData, setCountData] = useState<number>(0);
 
   async function getRecordData() {
     let result: IGetRecord[] = [];
     let message = "Loading.. ";
     await apiClient
-      .get<IGetRecord[]>("/bookings/self", {
+      .get<GetBookingsByUserIdResponse>("/bookings/self", {
         params: { offset: offset, limit: limit },
       })
       .then((res) => {
-        // console.log("Response Record: ", res);
-        result = res.data;
+        console.log("Response Record: ", res);
+        result = res.data.bookings;
         setTravellerRecord(result);
         message = "Success";
 
         setRows(result);
+        setCountData(res.data.bookingsCount);
       })
       .catch((err) => {
         console.log("Error: ", err);
@@ -55,5 +63,10 @@ export default function bookingViewModel({
     });
   }, [offset, limit]);
 
-  return travellerRecord;
+  let ans: IResultRecord = {
+    count: countData,
+    rows: travellerRecord,
+  };
+
+  return ans;
 }

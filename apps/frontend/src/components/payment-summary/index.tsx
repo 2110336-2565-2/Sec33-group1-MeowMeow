@@ -35,9 +35,9 @@ const fetchBooking = async (bookingId: number) => {
   });
   const allBookings: GetBookingsByGuideIdResponse = resp.data;
 
-  console.log(allBookings);
-
-  const booking = allBookings.find((booking) => booking.id === bookingId);
+  const booking = allBookings.bookings.find(
+    (booking) => booking.id === bookingId
+  );
 
   if (!booking) {
     throw new Error("Booking not found");

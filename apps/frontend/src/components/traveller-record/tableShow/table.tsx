@@ -41,7 +41,7 @@ export default function TableRecord() {
   let prev = React.useRef(record);
 
   useEffect(() => {
-    setRows(record);
+    setRows(record.rows);
   }, [prev.current !== record]);
 
   let emptyRows =

@@ -30,7 +30,26 @@ export class GetBookingsByUserIdResponseMember extends PickType(Booking, [
   "endDate",
   "bookingStatus",
   "postId",
-] as const) {}
+  "userId",
+  "username",
+  "firstName",
+  "lastName",
+] as const) {
+  @ApiProperty({
+    type: () => String,
+  })
+  username: string;
+
+  @ApiProperty({
+    type: () => String,
+  })
+  firstName: string;
+
+  @ApiProperty({
+    type: () => String,
+  })
+  lastName: string;
+}
 
 export class GetBookingsByUserIdResponse {
   @ApiProperty({

@@ -78,6 +78,10 @@ export class BookingsService implements IBookingsService {
       endDate: booking.endDate.toString(),
       bookingStatus: booking.bookingStatus,
       postId: booking.postId,
+      userId: booking.userId,
+      username: booking.username,
+      firstName: booking.firstName,
+      lastName: booking.lastName,
     }));
     return {
       bookings: results,
@@ -100,6 +104,10 @@ export class BookingsService implements IBookingsService {
       endDate: booking.endDate.toString(),
       bookingStatus: booking.bookingStatus,
       postId: booking.postId,
+      userId: booking.userId,
+      username: booking.username,
+      firstName: booking.firstName,
+      lastName: booking.lastName,
     }));
     return {
       bookings: results,

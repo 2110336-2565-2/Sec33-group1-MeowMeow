@@ -38,7 +38,9 @@ const fetchBooking = async (bookingId: number) => {
 
   console.log(allBookings);
 
-  const booking = allBookings.find((booking) => booking.id === bookingId);
+  const booking = allBookings.bookings.find(
+    (booking) => booking.id === bookingId
+  );
 
   if (!booking) {
     throw new Error(`Booking with id ${bookingId} is not found`);

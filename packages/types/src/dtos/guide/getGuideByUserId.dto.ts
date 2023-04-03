@@ -40,4 +40,11 @@ export class GetGuideByUserIdResponse extends PickType(Guide, [
     example: [Role.USER],
   })
   roles: string[];
+
+  @ApiProperty({
+    type: () => String,
+    description: "guide image",
+    example: "hello.jpg",
+  })
+  imageId: string;
 }

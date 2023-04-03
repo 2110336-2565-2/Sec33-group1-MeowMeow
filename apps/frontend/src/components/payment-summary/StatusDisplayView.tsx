@@ -1,6 +1,7 @@
 import { ErrorOutline, CheckCircleOutline } from "@mui/icons-material";
 import { Button, LinearProgress, Stack, Typography } from "@mui/material";
 import Router from "next/router";
+import { useEffect } from "react";
 
 const PendingDisplay = () => {
   return (
@@ -33,6 +34,12 @@ const FailedDisplay = () => {
 };
 
 const SuccessDisplay = () => {
+  useEffect(() => {
+    setTimeout(() => {
+      Router.push("/dashboard");
+    }, 2000);
+  }, []);
+
   return (
     <Stack gap={4} p={8} alignItems={"center"}>
       <CheckCircleOutline

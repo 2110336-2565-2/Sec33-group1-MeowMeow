@@ -33,7 +33,8 @@ const PostCard = (props: IPost) => {
         <CardHeader
           {...author}
           postId={id}
-          authorId={author.id}
+          userId={author.id}
+          guideId={author.guideId}
           currentUserId={user!.id}
         />
       </Grid>
@@ -61,7 +62,7 @@ const PostCard = (props: IPost) => {
       <Grid item xs={12} md={8}>
         <CardContent
           {...props}
-          authorId={author.id}
+          guideId={author.guideId}
           postId={id}
           travellerId={user!.id}
         />

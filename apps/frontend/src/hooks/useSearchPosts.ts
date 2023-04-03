@@ -11,8 +11,8 @@ import useFilterForm from "./useFilterForm";
 import apiClient from "@/utils/apiClient";
 import { NotificationContext } from "@/context/NotificationContext";
 import {
-  GetGuideByUserIdResponse,
   GetUserByIdResponse,
+  SearchPostsPost,
   SearchPostsResponse,
 } from "types";
 import { POST_PER_PAGE, templatePost } from "@/constants/SearchPage";
@@ -40,25 +40,30 @@ const fetchPosts = async (props: IFetchPosts) => {
 
   const myPostsLoading: Promise<IPost[]> = Promise.all(
     respData.posts.map(async (post: any) => {
-      const authorId = post.authorId;
-      const plainRespUser = await apiClient.get(`/users/${authorId}`);
+      const userId = post.authorId;
+      const guideId = post.guideId;
+      const plainRespUser = await apiClient.get(`/users/${userId}`);
 
       const respUser: GetUserByIdResponse = plainRespUser.data;
-      return {
+
+      const result: IPost = {
         ...templatePost,
         ...post,
         author: {
-          id: authorId,
+          id: userId,
           name: respUser.username,
           profile: respUser.imageId,
+          guideId: guideId,
         },
       };
+      return result;
     })
   );
   let myPosts: IPost[] = [];
   await myPostsLoading
     .then((post) => {
       myPosts = post;
+      console.log(myPosts);
     })
     .catch((err) => {
       throw new Error(err);

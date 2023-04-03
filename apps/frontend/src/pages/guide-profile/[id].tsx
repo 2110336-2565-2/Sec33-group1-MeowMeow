@@ -73,9 +73,6 @@ export default function GuideProfile() {
         sx={{
           display: "flex",
           justifyContent: "center",
-          background:
-            "linear-gradient(90deg, #FF9A9E 0%, #FAD0C4 99%, #FAD0C4 100%)",
-          paddingBottom: "15vh",
         }}
       >
         <Content

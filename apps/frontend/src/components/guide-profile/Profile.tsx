@@ -1,5 +1,5 @@
-import { Avatar, Box, Chip, Grid } from "@mui/material";
-import React from "react";
+import { Avatar, Box, Button, Chip, Dialog, Grid } from "@mui/material";
+import React, { useState } from "react";
 interface IProfileProps {
   name: string;
   imageurl: string;
@@ -10,7 +10,7 @@ export default function Profile({
   imageurl,
   certificateId,
 }: IProfileProps) {
-  console.log(imageurl);
+  const [open, setOpen] = useState(false);
   return (
     <Grid
       container
@@ -59,12 +59,20 @@ export default function Profile({
             fontSize={{ xs: 14, sm: 16, lg: 18 }}
             paddingTop={{ xs: "1vh", sm: "2vh" }}
           >
-            {"The guide is qualified with a certification:"}
-            <Avatar
-              sx={{ width: 200, height: 140 }}
-              variant="square"
-              src={process.env.backendBaseURL + "/media/" + certificateId}
-            ></Avatar>
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={() => setOpen(true)}
+            >
+              View Certificate{" "}
+            </Button>
+            <Dialog open={open} onClose={() => setOpen(false)}>
+              <Avatar
+                sx={{ width: 600, height: 420 }}
+                variant="square"
+                src={process.env.backendBaseURL + "/media/" + certificateId}
+              ></Avatar>
+            </Dialog>
           </Box>
         </Grid>
       </Grid>

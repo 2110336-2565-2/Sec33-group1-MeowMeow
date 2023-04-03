@@ -10,3 +10,11 @@ export const templatePost: Partial<IPost> = {
   },
   image: "/landing/travel1.png", // post
 };
+
+export const initialValue = {
+  location: "",
+  price: [0, 9999],
+  rating: [0, 5],
+  startDate: null,
+  endDate: null,
+};

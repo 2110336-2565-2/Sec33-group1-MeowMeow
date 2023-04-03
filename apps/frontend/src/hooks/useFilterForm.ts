@@ -1,4 +1,5 @@
 import { IFilterOptions } from "@/components/SearchPage/types";
+import { initialValue } from "@/constants/SearchPage";
 import { ChangeEvent, FormEvent, useState } from "react";
 
 export interface IFilterMethod {
@@ -14,13 +15,7 @@ export interface IFilterMethod {
 }
 
 const useFilterForm = () => {
-  const [options, setOptions] = useState<IFilterOptions>({
-    location: "",
-    price: [0, 1000],
-    rating: [0, 5],
-    startDate: null,
-    endDate: null,
-  });
+  const [options, setOptions] = useState<IFilterOptions>(initialValue);
 
   const [tempOptions, setTempOptions] = useState<IFilterOptions>(options); // temp options for form submission
 
@@ -31,13 +26,7 @@ const useFilterForm = () => {
   };
 
   const reset = () => {
-    setTempOptions({
-      location: "",
-      price: [0, 9999],
-      rating: [0, 5],
-      startDate: null,
-      endDate: null,
-    });
+    setTempOptions(initialValue);
   };
 
   const handleChangeLocation = (e: React.ChangeEvent<HTMLInputElement>) => {

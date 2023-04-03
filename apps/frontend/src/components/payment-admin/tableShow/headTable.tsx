@@ -77,19 +77,7 @@ export default function TableHeader(props: EnhancedTableProps) {
     <TableHead>
       <TableRow>
         {headCells.map((headCell) => (
-          <StyledTableCell
-            key={headCell.id}
-            align="center"
-            sortDirection={orderBy === headCell.id ? order : false}
-          >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : "asc"}
-              onClick={createSortHandler(headCell.id)}
-            >
-              {headCell.label}
-            </TableSortLabel>
-          </StyledTableCell>
+          <StyledTableCell key={headCell.id} align="center"></StyledTableCell>
         ))}
       </TableRow>
     </TableHead>

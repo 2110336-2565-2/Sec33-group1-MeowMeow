@@ -67,10 +67,17 @@ export default function GuideProfile() {
     };
     fetchReviews();
   }, [id, page]);
-  const loadMoreItems = async () => setPage(page + 1);
   return (
     <AuthProvider roleAllowed={["USER"]}>
-      <Box sx={{ display: "flex", justifyContent: "center" }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          background:
+            "linear-gradient(90deg, #FF9A9E 0%, #FAD0C4 99%, #FAD0C4 100%)",
+          paddingBottom: "15vh",
+        }}
+      >
         <Content
           name={guideData.firstName + " " + guideData.lastName}
           certificateId={guideData.certificateId}

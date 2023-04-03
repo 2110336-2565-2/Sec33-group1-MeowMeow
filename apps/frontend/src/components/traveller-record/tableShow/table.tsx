@@ -71,14 +71,6 @@ export default function TableRecord() {
     setPage(0);
   };
 
-  if (rows.length === 0) {
-    return (
-      <Typography variant="h5" component="span" sx={{ fontWeight: "bold" }}>
-        No Record
-      </Typography>
-    );
-  }
-
   return (
     <>
       <Paper

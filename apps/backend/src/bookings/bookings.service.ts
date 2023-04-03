@@ -180,14 +180,20 @@ export class BookingsService implements IBookingsService {
         );
       }
 
-      if (booking.bookingStatus !== 'TRAVELING') {
-        await this.paymentsService.refund(bookingId);
-      }
-
       const cancelledBooking = await this.bookingsRepo.updateBookingStatus(
         bookingId,
         'GUIDE_CANCELLED',
       );
+
+      if (booking.bookingStatus === 'TRAVELING') {
+        await this.paymentsService.refund(bookingId);
+        return {
+          id: cancelledBooking.id,
+          refunded: true,
+          bookingStatus: cancelledBooking.bookingStatus.toString(),
+        };
+      }
+
       return {
         id: cancelledBooking.id,
         refunded: false,

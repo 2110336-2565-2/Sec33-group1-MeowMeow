@@ -1,7 +1,7 @@
 import { SeedGenerator } from "./types";
 import { backendConfig } from "config";
 import * as bcrypt from "bcrypt";
-import { BookingStatus } from "@prisma/client";
+import { BookingStatus, Role } from "@prisma/client";
 
 export const devSeed: SeedGenerator = async (prisma) => {
   const hashRound = backendConfig.bcrypt.hashRound;
@@ -48,6 +48,7 @@ export const devSeed: SeedGenerator = async (prisma) => {
           username: "LosHeavenGuide",
           firstName: "Tommy",
           lastName: "Angelo",
+          roles: [Role.USER, Role.GUIDE],
         },
         {
           id: 4,
@@ -66,6 +67,7 @@ export const devSeed: SeedGenerator = async (prisma) => {
           username: "hellobitch",
           firstName: "foobarz",
           lastName: "johndoes",
+          roles: [Role.USER, Role.GUIDE],
         },
       ],
     }),

@@ -17,7 +17,8 @@
     "db:migrate:dev": "prisma migrate dev",
     "db:migrate:deploy": "prisma migrate deploy",
     "db:seed": "prisma db seed",
-    "db:seed-dev": "ts-node seed/index.ts dev"
+    "db:seed-dev": "ts-node seed/index.ts dev",
+    "db:studio": "prisma studio"
   },
   "prisma": {
     "seed": "ts-node seed/index.ts"

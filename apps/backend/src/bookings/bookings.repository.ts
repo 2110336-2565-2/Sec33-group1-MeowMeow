@@ -19,14 +19,27 @@ const bookingStatusEnumMapper = {
 
 @Injectable()
 export class BookingsRepository {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(private readonly prismaService: PrismaService) { }
 
   async paginateBookings(filter: {
     offset: number;
     limit: number;
     userId?: number;
     guideId?: number;
-  }): Promise<[number, Booking[]]> {
+  }): Promise<[number,
+    {
+      id: number;
+      bookingStatus: BookingStatus;
+      updatedAt: Date;
+      startDate: Date;
+      endDate: Date;
+      userId: number;
+      username: string;
+      firstName: string;
+      lastName: string;
+      postId: number;
+    }[]]
+  > {
     const [count, results] = await this.prismaService.$transaction([
       this.prismaService.booking.count({
         where: {
@@ -34,7 +47,7 @@ export class BookingsRepository {
           post: {
             authorId: filter.guideId,
           },
-        },
+        }
       }),
       this.prismaService.booking.findMany({
         where: {
@@ -43,19 +56,34 @@ export class BookingsRepository {
             authorId: filter.guideId,
           },
         },
+        include: {
+          user: true,
+        },
         skip: filter.offset,
         take: filter.limit,
         orderBy: [
           {
             createdAt: 'desc',
           },
-          {
-            bookingStatus: 'asc', // this is a hack, needed to be fixed in the future
-          },
-        ],
-      }),
-    ]);
-    return [count, results];
+        ]
+      })
+    ])
+
+    return [count, results.map((e) => {
+      return {
+        id: e.id,
+        bookingStatus: e.bookingStatus,
+        updatedAt: e.updatedAt,
+        startDate: e.startDate,
+        endDate: e.endDate,
+        userId: e.userId,
+        username: e.user.username,
+        firstName: e.user.firstName,
+        lastName: e.user.lastName,
+        userName: e.user.username,
+        postId: e.postId,
+      };
+    })];
   }
 
   async getBookingById(id: number): Promise<{

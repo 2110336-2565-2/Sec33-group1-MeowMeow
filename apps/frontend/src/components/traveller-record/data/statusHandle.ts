@@ -49,10 +49,7 @@ buttonDisplayNames.set(
 export let buttonMapStatus = new Map<string, string[]>();
 buttonMapStatus.set(BookingStatus.WAITING_FOR_GUIDE_CONFIRMATION, []);
 buttonMapStatus.set(BookingStatus.GUIDE_CANCELLED, []);
-buttonMapStatus.set(BookingStatus.WAITING_FOR_PAYMENT, [
-  subButtonName.PAY,
-  subButtonName.CANCEL,
-]);
+buttonMapStatus.set(BookingStatus.WAITING_FOR_PAYMENT, [subButtonName.PAY]);
 buttonMapStatus.set(BookingStatus.USER_CANCELLED, []);
 buttonMapStatus.set(BookingStatus.WAITING_FOR_TRAVELING, [
   subButtonName.CANCEL,

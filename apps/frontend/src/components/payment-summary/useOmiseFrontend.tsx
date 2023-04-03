@@ -7,8 +7,8 @@ import { AxiosError } from "axios";
 
 const testCreditCard = 4111111111111111;
 
-if (!process.env.BACKEND_OMISE_PUBLIC_KEY) {
-  throw new Error("BACKEND_OMISE_PUBLIC_KEY is not defined");
+if (!process.env.FRONTEND_OMISE_PUBLIC_KEY) {
+  throw new Error("FRONTEND_OMISE_PUBLIC_KEY is not defined");
 }
 
 const payTrip = async (bookingId: number, nonce: string) => {
@@ -40,7 +40,7 @@ const useOmiseFrontend = (props: IOmiseFrontend) => {
 
   useEffect(() => {
     omiseCard?.configure({
-      publicKey: process.env.BACKEND_OMISE_PUBLIC_KEY || "",
+      publicKey: process.env.FRONTEND_OMISE_PUBLIC_KEY || "",
     });
   }, [omiseCard]);
 

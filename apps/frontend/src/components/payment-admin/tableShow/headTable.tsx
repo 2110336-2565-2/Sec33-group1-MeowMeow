@@ -76,9 +76,12 @@ export default function TableHeader(props: EnhancedTableProps) {
   return (
     <TableHead>
       <TableRow>
-        {headCells.map((headCell) => (
-          <StyledTableCell key={headCell.id} align="center"></StyledTableCell>
-        ))}
+        <StyledTableCell align="center"> No. </StyledTableCell>
+        <StyledTableCell align="center"> User ID </StyledTableCell>
+        <StyledTableCell align="center"> Username </StyledTableCell>
+        <StyledTableCell align="center"> Booking ID </StyledTableCell>
+        <StyledTableCell align="center"> Post ID </StyledTableCell>
+        <StyledTableCell align="center"> Transaction Type </StyledTableCell>
       </TableRow>
     </TableHead>
   );

@@ -298,12 +298,29 @@ export class BookingsService implements IBookingsService {
         throw new AccessNotGranted('permissing denied');
       }
       if (
-        booking.bookingStatus !== 'TRAVELING' &&
-        booking.bookingStatus !== 'WAITING_FOR_PAYMENT'
+        booking.bookingStatus === 'USER_CANCELLED' ||
+        booking.bookingStatus === 'GUIDE_CANCELLED' ||
+        booking.bookingStatus === 'FINISHED'
       ) {
         throw new UnprocessableEntity(
           'this booking has not beed available for user cancelation',
         );
+      }
+
+      if (
+        booking.bookingStatus === 'WAITING_FOR_GUIDE_CONFIRMATION' ||
+        booking.bookingStatus === 'WAITING_FOR_PAYMENT'
+      ) {
+        const refundedBooking = await this.bookingsRepo.updateBookingStatus(
+          bookingId,
+          'USER_CANCELLED',
+        );
+        return {
+          message: 'cancelled with refund',
+          refunded: true,
+          bookingId: refundedBooking.id,
+          bookingStatus: refundedBooking.bookingStatus.toString(),
+        };
       }
 
       const now = new Date();

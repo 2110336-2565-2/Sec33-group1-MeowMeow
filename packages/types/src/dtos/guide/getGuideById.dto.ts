@@ -10,4 +10,11 @@ export class GetGuideByIdResponse extends PickType(Guide, [
   "averageReviewScore",
   "locations",
   "tourStyles",
-] as const) {}
+] as const) {
+  @ApiProperty({
+    type: () => String,
+    description: "guide image",
+    example: "hello.jpg",
+  })
+  imageId: string;
+}

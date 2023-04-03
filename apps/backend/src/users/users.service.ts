@@ -43,6 +43,7 @@ export class UsersServiceImpl {
       firstName: user.firstName,
       lastName: user.lastName,
       roles: user.roles,
+      imageId: user.imageId,
     };
   }
 

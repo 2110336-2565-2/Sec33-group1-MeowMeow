@@ -7,7 +7,7 @@ import { Booking } from "@/components/managetrip-guide/Types";
 
 const getGuideId = async () => {
   const response = await apiClient.get("/guides/profile");
-  return response.data.guideId;
+  return response.data.userId;
 };
 const getData = async (id: string) => {
   const response = await apiClient.get(

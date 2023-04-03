@@ -25,26 +25,6 @@ interface IGuide {
 }
 const imageurl =
   "https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80";
-const tagsTourStyle = [
-  "Playful",
-  "Knowledge",
-  "Luxury",
-  "Luxury1",
-  "Luxury2",
-  "Luxury3",
-  "Luxury4",
-];
-const tagsLocation = [
-  "Bangkok",
-  "Ayutthaya",
-  "Ohio",
-  "London",
-  "London1",
-  "London2",
-  "London3",
-];
-const accept = 60;
-const total = 100;
 const getData = async (id: string) => {
   const response = await apiClient.get("guides/" + id);
   return response;
@@ -98,9 +78,6 @@ export default function GuideProfile() {
           imageurl={imageurl}
           tagsTourStyle={guideData.tourStyles}
           tagsLocation={guideData.locations}
-          accept={accept}
-          total={total}
-          reviewCount={[1, 2, 3, 4, 5]}
           reviews={reviews}
           averageReviewScore={guideData.averageReviewScore}
           newLimit={() => setPage(page + 1)}

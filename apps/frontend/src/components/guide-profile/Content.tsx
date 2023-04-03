@@ -3,7 +3,6 @@ import React from "react";
 import Profile from "./Profile";
 import Review from "./Review";
 import ReviewHead from "./ReviewHead";
-import Statistics from "./Statistics";
 import Tags from "./Tags";
 interface IReview {
   guideId: number;
@@ -19,9 +18,6 @@ interface IContentProps {
   imageurl: string;
   tagsTourStyle: string[];
   tagsLocation: string[];
-  accept: number;
-  total: number;
-  reviewCount: number[];
   reviews: IReview[];
   averageReviewScore: number;
   newLimit: () => void;
@@ -32,9 +28,6 @@ export default function Content({
   imageurl,
   tagsTourStyle,
   tagsLocation,
-  accept,
-  total,
-  reviewCount,
   reviews,
   averageReviewScore,
   newLimit,
@@ -72,20 +65,10 @@ export default function Content({
       <Grid
         item
         justifyContent="center"
-        paddingX={{ xs: 0, sm: "3vw", md: "5vw" }}
-      >
-        <Statistics accept={accept} total={total} />
-      </Grid>
-      <Grid
-        item
-        justifyContent="center"
         paddingX={{ xs: 0, md: "5vw" }}
         paddingBottom={{ xs: "2vh", md: "3.5vh" }}
       >
-        <ReviewHead
-          reviewCount={reviewCount}
-          averageReviewScore={averageReviewScore}
-        ></ReviewHead>
+        <ReviewHead averageReviewScore={averageReviewScore}></ReviewHead>
       </Grid>
       <Grid
         item

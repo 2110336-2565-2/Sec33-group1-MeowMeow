@@ -192,23 +192,18 @@ export class BookingsService implements IBookingsService {
   ): Promise<CancelBookingResponse> {
     try {
       const booking = await this.bookingsRepo.getBookingById(bookingId);
-      const guide = await this.guideService.getGuideByUserId(booking.guideId);
+      const guide = await this.guideService.getGuideById(booking.guideId);
       if (booking.guideId !== guide.guideId) {
         throw new AccessNotGranted('permissing denied');
       }
-      console.log({ booking });
-      let cancelledBooking;
-      if (booking.guideId === account.userId) {
-        cancelledBooking = await this.bookingsRepo.updateBookingStatus(
-          bookingId,
-          'GUIDE_CANCELLED',
-        );
-      } else {
-        cancelledBooking = await this.bookingsRepo.updateBookingStatus(
-          bookingId,
-          'USER_CANCELLED',
-        );
-      }
+      const cancelledBookingStatus =
+        booking.guideId === account.userId
+          ? 'GUIDE_CANCELLED'
+          : 'USER_CANCELLED';
+      const cancelledBooking = await this.bookingsRepo.updateBookingStatus(
+        bookingId,
+        cancelledBookingStatus,
+      );
 
       if (
         booking.bookingStatus === 'WAITING_FOR_GUIDE_CONFIRMATION' ||

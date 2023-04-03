@@ -10,6 +10,7 @@ export default function Profile({
   imageurl,
   certificateId,
 }: IProfileProps) {
+  console.log(imageurl);
   return (
     <Grid
       container
@@ -24,7 +25,7 @@ export default function Profile({
         justifyContent="center"
       >
         <Avatar
-          src={imageurl}
+          src={process.env.backendBaseURL + "/media/" + imageurl}
           sx={{
             width: { xs: 160, sm: 200, md: 160, lg: 200 },
             height: { xs: 160, sm: 200, md: 160, lg: 200 },
@@ -58,7 +59,12 @@ export default function Profile({
             fontSize={{ xs: 14, sm: 16, lg: 18 }}
             paddingTop={{ xs: "1vh", sm: "2vh" }}
           >
-            {"Certificate ID: " + certificateId}
+            {"The guide is qualified with a certification:"}
+            <Avatar
+              sx={{ width: 200, height: 140 }}
+              variant="square"
+              src={process.env.backendBaseURL + "/media/" + certificateId}
+            ></Avatar>
           </Box>
         </Grid>
       </Grid>

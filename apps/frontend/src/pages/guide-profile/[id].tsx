@@ -22,9 +22,8 @@ interface IGuide {
   averageReviewScore: number;
   locations: string[];
   tourStyles: string[];
+  imageId: string;
 }
-const imageurl =
-  "https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80";
 const getData = async (id: string) => {
   const response = await apiClient.get("guides/" + id);
   return response;
@@ -43,6 +42,7 @@ export default function GuideProfile() {
     averageReviewScore: 3,
     locations: [""],
     tourStyles: [""],
+    imageId: "",
   });
   const [reviews, setReviews] = useState<IReview[]>([]);
   const [page, setPage] = useState(1);
@@ -70,12 +70,11 @@ export default function GuideProfile() {
   const loadMoreItems = async () => setPage(page + 1);
   return (
     <AuthProvider roleAllowed={["USER"]}>
-      <Navbar />
       <Box sx={{ display: "flex", justifyContent: "center" }}>
         <Content
           name={guideData.firstName + " " + guideData.lastName}
           certificateId={guideData.certificateId}
-          imageurl={imageurl}
+          imageurl={guideData.imageId}
           tagsTourStyle={guideData.tourStyles}
           tagsLocation={guideData.locations}
           reviews={reviews}

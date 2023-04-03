@@ -22,8 +22,21 @@ interface IEditProfileProps {
   onEndEdit: () => void;
 }
 
+const uploadImage = async (formData: FormData) => {
+  const response = await apiClient.post<{ message: string; id: string }>(
+    "media",
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+  return response.data.id;
+};
+
 const EditProfile = ({ onEndEdit }: IEditProfileProps) => {
-  const { user } = useContext(AuthContext);
+  const { user, refreshProfile } = useContext(AuthContext);
   const isGuide = useMemo(() => {
     return !!user?.roles?.includes("GUIDE");
   }, [user]);
@@ -45,9 +58,15 @@ const EditProfile = ({ onEndEdit }: IEditProfileProps) => {
       prev[formId] = event.currentTarget[formId].value;
       return prev;
     }, {} as { [key: string]: string });
-
+    if (image) {
+      const formData = new FormData();
+      formData.append("file", image);
+      const imageId = await uploadImage(formData);
+      formBody.imageId = imageId;
+    }
     try {
       await apiClient.put("/users", formBody);
+      refreshProfile();
       onEndEdit();
     } catch (err) {
       const error = err as Error;

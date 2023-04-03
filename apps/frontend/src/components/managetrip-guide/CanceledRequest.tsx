@@ -12,8 +12,8 @@ const CanceledRequest = ({ bookings }: ICanceledRequestProps) => {
   return (
     <div>
       <List>
-        {filteredbooking.map((booking, index) => {
-          return <CanceledRequestCard key={index} booking={booking} />;
+        {filteredbooking.map((booking) => {
+          return <CanceledRequestCard key={booking.id} booking={booking} />;
         })}
       </List>
     </div>

@@ -22,6 +22,8 @@ const AcceptedRequest = ({ bookings, handleCancel }: IAcceptedRequestProps) => {
     startDate: "",
     endDate: "",
     postId: 0,
+    firstName: "",
+    lastName: "",
   });
   const handleClick = (booking: Booking) => {
     setCurReq(booking);
@@ -43,10 +45,10 @@ const AcceptedRequest = ({ bookings, handleCancel }: IAcceptedRequestProps) => {
   return (
     <div>
       <List>
-        {filteredbooking.map((booking, index) => {
+        {filteredbooking.map((booking) => {
           return (
             <AcceptedRequestCard
-              key={index}
+              key={booking.id}
               booking={booking}
               handleClick={handleClick}
             />

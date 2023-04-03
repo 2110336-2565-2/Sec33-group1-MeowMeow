@@ -70,6 +70,7 @@ export class GuidesRepository {
     id?: number;
     userId?: number;
   }): Promise<GetGuideByIdResponse> {
+    console.log({ filter });
     const guide = await this.prismaService.guide.findUnique({
       include: {
         user: true,

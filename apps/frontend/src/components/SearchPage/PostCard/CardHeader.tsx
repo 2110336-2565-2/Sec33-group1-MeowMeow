@@ -1,4 +1,4 @@
-import { Avatar, Box, Link } from "@mui/material";
+import { Avatar, Box } from "@mui/material";
 import OptionMenu from "./OptionMenu";
 import NextLink from "next/link";
 interface ICardHeader {
@@ -12,11 +12,13 @@ interface ICardHeader {
 const CardHeader = (props: ICardHeader) => {
   const { profile, name, authorId, postId, currentUserId } = props;
 
+  const imageUrl = process.env.backendBaseURL + "/media/" + profile;
+
   return (
     <>
       <Box display="flex" gap={2} alignItems="center">
         <Avatar
-          src={profile}
+          src={profile ? imageUrl : ""}
           sx={{
             width: 32,
             height: 32,

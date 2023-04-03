@@ -19,7 +19,7 @@ const SliderInput = (props: SliderInputProps) => {
         value={value}
         min={0}
         max={max}
-        step={1000}
+        step={100}
         onChange={onChange}
         valueLabelDisplay="auto"
       />

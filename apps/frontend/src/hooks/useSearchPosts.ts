@@ -25,7 +25,8 @@ const fetchPosts = async (props: IFetchPosts) => {
   const params = {
     offset: (pageNo - 1) * POST_PER_PAGE,
     limit: POST_PER_PAGE,
-    fee: filterOptions.price[1],
+    // fee: filterOptions.price[1],
+    fee: 12,
     reviewScore: filterOptions.rating[0],
     locations: filterOptions.location ? [filterOptions.location] : [],
     text: search,
@@ -93,9 +94,12 @@ export const useSearchPosts = () => {
         })
         .catch((err) => {
           if (err instanceof Error) {
+            if (err.message[0] === "fee must not be less than 30") {
+              setFeed([]);
+              setFeedStatus(FeedStatus.SHOWING);
+            }
             addNotification(err.message, "error");
           }
-          console.log("error fetching : ", err.stack);
         });
     },
     [tempSearch, search, filterStuff.options]
@@ -116,9 +120,12 @@ export const useSearchPosts = () => {
         })
         .catch((err) => {
           if (err instanceof Error) {
+            if (err.message[0] === "fee must not be less than 30") {
+              setFeed([]);
+              setFeedStatus(FeedStatus.SHOWING);
+            }
             addNotification(err.message, "error");
           }
-          console.log("error fetching : ", err.stack);
         });
     }
   }, [search, pageNo, filterStuff.options]); // refetch feed when page number changes : pagination

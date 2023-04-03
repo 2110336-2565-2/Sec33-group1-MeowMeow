@@ -36,6 +36,10 @@ export default function TableRecord() {
   const [rowsPerPage, setRowsPerPage] = useState<number>(1);
 
   const [rows, setRows] = React.useState<IGetRecord[]>([]);
+  const [rowsCount, setRowsCount] = React.useState<number>(0);
+
+  console.log("Rows: ", rows);
+  console.log("Rows Count: ", rowsCount);
 
   let record = bookingViewModel({ offset: page, limit: rowsPerPage, setRows });
   let prev = React.useRef(record);
@@ -132,7 +136,7 @@ export default function TableRecord() {
                 <TablePagination
                   rowsPerPageOptions={[1, 2, 3, { label: "All", value: -1 }]}
                   colSpan={3}
-                  count={2} // total row in database (Mock)
+                  count={rowsCount}
                   rowsPerPage={rowsPerPage}
                   page={page}
                   SelectProps={{

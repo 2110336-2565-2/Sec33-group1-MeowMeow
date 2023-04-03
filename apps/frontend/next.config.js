@@ -8,8 +8,7 @@ const nextConfig = {
   },
   env: {
     backendBaseURL: process.env.BACKEND_BASE_URL,
-    BACKEND_OMISE_PUBLIC_KEY:
-      process.env.BACKEND_OMISE_PUBLIC_KEY || "pkey_test_5v70hqdlwjvi70erf9n",
+    FRONTEND_OMISE_PUBLIC_KEY: process.env.FRONTEND_OMISE_PUBLIC_KEY,
   },
 };
 

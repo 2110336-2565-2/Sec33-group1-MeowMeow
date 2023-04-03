@@ -42,17 +42,15 @@ const fetchPosts = async (props: IFetchPosts) => {
     respData.posts.map(async (post: any) => {
       const authorId = post.authorId;
       const plainRespUser = await apiClient.get(`/users/${authorId}`);
-      const plainRespGuide = await apiClient.get(`/guides/${authorId}`);
 
       const respUser: GetUserByIdResponse = plainRespUser.data;
-      const respGuide: GetGuideByUserIdResponse = plainRespGuide.data;
       return {
         ...templatePost,
         ...post,
         author: {
           id: authorId,
           name: respUser.username,
-          profile: respGuide.imageId,
+          profile: respUser.imageId,
         },
       };
     })

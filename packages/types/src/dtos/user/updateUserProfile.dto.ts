@@ -1,5 +1,4 @@
 import {
-  ApiProperty,
   ApiPropertyOptional,
   IntersectionType,
   OmitType,
@@ -10,9 +9,8 @@ import { CreateUserRequest } from "./createUser.dto";
 import { User } from "./user.dto";
 
 export class UpdateUserRequest extends PartialType(CreateUserRequest) {
-  @ApiProperty({
+  @ApiPropertyOptional({
     type: () => String,
-    required: false,
     example: "1235-183C",
   })
   imageId: string;

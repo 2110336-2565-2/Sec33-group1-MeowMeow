@@ -4,18 +4,10 @@ import PaymentStatus from "./statusShow";
 import { IGetRecord } from "./viewModel";
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  "&:nth-of-type(4n+1)": {
-    backgroundColor: theme.palette.grey[200],
+  "&:nth-of-type(odd)": {
+    backgroundColor: theme.palette.action.hover,
   },
-  "&:nth-of-type(4n+2)": {
-    backgroundColor: theme.palette.grey[200],
-  },
-  "&:nth-of-type(4n-1)": {
-    backgroundColor: "#ffffff",
-  },
-  "&:nth-of-type(4n)": {
-    backgroundColor: "#ffffff",
-  },
+
   "&:last-child td, &:last-child th": {
     border: 0,
   },
@@ -28,9 +20,6 @@ interface IContentTable {
 
 export default function ContentComponent({ row, index }: IContentTable) {
   const labelId = `record-${index}`;
-
-  console.log("------> ", row);
-  console.log("------> ", row.bookingId);
 
   return (
     <>

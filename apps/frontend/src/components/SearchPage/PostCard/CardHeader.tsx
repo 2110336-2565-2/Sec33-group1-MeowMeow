@@ -1,15 +1,16 @@
-import { Avatar, Box, Typography } from "@mui/material";
+import { Avatar, Box, Link } from "@mui/material";
 import OptionMenu from "./OptionMenu";
-
+import NextLink from "next/link";
 interface ICardHeader {
-  post_id: number;
+  postId: number;
   profile: string;
   name: string;
-  isOwner: boolean;
+  authorId: number;
+  currentUserId: number;
 }
 
 const CardHeader = (props: ICardHeader) => {
-  const { profile, name, isOwner, post_id } = props;
+  const { profile, name, authorId, postId, currentUserId } = props;
 
   return (
     <>
@@ -21,9 +22,17 @@ const CardHeader = (props: ICardHeader) => {
             height: 32,
           }}
         />
-        <Typography variant="h6">{name}</Typography>
+        <NextLink
+          href={`/guide-profile/${authorId}`}
+          style={{
+            textDecoration: "none",
+            color: "black",
+          }}
+        >
+          {name}
+        </NextLink>
       </Box>
-      <OptionMenu isOwner={isOwner} post_id={post_id} />
+      <OptionMenu isOwner={currentUserId === authorId} postId={postId} />
     </>
   );
 };

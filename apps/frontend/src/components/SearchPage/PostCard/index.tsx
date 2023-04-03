@@ -8,8 +8,9 @@ import { AuthContext } from "@/context/AuthContext";
 
 const PostCard = (props: IPost) => {
   const { title, author, image, id } = props;
-
   const { user } = useContext(AuthContext);
+
+  if (!user) return <></>;
 
   return (
     <Grid
@@ -31,8 +32,9 @@ const PostCard = (props: IPost) => {
       >
         <CardHeader
           {...author}
-          post_id={id}
-          isOwner={user?.username === author.name}
+          postId={id}
+          authorId={author.id}
+          currentUserId={user!.id}
         />
       </Grid>
       <Grid

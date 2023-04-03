@@ -10,6 +10,7 @@ import { IProfileResponse, IUser, Roles_Types } from "./type/authContext";
 interface IAuthContext {
   user: IUser | undefined;
   updateUser: (newUser: IUser | undefined) => void;
+  refreshProfile: () => void;
 }
 
 export const AuthContext = createContext<IAuthContext>({} as IAuthContext);
@@ -24,8 +25,12 @@ const AuthProvider = ({
   roleAllowed = ["USER"],
 }: IAuthProviderProps) => {
   const [user, setUser] = useState<IUser | undefined>({} as IUser);
+  const [isUpdate, setUpdate] = useState<boolean>(false);
   const updateUser = useCallback((newUser: IUser | undefined) => {
     setUser(newUser);
+  }, []);
+  const refreshProfile = useCallback(() => {
+    setUpdate((prev) => !prev);
   }, []);
 
   useEffect(() => {
@@ -53,10 +58,10 @@ const AuthProvider = ({
       }
     };
     fetchProfile();
-  }, []);
+  }, [isUpdate]);
 
   return (
-    <AuthContext.Provider value={{ user, updateUser }}>
+    <AuthContext.Provider value={{ user, updateUser, refreshProfile }}>
       {children}
     </AuthContext.Provider>
   );

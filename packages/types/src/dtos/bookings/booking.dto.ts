@@ -45,4 +45,12 @@ export class Booking {
   })
   @IsInt()
   guideId: number;
+
+  @ApiProperty({
+    type: () => Number,
+    minimum: 1,
+    example: 1,
+  })
+  @IsInt()
+  userId: number;
 }

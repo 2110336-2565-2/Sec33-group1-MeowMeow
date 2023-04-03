@@ -230,7 +230,7 @@ export class GuidesRepository {
     try {
       const locationsID = await this.getOrCreateLocationsID(data.locations);
       const tourStylesID = await this.getOrCreateTourStylesID(data.tourStyles);
-      const guide = await this.prismaService.$transaction([
+      const [_, guide] = await this.prismaService.$transaction([
         this.prismaService.guide.update({
           where: {
             userId: data.userId,
@@ -271,7 +271,7 @@ export class GuidesRepository {
             },
           },
         }),
-      ])[1];
+      ]);
 
       return {
         guideId: guide.id,

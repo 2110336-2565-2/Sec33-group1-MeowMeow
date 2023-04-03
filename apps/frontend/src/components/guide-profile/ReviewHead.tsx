@@ -4,27 +4,22 @@ import React from "react";
 import StarAndBar from "./StarAndBar";
 import ReviewDialog from "../review/dialog";
 interface IReviewHeadProps {
-  reviewCount: number[];
   averageReviewScore: number;
 }
-export default function ReviewHead({
-  reviewCount,
-  averageReviewScore,
-}: IReviewHeadProps) {
+export default function ReviewHead({ averageReviewScore }: IReviewHeadProps) {
   return (
     <Grid
       container
       fontFamily="Inter"
       fontStyle="normal"
-      paddingTop={{ xs: "1vh", sm: "4vh" }}
       paddingX={{ xs: 0, sm: "3vw", md: 0 }}
+      justifySelf="center"
     >
       <Grid
         container
         direction="row"
         justifyContent="space-between"
         fontWeight={600}
-        paddingBottom={{ xs: "0", sm: "1.5vh" }}
       >
         <Grid item fontSize={{ xs: 18, sm: 20 }}>
           {" "}
@@ -38,7 +33,7 @@ export default function ReviewHead({
       <Grid
         container
         direction={{ xs: "column", sm: "row" }}
-        justifyContent="space-between"
+        justifyContent="center"
       >
         <Grid
           container
@@ -47,25 +42,11 @@ export default function ReviewHead({
           xs={2}
           paddingLeft={{ xs: "3vw", sm: 0 }}
         >
-          <Grid item fontSize={{ xs: 32, sm: 40 }} textAlign="center">
-            {" "}
+          <Grid item fontSize={{ xs: 50, sm: 60 }} textAlign="center">
             {averageReviewScore}
           </Grid>
-          <Grid item fontSize={16} textAlign="center">
-            {" "}
-            Out of 5
-          </Grid>
-        </Grid>
-        <Grid item>
-          <Grid container direction="column">
-            {Array.from({ length: 5 }, (_, i) => (
-              <StarAndBar
-                key={5 - i}
-                star={5 - i}
-                count={reviewCount[i]}
-                total={reviewCount.reduce((total, value) => total + value, 0)}
-              />
-            ))}
+          <Grid item fontSize={24} textAlign="center">
+            {"Out of 5"}
           </Grid>
         </Grid>
       </Grid>

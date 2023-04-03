@@ -140,18 +140,21 @@ export class PostsServiceImpl {
     searchData: SearchPostsRequest,
   ): Promise<SearchPostsResponse> {
     const posts = await this.postsRepo.searchPosts(searchData);
-    return posts.map((e) => ({
-      id: e.id,
-      authorId: e.authorId,
-      title: e.title,
-      content: e.content,
-      tags: e.tags,
-      locations: e.PostLocation.map((e) => e.location.locationName),
-      fee: e.fee.toNumber(),
-      maxParticipant: e.maxParticipant,
-      contactInfo: e.contactInfo,
-      createdAt: e.createdAt,
-      updatedAt: e.updatedAt,
-    }));
+    return {
+      posts: posts.posts.map((e) => ({
+        id: e.id,
+        authorId: e.authorId,
+        title: e.title,
+        content: e.content,
+        tags: e.tags,
+        locations: e.PostLocation.map((e) => e.location.locationName),
+        fee: e.fee.toNumber(),
+        maxParticipant: e.maxParticipant,
+        contactInfo: e.contactInfo,
+        createdAt: e.createdAt,
+        updatedAt: e.updatedAt,
+      })),
+      postsCount: posts.postsCount,
+    };
   }
 }

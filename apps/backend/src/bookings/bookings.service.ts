@@ -187,42 +187,40 @@ export class BookingsService implements IBookingsService {
     account: AccountMetadata,
   ): Promise<CancelBookingResponse> {
     try {
-      const guide = await this.guideService.getGuideByUserId(account.userId);
       const booking = await this.bookingsRepo.getBookingById(bookingId);
+      const guide = await this.guideService.getGuideByUserId(booking.guideId);
       if (booking.guideId !== guide.guideId) {
         throw new AccessNotGranted('permissing denied');
       }
-      if (
-        booking.bookingStatus !== 'WAITING_FOR_GUIDE_CONFIRMATION' &&
-        booking.bookingStatus !== 'WAITING_FOR_PAYMENT' &&
-        booking.bookingStatus !== 'TRAVELING'
-      ) {
-        throw new UnprocessableEntity(
-          'this booking has been accepted or cancelled',
+      console.log({ booking });
+      let cancelledBooking;
+      if (booking.guideId === account.userId) {
+        cancelledBooking = await this.bookingsRepo.updateBookingStatus(
+          bookingId,
+          'GUIDE_CANCELLED',
+        );
+      } else {
+        cancelledBooking = await this.bookingsRepo.updateBookingStatus(
+          bookingId,
+          'USER_CANCELLED',
         );
       }
 
-      if (booking.bookingStatus !== 'TRAVELING') {
-        await this.paymentsService.refund(bookingId);
-      }
-
-      const cancelledBooking = await this.bookingsRepo.updateBookingStatus(
-        bookingId,
-        'GUIDE_CANCELLED',
-      );
-
-      if (booking.bookingStatus === 'TRAVELING') {
-        await this.paymentsService.refund(bookingId);
+      if (
+        booking.bookingStatus === 'WAITING_FOR_GUIDE_CONFIRMATION' ||
+        booking.bookingStatus === 'WAITING_FOR_PAYMENT'
+      ) {
         return {
           id: cancelledBooking.id,
-          refunded: true,
+          refunded: false,
           bookingStatus: cancelledBooking.bookingStatus.toString(),
         };
       }
 
+      await this.paymentsService.refund(bookingId);
       return {
         id: cancelledBooking.id,
-        refunded: false,
+        refunded: true,
         bookingStatus: cancelledBooking.bookingStatus.toString(),
       };
     } catch (e) {

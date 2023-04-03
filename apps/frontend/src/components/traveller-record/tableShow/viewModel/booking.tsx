@@ -7,6 +7,7 @@ export interface IBookingProps {
   offset: number;
   limit: number;
   setRows: React.Dispatch<React.SetStateAction<IGetRecord[]>>;
+  setRowsCount: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export interface IResultRecord {
@@ -26,6 +27,7 @@ export default function bookingViewModel({
   offset,
   limit,
   setRows,
+  setRowsCount,
 }: IBookingProps) {
   const [travellerRecord, setTravellerRecord] = useState<IGetRecord[]>([]);
   const [countData, setCountData] = useState<number>(0);
@@ -33,18 +35,22 @@ export default function bookingViewModel({
   async function getRecordData() {
     let result: IGetRecord[] = [];
     let message = "Loading.. ";
+    if (limit === -1) {
+      limit = countData;
+    }
     await apiClient
       .get<GetBookingsByUserIdResponse>("/bookings/self", {
         params: { offset: offset, limit: limit },
       })
       .then((res) => {
-        console.log("Response Record: ", res);
+        // console.log("Response Record: ", res);
         result = res.data.bookings;
         setTravellerRecord(result);
+        setCountData(res.data.bookingsCount);
         message = "Success";
 
         setRows(result);
-        setCountData(res.data.bookingsCount);
+        setRowsCount(res.data.bookingsCount);
       })
       .catch((err) => {
         console.log("Error: ", err);

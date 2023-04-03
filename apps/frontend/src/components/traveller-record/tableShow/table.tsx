@@ -38,14 +38,20 @@ export default function TableRecord() {
   const [rows, setRows] = React.useState<IGetRecord[]>([]);
   const [rowsCount, setRowsCount] = React.useState<number>(0);
 
-  console.log("Rows: ", rows);
-  console.log("Rows Count: ", rowsCount);
+  // console.log("Rows: ", rows);
+  // console.log("Rows Count: ", rowsCount);
 
-  let record = bookingViewModel({ offset: page, limit: rowsPerPage, setRows });
+  let record = bookingViewModel({
+    offset: page,
+    limit: rowsPerPage,
+    setRows,
+    setRowsCount,
+  });
   let prev = React.useRef(record);
 
   useEffect(() => {
     setRows(record.rows);
+    setRowsCount(record.count);
   }, [prev.current !== record]);
 
   let emptyRows =
@@ -84,22 +90,19 @@ export default function TableRecord() {
         </Grid>
 
         <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <Table sx={{ minWidth: 650 }} aria-label="custom pagination table">
             <TableHead>
               <TableRow>
                 <StyledTableCell align="center"> Record ID </StyledTableCell>
                 <StyledTableCell align="center">Start Date</StyledTableCell>
-                <StyledTableCell align="center">End Date)</StyledTableCell>
+                <StyledTableCell align="center">End Date</StyledTableCell>
                 <StyledTableCell align="center">Post</StyledTableCell>
                 <StyledTableCell align="center">Record Type</StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
+                <TableRow key={row.id}>
                   <TableCell component="th" scope="row" align="center">
                     {row.id}
                   </TableCell>
@@ -135,7 +138,7 @@ export default function TableRecord() {
               <TableRow>
                 <TablePagination
                   rowsPerPageOptions={[1, 2, 3, { label: "All", value: -1 }]}
-                  colSpan={3}
+                  colSpan={5}
                   count={rowsCount}
                   rowsPerPage={rowsPerPage}
                   page={page}

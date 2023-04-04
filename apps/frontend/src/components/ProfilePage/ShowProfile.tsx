@@ -91,31 +91,38 @@ const ShowProfile = ({ imageUrl, onStartEdit }: IShowProfileProps) => {
         </Stack>
       </Stack>
 
-      <Stack spacing="16px" direction="column" alignItems="center" width="100%">
-        <Typography fontWeight="bold" textAlign="center">
-          Guide Profile Information
-        </Typography>
+      {guideProfile && (
         <Stack
-          direction="column"
-          justifyContent="center"
-          alignItems="start"
           spacing="16px"
-          minWidth="450px"
+          direction="column"
+          alignItems="center"
+          width="100%"
         >
-          <Locations locations={guideProfile?.locations || []} />
-          <TourStyles tourStyles={guideProfile?.tourStyles || []} />
-          <Typography>
-            Average review score: {guideProfile?.averageReviewScore}
+          <Typography fontWeight="bold" textAlign="center">
+            Guide Profile Information
           </Typography>
-          <Stack direction="column" spacing={"16px"}>
-            <Typography>Show Certificate</Typography>
-            <Avatar
-              src={certificateImage}
-              sx={{ width: "250px", height: "250px", borderRadius: "0px" }}
-            />
+          <Stack
+            direction="column"
+            justifyContent="center"
+            alignItems="start"
+            spacing="16px"
+            minWidth="450px"
+          >
+            <Locations locations={guideProfile?.locations || []} />
+            <TourStyles tourStyles={guideProfile?.tourStyles || []} />
+            <Typography>
+              Average review score: {guideProfile?.averageReviewScore}
+            </Typography>
+            <Stack direction="column" spacing={"16px"}>
+              <Typography>Show Certificate</Typography>
+              <Avatar
+                src={certificateImage}
+                sx={{ width: "250px", height: "250px", borderRadius: "0px" }}
+              />
+            </Stack>
           </Stack>
         </Stack>
-      </Stack>
+      )}
       <Button variant="contained" fullWidth onClick={onStartEdit}>
         <Typography
           variant="body2"

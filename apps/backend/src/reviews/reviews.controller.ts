@@ -37,7 +37,7 @@ export class ReviewsController {
 
   @ApiCookieAuth('access_token')
   @ApiOperation({
-    summary: 'decline booking by ID',
+    summary: 'create review',
   })
   @ApiBody({
     type: CreateReviewRequest,

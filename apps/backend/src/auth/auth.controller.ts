@@ -107,7 +107,6 @@ export class AuthController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'internal server error',
   })
-  @UseGuards(AuthGuard)
   @Post('refresh')
   async refresh(@Req() req, @Res({ passthrough: true }) res) {
     try {

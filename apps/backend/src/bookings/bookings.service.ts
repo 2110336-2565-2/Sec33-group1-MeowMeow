@@ -197,9 +197,10 @@ export class BookingsService implements IBookingsService {
       if (booking.guideId !== guide.guideId) {
         throw new AccessNotGranted('permissing denied');
       }
+
       const cancelledBooking = await this.bookingsRepo.updateBookingStatus(
         bookingId,
-        BookingStatus.GUIDE_CANCELLED,
+        'GUIDE_CANCELLED',
       );
 
       if (

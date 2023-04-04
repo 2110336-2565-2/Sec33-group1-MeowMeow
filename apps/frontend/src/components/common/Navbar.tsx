@@ -42,7 +42,7 @@ export default function Navbar() {
           <Button
             variant="outlined"
             style={{ margin: "10px" }}
-            onClick={() => router.push("")}
+            onClick={() => router.push("/")}
           >
             LOGIN
           </Button>

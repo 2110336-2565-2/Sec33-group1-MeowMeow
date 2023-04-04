@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEmail, IsNotEmpty } from "class-validator";
+import { IsEmail, IsNotEmpty, IsString, MinLength } from "class-validator";
 import { Role } from "database";
 
 export class User {
@@ -20,6 +20,7 @@ export class User {
     example: "user1",
   })
   @IsNotEmpty()
+  @IsString()
   username: string;
 
   @ApiProperty({
@@ -29,6 +30,8 @@ export class User {
     example: "password",
   })
   @IsNotEmpty()
+  @IsString()
+  @MinLength(8)
   password: string;
 
   @ApiProperty({
@@ -38,6 +41,7 @@ export class User {
     example: "john",
   })
   @IsNotEmpty()
+  @IsString()
   firstName: string;
 
   @ApiProperty({
@@ -47,6 +51,7 @@ export class User {
     example: "doe",
   })
   @IsNotEmpty()
+  @IsString()
   lastName: string;
 
   @ApiProperty({

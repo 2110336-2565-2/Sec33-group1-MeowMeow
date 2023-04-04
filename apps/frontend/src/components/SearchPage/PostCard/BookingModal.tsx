@@ -32,7 +32,7 @@ const ModalContainer = styled(Box)(({ theme }) => ({
 }));
 
 interface IBookingModal {
-  authorId: number;
+  guideId: number;
   postId: number;
   travellerId: number;
   isOpen: boolean;
@@ -44,7 +44,7 @@ const createBooking = (body: CreateBookingRequest) => {
 };
 
 const BookingModal = (props: IBookingModal) => {
-  const { isOpen, onClose, authorId, postId, travellerId } = props;
+  const { isOpen, onClose, guideId, postId, travellerId } = props;
 
   const { addNotification } = useContext(NotificationContext);
   const [startDate, setStartDate] = useState<Date | null>(null);
@@ -54,7 +54,7 @@ const BookingModal = (props: IBookingModal) => {
     createBooking({
       startDate: startDate!.toISOString(),
       endDate: endDate!.toISOString(),
-      guideId: authorId,
+      guideId: guideId,
       postId: postId,
     })
       .then((res) => {

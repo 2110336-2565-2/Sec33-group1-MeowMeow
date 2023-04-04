@@ -22,6 +22,7 @@ import {
   UnprocessableEntity,
 } from './bookings.common';
 import { BookingsRepository } from './bookings.repository';
+import { PostsService } from 'src/posts/posts.service';
 
 export interface IBookingsService {
   acceptBookingByGuide(
@@ -59,6 +60,7 @@ export interface IBookingsService {
 export class BookingsService implements IBookingsService {
   constructor(
     private readonly bookingsRepo: BookingsRepository,
+    @Inject('PostsService') private readonly postsService: PostsService,
     private readonly paymentsService: PaymentService,
     @Inject('GuidesService') private readonly guideService: GuidesService,
   ) {}
@@ -127,7 +129,9 @@ export class BookingsService implements IBookingsService {
     if (isNaN(Date.parse(req.endDate))) {
       throw new InvalidDateFormat("invalid 'endDate' format");
     }
-    if (userId == req.guideId) {
+
+    const post = await this.postsService.getPostById(req.postId);
+    if (userId == post.authorId) {
       throw new UnprocessableEntity('cannot book your own post');
     }
 
@@ -187,42 +191,35 @@ export class BookingsService implements IBookingsService {
     account: AccountMetadata,
   ): Promise<CancelBookingResponse> {
     try {
-      const guide = await this.guideService.getGuideByUserId(account.userId);
       const booking = await this.bookingsRepo.getBookingById(bookingId);
+      const guide = await this.guideService.getGuideById(booking.guideId);
       if (booking.guideId !== guide.guideId) {
         throw new AccessNotGranted('permissing denied');
       }
-      if (
-        booking.bookingStatus !== 'WAITING_FOR_GUIDE_CONFIRMATION' &&
-        booking.bookingStatus !== 'WAITING_FOR_PAYMENT' &&
-        booking.bookingStatus !== 'TRAVELING'
-      ) {
-        throw new UnprocessableEntity(
-          'this booking has been accepted or cancelled',
-        );
-      }
-
-      if (booking.bookingStatus !== 'TRAVELING') {
-        await this.paymentsService.refund(bookingId);
-      }
-
+      const cancelledBookingStatus =
+        booking.guideId === account.userId
+          ? 'GUIDE_CANCELLED'
+          : 'USER_CANCELLED';
       const cancelledBooking = await this.bookingsRepo.updateBookingStatus(
         bookingId,
-        'GUIDE_CANCELLED',
+        cancelledBookingStatus,
       );
 
-      if (booking.bookingStatus === 'TRAVELING') {
-        await this.paymentsService.refund(bookingId);
+      if (
+        booking.bookingStatus === 'WAITING_FOR_GUIDE_CONFIRMATION' ||
+        booking.bookingStatus === 'WAITING_FOR_PAYMENT'
+      ) {
         return {
           id: cancelledBooking.id,
-          refunded: true,
+          refunded: false,
           bookingStatus: cancelledBooking.bookingStatus.toString(),
         };
       }
 
+      await this.paymentsService.refund(bookingId);
       return {
         id: cancelledBooking.id,
-        refunded: false,
+        refunded: true,
         bookingStatus: cancelledBooking.bookingStatus.toString(),
       };
     } catch (e) {
@@ -298,23 +295,37 @@ export class BookingsService implements IBookingsService {
         throw new AccessNotGranted('permissing denied');
       }
       if (
-        booking.bookingStatus !== 'TRAVELING' &&
-        booking.bookingStatus !== 'WAITING_FOR_PAYMENT'
+        booking.bookingStatus === 'USER_CANCELLED' ||
+        booking.bookingStatus === 'GUIDE_CANCELLED' ||
+        booking.bookingStatus === 'FINISHED'
       ) {
         throw new UnprocessableEntity(
           'this booking has not beed available for user cancelation',
         );
       }
 
+      if (
+        booking.bookingStatus === 'WAITING_FOR_GUIDE_CONFIRMATION' ||
+        booking.bookingStatus === 'WAITING_FOR_PAYMENT'
+      ) {
+        const refundedBooking = await this.bookingsRepo.updateBookingStatus(
+          bookingId,
+          'USER_CANCELLED',
+        );
+        return {
+          message: 'cancelled without refund',
+          refunded: false,
+          bookingId: refundedBooking.id,
+          bookingStatus: refundedBooking.bookingStatus.toString(),
+        };
+      }
+
       const now = new Date();
       const refundDeadline = moment(booking.startDate)
         .subtract(5, 'days')
         .toDate();
-      if (now > booking.startDate) {
-        throw new UnprocessableEntity('this trip has already started');
-      }
-
-      if (now > refundDeadline) {
+      const tripPaid = booking.bookingStatus !== 'TRAVELING';
+      if (now > refundDeadline || tripPaid || now > refundDeadline) {
         const cancelledBooking = await this.bookingsRepo.updateBookingStatus(
           bookingId,
           'USER_CANCELLED',

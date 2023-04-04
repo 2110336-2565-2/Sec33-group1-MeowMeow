@@ -7,11 +7,11 @@ import { Booking } from "@/components/managetrip-guide/Types";
 
 const getGuideId = async () => {
   const response = await apiClient.get("/guides/profile");
-  return response.data.guideId;
+  return response.data.userId;
 };
 const getData = async (id: string) => {
   const response = await apiClient.get(
-    "bookings/guide/" + id + "?offset=0&limit=20"
+    "bookings/guide/" + id + "?offset=0&limit=1000000"
   );
   return response;
 };
@@ -22,7 +22,6 @@ const ManageTripGuide = () => {
     const fetchBookings = async () => {
       const id = await getGuideId();
       const data = await getData(id);
-      if (data.data.bookings == bookings) return;
       setBookings(data.data.bookings);
     };
     fetchBookings();

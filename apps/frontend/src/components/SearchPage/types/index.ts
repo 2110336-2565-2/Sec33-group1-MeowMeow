@@ -7,6 +7,7 @@ export interface IPost {
     id: number;
     name: string;
     profile: string;
+    guideId: number;
   };
   image: string;
   locations: string[];

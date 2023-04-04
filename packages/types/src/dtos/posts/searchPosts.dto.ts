@@ -82,7 +82,14 @@ export class SearchPostsPost extends PickType(Post, [
   "contactInfo",
   "createdAt",
   "updatedAt",
-] as const) {}
+] as const) {
+  @ApiProperty({
+    type: () => Number,
+    minimum: 1,
+    example: 1,
+  })
+  guideId: number;
+}
 
 export class SearchPostsResponse {
   @ApiProperty({

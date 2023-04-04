@@ -15,7 +15,7 @@ interface ICardContent {
   fee: number;
   locations: string[];
   maxParticipant: number;
-  authorId: number;
+  guideId: number;
   postId: number;
   travellerId: number;
   tags: string[];
@@ -29,7 +29,7 @@ const CardContent = (props: ICardContent) => {
     locations,
     maxParticipant,
     travellerId,
-    authorId,
+    guideId,
     postId,
     tags,
   } = props;
@@ -66,7 +66,7 @@ const CardContent = (props: ICardContent) => {
         </Button>
       </Box>
       <BookingModal
-        authorId={authorId}
+        guideId={guideId}
         postId={postId}
         travellerId={travellerId}
         isOpen={isOpen}

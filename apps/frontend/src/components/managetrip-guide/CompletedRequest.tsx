@@ -9,8 +9,8 @@ const CompletedRequest = ({ bookings }: { bookings: Booking[] }) => {
   return (
     <div>
       <List>
-        {filteredbooking.map((booking, index) => {
-          return <CompletedRequestCard key={index} booking={booking} />;
+        {filteredbooking.map((booking) => {
+          return <CompletedRequestCard key={booking.id} booking={booking} />;
         })}
       </List>
     </div>

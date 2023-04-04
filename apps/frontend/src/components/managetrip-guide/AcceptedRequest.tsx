@@ -22,6 +22,8 @@ const AcceptedRequest = ({ bookings, handleCancel }: IAcceptedRequestProps) => {
     startDate: "",
     endDate: "",
     postId: 0,
+    firstName: "",
+    lastName: "",
   });
   const handleClick = (booking: Booking) => {
     setCurReq(booking);
@@ -38,15 +40,15 @@ const AcceptedRequest = ({ bookings, handleCancel }: IAcceptedRequestProps) => {
   const filteredbooking = bookings.filter(
     (booking) =>
       booking.bookingStatus === "WAITING_FOR_PAYMENT" ||
-      booking.bookingStatus === "WAITING_FOR_TRAVELING"
+      booking.bookingStatus === "TRAVELING"
   );
   return (
     <div>
       <List>
-        {filteredbooking.map((booking, index) => {
+        {filteredbooking.map((booking) => {
           return (
             <AcceptedRequestCard
-              key={index}
+              key={booking.id}
               booking={booking}
               handleClick={handleClick}
             />
@@ -57,14 +59,6 @@ const AcceptedRequest = ({ bookings, handleCancel }: IAcceptedRequestProps) => {
         <DialogTitle>Confirmation</DialogTitle>
         <DialogContent>
           <Typography variant="body2" color="textSecondary">
-            Upon cancellation, the client's money will be fully refunded.
-          </Typography>
-          <Typography variant="body2" color="textSecondary">
-            However, you may lost some of your credibility.
-          </Typography>
-          <br />
-          <Typography variant="body2" color="textSecondary">
-            {" "}
             This process cannot be undone, are you sure you want to cancel this
             appointment?
           </Typography>

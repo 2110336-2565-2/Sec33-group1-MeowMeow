@@ -9,10 +9,6 @@ const getTripInfo = async (id: string) => {
   return response.data;
 };
 
-const getCustomerName = async (id: string) => {
-  const response = await apiClient.get("users/" + id);
-  return response.data.firstName + " " + response.data.lastName;
-};
 export const AcceptedRequestCard = ({
   booking,
   handleClick,
@@ -20,7 +16,6 @@ export const AcceptedRequestCard = ({
   booking: Booking;
   handleClick: (booking: Booking) => void;
 }) => {
-  const [customerName, setCustomerName] = useState("");
   const [fee, setFee] = useState(0);
   const [title, setTitle] = useState("");
   useEffect(() => {
@@ -28,8 +23,6 @@ export const AcceptedRequestCard = ({
       const data = await getTripInfo(booking.postId.toString());
       setFee(data.fee);
       setTitle(data.title);
-      const name = await getCustomerName(data.authorId.toString());
-      setCustomerName(name);
     };
     fetchInfo();
   }, []);
@@ -44,7 +37,7 @@ export const AcceptedRequestCard = ({
           <Grid item>
             <Typography variant="h5">{title}</Typography>
             <Typography variant="body2" color="textSecondary">
-              Reserver Name: {customerName}
+              Reserver Name: {booking.firstName + " " + booking.lastName}
             </Typography>
             <Typography variant="body2" color="textSecondary">
               Reserved date:{" "}
@@ -76,6 +69,7 @@ export const AcceptedRequestCard = ({
               onClick={() => handleClick(booking)}
               size="small"
               sx={{ marginRight: "2vw", marginTop: "1vh" }}
+              disabled={dayjs().isAfter(dayjs(booking.startDate))}
             >
               Cancel
             </Button>

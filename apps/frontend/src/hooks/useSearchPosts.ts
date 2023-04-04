@@ -10,8 +10,12 @@ import { FeedStatus } from "./types/FeedStatus";
 import useFilterForm from "./useFilterForm";
 import apiClient from "@/utils/apiClient";
 import { NotificationContext } from "@/context/NotificationContext";
-import { SearchPostsResponse } from "types";
-import { POST_PER_PAGE, templatePost } from "@/constants/SearchPage";
+import {
+  GetUserByIdResponse,
+  SearchPostsPost,
+  SearchPostsResponse,
+} from "types";
+import { POST_PER_PAGE } from "@/constants/SearchPage";
 
 interface IFetchPosts {
   pageNo: number;
@@ -35,23 +39,34 @@ const fetchPosts = async (props: IFetchPosts) => {
   const respData: SearchPostsResponse = resp.data;
 
   const myPostsLoading: Promise<IPost[]> = Promise.all(
-    respData.posts.map(async (post: any) => {
-      const authorId = post.authorId;
-      const resp = await apiClient.get(`/users/${authorId}`);
-      return {
-        ...templatePost,
+    respData.posts.map(async (post: SearchPostsPost) => {
+      const userId = post.authorId;
+      const guideId = post.guideId;
+      const plainRespUser = await apiClient.get(`/users/${userId}`);
+
+      const respUser: GetUserByIdResponse = plainRespUser.data;
+
+      const result: IPost = {
         ...post,
         author: {
-          id: authorId,
-          name: resp.data.username,
+          id: userId,
+          name: respUser.username,
+          profile: respUser.imageId,
+          guideId: guideId,
         },
+        image: "/landing/travel1.png", // template image
       };
+
+      console.log(result);
+
+      return result;
     })
   );
   let myPosts: IPost[] = [];
   await myPostsLoading
     .then((post) => {
       myPosts = post;
+      console.log(myPosts);
     })
     .catch((err) => {
       throw new Error(err);
@@ -83,7 +98,7 @@ export const useSearchPosts = () => {
     })
       .then((resp: ISearchPosts) => {
         setFeed(resp.posts);
-        setAllPage(Math.ceil(resp.count / POST_PER_PAGE));
+        setAllPage(Math.ceil(resp.count / POST_PER_PAGE) || 1);
         setFeedStatus(FeedStatus.SHOWING);
       })
       .catch((err) => {

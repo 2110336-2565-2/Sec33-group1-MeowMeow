@@ -144,6 +144,7 @@ export class PostsServiceImpl {
       posts: posts.posts.map((e) => ({
         id: e.id,
         authorId: e.authorId,
+        guideId: e.author.guide.id,
         title: e.title,
         content: e.content,
         tags: e.tags,

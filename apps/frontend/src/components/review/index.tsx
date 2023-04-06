@@ -12,7 +12,8 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useContext } from "react";
+import { AuthContext } from "@/context/AuthContext";
 
 interface reviewProps {
   handleDialog: () => void;
@@ -21,6 +22,8 @@ interface reviewProps {
 export default function Review(props: reviewProps) {
   const { onClose, onExit, isOpen, messageInfo } = useCustomSnackbar();
   const { onSubmit, isLoading } = useReviewForm();
+
+  const { user } = useContext(AuthContext);
 
   if (isLoading) {
     return (
@@ -75,9 +78,9 @@ export default function Review(props: reviewProps) {
             Review
           </Grid>
           <Grid container justifyContent="flex-start" alignItems="center">
-            <Grid item xs={12}>
-              Natee Niparnan
-            </Grid>
+            {/* <Grid item xs={12}>
+              {user?.username || "Anonymous"}
+            </Grid> */}
             <Grid container justifyContent="center" alignItems="center">
               <Star id="score" />
             </Grid>

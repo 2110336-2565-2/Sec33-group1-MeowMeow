@@ -23,6 +23,7 @@ import {
 } from './bookings.common';
 import { BookingsRepository } from './bookings.repository';
 import { PostsService } from 'src/posts/posts.service';
+import { BookingStatus } from 'database';
 
 export interface IBookingsService {
   acceptBookingByGuide(
@@ -30,8 +31,8 @@ export interface IBookingsService {
     account: AccountMetadata,
   ): Promise<AcceptBookingResponse>;
   cancelBookingByGuide(
+    userId: number,
     bookingId: number,
-    account: AccountMetadata,
   ): Promise<CancelBookingResponse>;
   payBookingFee(
     bookingId: number,
@@ -187,22 +188,19 @@ export class BookingsService implements IBookingsService {
   }
 
   async cancelBookingByGuide(
+    userId: number,
     bookingId: number,
-    account: AccountMetadata,
   ): Promise<CancelBookingResponse> {
     try {
       const booking = await this.bookingsRepo.getBookingById(bookingId);
-      const guide = await this.guideService.getGuideById(booking.guideId);
+      const guide = await this.guideService.getGuideByUserId(userId);
       if (booking.guideId !== guide.guideId) {
         throw new AccessNotGranted('permissing denied');
       }
-      const cancelledBookingStatus =
-        booking.guideId === account.userId
-          ? 'GUIDE_CANCELLED'
-          : 'USER_CANCELLED';
+
       const cancelledBooking = await this.bookingsRepo.updateBookingStatus(
         bookingId,
-        cancelledBookingStatus,
+        'GUIDE_CANCELLED',
       );
 
       if (

@@ -270,11 +270,14 @@ export class BookingsController {
   @Post(':id/decline')
   async declineBookingbyGuide(
     @Req() req,
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id', ParseIntPipe) bookingId: number,
   ): Promise<CancelBookingResponse> {
     try {
       const account: AccountMetadata = req.account;
-      return await this.bookingsService.cancelBookingByGuide(id, account);
+      return await this.bookingsService.cancelBookingByGuide(
+        account.userId,
+        bookingId,
+      );
     } catch (e) {
       this.handleException(e);
     }

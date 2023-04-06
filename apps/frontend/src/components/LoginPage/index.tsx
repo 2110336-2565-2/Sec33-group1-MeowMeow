@@ -9,7 +9,6 @@ const LoginPage = () => {
     <LoginPageContainer>
       <BrandLogo />
       <LoginForm />
-
       <Typography variant="body2" component="span" marginTop="96px">
         Don’t have an account yet?{" "}
         <StyledLink href="/register">

@@ -23,6 +23,7 @@ const useCancelTrip = ({ tripId, handleClose }: IUseCancelTrip) => {
         setTimeout(() => {
           handleClose();
           router.push("/traveller-record");
+          router.reload();
         }, 2000);
       } catch (err) {
         const error = err as Error;

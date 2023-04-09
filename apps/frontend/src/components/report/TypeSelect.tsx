@@ -4,6 +4,7 @@ import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useState } from "react";
 import { ReportLabel } from "@/utils/createDropdownData";
+import { styled } from "@mui/material";
 
 export type IReportDropdown = {
   name: string;
@@ -13,28 +14,41 @@ export type IReportDropdown = {
 
 interface ITypeSelectProps {
   dropdownChildren: IReportDropdown[];
-  defaultValue?: ReportLabel;
+  reportType: ReportLabel | "";
+  onChange: (event: SelectChangeEvent<ReportLabel>) => void;
 }
 
-const TypeSelect = (props: ITypeSelectProps) => {
-  const { dropdownChildren, defaultValue } = props;
-  const [reportType, setReportType] = useState<ReportLabel | "">(
-    defaultValue || ""
-  );
+const StyledFormControl = styled(FormControl)({
+  borderRadius: "4px",
+  "& .MuiOutlinedInput-root": {
+    "& fieldset": {
+      borderColor: "rgba(0, 0, 0, 0.42)",
+    },
+    "&:hover fieldset": {
+      border: "2px solid #F46D21",
+    },
+  },
+});
 
-  const handleChange = (event: SelectChangeEvent<ReportLabel>) => {
-    setReportType(event.target.value as ReportLabel);
-  };
+const TypeSelect = (props: ITypeSelectProps) => {
+  const { dropdownChildren, reportType, onChange } = props;
 
   return (
-    <FormControl sx={{ m: 1, minWidth: 120 }}>
+    <StyledFormControl
+      sx={{
+        ":hover": {
+          borderColor: "red",
+          borderRadius: "4px",
+        },
+      }}
+    >
       <InputLabel id="demo-simple-select-helper-label">Report Type</InputLabel>
       <Select
         labelId="demo-simple-select-helper-label"
         id="demo-simple-select-helper"
         value={reportType}
         label="Report Type"
-        onChange={handleChange}
+        onChange={onChange}
       >
         {dropdownChildren.map((data) => {
           return (
@@ -44,7 +58,7 @@ const TypeSelect = (props: ITypeSelectProps) => {
           );
         })}
       </Select>
-    </FormControl>
+    </StyledFormControl>
   );
 };
 

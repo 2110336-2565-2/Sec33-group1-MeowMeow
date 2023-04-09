@@ -3,9 +3,15 @@ import StyleTextField from "../LoginPage/StyledTextField";
 import TypeSelect from "./TypeSelect";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import createDropdownData from "@/utils/createDropdownData";
+import createDropdownData, { ReportLabel } from "@/utils/createDropdownData";
+import { SelectChangeEvent } from "@mui/material/Select";
+import { useState } from "react";
 
 const ReportForm = () => {
+  const [reportType, setReportType] = useState<ReportLabel | "">("");
+  const onChange = (event: SelectChangeEvent<ReportLabel>) => {
+    setReportType(event.target.value as ReportLabel);
+  };
   return (
     <Stack
       component="form"
@@ -16,10 +22,24 @@ const ReportForm = () => {
         event.preventDefault();
       }}
     >
-      <StyleTextField label="Guide name" />
-      <StyleTextField label="Trip name" />
-      <StyleTextField label="Report Detail" multiline minRows={4} maxRows={8} />
-      <TypeSelect dropdownChildren={createDropdownData()} />
+      <TypeSelect
+        reportType={reportType}
+        onChange={onChange}
+        dropdownChildren={createDropdownData()}
+      />
+      {reportType === ReportLabel.GUIDE && (
+        <StyleTextField id="guideId" label="Guide ID" />
+      )}
+      {reportType === ReportLabel.TRIP && (
+        <StyleTextField id="tripId" label="Trip ID" />
+      )}
+      <StyleTextField
+        id="detail"
+        label="Report Detail"
+        multiline
+        minRows={4}
+        maxRows={8}
+      />
       <Button type="submit" variant="contained">
         <Typography fontWeight="600" color="white" textTransform="none">
           Submit

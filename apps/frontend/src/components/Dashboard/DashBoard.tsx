@@ -7,6 +7,7 @@ import useDashBoard from "@/hooks/useDashBoard";
 import AuthProvider from "@/context/AuthContext";
 import StateLists from "./StateLists";
 import { Roles_Types } from "@/context/type/authContext";
+import Link from "next/link";
 
 interface IDashBoardProps {
   children?: ReactNode;
@@ -42,22 +43,25 @@ const DashBoard = ({ children, roleAllowed = ["USER"] }: IDashBoardProps) => {
             top: "48px",
           }}
         >
-          <Stack
-            direction="row"
-            alignItems="center"
-            spacing="12px"
-            width="100%"
-          >
-            <Image
-              src="/images/loginPage/guideKai-logo.svg"
-              alt="guideKai"
-              width={32}
-              height={32}
-            />
-            <Typography variant="h6" fontWeight="700">
-              GuideKai
-            </Typography>
-          </Stack>
+          <Link href="/dashboard" style={{ textDecoration: "none" }}>
+            <Stack
+              direction="row"
+              alignItems="center"
+              spacing="12px"
+              width="100%"
+              justifyContent="center"
+            >
+              <Image
+                src="/images/loginPage/guideKai-logo.svg"
+                alt="guideKai"
+                width={32}
+                height={32}
+              />
+              <Typography variant="h6" fontWeight="700" sx={{ color: "black" }}>
+                GuideKai
+              </Typography>
+            </Stack>
+          </Link>
           <Divider color="#E0E0E0" />
           <StateLists />
         </Stack>

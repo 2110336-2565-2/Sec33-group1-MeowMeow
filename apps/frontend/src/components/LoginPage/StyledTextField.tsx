@@ -13,6 +13,11 @@ const StyleTextField = styled(TextField)(({ theme }) => {
         border: "2px solid #F46D21",
       },
     },
+    "& .Mui-disabled": {
+      "&:hover fieldset": {
+        border: "2px solid rgba(0, 0, 0, 0.42)",
+      },
+    },
   };
 });
 

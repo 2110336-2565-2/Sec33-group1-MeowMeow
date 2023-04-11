@@ -5,13 +5,14 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import createDropdownData, { ReportLabel } from "@/utils/createDropdownData";
 import { SelectChangeEvent } from "@mui/material/Select";
-import { useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import useReportQuery from "@/hooks/useReportQuery";
+import checkReportEntrance from "@/utils/checkReportEntrance";
+import useReport from "@/hooks/useReport";
 
 const ReportForm = () => {
-  const [reportType, setReportType] = useState<ReportLabel | "">("");
-  const onChange = (event: SelectChangeEvent<ReportLabel>) => {
-    setReportType(event.target.value as ReportLabel);
-  };
+  const { guideId, tripId, isQueryValid } = useReportQuery();
+  const { reportType, reportEntrance, onChange } = useReport(isQueryValid);
   return (
     <Stack
       component="form"
@@ -25,13 +26,24 @@ const ReportForm = () => {
       <TypeSelect
         reportType={reportType}
         onChange={onChange}
-        dropdownChildren={createDropdownData()}
+        dropdownChildren={createDropdownData(reportEntrance)}
       />
       {reportType === ReportLabel.GUIDE && (
-        <StyleTextField id="guideId" label="Guide ID" />
+        <StyleTextField
+          disabled
+          defaultValue={guideId}
+          id="guideId"
+          label="Guide ID"
+        />
       )}
       {reportType === ReportLabel.TRIP && (
-        <StyleTextField id="tripId" label="Trip ID" />
+        <StyleTextField
+          disabled
+          defaultValue={tripId}
+          id="tripId"
+          label="Trip ID"
+          inputProps={{ "aria-label": "description" }}
+        />
       )}
       <StyleTextField
         id="detail"

@@ -4,6 +4,7 @@ import { useContext, useState } from "react";
 import { deletePost } from "./OptionsMethods";
 import Router from "next/router";
 import { NotificationContext } from "@/context/NotificationContext";
+import Link from "next/link";
 
 interface IOptionMenu {
   postId: number;
@@ -69,10 +70,24 @@ const OptionMenu = (props: IOptionMenu) => {
           },
         }}
       >
-        <MenuItem onClick={handleClose} sx={{ gap: 1 }}>
-          <Report />
-          Report
-        </MenuItem>
+        <Link
+          target="_blank"
+          rel="noreferer"
+          href={{
+            pathname: "/report",
+            query: { tripId: postId },
+          }}
+          style={{
+            textDecoration: "none",
+            color: "inherit",
+          }}
+        >
+          <MenuItem onClick={handleClose} sx={{ gap: 1 }}>
+            <Report />
+            Report
+          </MenuItem>
+        </Link>
+
         {isOwner && (
           <Box>
             <MenuItem onClick={handleEdit} sx={{ gap: 1 }}>

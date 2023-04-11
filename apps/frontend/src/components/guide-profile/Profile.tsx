@@ -1,5 +1,18 @@
-import { Avatar, Box, Button, Chip, Dialog, Grid } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  Chip,
+  Dialog,
+  Grid,
+  Typography,
+} from "@mui/material";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
+import Link from "next/link";
+import { Report } from "@mui/icons-material";
+import IconButton from "@mui/material/IconButton";
+
 interface IProfileProps {
   name: string;
   imageurl: string;
@@ -11,6 +24,8 @@ export default function Profile({
   certificateId,
 }: IProfileProps) {
   const [open, setOpen] = useState(false);
+  const router = useRouter();
+  const guideId = router.query.id as string;
   return (
     <Grid
       container
@@ -20,7 +35,7 @@ export default function Profile({
     >
       <Grid
         item
-        paddingX={{ xs: "5vw", md: "2vw", lg: "5vw" }}
+        paddingX={{ xs: "5vw", md: "2vw", lg: "4vw" }}
         display="flex"
         justifyContent="center"
       >
@@ -30,7 +45,7 @@ export default function Profile({
             width: { xs: 160, sm: 200, md: 160, lg: 200 },
             height: { xs: 160, sm: 200, md: 160, lg: 200 },
           }}
-        ></Avatar>
+        />
       </Grid>
       <Grid item xs>
         <Grid
@@ -46,12 +61,30 @@ export default function Profile({
                 {name}
               </Box>
             </Grid>
-            <Grid item paddingLeft={"1vw"}>
+            <Grid item paddingLeft="12px">
               <Chip
                 label="Guide"
                 size="small"
                 sx={{ fontFamily: "Inter", fontSize: { xs: 12, sm: 14 } }}
               />
+            </Grid>
+            <Grid item paddingLeft="12px">
+              <Link
+                target="_blank"
+                rel="noreferer"
+                href={{
+                  pathname: "/report",
+                  query: { guideId },
+                }}
+                style={{
+                  textDecoration: "none",
+                  color: "inherit",
+                }}
+              >
+                <IconButton color="error" sx={{ padding: "4px" }}>
+                  <Report color="error" />
+                </IconButton>
+              </Link>
             </Grid>
           </Grid>
           <Box

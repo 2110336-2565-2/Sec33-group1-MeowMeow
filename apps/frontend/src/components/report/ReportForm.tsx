@@ -4,10 +4,7 @@ import TypeSelect from "./TypeSelect";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import createDropdownData, { ReportLabel } from "@/utils/createDropdownData";
-import { SelectChangeEvent } from "@mui/material/Select";
-import { useCallback, useEffect, useMemo, useState } from "react";
 import useReportQuery from "@/hooks/useReportQuery";
-import checkReportEntrance from "@/utils/checkReportEntrance";
 import useReport from "@/hooks/useReport";
 
 const ReportForm = () => {

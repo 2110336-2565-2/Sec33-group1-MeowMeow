@@ -7,8 +7,8 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  
-  url      = env("DATABASE_URL")
+
+  url = env("DATABASE_URL")
 }
 
 enum Role {
@@ -45,7 +45,7 @@ model User {
   posts        Post[]
   bookings     Booking[]
   transactions Transaction[]
-  Report       Report[]
+  Reports      Report[]
 }
 
 model Location {

@@ -7,6 +7,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+  
   url      = env("DATABASE_URL")
 }
 
@@ -44,6 +45,7 @@ model User {
   posts        Post[]
   bookings     Booking[]
   transactions Transaction[]
+  Report       Report[]
 }
 
 model Location {
@@ -170,4 +172,21 @@ model Transaction {
 
   booking Booking @relation(fields: [bookingId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   user    User    @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+}
+
+enum ReportType {
+  GUIDE
+  TRIP
+  SYSTEM
+  OTHER
+}
+
+model Report {
+  id         Int        @id @default(autoincrement())
+  createdAt  DateTime   @default(now())
+  reportType ReportType @default(OTHER)
+  text       String
+
+  reporter   User @relation(fields: [reporterId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  reporterId Int
 }

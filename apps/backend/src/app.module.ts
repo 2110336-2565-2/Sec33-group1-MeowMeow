@@ -12,6 +12,7 @@ import { PrismaService } from './prisma/prisma.service';
 import { ReviewsModule } from './reviews/reviews.module';
 import { UsersModule } from './users/users.module';
 import { UsersRepository } from './users/users.repository';
+import { ReportsModule } from './reports/reports.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { UsersRepository } from './users/users.repository';
     BookingsModule,
     MediaModule,
     PaymentModule,
+    ReportsModule,
   ],
   controllers: [AppController],
   providers: [

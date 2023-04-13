@@ -95,7 +95,10 @@ export class GuidesRepository {
 
     try {
       const scoreResult = await this.prismaService.review.aggregate({
-        _avg: {
+        _sum: {
+          score: true,
+        },
+        _count: {
           score: true,
         },
         where: {
@@ -109,7 +112,9 @@ export class GuidesRepository {
         lastName: guide.user.lastName,
         imageId: guide.user.imageId,
         certificateId: guide.certificateId,
-        averageReviewScore: scoreResult._avg.score?.toNumber() | 0,
+        averageReviewScore:
+          (scoreResult._sum.score?.toNumber() | 0) /
+          (scoreResult._count.score || 1),
         locations: guide.GuideLocation.map((e) => e.location.locationName),
         tourStyles: guide.GuideTourStyle.map((e) => e.tourStyle.tourStyleName),
       };

@@ -9,8 +9,6 @@ export interface IFilterMethod {
   handleChangeLocation: (e: ChangeEvent<HTMLInputElement>) => void;
   handleChangePrice: (e: Event, newValue: number | number[]) => void;
   handleChangeRating: (e: Event, newValue: number | number[]) => void;
-  handleChangeStartDate: (newValue: Date | null) => void;
-  handleChangeEndDate: (newValue: Date | null) => void;
   reset: () => void;
 }
 
@@ -50,20 +48,6 @@ const useFilterForm = () => {
     }));
   };
 
-  const handleChangeStartDate = (newValue: Date | null) => {
-    setTempOptions((prev) => ({
-      ...prev,
-      startDate: newValue,
-    }));
-  };
-
-  const handleChangeEndDate = (newValue: Date | null) => {
-    setTempOptions((prev) => ({
-      ...prev,
-      endDate: newValue,
-    }));
-  };
-
   return {
     options,
     tempOptions,
@@ -71,8 +55,6 @@ const useFilterForm = () => {
     handleChangeLocation,
     handleChangePrice,
     handleChangeRating,
-    handleChangeStartDate,
-    handleChangeEndDate,
     reset,
   };
 };

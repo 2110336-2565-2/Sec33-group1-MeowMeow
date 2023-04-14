@@ -1,13 +1,15 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpException,
   HttpStatus,
   Inject,
-  Param,
   Post,
+  Query,
   Req,
+  UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -16,9 +18,11 @@ import {
   AccountMetadata,
   CreateReportRequest,
   GetGuideByIdResponse,
+  SearchReportsRequest,
 } from 'types';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { FailedRelationConstraintError } from './reports.common';
+import { Role } from 'database';
 
 @ApiTags('Reports')
 @Controller('reports')
@@ -30,10 +34,9 @@ export class ReportsController {
   handleException(e: Error) {
     if (e instanceof FailedRelationConstraintError)
       throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
-    throw new HttpException(
-      'internal server error',
-      HttpStatus.INTERNAL_SERVER_ERROR,
-    );
+    if (e instanceof UnauthorizedException)
+      throw new UnauthorizedException(e.message);
+    throw new HttpException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
   @ApiOperation({
@@ -55,6 +58,37 @@ export class ReportsController {
     try {
       const account: AccountMetadata = req.account;
       return await this.reportsService.createReport(account.userId, reportData);
+    } catch (e) {
+      this.handleException(e);
+    }
+  }
+
+  @ApiOperation({
+    summary: 'Get all reports',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'successfully get all reports',
+    type: GetGuideByIdResponse,
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'internal server error',
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'access denied',
+  })
+  @HttpCode(HttpStatus.OK)
+  @Get()
+  @UseGuards(AuthGuard)
+  async searchPost(@Req() req, @Query() searchFilter: SearchReportsRequest) {
+    try {
+      const account: AccountMetadata = req.account;
+      if (!req.account.roles.includes(Role.ADMIN)) {
+        throw new UnauthorizedException('Only ADMIN can access this function');
+      }
+      return await this.reportsService.searchReports(searchFilter);
     } catch (e) {
       this.handleException(e);
     }

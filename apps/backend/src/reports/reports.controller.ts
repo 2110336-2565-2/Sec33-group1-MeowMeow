@@ -12,13 +12,20 @@ import {
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiCookieAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { ReportsService } from './reports.service';
 import {
   AccountMetadata,
   CreateReportRequest,
+  CreateReportResponse,
   GetGuideByIdResponse,
   SearchReportsRequest,
+  SearchReportsResponse,
 } from 'types';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { FailedRelationConstraintError } from './reports.common';
@@ -45,7 +52,7 @@ export class ReportsController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'successfully send a report',
-    type: GetGuideByIdResponse,
+    type: CreateReportResponse,
   })
   @ApiResponse({
     status: HttpStatus.INTERNAL_SERVER_ERROR,
@@ -53,8 +60,12 @@ export class ReportsController {
   })
   @HttpCode(HttpStatus.OK)
   @Post()
+  @ApiCookieAuth('access-token')
   @UseGuards(AuthGuard)
-  async createReport(@Req() req, @Body() reportData: CreateReportRequest) {
+  async createReport(
+    @Req() req,
+    @Body() reportData: CreateReportRequest,
+  ): Promise<CreateReportResponse> {
     try {
       const account: AccountMetadata = req.account;
       return await this.reportsService.createReport(account.userId, reportData);
@@ -69,7 +80,7 @@ export class ReportsController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'successfully get all reports',
-    type: GetGuideByIdResponse,
+    type: SearchReportsResponse,
   })
   @ApiResponse({
     status: HttpStatus.INTERNAL_SERVER_ERROR,
@@ -81,8 +92,12 @@ export class ReportsController {
   })
   @HttpCode(HttpStatus.OK)
   @Get()
+  @ApiCookieAuth('access-token')
   @UseGuards(AuthGuard)
-  async searchPost(@Req() req, @Query() searchFilter: SearchReportsRequest) {
+  async searchPost(
+    @Req() req,
+    @Query() searchFilter: SearchReportsRequest,
+  ): Promise<SearchReportsResponse> {
     try {
       const account: AccountMetadata = req.account;
       if (!req.account.roles.includes(Role.ADMIN)) {

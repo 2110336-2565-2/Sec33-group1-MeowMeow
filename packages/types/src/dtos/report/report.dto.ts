@@ -30,10 +30,9 @@ export class Report {
   createdAt: Date;
 
   @ApiProperty({
-    type: () => Date,
-    description:
-      "Timestamp of the report. Value is the current time by default.",
-    example: new Date("2023-10-10"),
+    type: () => ReportType,
+    description: "Type of report",
+    enum: ReportType,
   })
   @IsString()
   @IsEnum(ReportType)

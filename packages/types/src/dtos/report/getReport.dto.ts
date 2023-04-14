@@ -6,12 +6,12 @@ import { ReportType } from "database";
 
 export class SearchReportsRequest {
   @ApiProperty({
+    type: () => [ReportType],
     description: "List of report type for filter",
     isArray: true,
     enum: ReportType,
   })
   @IsOptional()
-  @IsArray()
   @IsEnum(ReportType, { each: true })
   reportTypeFilter?: ReportType[];
 
@@ -46,7 +46,7 @@ export class SearchReportsResponse {
   @ApiProperty({
     type: () => Number,
     description: "number of reports that match the filter",
-    example: 50,
+    example: 1,
   })
   reportsCount: number;
 }

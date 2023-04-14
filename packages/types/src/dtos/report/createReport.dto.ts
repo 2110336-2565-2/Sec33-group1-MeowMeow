@@ -1,4 +1,4 @@
-import { PickType } from "@nestjs/swagger";
+import { ApiProperty, PickType } from "@nestjs/swagger";
 import { Report } from "./report.dto";
 
 export class CreateReportRequest extends PickType(Report, [
@@ -12,5 +12,11 @@ export class CreateReportResponse extends PickType(Report, [
   "reportType",
   "text",
   "reporterId",
-  "message",
-] as const) {}
+] as const) {
+  @ApiProperty({
+    type: () => String,
+    description: "return status message",
+    example: "success",
+  })
+  message: string;
+}

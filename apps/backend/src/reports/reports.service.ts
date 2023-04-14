@@ -1,6 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { ReportsRepository } from './reports.repository';
-import { CreateReportRequest, CreateReportResponse } from 'types';
+import {
+  CreateReportRequest,
+  CreateReportResponse,
+  SearchReportsRequest,
+  SearchReportsResponse,
+} from 'types';
 
 @Injectable()
 export class ReportsService {
@@ -23,6 +28,17 @@ export class ReportsService {
         reportType: report.reportType,
         text: report.text,
       };
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  async searchReports(
+    reportFilter: SearchReportsRequest,
+  ): Promise<SearchReportsResponse> {
+    try {
+      const result = await this.reportsRepo.searchReports(reportFilter);
+      return { reportsCount: result.length, reports: result };
     } catch (e) {
       throw e;
     }

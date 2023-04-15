@@ -78,8 +78,8 @@ export const GUIDE_FEATURES: IFeature[] = [
   {
     icon: <AddCircleIcon fontSize="small" color="primary" />,
     title: "Manage Trip",
-    description: "Manage your trip status.",
-    href: "/guide-post/create",
+    description: "Manage and view your trip status.",
+    href: "/managetrip-guide",
     decorationLabel: <NewLabel />,
   },
   {

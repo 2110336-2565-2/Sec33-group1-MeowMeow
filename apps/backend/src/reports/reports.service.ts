@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ReportsRepository } from './reports.repository';
 import {
+  CreateReportQuery,
   CreateReportRequest,
   CreateReportResponse,
   SearchReportsRequest,
@@ -14,19 +15,17 @@ export class ReportsService {
   async createReport(
     reporterId: number,
     reportData: CreateReportRequest,
+    reportTarget: CreateReportQuery,
   ): Promise<CreateReportResponse> {
     try {
       const report = await this.reportsRepo.createReport(
         reporterId,
         reportData,
+        reportTarget,
       );
       return {
         message: 'success',
-        createdAt: report.createdAt,
-        id: report.id,
-        reporterId: report.reporterId,
-        reportType: report.reportType,
-        text: report.text,
+        ...report,
       };
     } catch (e) {
       throw e;

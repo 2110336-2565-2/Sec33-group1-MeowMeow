@@ -11,6 +11,8 @@ import {
   Req,
   UnauthorizedException,
   UseGuards,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import {
   ApiCookieAuth,
@@ -21,15 +23,18 @@ import {
 import { ReportsService } from './reports.service';
 import {
   AccountMetadata,
+  CreateReportQuery,
   CreateReportRequest,
   CreateReportResponse,
-  GetGuideByIdResponse,
   SearchReportsRequest,
   SearchReportsResponse,
 } from 'types';
 import { AuthGuard } from 'src/auth/auth.guard';
-import { FailedRelationConstraintError } from './reports.common';
-import { Role } from 'database';
+import {
+  FailedRelationConstraintError,
+  InvalidReportFormat,
+} from './reports.common';
+import { ReportType, Role } from 'database';
 
 @ApiTags('Reports')
 @Controller('reports')
@@ -43,6 +48,8 @@ export class ReportsController {
       throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
     if (e instanceof UnauthorizedException)
       throw new UnauthorizedException(e.message);
+    if (e instanceof InvalidReportFormat)
+      throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
     throw new HttpException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
@@ -58,17 +65,46 @@ export class ReportsController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'internal server error',
   })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Some parameters were not passed correctly',
+  })
   @HttpCode(HttpStatus.OK)
   @Post()
   @ApiCookieAuth('access-token')
+  @UsePipes(
+    new ValidationPipe({
+      transform: true,
+      transformOptions: { enableImplicitConversion: true },
+    }),
+  )
   @UseGuards(AuthGuard)
   async createReport(
     @Req() req,
+    @Query() reportTarget: CreateReportQuery,
     @Body() reportData: CreateReportRequest,
   ): Promise<CreateReportResponse> {
     try {
+      if (
+        (reportData.reportType == ReportType.GUIDE && !reportTarget.guideId) ||
+        (reportData.reportType == ReportType.TRIP && !reportTarget.postId)
+      ) {
+        throw new InvalidReportFormat(
+          "Report type and reported id don't matched",
+        );
+      }
       const account: AccountMetadata = req.account;
-      return await this.reportsService.createReport(account.userId, reportData);
+      if (!(reportData.reportType == ReportType.GUIDE)) {
+        reportTarget.guideId = null;
+      }
+      if (!(reportData.reportType == ReportType.TRIP)) {
+        reportTarget.postId = null;
+      }
+      return await this.reportsService.createReport(
+        account.userId,
+        reportData,
+        reportTarget,
+      );
     } catch (e) {
       this.handleException(e);
     }

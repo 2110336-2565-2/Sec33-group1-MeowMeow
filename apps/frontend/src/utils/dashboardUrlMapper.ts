@@ -17,7 +17,7 @@ const dashboardUrlMapper = (url: string, isGuide: boolean) => {
   if (!isGuide && !!GUIDE_STATE_LIST.find((data) => data === url)) {
     return undefined;
   }
-  return pathToDashboardMapper[url];
+  return pathToDashboardMapper[url.split("?")[0]];
 };
 
 export default dashboardUrlMapper;

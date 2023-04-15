@@ -42,7 +42,11 @@ import {
 } from '@nestjs/swagger';
 import { ReviewsService } from '../reviews/reviews.service';
 import { FileIsDefinedValidator } from '../common/file.validator';
-import { PropertyAlreadyUsedError, RecordAlreadyExist } from './guides.common';
+import {
+  GuideNotFound,
+  PropertyAlreadyUsedError,
+  RecordAlreadyExist,
+} from './guides.common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from '../auth/auth.guard';
 import { InvalidRequestError } from '../auth/auth.commons';
@@ -151,13 +155,11 @@ export class GuidesController {
     @Param('id', ParseIntPipe) id: number,
   ): Promise<GetGuideByIdResponse> {
     try {
-      const guild = await this.guidesService.getGuideById(id);
-      if (!guild) {
-        throw new NotFoundException(`Guide with id ${id} does not exist.`);
-      }
-      return guild;
+      return await this.guidesService.getGuideById(id);
     } catch (e) {
-      this.handleException(e);
+      if (e instanceof GuideNotFound)
+        throw new NotFoundException(`Guide with id ${id} does not exist.`);
+      else this.handleException(e);
     }
   }
 

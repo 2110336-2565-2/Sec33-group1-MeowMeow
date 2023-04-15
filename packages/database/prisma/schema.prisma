@@ -44,6 +44,7 @@ model User {
   posts        Post[]
   bookings     Booking[]
   transactions Transaction[]
+  reports      Report[]
 }
 
 model Location {
@@ -170,4 +171,21 @@ model Transaction {
 
   booking Booking @relation(fields: [bookingId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   user    User    @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+}
+
+enum ReportType {
+  GUIDE
+  TRIP
+  SYSTEM
+  OTHER
+}
+
+model Report {
+  id         Int        @id @default(autoincrement())
+  createdAt  DateTime   @default(now())
+  reportType ReportType @default(OTHER)
+  text       String
+
+  reporter   User @relation(fields: [reporterId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  reporterId Int
 }

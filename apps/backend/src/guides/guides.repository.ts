@@ -94,14 +94,11 @@ export class GuidesRepository {
     }
 
     try {
-      const scoreResult = await this.prismaService.review.aggregate({
-        _avg: {
-          score: true,
-        },
-        where: {
-          guideId: guide.id,
-        },
-      });
+      const averageReviewScore = (
+        await this.prismaService.$queryRaw<{ avg: number }[]>(
+          Prisma.sql`SELECT AVG("score") FROM "Review" WHERE "guideId" = ${guide.id}`,
+        )
+      )[0].avg;
       return {
         guideId: guide.id,
         userId: guide.user.id,
@@ -109,7 +106,7 @@ export class GuidesRepository {
         lastName: guide.user.lastName,
         imageId: guide.user.imageId,
         certificateId: guide.certificateId,
-        averageReviewScore: scoreResult._avg.score?.toNumber() | 0,
+        averageReviewScore,
         locations: guide.GuideLocation.map((e) => e.location.locationName),
         tourStyles: guide.GuideTourStyle.map((e) => e.tourStyle.tourStyleName),
       };

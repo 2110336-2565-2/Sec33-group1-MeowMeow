@@ -6,3 +6,4 @@ export * from "./payment";
 export * from "./posts";
 export * from "./review";
 export * from "./user";
+export * from "./report";

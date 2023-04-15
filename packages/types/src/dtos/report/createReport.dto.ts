@@ -6,12 +6,19 @@ export class CreateReportRequest extends PickType(Report, [
   "text",
 ] as const) {}
 
+export class CreateReportQuery extends PickType(Report, [
+  "postId",
+  "guideId",
+] as const) {}
+
 export class CreateReportResponse extends PickType(Report, [
   "id",
   "createdAt",
   "reportType",
   "text",
   "reporterId",
+  "postId",
+  "guideId",
 ] as const) {
   @ApiProperty({
     type: () => String,

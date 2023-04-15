@@ -1,13 +1,11 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
 import {
-  IsArray,
   IsDateString,
   IsEnum,
   IsInt,
-  IsNumber,
+  IsOptional,
   IsString,
-  Min,
 } from "class-validator";
 import { ReportType } from "database";
 
@@ -33,6 +31,7 @@ export class Report {
     type: () => ReportType,
     description: "Type of report",
     enum: ReportType,
+    example: ReportType.GUIDE,
   })
   @IsString()
   @IsEnum(ReportType)
@@ -41,7 +40,7 @@ export class Report {
   @ApiProperty({
     type: () => String,
     description: "Describe the report",
-    example: "I don't like this guide, Tommy, id 3. He's rude.",
+    example: "I don't like this guide, John Doe. He's rude.",
   })
   @IsString()
   text: string;
@@ -53,4 +52,26 @@ export class Report {
   })
   @IsInt()
   reporterId: number;
+
+  @ApiProperty({
+    type: () => Number,
+    description: "Guide ID of the guide to be reported",
+    example: 2,
+    required: false,
+  })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  guideId?: number;
+
+  @ApiProperty({
+    type: () => Number,
+    description: "Post ID of the trip to be reported",
+    example: 2,
+    required: false,
+  })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  postId?: number;
 }

@@ -70,7 +70,7 @@ const StateLists = () => {
             />
           );
         })}
-      {role !== Roles.ADMIN &&
+      {role === Roles.ADMIN &&
         Object.values(DASHBOARD_STATE_ADMIN).map((state, index) => {
           const { name, path } = state;
           return (

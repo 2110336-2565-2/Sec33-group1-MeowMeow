@@ -25,26 +25,11 @@ type PostReport = {
   text: string;
 };
 
-const createPostReportPath = (report: Omit<PostReport, "text">) => {
-  const { tripId, guideId, reportType } = report;
-  if (reportType === ReportLabel.GUIDE) {
-    return `/reports?guideId=${guideId}`;
-  }
-  if (reportType === ReportLabel.TRIP) {
-    return `/reports?postId=${tripId}`;
-  }
-  return "/reports";
-};
-
 const postReport = async (report: PostReport) => {
-  const { reportType, text } = report;
-  const response = await apiClient.post<CreateReportResponse>(
-    createPostReportPath(report),
-    {
-      reportType,
-      text,
-    }
-  );
+  const response = await apiClient.post<CreateReportResponse>("/reports", {
+    ...report,
+    postId: report.tripId,
+  });
   return response.data;
 };
 

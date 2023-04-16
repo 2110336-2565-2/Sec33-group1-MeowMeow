@@ -2,23 +2,17 @@ import React, { useEffect, useState } from "react";
 
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
-import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import {
-  Box,
-  Grid,
-  TableFooter,
-  TablePagination,
-  Typography,
-  styled,
-} from "@mui/material";
+import { Box, Grid, TablePagination, Typography } from "@mui/material";
 import apiClient from "@/utils/apiClient";
 import dayjs from "dayjs";
 import theme from "@/config/theme";
 import TablePaginationActions from "./tablePaginationActions";
+import Top from "./top";
 interface IReport {
   id: number;
   createdAt: string;
@@ -48,7 +42,6 @@ const Content = () => {
       const data = await getReports(page * rowsPerPage, rowsPerPage);
       setReports(data.reports);
       setReportsCount(data.reportsCount);
-      console.log(data);
     };
     fetchInfo();
   }, [page, rowsPerPage]);
@@ -99,6 +92,23 @@ const Content = () => {
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
+              <TableRow>
+                <TablePagination
+                  rowsPerPageOptions={[5, 10, 25]}
+                  count={reportsCount}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  SelectProps={{
+                    inputProps: {
+                      "aria-label": "rows per page",
+                    },
+                    native: true,
+                  }}
+                  onPageChange={handleChangePage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                  ActionsComponent={TablePaginationActions}
+                />
+              </TableRow>
               <TableRow>
                 <TableCell align="center" width="5%" style={style}>
                   Report ID
@@ -153,28 +163,10 @@ const Content = () => {
                 </TableRow>
               ))}
             </TableBody>
-            <TableFooter>
-              <TableRow>
-                <TablePagination
-                  rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
-                  count={reportsCount}
-                  rowsPerPage={rowsPerPage}
-                  page={page}
-                  SelectProps={{
-                    inputProps: {
-                      "aria-label": "rows per page",
-                    },
-                    native: true,
-                  }}
-                  onPageChange={handleChangePage}
-                  onRowsPerPageChange={handleChangeRowsPerPage}
-                  ActionsComponent={TablePaginationActions}
-                />
-              </TableRow>
-            </TableFooter>
           </Table>
         </TableContainer>
       </Paper>
+      <Top />
     </Box>
   );
 };

@@ -4,9 +4,6 @@ import { Report } from "./report.dto";
 export class CreateReportRequest extends PickType(Report, [
   "reportType",
   "text",
-] as const) {}
-
-export class CreateReportQuery extends PickType(Report, [
   "postId",
   "guideId",
 ] as const) {}

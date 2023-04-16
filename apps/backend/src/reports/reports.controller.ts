@@ -11,6 +11,8 @@ import {
   Req,
   UnauthorizedException,
   UseGuards,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import {
   ApiCookieAuth,
@@ -23,13 +25,15 @@ import {
   AccountMetadata,
   CreateReportRequest,
   CreateReportResponse,
-  GetGuideByIdResponse,
   SearchReportsRequest,
   SearchReportsResponse,
 } from 'types';
 import { AuthGuard } from 'src/auth/auth.guard';
-import { FailedRelationConstraintError } from './reports.common';
-import { Role } from 'database';
+import {
+  FailedRelationConstraintError,
+  InvalidReportFormat,
+} from './reports.common';
+import { ReportType, Role } from 'database';
 
 @ApiTags('Reports')
 @Controller('reports')
@@ -43,7 +47,27 @@ export class ReportsController {
       throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
     if (e instanceof UnauthorizedException)
       throw new UnauthorizedException(e.message);
+    if (e instanceof InvalidReportFormat)
+      throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
     throw new HttpException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
+  }
+
+  validateReportData(reportData: CreateReportRequest): CreateReportRequest {
+    if (
+      (reportData.reportType == ReportType.GUIDE && !reportData.guideId) ||
+      (reportData.reportType == ReportType.TRIP && !reportData.postId)
+    ) {
+      throw new InvalidReportFormat(
+        "Report type and reported id don't match. If you report TRIP or GUIDE, please make sure that you enter postId or guideId respectively.",
+      );
+    }
+    if (!(reportData.reportType == ReportType.GUIDE)) {
+      reportData.guideId = null;
+    }
+    if (!(reportData.reportType == ReportType.TRIP)) {
+      reportData.postId = null;
+    }
+    return reportData;
   }
 
   @ApiOperation({
@@ -58,15 +82,26 @@ export class ReportsController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'internal server error',
   })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Some parameters were not passed correctly',
+  })
   @HttpCode(HttpStatus.OK)
   @Post()
   @ApiCookieAuth('access-token')
+  @UsePipes(
+    new ValidationPipe({
+      transform: true,
+      transformOptions: { enableImplicitConversion: true },
+    }),
+  )
   @UseGuards(AuthGuard)
   async createReport(
     @Req() req,
     @Body() reportData: CreateReportRequest,
   ): Promise<CreateReportResponse> {
     try {
+      reportData = this.validateReportData(reportData);
       const account: AccountMetadata = req.account;
       return await this.reportsService.createReport(account.userId, reportData);
     } catch (e) {

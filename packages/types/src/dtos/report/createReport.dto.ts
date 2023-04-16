@@ -4,6 +4,8 @@ import { Report } from "./report.dto";
 export class CreateReportRequest extends PickType(Report, [
   "reportType",
   "text",
+  "postId",
+  "guideId",
 ] as const) {}
 
 export class CreateReportResponse extends PickType(Report, [
@@ -12,6 +14,8 @@ export class CreateReportResponse extends PickType(Report, [
   "reportType",
   "text",
   "reporterId",
+  "postId",
+  "guideId",
 ] as const) {
   @ApiProperty({
     type: () => String,

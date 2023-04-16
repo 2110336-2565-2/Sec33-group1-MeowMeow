@@ -22,11 +22,7 @@ export class ReportsService {
       );
       return {
         message: 'success',
-        createdAt: report.createdAt,
-        id: report.id,
-        reporterId: report.reporterId,
-        reportType: report.reportType,
-        text: report.text,
+        ...report,
       };
     } catch (e) {
       throw e;

@@ -1,6 +1,7 @@
 import { Stack, TextField, Typography } from "@mui/material";
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 
 interface DateInputProps {
   displayText?: string;
@@ -23,14 +24,14 @@ const DateInput = (props: DateInputProps) => {
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Stack gap={2}>
         <Typography variant="body1">{displayText}</Typography>
-        <DatePicker
+        <DateTimePicker
           disablePast
           label="Start date"
           value={startDate}
           onChange={handleChangeStartDate}
           renderInput={(params) => <TextField {...params} />}
         />
-        <DatePicker
+        <DateTimePicker
           disablePast
           label="End date"
           minDate={startDate ? startDate : undefined}

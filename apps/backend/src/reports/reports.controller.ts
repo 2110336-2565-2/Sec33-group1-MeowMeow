@@ -23,7 +23,6 @@ import {
 import { ReportsService } from './reports.service';
 import {
   AccountMetadata,
-  CreateReportQuery,
   CreateReportRequest,
   CreateReportResponse,
   SearchReportsRequest,
@@ -51,6 +50,24 @@ export class ReportsController {
     if (e instanceof InvalidReportFormat)
       throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
     throw new HttpException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
+  }
+
+  validateReportData(reportData: CreateReportRequest): CreateReportRequest {
+    if (
+      (reportData.reportType == ReportType.GUIDE && !reportData.guideId) ||
+      (reportData.reportType == ReportType.TRIP && !reportData.postId)
+    ) {
+      throw new InvalidReportFormat(
+        "Report type and reported id don't match. If you report TRIP or GUIDE, please make sure that you enter postId or guideId respectively.",
+      );
+    }
+    if (!(reportData.reportType == ReportType.GUIDE)) {
+      reportData.guideId = null;
+    }
+    if (!(reportData.reportType == ReportType.TRIP)) {
+      reportData.postId = null;
+    }
+    return reportData;
   }
 
   @ApiOperation({
@@ -81,30 +98,12 @@ export class ReportsController {
   @UseGuards(AuthGuard)
   async createReport(
     @Req() req,
-    @Query() reportTarget: CreateReportQuery,
     @Body() reportData: CreateReportRequest,
   ): Promise<CreateReportResponse> {
     try {
-      if (
-        (reportData.reportType == ReportType.GUIDE && !reportTarget.guideId) ||
-        (reportData.reportType == ReportType.TRIP && !reportTarget.postId)
-      ) {
-        throw new InvalidReportFormat(
-          "Report type and reported id don't matched",
-        );
-      }
+      reportData = this.validateReportData(reportData);
       const account: AccountMetadata = req.account;
-      if (!(reportData.reportType == ReportType.GUIDE)) {
-        reportTarget.guideId = null;
-      }
-      if (!(reportData.reportType == ReportType.TRIP)) {
-        reportTarget.postId = null;
-      }
-      return await this.reportsService.createReport(
-        account.userId,
-        reportData,
-        reportTarget,
-      );
+      return await this.reportsService.createReport(account.userId, reportData);
     } catch (e) {
       this.handleException(e);
     }

@@ -1,11 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import {
-  CreateReportQuery,
-  CreateReportRequest,
-  CreateReportResponse,
-  SearchReportsRequest,
-} from 'types';
+import { CreateReportRequest, SearchReportsRequest } from 'types';
 import { Prisma, Report, ReportType } from 'database';
 import { FailedRelationConstraintError } from './reports.common';
 
@@ -16,7 +11,6 @@ export class ReportsRepository {
   async createReport(
     reporterId: number,
     reportData: CreateReportRequest,
-    reportTarget: CreateReportQuery,
   ): Promise<Report> {
     try {
       return await this.prismaService.report.create({
@@ -24,8 +18,8 @@ export class ReportsRepository {
           text: reportData.text,
           reporterId: reporterId,
           reportType: reportData.reportType,
-          guideId: reportTarget.guideId,
-          postId: reportTarget.postId,
+          guideId: reportData.guideId,
+          postId: reportData.postId,
         },
       });
     } catch (e) {

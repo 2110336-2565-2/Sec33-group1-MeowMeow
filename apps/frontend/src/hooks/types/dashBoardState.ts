@@ -40,13 +40,26 @@ export const DASHBOARD_STATE_GUIDE = {
   },
 } as const;
 
+export const DASHBOARD_STATE_ADMIN = {
+  VIEW_REPORT: {
+    name: "VIEW_REPORT",
+    path: "/adminReport",
+  },
+  PAYMENT_ADMIN: {
+    name: "PAYMENT_ADMIN",
+    path: "/payment-admin",
+  },
+} as const;
+
 export const GUIDE_STATE_LIST = Object.values(DASHBOARD_STATE_GUIDE).map(
   (data) => data.path
 );
 
 export type DASHBOARD_STATE_USER_TYPE = keyof typeof DASHBOARD_STATE_USER;
 export type DASHBOARD_STATE_GUIDE_TYPE = keyof typeof DASHBOARD_STATE_GUIDE;
+export type DASHBOARD_STATE_ADMIN_TYPE = keyof typeof DASHBOARD_STATE_ADMIN;
 
 export type AVAILABLE_DASHBOARD_STATE =
   | DASHBOARD_STATE_USER_TYPE
-  | DASHBOARD_STATE_GUIDE_TYPE;
+  | DASHBOARD_STATE_GUIDE_TYPE
+  | DASHBOARD_STATE_ADMIN_TYPE;

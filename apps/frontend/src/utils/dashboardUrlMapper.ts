@@ -1,5 +1,6 @@
 import {
   AVAILABLE_DASHBOARD_STATE,
+  DASHBOARD_STATE_ADMIN,
   DASHBOARD_STATE_GUIDE,
   DASHBOARD_STATE_USER,
   GUIDE_STATE_LIST,
@@ -8,6 +9,7 @@ import {
 const pathToDashboardMapper = Object.values({
   ...DASHBOARD_STATE_USER,
   ...DASHBOARD_STATE_GUIDE,
+  ...DASHBOARD_STATE_ADMIN,
 }).reduce((prev, curr) => {
   const { name, path } = curr;
   return { ...prev, [path]: name };

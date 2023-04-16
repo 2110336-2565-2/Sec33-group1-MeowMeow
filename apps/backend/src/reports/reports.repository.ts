@@ -2,10 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import {
   CreateReportRequest,
-  CreateReportResponse,
   SearchReportsRequest,
+  SearchReportsResponse,
 } from 'types';
-import { Prisma, Report } from 'database';
+import { Prisma, Report, ReportType } from 'database';
 import { FailedRelationConstraintError } from './reports.common';
 
 @Injectable()
@@ -17,14 +17,15 @@ export class ReportsRepository {
     reportData: CreateReportRequest,
   ): Promise<Report> {
     try {
-      const createdReport = await this.prismaService.report.create({
+      return await this.prismaService.report.create({
         data: {
           text: reportData.text,
           reporterId: reporterId,
           reportType: reportData.reportType,
+          guideId: reportData.guideId,
+          postId: reportData.postId,
         },
       });
-      return createdReport;
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
         if (e.code === 'P2003') {
@@ -35,15 +36,21 @@ export class ReportsRepository {
     }
   }
 
-  async searchReports(reportFilter: SearchReportsRequest): Promise<Report[]> {
+  async searchReports(
+    reportFilter: SearchReportsRequest,
+  ): Promise<SearchReportsResponse> {
     try {
-      return await this.prismaService.report.findMany({
+      const reportsCount = await this.prismaService.report.count({
+        where: { reportType: { in: reportFilter.reportTypeFilter } },
+      });
+      const result = await this.prismaService.report.findMany({
         skip: reportFilter.offset,
         take: reportFilter.limit,
         where: {
           reportType: { in: reportFilter.reportTypeFilter },
         },
       });
+      return { reportsCount: reportsCount, reports: result };
     } catch (e) {
       throw e;
     }

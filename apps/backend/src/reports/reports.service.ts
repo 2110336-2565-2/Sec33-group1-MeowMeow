@@ -22,11 +22,7 @@ export class ReportsService {
       );
       return {
         message: 'success',
-        createdAt: report.createdAt,
-        id: report.id,
-        reporterId: report.reporterId,
-        reportType: report.reportType,
-        text: report.text,
+        ...report,
       };
     } catch (e) {
       throw e;
@@ -37,8 +33,7 @@ export class ReportsService {
     reportFilter: SearchReportsRequest,
   ): Promise<SearchReportsResponse> {
     try {
-      const result = await this.reportsRepo.searchReports(reportFilter);
-      return { reportsCount: result.length, reports: result };
+      return await this.reportsRepo.searchReports(reportFilter);
     } catch (e) {
       throw e;
     }

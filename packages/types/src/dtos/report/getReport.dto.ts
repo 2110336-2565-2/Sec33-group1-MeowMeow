@@ -10,6 +10,7 @@ export class SearchReportsRequest {
     description: "List of report type for filter",
     isArray: true,
     enum: ReportType,
+    required: false,
   })
   @IsOptional()
   @IsEnum(ReportType, { each: true })

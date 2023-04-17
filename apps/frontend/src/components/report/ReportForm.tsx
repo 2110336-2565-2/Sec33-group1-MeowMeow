@@ -6,19 +6,21 @@ import Typography from "@mui/material/Typography";
 import createDropdownData, { ReportLabel } from "@/utils/createDropdownData";
 import useReportQuery from "@/hooks/useReportQuery";
 import useReport from "@/hooks/useReport";
+import useCustomSnackbar from "@/hooks/useCustomSnackbar";
+import AppSnackbar from "../common/AppSnackbar";
 
 const ReportForm = () => {
   const { guideId, tripId, isQueryValid } = useReportQuery();
-  const { reportType, reportEntrance, onChange } = useReport(isQueryValid);
+  const { reportType, reportEntrance, onChange, onSubmit } =
+    useReport(isQueryValid);
+  const snackbarProps = useCustomSnackbar();
   return (
     <Stack
       component="form"
       maxWidth={{ lg: "750px", width: "100%" }}
       padding="16px"
       spacing="16px"
-      onSubmit={(event) => {
-        event.preventDefault();
-      }}
+      onSubmit={onSubmit}
     >
       <TypeSelect
         reportType={reportType}
@@ -54,6 +56,7 @@ const ReportForm = () => {
           Submit
         </Typography>
       </Button>
+      <AppSnackbar {...snackbarProps} />
     </Stack>
   );
 };

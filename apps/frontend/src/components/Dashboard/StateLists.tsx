@@ -1,5 +1,6 @@
 import { AuthContext } from "@/context/AuthContext";
 import {
+  DASHBOARD_STATE_ADMIN,
   DASHBOARD_STATE_GUIDE,
   DASHBOARD_STATE_USER,
 } from "@/hooks/types/dashBoardState";
@@ -11,14 +12,23 @@ import StyledTab from "./StyledTab";
 import Tabs from "@mui/material/Tabs";
 import { useRouter } from "next/router";
 
+export enum Roles {
+  "USER" = "USER",
+  "GUIDE" = "GUIDE",
+  "ADMIN" = "ADMIN",
+}
+
 const StateLists = () => {
   const { onChange, selectTab } = useDashBoard();
   const { user } = useContext(AuthContext);
-  const isGuide = useMemo(() => {
+  const role: Roles = useMemo(() => {
     if (!user || !user.roles) {
-      return false;
+      return Roles.USER;
     }
-    return !!user.roles.includes("GUIDE");
+    if (user?.roles?.includes("GUIDE")) {
+      return Roles.GUIDE;
+    }
+    return Roles.ADMIN;
   }, [user]);
   const router = useRouter();
 
@@ -44,8 +54,24 @@ const StateLists = () => {
           />
         );
       })}
-      {isGuide &&
+      {role === Roles.GUIDE &&
         Object.values(DASHBOARD_STATE_GUIDE).map((state, index) => {
+          const { name, path } = state;
+          return (
+            <StyledTab
+              key={name}
+              sx={{ width: "100%" }}
+              label={name}
+              value={name}
+              onClick={async () => {
+                await router.push(path);
+              }}
+              {...a11yProps(index)}
+            />
+          );
+        })}
+      {role === Roles.ADMIN &&
+        Object.values(DASHBOARD_STATE_ADMIN).map((state, index) => {
           const { name, path } = state;
           return (
             <StyledTab

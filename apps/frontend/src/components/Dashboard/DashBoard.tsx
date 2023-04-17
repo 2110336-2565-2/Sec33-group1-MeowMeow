@@ -5,9 +5,9 @@ import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import useDashBoard from "@/hooks/useDashBoard";
 import AuthProvider from "@/context/AuthContext";
-import StateLists from "./StateLists";
 import { Roles_Types } from "@/context/type/authContext";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 
 interface IDashBoardProps {
   children?: ReactNode;
@@ -20,6 +20,10 @@ export const a11yProps = (index: number) => {
     "aria-controls": `simple-tabpanel-${index}`,
   };
 };
+
+const StateLists = dynamic(() => import("@/components/Dashboard/StateLists"), {
+  ssr: false,
+});
 
 const DashBoard = ({ children, roleAllowed = ["USER"] }: IDashBoardProps) => {
   return (

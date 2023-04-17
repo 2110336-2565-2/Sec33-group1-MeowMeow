@@ -35,9 +35,9 @@ export const CanceledRequestCard = ({ booking }: { booking: Booking }) => {
             </Typography>
             <Typography variant="body2" color="textSecondary">
               Reserved date:{" "}
-              {dayjs(booking.startDate).format("DD-MM-YYYY") +
+              {dayjs(booking.startDate).format("DD-MM-YYYY hh:mmA") +
                 " to " +
-                dayjs(booking.startDate).format("DD-MM-YYYY")}
+                dayjs(booking.startDate).format("DD-MM-YYYY hh:mmA")}
             </Typography>
             <Typography variant="body2" color="textSecondary">
               Price: {fee}

@@ -116,7 +116,7 @@ const Content = () => {
                   <TableCell align="center" width="5%" style={style}>
                     Report ID
                   </TableCell>
-                  <TableCell align="right" width="5%" style={style}>
+                  <TableCell align="center" width="15%" style={style}>
                     Timestamp
                   </TableCell>
                   <TableCell align="center" width="5%" style={style}>
@@ -142,8 +142,8 @@ const Content = () => {
                     <TableCell align="center" component="th" scope="row">
                       {report.id}
                     </TableCell>
-                    <TableCell align="right">
-                      {dayjs(report.createdAt).format("DD-MM-YYYY")}
+                    <TableCell align="center">
+                      {dayjs(report.createdAt).format("DD-MM-YYYY hh:mm A")}
                     </TableCell>
                     <TableCell align="center">{report.reporterId}</TableCell>
                     <TableCell align="center">{report.reportType}</TableCell>

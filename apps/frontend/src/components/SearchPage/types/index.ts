@@ -19,8 +19,6 @@ export interface IFilterOptions {
   location: string;
   price: number[];
   rating: number[];
-  startDate: Date | null;
-  endDate: Date | null;
 }
 
 export interface ISearchPosts {

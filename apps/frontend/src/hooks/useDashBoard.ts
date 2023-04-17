@@ -1,5 +1,5 @@
 import dashboardUrlMapper from "@/utils/dashboardUrlMapper";
-import { useContext, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { AVAILABLE_DASHBOARD_STATE } from "./types/dashBoardState";
 import { useRouter } from "next/router";
 import { AuthContext } from "@/context/AuthContext";
@@ -19,7 +19,11 @@ const useDashBoard = () => {
   }, [user]);
   const [selectTab, setSelectTab] = useState<
     AVAILABLE_DASHBOARD_STATE | undefined
-  >(dashboardUrlMapper(router.asPath, role));
+  >(undefined);
+
+  useEffect(() => {
+    setSelectTab(dashboardUrlMapper(router.asPath, role));
+  }, [role]);
 
   const onChange = (
     _: React.SyntheticEvent,

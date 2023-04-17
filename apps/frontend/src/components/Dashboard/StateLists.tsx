@@ -20,7 +20,6 @@ export enum Roles {
 
 const StateLists = () => {
   const { selectTab, role, onChange } = useDashBoard();
-  const { user } = useContext(AuthContext);
   const router = useRouter();
 
   return (

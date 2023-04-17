@@ -13,6 +13,8 @@ import dayjs from "dayjs";
 import theme from "@/config/theme";
 import TablePaginationActions from "./tablePaginationActions";
 import Top from "./top";
+import DashBoard from "@/components/Dashboard/DashBoard";
+
 interface IReport {
   id: number;
   createdAt: string;
@@ -58,116 +60,118 @@ const Content = () => {
     setPage(0);
   };
   return (
-    <Box
-      justifyContent="center"
-      alignItems="center"
-      sx={{
-        width: "100%",
-        height: "100%",
-        minHeight: "100vh",
-        background:
-          "linear-gradient(90deg, #fff3d4 0%, #FAD0C4 99%, #FAD0C4 100%)",
-        padding: "40px 20px",
-      }}
-    >
-      <Paper
-        sx={{ width: "100%", mb: 2, padding: "20px", alignItems: "center" }}
-        elevation={3}
+    <DashBoard roleAllowed={["ADMIN"]}>
+      <Box
+        justifyContent="center"
+        alignItems="center"
+        sx={{
+          width: "100%",
+          height: "100%",
+          minHeight: "100vh",
+          background:
+            "linear-gradient(90deg, #fff3d4 0%, #FAD0C4 99%, #FAD0C4 100%)",
+          padding: "40px 20px",
+        }}
       >
-        <Grid
-          container
-          direction="row"
-          justifyContent="flex-start"
-          alignItems="center"
+        <Paper
+          sx={{ width: "100%", mb: 2, padding: "20px", alignItems: "center" }}
+          elevation={3}
         >
-          <Typography
-            variant="h5"
-            component="span"
-            paddingBottom={1}
-            sx={{ fontWeight: "bold" }}
+          <Grid
+            container
+            direction="row"
+            justifyContent="flex-start"
+            alignItems="center"
           >
-            All Reports
-          </Typography>
-        </Grid>
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TablePagination
-                  rowsPerPageOptions={[5, 10, 25]}
-                  count={reportsCount}
-                  rowsPerPage={rowsPerPage}
-                  page={page}
-                  SelectProps={{
-                    inputProps: {
-                      "aria-label": "rows per page",
-                    },
-                    native: true,
-                  }}
-                  onPageChange={handleChangePage}
-                  onRowsPerPageChange={handleChangeRowsPerPage}
-                  ActionsComponent={TablePaginationActions}
-                />
-              </TableRow>
-              <TableRow>
-                <TableCell align="center" width="5%" style={style}>
-                  Report ID
-                </TableCell>
-                <TableCell align="right" width="5%" style={style}>
-                  Timestamp
-                </TableCell>
-                <TableCell align="center" width="5%" style={style}>
-                  Reporter
-                </TableCell>
-                <TableCell align="center" width="10%" style={style}>
-                  Report type
-                </TableCell>
-                <TableCell align="center" width="10%" style={style}>
-                  Related user/post ID
-                </TableCell>
-                <TableCell align="center" width="30%" style={style}>
-                  Details
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {reports.map((report) => (
-                <TableRow
-                  key={report.id}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell align="center" component="th" scope="row">
-                    {report.id}
-                  </TableCell>
-                  <TableCell align="right">
-                    {dayjs(report.createdAt).format("DD-MM-YYYY")}
-                  </TableCell>
-                  <TableCell align="center">{report.reporterId}</TableCell>
-                  <TableCell align="center">{report.reportType}</TableCell>
-                  <TableCell align="center">
-                    {report.reportType == "GUIDE"
-                      ? report.guideId
-                      : report.reportType == "TRIP"
-                      ? report.postId
-                      : "-"}
-                  </TableCell>
-                  <TableCell
-                    align="left"
-                    style={{
-                      whiteSpace: "normal",
-                      wordBreak: "break-word",
+            <Typography
+              variant="h5"
+              component="span"
+              paddingBottom={1}
+              sx={{ fontWeight: "bold" }}
+            >
+              All Reports
+            </Typography>
+          </Grid>
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TablePagination
+                    rowsPerPageOptions={[5, 10, 25]}
+                    count={reportsCount}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    SelectProps={{
+                      inputProps: {
+                        "aria-label": "rows per page",
+                      },
+                      native: true,
                     }}
-                  >
-                    {report.text}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                    ActionsComponent={TablePaginationActions}
+                  />
+                </TableRow>
+                <TableRow>
+                  <TableCell align="center" width="5%" style={style}>
+                    Report ID
+                  </TableCell>
+                  <TableCell align="right" width="5%" style={style}>
+                    Timestamp
+                  </TableCell>
+                  <TableCell align="center" width="5%" style={style}>
+                    Reporter
+                  </TableCell>
+                  <TableCell align="center" width="10%" style={style}>
+                    Report type
+                  </TableCell>
+                  <TableCell align="center" width="10%" style={style}>
+                    Related user/post ID
+                  </TableCell>
+                  <TableCell align="center" width="30%" style={style}>
+                    Details
                   </TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Paper>
-      <Top />
-    </Box>
+              </TableHead>
+              <TableBody>
+                {reports.map((report) => (
+                  <TableRow
+                    key={report.id}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell align="center" component="th" scope="row">
+                      {report.id}
+                    </TableCell>
+                    <TableCell align="right">
+                      {dayjs(report.createdAt).format("DD-MM-YYYY")}
+                    </TableCell>
+                    <TableCell align="center">{report.reporterId}</TableCell>
+                    <TableCell align="center">{report.reportType}</TableCell>
+                    <TableCell align="center">
+                      {report.reportType == "GUIDE"
+                        ? report.guideId
+                        : report.reportType == "TRIP"
+                        ? report.postId
+                        : "-"}
+                    </TableCell>
+                    <TableCell
+                      align="left"
+                      style={{
+                        whiteSpace: "normal",
+                        wordBreak: "break-word",
+                      }}
+                    >
+                      {report.text}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Paper>
+        <Top />
+      </Box>
+    </DashBoard>
   );
 };
 export default Content;

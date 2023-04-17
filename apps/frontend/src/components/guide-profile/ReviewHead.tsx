@@ -46,7 +46,7 @@ export default function ReviewHead({ averageReviewScore }: IReviewHeadProps) {
             fontSize={{ xs: 20, sm: 32, md: 42, lg: 50 }}
             textAlign="center"
           >
-            {averageReviewScore}
+            {Math.round(averageReviewScore * 100) / 100}
           </Grid>
           <Grid
             item

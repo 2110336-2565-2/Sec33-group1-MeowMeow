@@ -125,8 +125,8 @@ const Content = () => {
                   <TableCell align="center" width="10%" style={style}>
                     Report type
                   </TableCell>
-                  <TableCell align="center" width="10%" style={style}>
-                    Related user/post ID
+                  <TableCell align="center" width="12%" style={style}>
+                    Related guide/post ID
                   </TableCell>
                   <TableCell align="center" width="30%" style={style}>
                     Details

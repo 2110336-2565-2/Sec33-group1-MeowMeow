@@ -19,17 +19,7 @@ export enum Roles {
 }
 
 const StateLists = () => {
-  const { onChange, selectTab } = useDashBoard();
-  const { user } = useContext(AuthContext);
-  const role: Roles = useMemo(() => {
-    if (!user || !user.roles) {
-      return Roles.USER;
-    }
-    if (user?.roles?.includes("GUIDE")) {
-      return Roles.GUIDE;
-    }
-    return Roles.ADMIN;
-  }, [user]);
+  const { selectTab, role, onChange } = useDashBoard();
   const router = useRouter();
 
   return (

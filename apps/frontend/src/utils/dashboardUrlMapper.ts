@@ -1,4 +1,6 @@
+import { Roles } from "@/components/Dashboard/StateLists";
 import {
+  ADMIN_STATE_LIST,
   AVAILABLE_DASHBOARD_STATE,
   DASHBOARD_STATE_ADMIN,
   DASHBOARD_STATE_GUIDE,
@@ -15,8 +17,11 @@ const pathToDashboardMapper = Object.values({
   return { ...prev, [path]: name };
 }, {} as { [key: string]: AVAILABLE_DASHBOARD_STATE });
 
-const dashboardUrlMapper = (url: string, isGuide: boolean) => {
-  if (!isGuide && !!GUIDE_STATE_LIST.find((data) => data === url)) {
+const dashboardUrlMapper = (url: string, role: Roles) => {
+  if (role !== Roles.GUIDE && !!GUIDE_STATE_LIST.find((data) => data === url)) {
+    return undefined;
+  }
+  if (role !== Roles.ADMIN && !!ADMIN_STATE_LIST.find((data) => data === url)) {
     return undefined;
   }
   return pathToDashboardMapper[url.split("?")[0]];

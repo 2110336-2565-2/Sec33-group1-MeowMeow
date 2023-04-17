@@ -55,6 +55,10 @@ export const GUIDE_STATE_LIST = Object.values(DASHBOARD_STATE_GUIDE).map(
   (data) => data.path
 );
 
+export const ADMIN_STATE_LIST = Object.values(DASHBOARD_STATE_ADMIN).map(
+  (data) => data.path
+);
+
 export type DASHBOARD_STATE_USER_TYPE = keyof typeof DASHBOARD_STATE_USER;
 export type DASHBOARD_STATE_GUIDE_TYPE = keyof typeof DASHBOARD_STATE_GUIDE;
 export type DASHBOARD_STATE_ADMIN_TYPE = keyof typeof DASHBOARD_STATE_ADMIN;

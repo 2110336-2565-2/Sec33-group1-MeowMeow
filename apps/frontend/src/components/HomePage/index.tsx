@@ -13,7 +13,7 @@ const HomePage = () => {
     return !!user?.roles?.includes("GUIDE");
   }, [user]);
   const features = isGuide ? GUIDE_FEATURES : BASIC_FEATURES;
-  console.log("isGuide =", isGuide);
+
   return (
     <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
       <Stack

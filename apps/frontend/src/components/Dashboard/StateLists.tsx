@@ -22,13 +22,13 @@ const StateLists = () => {
   const { onChange, selectTab } = useDashBoard();
   const { user } = useContext(AuthContext);
   const role: Roles = useMemo(() => {
-    if (!user || !user.roles) {
-      return Roles.USER;
-    }
     if (user?.roles?.includes("GUIDE")) {
       return Roles.GUIDE;
     }
-    return Roles.ADMIN;
+    if (user?.roles?.includes("ADMIN")) {
+      return Roles.ADMIN;
+    }
+    return Roles.USER;
   }, [user]);
   const router = useRouter();
 

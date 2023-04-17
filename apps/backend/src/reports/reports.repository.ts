@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { CreateReportRequest, SearchReportsRequest } from 'types';
+import {
+  CreateReportRequest,
+  SearchReportsRequest,
+  SearchReportsResponse,
+} from 'types';
 import { Prisma, Report, ReportType } from 'database';
 import { FailedRelationConstraintError } from './reports.common';
 
@@ -32,15 +36,21 @@ export class ReportsRepository {
     }
   }
 
-  async searchReports(reportFilter: SearchReportsRequest): Promise<Report[]> {
+  async searchReports(
+    reportFilter: SearchReportsRequest,
+  ): Promise<SearchReportsResponse> {
     try {
-      return await this.prismaService.report.findMany({
+      const reportsCount = await this.prismaService.report.count({
+        where: { reportType: { in: reportFilter.reportTypeFilter } },
+      });
+      const result = await this.prismaService.report.findMany({
         skip: reportFilter.offset,
         take: reportFilter.limit,
         where: {
           reportType: { in: reportFilter.reportTypeFilter },
         },
       });
+      return { reportsCount: reportsCount, reports: result };
     } catch (e) {
       throw e;
     }

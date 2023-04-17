@@ -36,7 +36,7 @@ export default function Content({
     <Grid
       container
       direction="column"
-      width={{ xs: "85%", sm: "55%" }}
+      width={{ xs: "85vw", sm: "55vw" }}
       rowSpacing={1}
       paddingTop={{ xs: "2vh", md: "3vh" }}
     >
@@ -65,10 +65,16 @@ export default function Content({
           <Tags title={"Location"} tags={tagsLocation} />
         </Grid>
       </Grid>
-      <Grid item justifyContent="center" paddingX={{ xs: 0, md: "5vw" }}>
+      <Grid
+        container
+        item
+        justifyContent="center"
+        paddingX={{ xs: 0, md: "5vw" }}
+      >
         <ReviewHead averageReviewScore={averageReviewScore}></ReviewHead>
       </Grid>
       <Grid
+        container
         item
         justifyContent="center"
         paddingX={{ xs: 0, sm: "3vw", md: "5vw" }}

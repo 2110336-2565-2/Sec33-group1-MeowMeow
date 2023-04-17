@@ -1,4 +1,4 @@
-import { Grid, Rating } from "@mui/material";
+import { Grid, Rating, Typography } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
 import React, { useEffect, useRef, useState } from "react";
 import dayjs from "dayjs";
@@ -53,6 +53,7 @@ export default function Review({
     <div ref={reviewRef}>
       <Grid
         container
+        item
         direction="column"
         bgcolor="#F3F4F6"
         borderRadius={5}
@@ -63,6 +64,7 @@ export default function Review({
         lineHeight={{ xs: 1.5, md: 2 }}
         padding={{ xs: "6vw", sm: "4vw", md: "3vw" }}
         marginBottom="3vh"
+        width={{ xs: "85vw", sm: "55vw" }}
       >
         <Grid container direction="row">
           <Grid item marginRight="auto">
@@ -87,7 +89,14 @@ export default function Review({
             {reviewer}
           </Grid>
         </Grid>
-        <Grid item>{detail}</Grid>
+        <Grid item>
+          <Typography
+            sx={{ wordBreak: "break-word" }}
+            fontSize={{ xs: 12, sm: 14, md: 16 }}
+          >
+            {detail}
+          </Typography>
+        </Grid>
       </Grid>
     </div>
   );

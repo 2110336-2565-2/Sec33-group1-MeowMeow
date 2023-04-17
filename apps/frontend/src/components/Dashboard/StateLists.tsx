@@ -11,6 +11,7 @@ import useDashBoard from "@/hooks/useDashBoard";
 import StyledTab from "./StyledTab";
 import Tabs from "@mui/material/Tabs";
 import { useRouter } from "next/router";
+import { RollerShadesRounded } from "@mui/icons-material";
 
 export enum Roles {
   "USER" = "USER",
@@ -19,7 +20,7 @@ export enum Roles {
 }
 
 const StateLists = () => {
-  const { selectTab, role, onChange } = useDashBoard();
+  const { selectTab, roles, onChange } = useDashBoard();
   const router = useRouter();
 
   return (
@@ -44,7 +45,7 @@ const StateLists = () => {
           />
         );
       })}
-      {role === Roles.GUIDE &&
+      {roles.includes(Roles.GUIDE) &&
         Object.values(DASHBOARD_STATE_GUIDE).map((state, index) => {
           const { name, path } = state;
           return (
@@ -60,7 +61,7 @@ const StateLists = () => {
             />
           );
         })}
-      {role === Roles.ADMIN &&
+      {roles.includes(Roles.ADMIN) &&
         Object.values(DASHBOARD_STATE_ADMIN).map((state, index) => {
           const { name, path } = state;
           return (

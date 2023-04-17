@@ -8,22 +8,26 @@ import { Roles } from "@/components/Dashboard/StateLists";
 const useDashBoard = () => {
   const router = useRouter();
   const { user } = useContext(AuthContext);
-  const role: Roles = useMemo(() => {
+  const roles: Roles[] = useMemo(() => {
+    const supportRoles = [];
     if (user?.roles?.includes("GUIDE")) {
-      return Roles.GUIDE;
+      supportRoles.push(Roles.GUIDE);
     }
     if (user?.roles?.includes("ADMIN")) {
-      return Roles.ADMIN;
+      supportRoles.push(Roles.ADMIN);
     }
-    return Roles.USER;
+    if (user?.roles?.includes("USER")) {
+      supportRoles.push(Roles.USER);
+    }
+    return supportRoles;
   }, [user]);
   const [selectTab, setSelectTab] = useState<
     AVAILABLE_DASHBOARD_STATE | undefined
   >(undefined);
 
   useEffect(() => {
-    setSelectTab(dashboardUrlMapper(router.asPath, role));
-  }, [role]);
+    roles.length > 0 && setSelectTab(dashboardUrlMapper(router.asPath, roles));
+  }, [roles]);
 
   const onChange = (
     _: React.SyntheticEvent,
@@ -32,7 +36,7 @@ const useDashBoard = () => {
     setSelectTab(newValue);
   };
 
-  return { selectTab, role, onChange };
+  return { selectTab, roles, onChange };
 };
 
 export default useDashBoard;

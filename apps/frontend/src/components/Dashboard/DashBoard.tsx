@@ -3,7 +3,6 @@ import { ReactNode } from "react";
 import Image from "next/image";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
-import useDashBoard from "@/hooks/useDashBoard";
 import AuthProvider from "@/context/AuthContext";
 import { Roles_Types } from "@/context/type/authContext";
 import Link from "next/link";

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from 'database';
-import { GuidesRepository } from 'src/guides/guides.repository';
+import { GuidesRepository } from '../guides/guides.repository';
 import {
   CreatePostRequest,
   SearchPostsRequest,

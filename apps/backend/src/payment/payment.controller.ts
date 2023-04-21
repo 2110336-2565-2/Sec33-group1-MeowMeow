@@ -9,9 +9,9 @@ import {
 } from '@nestjs/common';
 import { ApiCookieAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Role } from 'database';
-import { AuthGuard } from 'src/auth/auth.guard';
-import { AccountMetadata } from 'types';
+import { AuthGuard } from '../auth/auth.guard';
 import { PaymentService } from './payment.service';
+import { AccountMetadata } from 'types';
 
 @ApiTags('Payment')
 @Controller('payments')

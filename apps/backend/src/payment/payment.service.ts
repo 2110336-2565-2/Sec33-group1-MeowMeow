@@ -5,8 +5,8 @@ import { backendConfig } from 'config';
 import { Booking, Post, Transaction, TransactionType, User } from 'database';
 import * as qs from 'qs';
 import { firstValueFrom, map } from 'rxjs';
-import { BookingsRepository } from 'src/bookings/bookings.repository';
-import { UsersRepository } from 'src/users/users.repository';
+import { BookingsRepository } from '../bookings/bookings.repository';
+import { UsersRepository } from '../users/users.repository';
 import { PaymentRepository } from './payment.repository';
 
 @Injectable()

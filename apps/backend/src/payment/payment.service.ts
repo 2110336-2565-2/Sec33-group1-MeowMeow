@@ -243,4 +243,11 @@ export class PaymentService {
     const transactions = await this.paymentRepository.getAllTransactions();
     return transactions;
   }
+
+  async getTransactionByUserId(userId: number) {
+    const transactions = await this.paymentRepository.getTransactionByUserId(
+      userId,
+    );
+    return transactions;
+  }
 }

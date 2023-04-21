@@ -81,4 +81,25 @@ export class PaymentRepository {
       };
     });
   }
+
+  async getTransactionByUserId(userId: number) {
+    const res = await this.prisma.transaction.findMany({
+      where: {
+        userId: userId,
+      },
+      include: {
+        booking: true,
+      },
+    });
+
+    return res.map((e) => {
+      return {
+        transactionId: e.id,
+        transactionType: e.transactionType,
+        userId: e.userId,
+        bookingId: e.bookingId,
+        postId: e.booking.postId,
+      };
+    });
+  }
 }

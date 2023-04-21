@@ -90,6 +90,9 @@ export class PaymentRepository {
       include: {
         booking: true,
       },
+      orderBy: {
+        updatedAt: 'desc',
+      },
     });
 
     return res.map((e) => {
@@ -99,6 +102,7 @@ export class PaymentRepository {
         userId: e.userId,
         bookingId: e.bookingId,
         postId: e.booking.postId,
+        updatedAt: e.updatedAt,
       };
     });
   }

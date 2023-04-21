@@ -43,7 +43,7 @@ export const AcceptedRequestCard = ({
               Reserved date:{" "}
               {dayjs(booking.startDate).format("DD-MM-YYYY hh:mmA") +
                 " to " +
-                dayjs(booking.startDate).format("DD-MM-YYYY hh:mmA")}
+                dayjs(booking.endDate).format("DD-MM-YYYY hh:mmA")}
             </Typography>
             <Typography variant="body2" color="textSecondary">
               Price: {fee}

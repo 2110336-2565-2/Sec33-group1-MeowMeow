@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 import * as moment from 'moment';
-import { GuideNotFound } from 'src/guides/guides.common';
-import { GuidesService } from 'src/guides/guides.service';
-import { PaymentService } from 'src/payment/payment.service';
+import { GuideNotFound } from '../guides/guides.common';
+import { GuidesService } from '../guides/guides.service';
+import { PaymentService } from '../payment/payment.service';
 import {
   AcceptBookingResponse,
   AccountMetadata,
@@ -22,8 +22,7 @@ import {
   UnprocessableEntity,
 } from './bookings.common';
 import { BookingsRepository } from './bookings.repository';
-import { PostsService } from 'src/posts/posts.service';
-import { BookingStatus } from 'database';
+import { PostsService } from '../posts/posts.service';
 
 export interface IBookingsService {
   acceptBookingByGuide(

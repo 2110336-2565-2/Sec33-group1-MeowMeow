@@ -28,7 +28,7 @@ import {
   SearchReportsRequest,
   SearchReportsResponse,
 } from 'types';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthGuard } from '../auth/auth.guard';
 import {
   FailedRelationConstraintError,
   InvalidReportFormat,

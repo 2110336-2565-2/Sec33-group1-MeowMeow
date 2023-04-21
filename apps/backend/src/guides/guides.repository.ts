@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from 'database';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { GetGuideByIdResponse, SearchGuidesResponse } from 'types';
 import {
   FailedRelationConstraintError,

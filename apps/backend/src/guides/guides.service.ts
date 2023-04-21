@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { validate } from 'class-validator';
 import { Role } from 'database';
-import { PaymentService } from 'src/payment/payment.service';
-import { UsersRepository } from 'src/users/users.repository';
+import { PaymentService } from '../payment/payment.service';
+import { UsersRepository } from '../users/users.repository';
 import {
   GetGuideByIdResponse,
   GetGuideByUserIdResponse,

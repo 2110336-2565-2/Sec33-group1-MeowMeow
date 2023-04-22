@@ -60,4 +60,5 @@ jobs:
       - name: Test Backend
         run: pnpm test:backend
         env:
+          FRONTEND_OMISE_PUBLIC_KEY: FRONTEND_OMISE_PUBLIC_KEY
           BACKEND_OMISE_SECRET_KEY: BACKEND_OMISE_SECRET_KEY

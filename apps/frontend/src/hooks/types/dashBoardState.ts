@@ -23,6 +23,10 @@ export const DASHBOARD_STATE_USER = {
     name: "TRAVELLER_RECORD",
     path: "/traveller-record",
   },
+  TRAVELLER_PAYMENT: {
+    name: "TRAVELLER_PAYMENT",
+    path: "/payment-traveller",
+  },
   REPORT: {
     name: "REPORT",
     path: "/report",

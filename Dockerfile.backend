@@ -3,6 +3,7 @@ RUN apk add --no-cache libc6-compat
 RUN apk update
 
 RUN npm i -g pnpm
+
 WORKDIR /app
 
 FROM base AS pruner

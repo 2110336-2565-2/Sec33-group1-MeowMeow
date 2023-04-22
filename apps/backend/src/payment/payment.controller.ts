@@ -10,6 +10,7 @@ import {
 import { ApiCookieAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Role } from 'database';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { AccountMetadata } from 'types';
 import { PaymentService } from './payment.service';
 
 @ApiTags('Payment')
@@ -31,5 +32,31 @@ export class PaymentController {
       );
     }
     return this.paymentService.getAllTransaction();
+  }
+
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'successfully get transaction by traveller id',
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'access token not provided',
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'internal server error',
+  })
+  @ApiCookieAuth('access_token')
+  @UseGuards(AuthGuard)
+  @Get('/user')
+  @HttpCode(HttpStatus.OK)
+  async getTransactionByTravellerID(@Req() req) {
+    if (!req.account.roles.includes(Role.USER)) {
+      throw new UnauthorizedException(
+        'You are not authorized to access this resource',
+      );
+    }
+    const account: AccountMetadata = req.account;
+    return this.paymentService.getTransactionByUserId(account.userId);
   }
 }

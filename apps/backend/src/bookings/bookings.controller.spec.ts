@@ -10,7 +10,7 @@ import { PaymentModule } from '../payment/payment.module';
 import { PaymentService } from '../payment/payment.service';
 import { GuidesModule } from '../guides/guides.module';
 import { PostsRepository } from '../posts/posts.repository';
-import { HttpModule, HttpService } from '@nestjs/axios';
+import { HttpModule } from '@nestjs/axios';
 import { UsersRepository } from '../users/users.repository';
 import { PaymentRepository } from '../payment/payment.repository';
 import { GuidesRepository } from '../guides/guides.repository';

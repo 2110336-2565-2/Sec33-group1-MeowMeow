@@ -5,7 +5,7 @@ import {
   SearchReportsRequest,
   SearchReportsResponse,
 } from 'types';
-import { Prisma, Report, ReportType } from 'database';
+import { Prisma, Report } from 'database';
 import { FailedRelationConstraintError } from './reports.common';
 
 @Injectable()

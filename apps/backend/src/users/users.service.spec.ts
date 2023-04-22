@@ -234,5 +234,17 @@ describe('UsersService', () => {
       });
       expect(mockUsersRepository.updateUserById).toHaveBeenCalledTimes(1);
     });
+    it('password should be hash', async () => {
+      await service.updateUser(1, {
+        password: 'newPassword',
+      });
+      expect(
+        bcrypt.compareSync(
+          'newPassword',
+          mockUsersRepository.updateUserById.mock.calls[0][1].hashedPassword,
+        ),
+      ).toBeTruthy();
+      expect(mockUsersRepository.updateUserById).toHaveBeenCalledTimes(1);
+    });
   });
 });

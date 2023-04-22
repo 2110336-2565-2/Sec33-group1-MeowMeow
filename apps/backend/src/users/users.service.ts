@@ -70,7 +70,16 @@ export class UsersServiceImpl {
     id: number,
     updates: UpdateUserRequest,
   ): Promise<UpdateUserResponse> {
-    const user = await this.usersRepo.updateUserById(id, updates);
+    let hashedPassword: string | undefined = undefined;
+
+    if (updates.password) {
+      hashedPassword = await bcrypt.hash(updates.password, this.hashRound);
+      delete updates.password;
+    }
+    const user = await this.usersRepo.updateUserById(id, {
+      ...updates,
+      hashedPassword,
+    });
     if (!user) {
       throw new UserNotFoundError('user with given id not found');
     }

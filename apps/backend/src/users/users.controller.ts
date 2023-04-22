@@ -24,13 +24,7 @@ import {
 import { PropertyAlreadyUsedError, UserNotFoundError } from './users.common';
 import { UsersService } from './users.service';
 import { AuthGuard } from '../auth/auth.guard';
-import {
-  ApiBody,
-  ApiCookieAuth,
-  ApiParam,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiCookieAuth, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Users')
 @Controller('users')

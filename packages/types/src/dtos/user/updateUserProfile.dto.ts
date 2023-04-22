@@ -13,7 +13,7 @@ export class UpdateUserRequest extends PartialType(CreateUserRequest) {
     type: () => String,
     example: "1235-183C",
   })
-  imageId: string;
+  imageId?: string;
 }
 
 export class UpdateUserResponse extends IntersectionType(

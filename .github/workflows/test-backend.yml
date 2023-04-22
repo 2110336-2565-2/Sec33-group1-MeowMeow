@@ -59,3 +59,5 @@ jobs:
 
       - name: Test Backend
         run: pnpm test:backend
+        env:
+          BACKEND_OMISE_SECRET_KEY: BACKEND_OMISE_SECRET_KEY

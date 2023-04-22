@@ -1,10 +1,11 @@
+import DashBoard from "@/components/Dashboard/DashBoard";
 import PaymentTravellerComponent from "@/components/payment-traveller";
 import React from "react";
 
 export default function PaymentTraveller() {
   return (
-    <div>
+    <DashBoard roleAllowed={["USER"]}>
       <PaymentTravellerComponent />
-    </div>
+    </DashBoard>
   );
 }

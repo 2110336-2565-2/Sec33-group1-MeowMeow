@@ -54,5 +54,8 @@ jobs:
       - name: Generate Prisma Client
         run: pnpm db:generate
 
+      - name: Build
+        run: pnpm build
+
       - name: Test Backend
         run: pnpm test:backend

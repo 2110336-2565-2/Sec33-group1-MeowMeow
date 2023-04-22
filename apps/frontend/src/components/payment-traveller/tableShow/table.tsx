@@ -29,8 +29,6 @@ export default function TableRecord() {
     setRows(record);
   }, [prev.current !== record]);
 
-  console.log("==> ", record);
-
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
     property: keyof IGetRecord

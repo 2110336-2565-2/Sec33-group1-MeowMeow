@@ -3,7 +3,7 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { AuthContext } from "@/context/AuthContext";
 import apiClient from "@/utils/apiClient";
 import { IGuideProfile, IGuideProfileResponse } from "./types/profilePage";
@@ -25,6 +25,9 @@ export const getGuideProfile = async () => {
 const ShowProfile = ({ imageUrl, onStartEdit }: IShowProfileProps) => {
   const { user } = useContext(AuthContext);
   const { firstName, lastName, username, email, roles } = user || ({} as IUser);
+  const isGuide = useMemo(() => {
+    return user?.roles?.includes("GUIDE");
+  }, [user]);
   const [guideProfile, setGuideProfile] = useState<IGuideProfile | undefined>(
     undefined
   );
@@ -91,31 +94,38 @@ const ShowProfile = ({ imageUrl, onStartEdit }: IShowProfileProps) => {
         </Stack>
       </Stack>
 
-      <Stack spacing="16px" direction="column" alignItems="center" width="100%">
-        <Typography fontWeight="bold" textAlign="center">
-          Guide Profile Information
-        </Typography>
+      {isGuide && (
         <Stack
-          direction="column"
-          justifyContent="center"
-          alignItems="start"
           spacing="16px"
-          minWidth="450px"
+          direction="column"
+          alignItems="center"
+          width="100%"
         >
-          <Locations locations={guideProfile?.locations || []} />
-          <TourStyles tourStyles={guideProfile?.tourStyles || []} />
-          <Typography>
-            Average review score: {guideProfile?.averageReviewScore}
+          <Typography fontWeight="bold" textAlign="center">
+            Guide Profile Information
           </Typography>
-          <Stack direction="column" spacing={"16px"}>
-            <Typography>Show Certificate</Typography>
-            <Avatar
-              src={certificateImage}
-              sx={{ width: "250px", height: "250px", borderRadius: "0px" }}
-            />
+          <Stack
+            direction="column"
+            justifyContent="center"
+            alignItems="start"
+            spacing="16px"
+            minWidth="450px"
+          >
+            <Locations locations={guideProfile?.locations || []} />
+            <TourStyles tourStyles={guideProfile?.tourStyles || []} />
+            <Typography>
+              Average review score: {guideProfile?.averageReviewScore}
+            </Typography>
+            <Stack direction="column" spacing={"16px"}>
+              <Typography>Show Certificate</Typography>
+              <Avatar
+                src={certificateImage}
+                sx={{ width: "250px", height: "250px", borderRadius: "0px" }}
+              />
+            </Stack>
           </Stack>
         </Stack>
-      </Stack>
+      )}
       <Button variant="contained" fullWidth onClick={onStartEdit}>
         <Typography
           variant="body2"

@@ -1,0 +1,18 @@
+name: Unit Test
+
+on:
+  pull_request:
+    branches:
+      - main
+      - beta
+      - dev
+    paths:
+      - "apps/frontend/**"
+  workflow_dispatch:
+
+jobs:
+  deploy_image:
+    name: Test Frontend
+    runs-on: ubuntu-latest
+    steps:
+      - run: 'echo "No Unit Test!"'

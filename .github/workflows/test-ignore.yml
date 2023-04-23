@@ -1,0 +1,23 @@
+name: Unit Test
+
+on:
+  pull_request:
+    branches:
+      - main
+      - beta
+      - dev
+    paths-ignore:
+      - "apps/frontend/**"
+      - "apps/backend/**"
+      - "packages/config/**"
+      - "packages/database/**"
+      - "packages/media-storage/**"
+      - "packages/types/**"
+  workflow_dispatch:
+
+jobs:
+  deploy_image:
+    name: Test Ignore
+    runs-on: ubuntu-latest
+    steps:
+      - run: 'echo "No Test Required"'

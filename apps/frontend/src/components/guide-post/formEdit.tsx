@@ -7,12 +7,14 @@ import {
   Typography,
   InputAdornment,
 } from "@mui/material";
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { usePostForm } from "@/hooks/usePostForm";
 import useCustomSnackbar from "@/hooks/useCustomSnackbar";
 import ChipsArray from "./chipArray";
 import editViewModel, { IGetPost } from "./editViewModel";
 import { METHOD_TYPE } from "@/constants/PostPage";
+import { AuthContext } from "@/context/AuthContext";
+import { useRouter } from "next/router";
 
 export interface ChipPostData {
   key: number;
@@ -21,6 +23,8 @@ export interface ChipPostData {
 
 export default function PostForm() {
   const { onClose, onExit, isOpen, messageInfo } = useCustomSnackbar();
+  const router = useRouter();
+  const { user } = useContext(AuthContext);
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setFormBody({ ...formBody, [name]: value });
@@ -42,6 +46,17 @@ export default function PostForm() {
     methodType: METHOD_TYPE.PUT,
     formData: formBody,
   });
+
+  if (
+    data.authorId !== undefined &&
+    user?.id !== undefined &&
+    user?.id.toString() != data.authorId
+  ) {
+    // console.log("user: ", user?.id);
+    // console.log("authorId: ", data.authorId);
+    console.log("not allowed");
+    router.push("/not-allowed");
+  }
 
   if (isLoading || formBody.title === undefined) {
     return <div>Loading...</div>;

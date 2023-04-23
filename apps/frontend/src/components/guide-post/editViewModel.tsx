@@ -1,6 +1,7 @@
 import apiClient from "@/utils/apiClient";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { AuthContext } from "@/context/AuthContext";
 
 export interface IGetPost {
   postID?: number;
@@ -18,6 +19,8 @@ export interface IGetPost {
 export default function editViewModel() {
   const router = useRouter();
   const [formBody, setFormBody] = useState<IGetPost>({} as IGetPost);
+  // let authorId: string | undefined = "";
+  // const { user } = useContext(AuthContext);
 
   const postID = router.query.id?.toString();
   async function getPostData() {
@@ -35,6 +38,7 @@ export default function editViewModel() {
           fee: result.fee,
           maxParticipant: result.maxParticipant,
           contactInfo: result.contactInfo,
+          authorId: result.authorId,
         } as IGetPost);
         result.message = "Success";
       })

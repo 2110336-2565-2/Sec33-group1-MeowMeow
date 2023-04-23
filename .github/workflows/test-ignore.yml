@@ -1,4 +1,4 @@
-name: Unit Test
+name: Ignore Unit Test
 
 on:
   pull_request:
@@ -16,8 +16,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  deploy_image:
-    name: Test Ignore
+  unit_tests:
+    name: Unit Tests
     runs-on: ubuntu-latest
     steps:
       - run: 'echo "No Test Required"'

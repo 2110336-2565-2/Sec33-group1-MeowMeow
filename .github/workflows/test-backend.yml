@@ -1,4 +1,4 @@
-name: Unit Test
+name: Test Backend
 
 on:
   pull_request:
@@ -15,8 +15,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  deploy_image:
-    name: Test Backend
+  unit_tests:
+    name: Unit Tests
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repository

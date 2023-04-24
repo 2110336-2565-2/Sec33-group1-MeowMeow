@@ -66,6 +66,11 @@ const Content = ({ bookings, update, setUpdate }: IContentProps) => {
         {" "}
         Guides can view all trip requests and manage them here
       </Typography>
+      <Typography variant="body2" fontFamily="Inter" paddingY="1vh">
+        {" "}
+        You have the option to cancel the trip up to 5 days after it has been
+        accepted.
+      </Typography>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs
           value={value}

@@ -69,7 +69,9 @@ export const AcceptedRequestCard = ({
               onClick={() => handleClick(booking)}
               size="small"
               sx={{ marginRight: "2vw", marginTop: "1vh" }}
-              disabled={dayjs().isAfter(dayjs(booking.startDate))}
+              disabled={dayjs().isAfter(
+                dayjs(booking.startDate).subtract(5, "d")
+              )}
             >
               Cancel
             </Button>

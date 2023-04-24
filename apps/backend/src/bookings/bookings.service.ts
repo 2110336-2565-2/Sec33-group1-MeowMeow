@@ -206,15 +206,29 @@ export class BookingsService implements IBookingsService {
         'GUIDE_CANCELLED',
       );
 
-      if (
-        booking.bookingStatus === 'WAITING_FOR_GUIDE_CONFIRMATION' ||
-        booking.bookingStatus === 'WAITING_FOR_PAYMENT'
-      ) {
+      if (booking.bookingStatus === 'WAITING_FOR_GUIDE_CONFIRMATION') {
         return {
           id: cancelledBooking.id,
           refunded: false,
           bookingStatus: cancelledBooking.bookingStatus.toString(),
         };
+      }
+
+      if (booking.bookingStatus === 'WAITING_FOR_PAYMENT') {
+        const cancelDeadline = moment(booking.startDate)
+          .subtract(5, 'days')
+          .toDate();
+        if (new Date() > cancelDeadline) {
+          throw new UnprocessableEntity(
+            'cannot cancel booking after 5 days before the start date',
+          );
+        } else {
+          return {
+            id: cancelledBooking.id,
+            refunded: false,
+            bookingStatus: cancelledBooking.bookingStatus.toString(),
+          };
+        }
       }
 
       await this.paymentsService.refund(bookingId);

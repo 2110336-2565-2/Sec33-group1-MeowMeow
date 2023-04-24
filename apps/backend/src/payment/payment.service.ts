@@ -68,14 +68,6 @@ export class PaymentService {
       data.bookingId,
     );
 
-    if (booking.updatedAt.getTime() < Date.now()) {
-      await this.bookingRepository.updateBookingStatus(
-        data.bookingId,
-        'USER_CANCELLED',
-      );
-      throw new InternalServerErrorException('cannot pay after 24 hours');
-    }
-
     const transactions = await this.paymentRepository.getTransactionByBookingId(
       data.bookingId,
     );

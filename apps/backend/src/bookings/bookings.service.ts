@@ -1,4 +1,8 @@
-import { Inject, Injectable } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import * as moment from 'moment';
 import { GuideNotFound } from '../guides/guides.common';
 import { GuidesService } from '../guides/guides.service';
@@ -191,25 +195,16 @@ export class BookingsService implements IBookingsService {
     bookingId: number,
   ): Promise<CancelBookingResponse> {
     try {
-      const account = await this.guideService.getGuideByUserId(userId);
       const booking = await this.bookingsRepo.getBookingById(bookingId);
-      const guide = await this.guideService.getGuideByUserId(booking.guideId);
+      const guide = await this.guideService.getGuideByUserId(userId);
       if (booking.guideId !== guide.guideId) {
         throw new AccessNotGranted('permissing denied');
       }
-      console.log({ booking });
-      let cancelledBooking;
-      if (booking.guideId === account.userId) {
-        cancelledBooking = await this.bookingsRepo.updateBookingStatus(
-          bookingId,
-          'GUIDE_CANCELLED',
-        );
-      } else {
-        cancelledBooking = await this.bookingsRepo.updateBookingStatus(
-          bookingId,
-          'USER_CANCELLED',
-        );
-      }
+
+      const cancelledBooking = await this.bookingsRepo.updateBookingStatus(
+        bookingId,
+        'GUIDE_CANCELLED',
+      );
 
       if (
         booking.bookingStatus === 'WAITING_FOR_GUIDE_CONFIRMATION' ||
@@ -259,11 +254,9 @@ export class BookingsService implements IBookingsService {
           bookingId,
           'USER_CANCELLED',
         );
-        return {
-          message: 'booking payment exceeds the deadline',
-          bookingId: cancelledBooking.id,
-          bookingStatus: cancelledBooking.bookingStatus.toString(),
-        };
+        throw new InternalServerErrorException(
+          `Booking Id ${cancelledBooking.id} exceeds the deadline. Can not pay fee`,
+        );
       }
 
       await this.paymentsService.charge({

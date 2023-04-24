@@ -68,7 +68,7 @@ export class PaymentService {
       data.bookingId,
     );
 
-    if (booking.createdAt.getTime() + 24 * 60 * 60 < Date.now()) {
+    if (booking.updatedAt.getTime() + 24 * 60 * 60 < Date.now()) {
       throw new InternalServerErrorException('cannot pay after 24 hours');
     }
 

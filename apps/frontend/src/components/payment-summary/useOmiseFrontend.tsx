@@ -53,7 +53,14 @@ const useOmiseFrontend = (props: IOmiseFrontend) => {
           })
           .catch((err) => {
             if (err instanceof AxiosError) {
-              addNotification(err.message, "error");
+              if (err.status === 500) {
+                addNotification(
+                  `Booking Id ${booking.id} exceeds the deadline. Can not pay fee`,
+                  "error"
+                );
+              } else {
+                addNotification(err.message, "error");
+              }
             }
             setStatus(PaymentStatus.FAILED);
           });

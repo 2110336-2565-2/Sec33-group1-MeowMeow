@@ -191,13 +191,20 @@ export class PaymentService {
         bookingId,
       );
     let payment;
+    let traveler;
     transactions.forEach((transaction) => {
       if (transaction.transactionType === TransactionType.TRANSFERS) {
         payment = transaction;
       }
+      if (transaction.transactionType === TransactionType.CHARGES) {
+        traveler = transaction;
+      }
     });
     if (payment) {
       throw new InternalServerErrorException('already transfer');
+    }
+    if (!traveler) {
+      throw new InternalServerErrorException('traveler not pay yet');
     }
 
     const body = qs.stringify({

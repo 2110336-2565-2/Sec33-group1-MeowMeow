@@ -4,9 +4,9 @@ interface SliderInputProps {
   name: string;
   step: number;
   displayText?: string;
-  value: number[];
+  value: number;
   max?: number;
-  onChange: (e: Event, newValue: number | number[]) => void;
+  onChange: (event: Event, value: number | number[]) => void;
 }
 
 const SliderInput = (props: SliderInputProps) => {

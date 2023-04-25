@@ -139,10 +139,15 @@ export class BookingsService implements IBookingsService {
       throw new UnprocessableEntity('cannot book your own post');
     }
 
+    const startDate = new Date(req.startDate);
+    const endDate = new Date(req.endDate);
+    if (startDate.getTime() > endDate.getTime()) {
+      throw new UnprocessableEntity('start date must be before end date');
+    }
+
     const booking = await this.bookingsRepo.createBooking({
       userId: userId,
       postId: req.postId,
-      guideId: req.guideId,
       startDate: new Date(req.startDate),
       endDate: new Date(req.endDate),
       bookingStatus: 'WAITING_FOR_GUIDE_CONFIRMATION',

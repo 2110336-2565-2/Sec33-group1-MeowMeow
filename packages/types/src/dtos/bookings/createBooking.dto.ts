@@ -4,7 +4,6 @@ export class CreateBookingRequest extends PickType(Booking, [
   "startDate",
   "endDate",
   "postId",
-  "guideId",
 ] as const) {}
 export class CreateBookingResponse extends PickType(Booking, [
   "id",

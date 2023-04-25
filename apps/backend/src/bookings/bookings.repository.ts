@@ -146,7 +146,6 @@ export class BookingsRepository {
     endDate: Date;
     postId: number;
     userId: number;
-    guideId: number;
     bookingStatus: string;
   }): Promise<Booking> {
     const bookingStatusEnum = bookingStatusEnumMapper[data.bookingStatus];

@@ -1,7 +1,7 @@
 import { IFilterMethod } from "@/hooks/useFilterForm";
 import { Button, Container, Stack, TextField, Typography } from "@mui/material";
 import SliderInput from "./SliderInput";
-import { maxFee, maxRating, stepFee, stepRating } from "@/constants/SearchPage";
+import { maxFee, minRating, stepFee, stepRating } from "@/constants/SearchPage";
 
 interface FilterFormProps {
   filterStuff: IFilterMethod;
@@ -47,27 +47,18 @@ const FilterForm = ({ filterStuff }: FilterFormProps) => {
           name="price"
           max={maxFee}
           step={stepFee}
-          displayText="Price"
-          value={tempOptions.price}
+          displayText="Max Price"
+          value={tempOptions.maxPrice}
           onChange={handleChangePrice}
         />
         <SliderInput
           name="rating"
-          max={maxRating}
+          max={minRating}
           step={stepRating}
-          displayText="Rating score"
-          value={tempOptions.rating}
+          displayText="Min Rating Score"
+          value={tempOptions.minRating}
           onChange={handleChangeRating}
         />
-
-        {/* <DateInput
-          displayText="Date"
-          startDate={tempOptions.startDate}
-          endDate={tempOptions.endDate}
-          handleChangeStartDate={handleChangeStartDate}
-          handleChangeEndDate={handleChangeEndDate}
-        /> */}
-
         <Button type="submit" variant="contained" sx={{ color: "white" }}>
           Apply
         </Button>

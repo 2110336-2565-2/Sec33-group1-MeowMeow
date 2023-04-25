@@ -7,8 +7,8 @@ export interface IFilterMethod {
   tempOptions: IFilterOptions;
   handleSubmit: (e: FormEvent<HTMLFormElement>) => void;
   handleChangeLocation: (e: ChangeEvent<HTMLInputElement>) => void;
-  handleChangePrice: (e: Event, newValue: number | number[]) => void;
-  handleChangeRating: (e: Event, newValue: number | number[]) => void;
+  handleChangePrice: (e: Event, value: number | number[]) => void;
+  handleChangeRating: (e: Event, value: number | number[]) => void;
   reset: () => void;
 }
 
@@ -34,17 +34,19 @@ const useFilterForm = () => {
     }));
   };
 
-  const handleChangePrice = (e: Event, newValue: number | number[]) => {
+  const handleChangePrice = (e: Event) => {
+    const target = e.target as HTMLInputElement;
     setTempOptions((prev) => ({
       ...prev,
-      price: newValue as number[],
+      maxPrice: Number(target.value),
     }));
   };
 
-  const handleChangeRating = (e: Event, newValue: number | number[]) => {
+  const handleChangeRating = (e: Event) => {
+    const target = e.target as HTMLInputElement;
     setTempOptions((prev) => ({
       ...prev,
-      rating: newValue as number[],
+      minRating: Number(target.value),
     }));
   };
 

@@ -13,6 +13,7 @@ import { NotificationContext } from "@/context/NotificationContext";
 import {
   GetUserByIdResponse,
   SearchPostsPost,
+  SearchPostsRequest,
   SearchPostsResponse,
 } from "types";
 import { POST_PER_PAGE } from "@/constants/SearchPage";
@@ -26,11 +27,11 @@ interface IFetchPosts {
 const fetchPosts = async (props: IFetchPosts) => {
   const { pageNo, search, filterOptions } = props;
 
-  const params = {
+  const params: SearchPostsRequest = {
     offset: (pageNo - 1) * POST_PER_PAGE,
     limit: POST_PER_PAGE,
-    fee: filterOptions.price[1],
-    reviewScore: filterOptions.rating[0],
+    fee: filterOptions.maxPrice,
+    reviewScore: filterOptions.minRating,
     locations: filterOptions.location ? [filterOptions.location] : [],
     text: search,
   };

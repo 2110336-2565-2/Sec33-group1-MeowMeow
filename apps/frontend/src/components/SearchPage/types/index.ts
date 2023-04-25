@@ -17,8 +17,8 @@ export interface IPost {
 
 export interface IFilterOptions {
   location: string;
-  price: number[];
-  rating: number[];
+  maxPrice: number;
+  minRating: number;
 }
 
 export interface ISearchPosts {

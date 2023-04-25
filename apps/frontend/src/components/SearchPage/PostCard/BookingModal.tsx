@@ -84,7 +84,7 @@ const BookingModal = (props: IBookingModal) => {
       <Fade in={isOpen}>
         <ModalContainer>
           <Typography variant="h5" id="modal-modal-title">
-            Booking : Select Date
+            Booking : Please Select Date
           </Typography>
           <DateInput
             startDate={startDate}

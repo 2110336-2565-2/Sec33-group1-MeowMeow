@@ -129,7 +129,7 @@ export class ReportsController {
   @Get()
   @ApiCookieAuth('access-token')
   @UseGuards(AuthGuard)
-  async searchPost(
+  async searchReport(
     @Req() req,
     @Query() searchFilter: SearchReportsRequest,
   ): Promise<SearchReportsResponse> {

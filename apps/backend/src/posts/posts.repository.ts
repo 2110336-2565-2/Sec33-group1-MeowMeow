@@ -261,7 +261,19 @@ export class PostsRepository {
             ${searchData.locations ? locationCondition : Prisma.empty}
           )
           SELECT
-              COUNT(*)
+              c1."avg_review_score" AS "averageReviewScore",
+              pp.id,
+              pp."createdAt",
+              pp."updatedAt",
+              pp.title,
+              pp."content",
+              pp."authorId",
+              pp.tags,
+              pp.fee,
+              pp."contactInfo",
+              pp."maxParticipant",
+              "Guide"."id" AS "guideId",
+              a1.locations AS locations
           FROM "Post" pp
               INNER JOIN "all_location" a1 ON a1."postId" = pp.id
               INNER JOIN "User" ON "User"."id" = pp."authorId"
@@ -272,9 +284,9 @@ export class PostsRepository {
               TRUE
               ${searchData.fee ? maxFeeCondition : Prisma.empty}
               ${searchData.text ? textCondition : Prisma.empty}
-          GROUP BY pp.id
           ORDER BY
               pp.id
+          OFFSET ${searchData.offset} LIMIT ${searchData.limit}
       `;
       if (!results.length) {
         return {

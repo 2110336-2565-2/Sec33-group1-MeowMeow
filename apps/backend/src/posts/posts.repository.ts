@@ -12,6 +12,13 @@ import {
   FailedRelationConstraintError,
   NotFoundError,
 } from './posts.common';
+
+function toJson(data) {
+  return JSON.stringify(data, (_, v) =>
+    typeof v === 'bigint' ? `${v}n` : v,
+  ).replace(/"(-?\d+)n"/g, (_, a) => a);
+}
+
 @Injectable()
 export class PostsRepository {
   constructor(
@@ -145,110 +152,160 @@ export class PostsRepository {
     }
   }
 
-  async searchPosts(searchData: SearchPostsRequest) {
+  async searchPosts(searchData: SearchPostsRequest): Promise<{
+    posts: any[];
+    postsCount: number;
+  }> {
     try {
-      const extraSearchOptions = [];
+      const maxFeeCondition = Prisma.sql`AND fee <= ${searchData.fee}`;
+      const textCondition = Prisma.sql`AND text LIKE '%${searchData.text}%'`;
+      const minReviewCondition = Prisma.sql`WHERE "avg_review_score" >= ${searchData.reviewScore}`;
+      const locationCondition = Prisma.sql`WHERE "Location"."locationName" IN (${
+        searchData.locations ? searchData.locations.join() : null
+      })`;
 
-      if (searchData.reviewScore) {
-        const guidesID = await this.guidesRepo.getGuideIDByReviewScore(
-          searchData.reviewScore,
-        );
-        if (guidesID.length > 0)
-          extraSearchOptions.push({
-            authorId: {
-              in: guidesID,
-            },
-          });
-      }
-      if (searchData.locations && searchData.locations.length > 0) {
-        const locationsID = (
-          await this.prismaService.location.findMany({
-            where: {
-              locationName: {
-                in: searchData.locations,
-              },
-            },
-          })
-        ).map((e) => e.id);
-        extraSearchOptions.push({
-          PostLocation: {
-            some: {
-              locationId: {
-                in: locationsID,
-              },
-            },
-          },
-        });
-      }
-      if (searchData.tags && searchData.tags.length > 0) {
-        extraSearchOptions.push({
-          tags: {
-            hasSome: searchData.tags ?? [],
-          },
-        });
-      }
-      if (searchData.participant && searchData.participant > 0) {
-        extraSearchOptions.push({
-          maxParticipant: {
-            gte: searchData.participant,
-          },
-        });
-      }
-      if (searchData.fee) {
-        extraSearchOptions.push({
-          fee: {
-            lte: searchData.fee,
-          },
-        });
+      const results = await this.prismaService.$queryRaw<any[]>`
+        WITH guideid_with_avg_review_score AS (
+          SELECT
+            "Guide"."id" as id,
+            AVG("Review"."score") AS avg_review_score
+          FROM
+            "Guide"
+          LEFT JOIN "Review" ON "Guide"."id" = "Review"."guideId"
+          GROUP BY
+            "Guide"."id"
+          ),
+          guideid_with_satisfied_avg_review_score AS (
+              SELECT
+                  "id",
+                  "avg_review_score"
+              FROM
+                  guideid_with_avg_review_score
+              ${searchData.reviewScore ? minReviewCondition : Prisma.empty}
+          ),
+          all_location AS (
+              SELECT
+                  p.id AS "postId",
+                  ARRAY_AGG(lx."locationName") AS "locations"
+              FROM
+                  "Post" AS p
+                  LEFT JOIN "PostLocation" px ON p."id" = px."postId"
+                  INNER JOIN "Location" lx ON px."locationId" = lx."id"
+              GROUP BY
+                  p.id
+          ),
+          post_having_provided_location AS (
+            SELECT DISTINCT("Post"."id") as id
+            FROM "Post"
+            LEFT JOIN "PostLocation" ON "Post"."id" = "PostLocation"."postId"
+            INNER JOIN "Location" ON "Location"."id" = "PostLocation"."locationId"
+            ${searchData.locations ? locationCondition : Prisma.empty}
+          )
+          SELECT
+              c1."avg_review_score" AS "averageReviewScore",
+              pp.id,
+              pp."createdAt",
+              pp."updatedAt",
+              pp.title,
+              pp."content",
+              pp."authorId",
+              pp.tags,
+              pp.fee,
+              pp."contactInfo",
+              pp."maxParticipant",
+              "Guide"."id" AS "guideId",
+              a1.locations AS locations
+          FROM "Post" pp
+              INNER JOIN "all_location" a1 ON a1."postId" = pp.id
+              INNER JOIN "User" ON "User"."id" = pp."authorId"
+              INNER JOIN "Guide" ON "Guide"."userId" = "User"."id"
+              INNER JOIN "guideid_with_satisfied_avg_review_score" c1 ON "Guide"."id" = c1."id"
+              INNER JOIN "post_having_provided_location" c2 ON pp."id" = c2.id
+          WHERE
+              TRUE
+              ${searchData.fee ? maxFeeCondition : Prisma.empty}
+              ${searchData.text ? textCondition : Prisma.empty}
+          ORDER BY
+              pp.id
+          OFFSET ${searchData.offset} LIMIT ${searchData.limit}
+      `;
+
+      const count = await this.prismaService.$queryRaw<any[]>`
+        WITH guideid_with_avg_review_score AS (
+          SELECT
+            "Guide"."id" as id,
+            AVG("Review"."score") AS avg_review_score
+          FROM
+            "Guide"
+          LEFT JOIN "Review" ON "Guide"."id" = "Review"."guideId"
+          GROUP BY
+            "Guide"."id"
+          ),
+          guideid_with_satisfied_avg_review_score AS (
+              SELECT
+                  "id",
+                  "avg_review_score"
+              FROM
+                  guideid_with_avg_review_score
+              ${searchData.reviewScore ? minReviewCondition : Prisma.empty}
+          ),
+          all_location AS (
+              SELECT
+                  p.id AS "postId",
+                  ARRAY_AGG(lx."locationName") AS "locations"
+              FROM
+                  "Post" AS p
+                  LEFT JOIN "PostLocation" px ON p."id" = px."postId"
+                  INNER JOIN "Location" lx ON px."locationId" = lx."id"
+              GROUP BY
+                  p.id
+          ),
+          post_having_provided_location AS (
+            SELECT DISTINCT("Post"."id") as id
+            FROM "Post"
+            LEFT JOIN "PostLocation" ON "Post"."id" = "PostLocation"."postId"
+            INNER JOIN "Location" ON "Location"."id" = "PostLocation"."locationId"
+            ${searchData.locations ? locationCondition : Prisma.empty}
+          )
+          SELECT
+              COUNT(*)
+          FROM "Post" pp
+              INNER JOIN "all_location" a1 ON a1."postId" = pp.id
+              INNER JOIN "User" ON "User"."id" = pp."authorId"
+              INNER JOIN "Guide" ON "Guide"."userId" = "User"."id"
+              INNER JOIN "guideid_with_satisfied_avg_review_score" c1 ON "Guide"."id" = c1."id"
+              INNER JOIN "post_having_provided_location" c2 ON pp."id" = c2.id
+          WHERE
+              TRUE
+              ${searchData.fee ? maxFeeCondition : Prisma.empty}
+              ${searchData.text ? textCondition : Prisma.empty}
+      `;
+      if (!results.length) {
+        return {
+          posts: [],
+          postsCount: 0,
+        };
       }
 
-      const searchConditions = {
-        AND: [
-          {
-            OR: [
-              {
-                content: {
-                  contains: searchData.text ?? '',
-                },
-              },
-              {
-                title: {
-                  contains: searchData.text ?? '',
-                },
-              },
-              {
-                contactInfo: {
-                  contains: searchData.text ?? '',
-                },
-              },
-            ],
-          },
-          ...extraSearchOptions,
-        ],
+      return {
+        posts: results.map((e) => {
+          return {
+            id: e.id,
+            authorId: e.authorId,
+            guideId: e.guideId,
+            title: e.title,
+            content: e.content ?? null,
+            tags: e.tags ?? null,
+            locations: e.locations ?? null,
+            fee: e.fee,
+            maxParticipant: e.maxParticipant,
+            contactInfo: e.contactInfo ?? null,
+            createdAt: e.createdAt,
+            updatedAt: e.updatedAt,
+          };
+        }),
+        postsCount: parseInt(toJson(count[0].count)),
       };
-      const [postsCount, posts] = await this.prismaService.$transaction([
-        this.prismaService.post.count({
-          where: searchConditions,
-        }),
-        this.prismaService.post.findMany({
-          skip: searchData.offset,
-          take: searchData.limit,
-          where: searchConditions,
-          include: {
-            author: {
-              include: {
-                guide: true,
-              },
-            },
-            PostLocation: {
-              select: {
-                location: true,
-              },
-            },
-          },
-        }),
-      ]);
-      return { posts, postsCount };
     } catch (e) {
       throw e;
     }

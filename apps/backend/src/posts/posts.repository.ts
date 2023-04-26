@@ -12,6 +12,13 @@ import {
   FailedRelationConstraintError,
   NotFoundError,
 } from './posts.common';
+
+function toJson(data) {
+  return JSON.stringify(data, (_, v) =>
+    typeof v === 'bigint' ? `${v}n` : v,
+  ).replace(/"(-?\d+)n"/g, (_, a) => a);
+}
+
 @Injectable()
 export class PostsRepository {
   constructor(
@@ -261,19 +268,7 @@ export class PostsRepository {
             ${searchData.locations ? locationCondition : Prisma.empty}
           )
           SELECT
-              c1."avg_review_score" AS "averageReviewScore",
-              pp.id,
-              pp."createdAt",
-              pp."updatedAt",
-              pp.title,
-              pp."content",
-              pp."authorId",
-              pp.tags,
-              pp.fee,
-              pp."contactInfo",
-              pp."maxParticipant",
-              "Guide"."id" AS "guideId",
-              a1.locations AS locations
+              COUNT(*)
           FROM "Post" pp
               INNER JOIN "all_location" a1 ON a1."postId" = pp.id
               INNER JOIN "User" ON "User"."id" = pp."authorId"
@@ -284,8 +279,6 @@ export class PostsRepository {
               TRUE
               ${searchData.fee ? maxFeeCondition : Prisma.empty}
               ${searchData.text ? textCondition : Prisma.empty}
-          ORDER BY
-              pp.id
       `;
       if (!results.length) {
         return {
@@ -311,7 +304,7 @@ export class PostsRepository {
             updatedAt: e.updatedAt,
           };
         }),
-        postsCount: Number(count[0].count.toString()),
+        postsCount: parseInt(toJson(count[0].count)),
       };
     } catch (e) {
       throw e;

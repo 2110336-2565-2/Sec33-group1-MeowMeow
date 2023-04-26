@@ -144,11 +144,11 @@ export class PostsServiceImpl {
       posts: posts.posts.map((e) => ({
         id: e.id,
         authorId: e.authorId,
-        guideId: e.author.guide.id,
+        guideId: e.guideId,
         title: e.title,
         content: e.content,
         tags: e.tags,
-        locations: e.PostLocation.map((e) => e.location.locationName),
+        locations: e.locations,
         fee: e.fee.toNumber(),
         maxParticipant: e.maxParticipant,
         contactInfo: e.contactInfo,

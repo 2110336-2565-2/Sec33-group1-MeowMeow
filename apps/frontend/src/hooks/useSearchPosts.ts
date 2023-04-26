@@ -37,6 +37,7 @@ const fetchPosts = async (props: IFetchPosts) => {
   };
 
   const resp = await apiClient.get("/posts/search", { params: params });
+
   const respData: SearchPostsResponse = resp.data;
 
   const myPostsLoading: Promise<IPost[]> = Promise.all(
@@ -57,9 +58,6 @@ const fetchPosts = async (props: IFetchPosts) => {
         },
         image: "/landing/travel1.png", // template image
       };
-
-      console.log(result);
-
       return result;
     })
   );

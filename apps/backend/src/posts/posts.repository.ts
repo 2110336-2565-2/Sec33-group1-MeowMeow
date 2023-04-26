@@ -286,7 +286,6 @@ export class PostsRepository {
               ${searchData.text ? textCondition : Prisma.empty}
           ORDER BY
               pp.id
-          OFFSET ${searchData.offset} LIMIT ${searchData.limit}
       `;
       if (!results.length) {
         return {

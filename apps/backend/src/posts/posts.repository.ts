@@ -294,8 +294,6 @@ export class PostsRepository {
         };
       }
 
-      console.log(results);
-
       return {
         posts: results.map((e) => {
           return {

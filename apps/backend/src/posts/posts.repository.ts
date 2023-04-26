@@ -298,6 +298,7 @@ export class PostsRepository {
             fee: e.fee,
             maxParticipant: e.maxParticipant,
             contactInfo: e.contactInfo ?? null,
+
             createdAt: e.createdAt,
             updatedAt: e.updatedAt,
           };

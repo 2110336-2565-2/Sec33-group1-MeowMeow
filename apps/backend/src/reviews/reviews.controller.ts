@@ -62,7 +62,6 @@ export class ReviewsController {
       const account: AccountMetadata = req.account;
       return await this.reviewsService.createReview(account.userId, reqBody);
     } catch (e) {
-      console.log(e);
       if (e instanceof InvalidRequestError) {
         throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
       }

@@ -1,7 +1,7 @@
 import { IFilterMethod } from "@/hooks/useFilterForm";
 import { Button, Container, Stack, TextField, Typography } from "@mui/material";
 import SliderInput from "./SliderInput";
-import { maxFee, minRating, stepFee, stepRating } from "@/constants/SearchPage";
+import { maxFee, maxRating, stepFee, stepRating } from "@/constants/SearchPage";
 
 interface FilterFormProps {
   filterStuff: IFilterMethod;
@@ -53,7 +53,7 @@ const FilterForm = ({ filterStuff }: FilterFormProps) => {
         />
         <SliderInput
           name="rating"
-          max={minRating}
+          max={maxRating}
           step={stepRating}
           displayText="Min Rating Score"
           value={tempOptions.minRating}

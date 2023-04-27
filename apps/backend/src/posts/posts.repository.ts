@@ -157,8 +157,12 @@ export class PostsRepository {
     postsCount: number;
   }> {
     try {
-      const maxFeeCondition = Prisma.sql`AND fee <= ${searchData.fee}`;
-      const textCondition = Prisma.sql`AND text LIKE '%${searchData.text}%'`;
+      const maxFeeCondition = Prisma.sql`AND pp.fee <= ${searchData.fee}`;
+      const textCondition = Prisma.sql`AND (
+        pp.title LIKE '%${searchData.text}%'
+        OR
+        pp.content LIKE '%${searchData.text}%'
+      )`;
       const minReviewCondition = Prisma.sql`WHERE "avg_review_score" >= ${searchData.reviewScore}`;
       const locationCondition = Prisma.sql`WHERE "Location"."locationName" IN (${
         searchData.locations ? searchData.locations.join() : null

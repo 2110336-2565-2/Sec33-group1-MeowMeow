@@ -157,12 +157,12 @@ export class PostsRepository {
     postsCount: number;
   }> {
     try {
-      const maxFeeCondition = Prisma.sql`AND pp.fee <= ${searchData.fee}`;
-      const textCondition = Prisma.sql`AND (
-        pp.title LIKE '%${searchData.text}%'
-        OR
-        pp.content LIKE '%${searchData.text}%'
-      )`;
+      if (searchData.text) {
+        searchData.text = searchData.text.toLowerCase();
+      }
+
+      const maxFeeCondition = Prisma.sql`AND fee <= ${searchData.fee}`;
+      const textCondition = Prisma.sql`AND (LOWER(title) LIKE '%${searchData.text}%' OR LOWER(content) LIKE '%${searchData.text}%')`;
       const minReviewCondition = Prisma.sql`WHERE "avg_review_score" >= ${searchData.reviewScore}`;
       const locationCondition = Prisma.sql`WHERE "Location"."locationName" IN (${
         searchData.locations ? searchData.locations.join() : null
@@ -204,19 +204,29 @@ export class PostsRepository {
             LEFT JOIN "PostLocation" ON "Post"."id" = "PostLocation"."postId"
             INNER JOIN "Location" ON "Location"."id" = "PostLocation"."locationId"
             ${searchData.locations ? locationCondition : Prisma.empty}
+          ),
+          post_having_fee_ok AS (
+            SELECT id, fee FROM "Post"
+            WHERE fee <= ${searchData.fee ? searchData.fee : 999999999}
+          ),
+          post_having_similar_text AS (
+            SELECT id, title, content FROM "Post"
+            WHERE LOWER(title) LIKE ${
+              searchData.text ? '%' + searchData.text + '%' : '%%'
+            }
           )
           SELECT
               c1."avg_review_score" AS "averageReviewScore",
               pp.id,
               pp."createdAt",
               pp."updatedAt",
-              pp.title,
-              pp."content",
+              pp.title AS title,
+              pp.content AS content,
               pp."authorId",
               pp.tags,
-              pp.fee,
+              pp.fee AS fee,
               pp."contactInfo",
-              pp."maxParticipant",
+              pp."maxParticipant" AS max_participant,
               "Guide"."id" AS "guideId",
               a1.locations AS locations
           FROM "Post" pp
@@ -225,10 +235,12 @@ export class PostsRepository {
               INNER JOIN "Guide" ON "Guide"."userId" = "User"."id"
               INNER JOIN "guideid_with_satisfied_avg_review_score" c1 ON "Guide"."id" = c1."id"
               INNER JOIN "post_having_provided_location" c2 ON pp."id" = c2.id
+              INNER JOIN "post_having_fee_ok" c3 ON pp."id" = c3.id
+              INNER JOIN "post_having_similar_text" c4 ON pp."id" = c4.id
           WHERE
-              TRUE
-              ${searchData.fee ? maxFeeCondition : Prisma.empty}
-              ${searchData.text ? textCondition : Prisma.empty}
+              pp."maxParticipant" >= ${
+                searchData.participant ? searchData.participant : 0
+              }
           ORDER BY
               pp.id
           OFFSET ${searchData.offset} LIMIT ${searchData.limit}
@@ -270,6 +282,16 @@ export class PostsRepository {
             LEFT JOIN "PostLocation" ON "Post"."id" = "PostLocation"."postId"
             INNER JOIN "Location" ON "Location"."id" = "PostLocation"."locationId"
             ${searchData.locations ? locationCondition : Prisma.empty}
+          ),
+          post_having_fee_ok AS (
+            SELECT id, fee FROM "Post"
+            WHERE fee <= ${searchData.fee ? searchData.fee : 999999999}
+          ),
+          post_having_similar_text AS (
+            SELECT id, title, content FROM "Post"
+            WHERE LOWER(title) LIKE ${
+              searchData.text ? '%' + searchData.text + '%' : '%%'
+            }
           )
           SELECT
               COUNT(*)
@@ -279,10 +301,12 @@ export class PostsRepository {
               INNER JOIN "Guide" ON "Guide"."userId" = "User"."id"
               INNER JOIN "guideid_with_satisfied_avg_review_score" c1 ON "Guide"."id" = c1."id"
               INNER JOIN "post_having_provided_location" c2 ON pp."id" = c2.id
+              INNER JOIN "post_having_fee_ok" c3 ON pp."id" = c3.id
+              INNER JOIN "post_having_similar_text" c4 ON pp."id" = c4.id
           WHERE
-              TRUE
-              ${searchData.fee ? maxFeeCondition : Prisma.empty}
-              ${searchData.text ? textCondition : Prisma.empty}
+              pp."maxParticipant" >= ${
+                searchData.participant ? searchData.participant : 0
+              }
       `;
       if (!results.length) {
         return {

@@ -1,6 +1,7 @@
 FROM node:alpine AS base
 RUN apk add --no-cache libc6-compat
 RUN apk update
+RUN apk add --no-cache python3 py3-pip
 
 RUN npm i -g pnpm
 
@@ -9,6 +10,7 @@ WORKDIR /app
 FROM base AS pruner
 RUN pnpm i turbo@1.8.8
 COPY . .
+RUN cp ./.ENV ./apps/frontend
 RUN pnpm turbo prune --scope=frontend --docker --out-dir prune/frontend
 
 FROM base AS builder

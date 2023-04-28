@@ -59,7 +59,7 @@ export const loadBackendConfig = (): BackendConfig => {
       prefixPath: process.env.BACKEND_SWAGGER_PREFIX_PATH ?? "api",
     },
     cors: {
-      enable: process.env.BACKEND_CORS_ENABLE === "true",
+      enable: process.env.BACKEND_CORS_ENABLE === "false",
       allowOrigin: (
         process.env.BACKEND_CORS_ALLOW_ORIGIN ?? "http://localhost:3000"
       ).split(","),

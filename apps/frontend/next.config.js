@@ -1,5 +1,6 @@
 require("dotenv-mono").load();
 
+console.log("process.env.backendBaseURL", process.env.BACKEND_BASE_URL);
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,

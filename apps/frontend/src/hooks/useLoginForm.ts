@@ -2,7 +2,7 @@ import { ILoginForm } from "@/components/LoginPage/types/loginForm";
 import { NotificationContext } from "@/context/NotificationContext";
 import apiClient from "@/utils/apiClient";
 import { useRouter } from "next/router";
-import { useState, FormEventHandler, useCallback, useContext } from "react";
+import { FormEventHandler, useCallback, useContext, useState } from "react";
 
 interface IUseLoginForm {}
 

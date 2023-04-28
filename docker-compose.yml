@@ -1,15 +1,84 @@
 version: '3'
 
 services:
-  postgres:
+
+  frontend:
+    image: tendont52/frontend-se
+    networks:
+      - public
+    ports:
+      - 3000:3000
+
+  backend:
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+      args:
+        - FRONTEND_BASE_URL=${FRONTEND_BASE_URL}
+        - BACKEND_PORT=${BACKEND_PORT}
+        - BACKEND_SWAGGER_ENABLE=${BACKEND_SWAGGER_ENABLE}
+        - BACKEND_SWAGGER_PREFIX_PATH=${BACKEND_SWAGGER_PREFIX_PATH}
+        - DB_USER=${DB_USER}
+        - DB_PASSWORD=${DB_PASSWORD}
+        - DB_NAME=${DB_NAME}
+        - DB_HOST=your-name-space-postgres
+        - DB_PORT=5432
+        - DATABASE_URL=${DATABASE_URL}
+        - BACKEND_JWT_SECRET=${BACKEND_JWT_SECRET}
+        - BACKEND_JWT_EXPIRE=${BACKEND_JWT_EXPIRE}
+        - BACKEND_MEDIASTORAGE_LOCAL_ROOTDIR=${BACKEND_MEDIASTORAGE_LOCAL_ROOTDIR}
+        - BACKEND_CORS_ENABLE=${BACKEND_CORS_ENABLE}
+        - BACKEND_CORS_ALLOW_ORIGIN=${BACKEND_CORS_ALLOW_ORIGIN}
+        - FRONTEND_OMISE_PUBLIC_KEY=${FRONTEND_OMISE_PUBLIC_KEY}
+        - BACKEND_OMISE_SECRET_KEY=${BACKEND_OMISE_SECRET_KEY}
+    container_name: backend
+    restart: always 
+    depends_on:
+      - database
+    ports:
+      - ${BACKEND_PORT}:${BACKEND_PORT}
+    environment:
+      - FRONTEND_BASE_URL=${FRONTEND_BASE_URL}
+      - BACKEND_PORT=${BACKEND_PORT}
+      - BACKEND_SWAGGER_ENABLE=${BACKEND_SWAGGER_ENABLE}
+      - BACKEND_SWAGGER_PREFIX_PATH=${BACKEND_SWAGGER_PREFIX_PATH}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - DB_HOST=your-name-space-postgres
+      - DB_PORT=5432
+      - DATABASE_URL=${DATABASE_URL}
+      - BACKEND_JWT_SECRET=${BACKEND_JWT_SECRET}
+      - BACKEND_JWT_EXPIRE=${BACKEND_JWT_EXPIRE}
+      - BACKEND_MEDIASTORAGE_LOCAL_ROOTDIR=${BACKEND_MEDIASTORAGE_LOCAL_ROOTDIR}
+      - BACKEND_CORS_ENABLE=${BACKEND_CORS_ENABLE}
+      - BACKEND_CORS_ALLOW_ORIGIN=${BACKEND_CORS_ALLOW_ORIGIN}
+      - FRONTEND_OMISE_PUBLIC_KEY=${FRONTEND_OMISE_PUBLIC_KEY}
+      - BACKEND_OMISE_SECRET_KEY=${BACKEND_OMISE_SECRET_KEY}
+    volumes:
+      - "./docker_volumes/your-name-space/backend/media-storage:/app/media-storage"
+    networks:
+      - public
+      - private
+
+  database:
     image: postgres:15-alpine
-    container_name: postgres
+    container_name: database
     restart: always
     environment:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
     ports:
-      - "${DB_PORT}:5432"
+      - ${DB_PORT}:5432
     volumes:
-      - "./postgres:/var/lib/postgresql/data"
+      - "./docker_volumes/database/postgres:/var/lib/postgresql/data"
+    networks:
+      - private
+
+networks:
+  public:
+    driver: bridge
+  private:
+    driver: bridge

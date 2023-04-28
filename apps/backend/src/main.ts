@@ -25,6 +25,7 @@ async function bootstrap() {
     const swaggerDocument = SwaggerModule.createDocument(app, swaggerConfig);
     SwaggerModule.setup(config.swagger.prefixPath, app, swaggerDocument);
   }
+  console.log('config.cors.enable', config.cors.enable);
 
   app.use(cookieParser());
   if (config.cors.enable) {

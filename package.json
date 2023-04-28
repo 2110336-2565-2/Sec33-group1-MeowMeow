@@ -7,14 +7,14 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "turbo run build",
+    "build": "dotenv -e .ENV -- turbo run build",
     "db:generate": "turbo run db:generate --filter database",
     "db:migrate:dev": "dotenv -e .env -- pnpm --filter database db:migrate:dev",
     "db:migrate:deploy": "dotenv -e .env -- pnpm --filter database db:migrate:deploy",
     "db:seed": "pnpm --filter database db:seed",
     "db:seed-dev": "pnpm --filter database db:seed-dev",
     "dev": "turbo run build --filter config --filter database && turbo run dev --parallel",
-    "dev:frontend": "turbo run build --filter config --filter types && turbo run dev --filter frontend --filter config --filter types",
+    "dev:frontend": "dotenv -e .ENV -- turbo run build --filter config --filter types && turbo run dev --filter frontend --filter config --filter types",
     "dev:backend": "turbo run build --filter config --filter database --filter media-storage --filter types && turbo run dev --filter backend --filter config --filter database --filter media-storage --filter types",
     "test:backend": "turbo run test --filter backend",
     "lint": "turbo run lint",

@@ -40,7 +40,7 @@ export default function Profile({
         justifyContent="center"
       >
         <Avatar
-          src={process.env.backendBaseURL + "/media/" + imageurl}
+          src={process.env.backendBaseURL + "media/" + imageurl}
           sx={{
             width: { xs: 160, sm: 200, md: 160, lg: 200 },
             height: { xs: 160, sm: 200, md: 160, lg: 200 },
@@ -103,7 +103,7 @@ export default function Profile({
               <Avatar
                 sx={{ width: 600, height: 420 }}
                 variant="square"
-                src={process.env.backendBaseURL + "/media/" + certificateId}
+                src={process.env.backendBaseURL + "media/" + certificateId}
               ></Avatar>
             </Dialog>
           </Box>

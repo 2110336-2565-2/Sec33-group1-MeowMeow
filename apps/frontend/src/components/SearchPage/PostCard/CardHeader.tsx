@@ -13,7 +13,7 @@ interface ICardHeader {
 const CardHeader = (props: ICardHeader) => {
   const { profile, name, userId, postId, currentUserId, guideId } = props;
 
-  const imageUrl = process.env.backendBaseURL + "/media/" + profile;
+  const imageUrl = process.env.backendBaseURL + "media/" + profile;
 
   return (
     <>

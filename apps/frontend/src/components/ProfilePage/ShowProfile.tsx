@@ -55,7 +55,7 @@ const ShowProfile = ({ imageUrl, onStartEdit }: IShowProfileProps) => {
       }
 
       setCertificateImage(
-        `${process.env.backendBaseURL}/media/${certificateId}`
+        `${process.env.backendBaseURL}media/${certificateId}`
       );
     };
     fetchGuideProfile();
@@ -81,7 +81,7 @@ const ShowProfile = ({ imageUrl, onStartEdit }: IShowProfileProps) => {
         alignItems="center"
       >
         <Avatar
-          src={`${process.env.backendBaseURL}/media/${user?.imageId}`}
+          src={`${process.env.backendBaseURL}media/${user?.imageId}`}
           sx={{
             width: { xs: 160, sm: 200, md: 160, lg: 200 },
             height: { xs: 160, sm: 200, md: 160, lg: 200 },
